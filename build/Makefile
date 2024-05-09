@@ -128,29 +128,53 @@ net/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/build
 .PHONY : net/fast
 
-src/net/test.obj: src/net/test.c.obj
-.PHONY : src/net/test.obj
+src/app/test/main.obj: src/app/test/main.c.obj
+.PHONY : src/app/test/main.obj
 
 # target to build an object file
-src/net/test.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/test.c.obj
-.PHONY : src/net/test.c.obj
+src/app/test/main.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/test/main.c.obj
+.PHONY : src/app/test/main.c.obj
 
-src/net/test.i: src/net/test.c.i
-.PHONY : src/net/test.i
+src/app/test/main.i: src/app/test/main.c.i
+.PHONY : src/app/test/main.i
 
 # target to preprocess a source file
-src/net/test.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/test.c.i
-.PHONY : src/net/test.c.i
+src/app/test/main.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/test/main.c.i
+.PHONY : src/app/test/main.c.i
 
-src/net/test.s: src/net/test.c.s
-.PHONY : src/net/test.s
+src/app/test/main.s: src/app/test/main.c.s
+.PHONY : src/app/test/main.s
 
 # target to generate assembly for a file
-src/net/test.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/test.c.s
-.PHONY : src/net/test.c.s
+src/app/test/main.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/test/main.c.s
+.PHONY : src/app/test/main.c.s
+
+src/plat/sys_plat.obj: src/plat/sys_plat.c.obj
+.PHONY : src/plat/sys_plat.obj
+
+# target to build an object file
+src/plat/sys_plat.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/plat/sys_plat.c.obj
+.PHONY : src/plat/sys_plat.c.obj
+
+src/plat/sys_plat.i: src/plat/sys_plat.c.i
+.PHONY : src/plat/sys_plat.i
+
+# target to preprocess a source file
+src/plat/sys_plat.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/plat/sys_plat.c.i
+.PHONY : src/plat/sys_plat.c.i
+
+src/plat/sys_plat.s: src/plat/sys_plat.c.s
+.PHONY : src/plat/sys_plat.s
+
+# target to generate assembly for a file
+src/plat/sys_plat.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/plat/sys_plat.c.s
+.PHONY : src/plat/sys_plat.c.s
 
 # Help Target
 help:
@@ -161,9 +185,12 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... net
-	@echo ... src/net/test.obj
-	@echo ... src/net/test.i
-	@echo ... src/net/test.s
+	@echo ... src/app/test/main.obj
+	@echo ... src/app/test/main.i
+	@echo ... src/app/test/main.s
+	@echo ... src/plat/sys_plat.obj
+	@echo ... src/plat/sys_plat.i
+	@echo ... src/plat/sys_plat.s
 .PHONY : help
 
 

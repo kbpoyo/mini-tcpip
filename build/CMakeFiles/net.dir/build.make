@@ -68,34 +68,51 @@ include CMakeFiles/net.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/net.dir/flags.make
 
-CMakeFiles/net.dir/src/net/test.c.obj: CMakeFiles/net.dir/flags.make
-CMakeFiles/net.dir/src/net/test.c.obj: CMakeFiles/net.dir/includes_C.rsp
-CMakeFiles/net.dir/src/net/test.c.obj: F:/code/c++code/mini-tcpip/src/net/test.c
-CMakeFiles/net.dir/src/net/test.c.obj: CMakeFiles/net.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/net.dir/src/net/test.c.obj"
-	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/net.dir/src/net/test.c.obj -MF CMakeFiles\net.dir\src\net\test.c.obj.d -o CMakeFiles\net.dir\src\net\test.c.obj -c F:\code\c++code\mini-tcpip\src\net\test.c
+CMakeFiles/net.dir/src/app/test/main.c.obj: CMakeFiles/net.dir/flags.make
+CMakeFiles/net.dir/src/app/test/main.c.obj: CMakeFiles/net.dir/includes_C.rsp
+CMakeFiles/net.dir/src/app/test/main.c.obj: F:/code/c++code/mini-tcpip/src/app/test/main.c
+CMakeFiles/net.dir/src/app/test/main.c.obj: CMakeFiles/net.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/net.dir/src/app/test/main.c.obj"
+	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/net.dir/src/app/test/main.c.obj -MF CMakeFiles\net.dir\src\app\test\main.c.obj.d -o CMakeFiles\net.dir\src\app\test\main.c.obj -c F:\code\c++code\mini-tcpip\src\app\test\main.c
 
-CMakeFiles/net.dir/src/net/test.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/net.dir/src/net/test.c.i"
-	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E F:\code\c++code\mini-tcpip\src\net\test.c > CMakeFiles\net.dir\src\net\test.c.i
+CMakeFiles/net.dir/src/app/test/main.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/net.dir/src/app/test/main.c.i"
+	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E F:\code\c++code\mini-tcpip\src\app\test\main.c > CMakeFiles\net.dir\src\app\test\main.c.i
 
-CMakeFiles/net.dir/src/net/test.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/net.dir/src/net/test.c.s"
-	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\src\net\test.c -o CMakeFiles\net.dir\src\net\test.c.s
+CMakeFiles/net.dir/src/app/test/main.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/net.dir/src/app/test/main.c.s"
+	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\src\app\test\main.c -o CMakeFiles\net.dir\src\app\test\main.c.s
+
+CMakeFiles/net.dir/src/plat/sys_plat.c.obj: CMakeFiles/net.dir/flags.make
+CMakeFiles/net.dir/src/plat/sys_plat.c.obj: CMakeFiles/net.dir/includes_C.rsp
+CMakeFiles/net.dir/src/plat/sys_plat.c.obj: F:/code/c++code/mini-tcpip/src/plat/sys_plat.c
+CMakeFiles/net.dir/src/plat/sys_plat.c.obj: CMakeFiles/net.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/net.dir/src/plat/sys_plat.c.obj"
+	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/net.dir/src/plat/sys_plat.c.obj -MF CMakeFiles\net.dir\src\plat\sys_plat.c.obj.d -o CMakeFiles\net.dir\src\plat\sys_plat.c.obj -c F:\code\c++code\mini-tcpip\src\plat\sys_plat.c
+
+CMakeFiles/net.dir/src/plat/sys_plat.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/net.dir/src/plat/sys_plat.c.i"
+	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E F:\code\c++code\mini-tcpip\src\plat\sys_plat.c > CMakeFiles\net.dir\src\plat\sys_plat.c.i
+
+CMakeFiles/net.dir/src/plat/sys_plat.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/net.dir/src/plat/sys_plat.c.s"
+	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\src\plat\sys_plat.c -o CMakeFiles\net.dir\src\plat\sys_plat.c.s
 
 # Object files for target net
 net_OBJECTS = \
-"CMakeFiles/net.dir/src/net/test.c.obj"
+"CMakeFiles/net.dir/src/app/test/main.c.obj" \
+"CMakeFiles/net.dir/src/plat/sys_plat.c.obj"
 
 # External object files for target net
 net_EXTERNAL_OBJECTS =
 
-net.exe: CMakeFiles/net.dir/src/net/test.c.obj
+net.exe: CMakeFiles/net.dir/src/app/test/main.c.obj
+net.exe: CMakeFiles/net.dir/src/plat/sys_plat.c.obj
 net.exe: CMakeFiles/net.dir/build.make
 net.exe: CMakeFiles/net.dir/linkLibs.rsp
 net.exe: CMakeFiles/net.dir/objects1.rsp
 net.exe: CMakeFiles/net.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable net.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable net.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\net.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -6,5 +6,5 @@ C_DEFINES = -DNET_DRIVER_PCAP -DSYS_PLAT_WINDOWS -D_CRT_SECURE_NO_WARNINGS
 
 C_INCLUDES = @CMakeFiles/net.dir/includes_C.rsp
 
-C_FLAGS = -std=gnu99 -Wall
+C_FLAGS = -std=gnu99
 

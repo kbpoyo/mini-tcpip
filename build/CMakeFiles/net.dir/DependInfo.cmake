@@ -8,7 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "F:/code/c++code/mini-tcpip/src/net/test.c" "CMakeFiles/net.dir/src/net/test.c.obj" "gcc" "CMakeFiles/net.dir/src/net/test.c.obj.d"
+  "F:/code/c++code/mini-tcpip/src/app/test/main.c" "CMakeFiles/net.dir/src/app/test/main.c.obj" "gcc" "CMakeFiles/net.dir/src/app/test/main.c.obj.d"
+  "F:/code/c++code/mini-tcpip/src/plat/sys_plat.c" "CMakeFiles/net.dir/src/plat/sys_plat.c.obj" "gcc" "CMakeFiles/net.dir/src/plat/sys_plat.c.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

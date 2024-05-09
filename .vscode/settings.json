@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "sys_plat.h": "c",
+        "winsock.h": "c",
+        "stdint.h": "c",
+        "stdio.h": "c",
+        "corecrt.h": "c",
+        "stdlib.h": "c",
+        "corecrt_stdio_config.h": "c",
+        "time.h": "c"
+    }
+}
