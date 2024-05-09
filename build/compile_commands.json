@@ -1,0 +1,8 @@
+[
+{
+  "directory": "F:/code/c++code/mini-tcpip/build",
+  "command": "\"F:\\software\\work_space\\Toolbox _APP\\CLion Nova\\bin\\mingw\\bin\\gcc.exe\" -DNET_DRIVER_PCAP -DSYS_PLAT_WINDOWS -D_CRT_SECURE_NO_WARNINGS @CMakeFiles/net.dir/includes_C.rsp -std=gnu99 -Wall -o CMakeFiles\\net.dir\\src\\net\\test.c.obj -c F:\\code\\c++code\\mini-tcpip\\src\\net\\test.c",
+  "file": "F:/code/c++code/mini-tcpip/src/net/test.c",
+  "output": "CMakeFiles/net.dir/src/net/test.c.obj"
+}
+]

@@ -1,0 +1,3 @@
+F:/code/c++code/mini-tcpip/build/CMakeFiles/net.dir
+F:/code/c++code/mini-tcpip/build/CMakeFiles/edit_cache.dir
+F:/code/c++code/mini-tcpip/build/CMakeFiles/rebuild_cache.dir
