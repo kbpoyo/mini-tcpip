@@ -49,3 +49,9 @@ else()
     add_definitions(-DSYS_PLAT_LINUX)
     target_link_libraries(${PROJECT_NAME} pthread pcap)
 endif()
+
+
+enable_testing()
+add_subdirectory(test)
+
+

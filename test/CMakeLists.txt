@@ -1,0 +1,36 @@
+# cmake最低版本要求
+cmake_minimum_required(VERSION 3.22.1)
+
+# 设置工程的名字，生成的可执行文件也将使用该名称，如net.exe
+project(test)
+
+
+message(STATUS "CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
+message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
+
+list(REMOVE_ITEM SOURCE_LIST ${CMAKE_SOURCE_DIR}/src/app/main.c)
+
+# 将源文件列表加入到工程中
+add_executable(test1 "test.c" ${SOURCE_LIST})
+add_executable(send_pocket "send_pocket.c" ${SOURCE_LIST})
+add_executable(recv_pocket "recv_pocket.c" ${SOURCE_LIST})
+
+target_link_libraries(test1 ${LINK_LIBS_LIST})
+target_link_libraries(send_pocket ${LINK_LIBS_LIST})
+target_link_libraries(recv_pocket ${LINK_LIBS_LIST})
+
+add_test(
+  NAME test1
+  COMMAND $<TARGET_FILE:test1>
+)
+
+add_test(
+  NAME send_pocket
+  COMMAND $<TARGET_FILE:send_pocket>
+)
+
+add_test(
+  NAME recv_pocket
+  COMMAND $<TARGET_FILE:recv_pocket>
+)
+set_tests_properties(recv_pocket PROPERTIES TIMEOUT 30)

@@ -64,6 +64,16 @@ CMAKE_BINARY_DIR = F:\code\c++code\mini-tcpip\build
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running tests..."
+	"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\ctest.exe" --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+.PHONY : test/fast
+
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
@@ -128,29 +138,68 @@ net/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/build
 .PHONY : net/fast
 
-src/app/test/main.obj: src/app/test/main.c.obj
-.PHONY : src/app/test/main.obj
+#=============================================================================
+# Target rules for targets named test1
+
+# Build rule for target.
+test1: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test1
+.PHONY : test1
+
+# fast build rule for target.
+test1/fast:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/build
+.PHONY : test1/fast
+
+#=============================================================================
+# Target rules for targets named send_pocket
+
+# Build rule for target.
+send_pocket: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 send_pocket
+.PHONY : send_pocket
+
+# fast build rule for target.
+send_pocket/fast:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/build
+.PHONY : send_pocket/fast
+
+#=============================================================================
+# Target rules for targets named recv_pocket
+
+# Build rule for target.
+recv_pocket: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 recv_pocket
+.PHONY : recv_pocket
+
+# fast build rule for target.
+recv_pocket/fast:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/build
+.PHONY : recv_pocket/fast
+
+src/app/main.obj: src/app/main.c.obj
+.PHONY : src/app/main.obj
 
 # target to build an object file
-src/app/test/main.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/test/main.c.obj
-.PHONY : src/app/test/main.c.obj
+src/app/main.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/main.c.obj
+.PHONY : src/app/main.c.obj
 
-src/app/test/main.i: src/app/test/main.c.i
-.PHONY : src/app/test/main.i
+src/app/main.i: src/app/main.c.i
+.PHONY : src/app/main.i
 
 # target to preprocess a source file
-src/app/test/main.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/test/main.c.i
-.PHONY : src/app/test/main.c.i
+src/app/main.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/main.c.i
+.PHONY : src/app/main.c.i
 
-src/app/test/main.s: src/app/test/main.c.s
-.PHONY : src/app/test/main.s
+src/app/main.s: src/app/main.c.s
+.PHONY : src/app/main.s
 
 # target to generate assembly for a file
-src/app/test/main.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/test/main.c.s
-.PHONY : src/app/test/main.c.s
+src/app/main.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/main.c.s
+.PHONY : src/app/main.c.s
 
 src/plat/sys_plat.obj: src/plat/sys_plat.c.obj
 .PHONY : src/plat/sys_plat.obj
@@ -184,10 +233,14 @@ help:
 	@echo ... depend
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... test
 	@echo ... net
-	@echo ... src/app/test/main.obj
-	@echo ... src/app/test/main.i
-	@echo ... src/app/test/main.s
+	@echo ... recv_pocket
+	@echo ... send_pocket
+	@echo ... test1
+	@echo ... src/app/main.obj
+	@echo ... src/app/main.i
+	@echo ... src/app/main.s
 	@echo ... src/plat/sys_plat.obj
 	@echo ... src/plat/sys_plat.i
 	@echo ... src/plat/sys_plat.s

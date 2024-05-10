@@ -63,15 +63,36 @@ CMAKE_BINARY_DIR = F:\code\c++code\mini-tcpip\build
 
 # The main recursive "all" target.
 all: CMakeFiles/net.dir/all
+all: test/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
-preinstall:
+preinstall: test/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
 clean: CMakeFiles/net.dir/clean
+clean: test/clean
 .PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory test
+
+# Recursive "all" directory target.
+test/all: test/CMakeFiles/test1.dir/all
+test/all: test/CMakeFiles/send_pocket.dir/all
+test/all: test/CMakeFiles/recv_pocket.dir/all
+.PHONY : test/all
+
+# Recursive "preinstall" directory target.
+test/preinstall:
+.PHONY : test/preinstall
+
+# Recursive "clean" directory target.
+test/clean: test/CMakeFiles/test1.dir/clean
+test/clean: test/CMakeFiles/send_pocket.dir/clean
+test/clean: test/CMakeFiles/recv_pocket.dir/clean
+.PHONY : test/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/net.dir
@@ -98,6 +119,84 @@ net: CMakeFiles/net.dir/rule
 CMakeFiles/net.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/clean
 .PHONY : CMakeFiles/net.dir/clean
+
+#=============================================================================
+# Target rules for target test/CMakeFiles/test1.dir
+
+# All Build rule for target.
+test/CMakeFiles/test1.dir/all:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/depend
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=10,11,12 "Built target test1"
+.PHONY : test/CMakeFiles/test1.dir/all
+
+# Build rule for subdir invocation for target.
+test/CMakeFiles/test1.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 3
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/test1.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 0
+.PHONY : test/CMakeFiles/test1.dir/rule
+
+# Convenience name for target.
+test1: test/CMakeFiles/test1.dir/rule
+.PHONY : test1
+
+# clean rule for target.
+test/CMakeFiles/test1.dir/clean:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/clean
+.PHONY : test/CMakeFiles/test1.dir/clean
+
+#=============================================================================
+# Target rules for target test/CMakeFiles/send_pocket.dir
+
+# All Build rule for target.
+test/CMakeFiles/send_pocket.dir/all:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/depend
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=7,8,9 "Built target send_pocket"
+.PHONY : test/CMakeFiles/send_pocket.dir/all
+
+# Build rule for subdir invocation for target.
+test/CMakeFiles/send_pocket.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 3
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/send_pocket.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 0
+.PHONY : test/CMakeFiles/send_pocket.dir/rule
+
+# Convenience name for target.
+send_pocket: test/CMakeFiles/send_pocket.dir/rule
+.PHONY : send_pocket
+
+# clean rule for target.
+test/CMakeFiles/send_pocket.dir/clean:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/clean
+.PHONY : test/CMakeFiles/send_pocket.dir/clean
+
+#=============================================================================
+# Target rules for target test/CMakeFiles/recv_pocket.dir
+
+# All Build rule for target.
+test/CMakeFiles/recv_pocket.dir/all:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/depend
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=4,5,6 "Built target recv_pocket"
+.PHONY : test/CMakeFiles/recv_pocket.dir/all
+
+# Build rule for subdir invocation for target.
+test/CMakeFiles/recv_pocket.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 3
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/recv_pocket.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 0
+.PHONY : test/CMakeFiles/recv_pocket.dir/rule
+
+# Convenience name for target.
+recv_pocket: test/CMakeFiles/recv_pocket.dir/rule
+.PHONY : recv_pocket
+
+# clean rule for target.
+test/CMakeFiles/recv_pocket.dir/clean:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/clean
+.PHONY : test/CMakeFiles/recv_pocket.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

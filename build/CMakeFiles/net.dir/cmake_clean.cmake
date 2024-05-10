@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/net.dir/src/app/test/main.c.obj"
-  "CMakeFiles/net.dir/src/app/test/main.c.obj.d"
+  "CMakeFiles/net.dir/src/app/main.c.obj"
+  "CMakeFiles/net.dir/src/app/main.c.obj.d"
   "CMakeFiles/net.dir/src/plat/sys_plat.c.obj"
   "CMakeFiles/net.dir/src/plat/sys_plat.c.obj.d"
   "libnet.dll.a"
