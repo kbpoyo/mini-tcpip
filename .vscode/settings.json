@@ -7,7 +7,10 @@
         "corecrt.h": "c",
         "stdlib.h": "c",
         "corecrt_stdio_config.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "winsock2.h": "c",
+        "*.ipp": "c",
+        "tcp_echo_client.h": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [

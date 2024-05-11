@@ -83,11 +83,41 @@ test/CMakeFiles/test1.dir/test.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/test1.dir/test.c.s"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\test\test.c -o CMakeFiles\test1.dir\test.c.s
 
+test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.obj: test/CMakeFiles/test1.dir/flags.make
+test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.obj: test/CMakeFiles/test1.dir/includes_C.rsp
+test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.obj: F:/code/c++code/mini-tcpip/src/app/echo/tcp_echo_client.c
+test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.obj: test/CMakeFiles/test1.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.obj"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.obj -MF CMakeFiles\test1.dir\__\src\app\echo\tcp_echo_client.c.obj.d -o CMakeFiles\test1.dir\__\src\app\echo\tcp_echo_client.c.obj -c F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_client.c
+
+test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.i"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_client.c > CMakeFiles\test1.dir\__\src\app\echo\tcp_echo_client.c.i
+
+test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.s"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_client.c -o CMakeFiles\test1.dir\__\src\app\echo\tcp_echo_client.c.s
+
+test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.obj: test/CMakeFiles/test1.dir/flags.make
+test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.obj: test/CMakeFiles/test1.dir/includes_C.rsp
+test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.obj: F:/code/c++code/mini-tcpip/src/app/echo/tcp_echo_server.c
+test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.obj: test/CMakeFiles/test1.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.obj"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.obj -MF CMakeFiles\test1.dir\__\src\app\echo\tcp_echo_server.c.obj.d -o CMakeFiles\test1.dir\__\src\app\echo\tcp_echo_server.c.obj -c F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_server.c
+
+test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.i"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_server.c > CMakeFiles\test1.dir\__\src\app\echo\tcp_echo_server.c.i
+
+test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.s"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_server.c -o CMakeFiles\test1.dir\__\src\app\echo\tcp_echo_server.c.s
+
 test/CMakeFiles/test1.dir/__/src/plat/sys_plat.c.obj: test/CMakeFiles/test1.dir/flags.make
 test/CMakeFiles/test1.dir/__/src/plat/sys_plat.c.obj: test/CMakeFiles/test1.dir/includes_C.rsp
 test/CMakeFiles/test1.dir/__/src/plat/sys_plat.c.obj: F:/code/c++code/mini-tcpip/src/plat/sys_plat.c
 test/CMakeFiles/test1.dir/__/src/plat/sys_plat.c.obj: test/CMakeFiles/test1.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object test/CMakeFiles/test1.dir/__/src/plat/sys_plat.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object test/CMakeFiles/test1.dir/__/src/plat/sys_plat.c.obj"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test1.dir/__/src/plat/sys_plat.c.obj -MF CMakeFiles\test1.dir\__\src\plat\sys_plat.c.obj.d -o CMakeFiles\test1.dir\__\src\plat\sys_plat.c.obj -c F:\code\c++code\mini-tcpip\src\plat\sys_plat.c
 
 test/CMakeFiles/test1.dir/__/src/plat/sys_plat.c.i: cmake_force
@@ -101,18 +131,22 @@ test/CMakeFiles/test1.dir/__/src/plat/sys_plat.c.s: cmake_force
 # Object files for target test1
 test1_OBJECTS = \
 "CMakeFiles/test1.dir/test.c.obj" \
+"CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.obj" \
+"CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.obj" \
 "CMakeFiles/test1.dir/__/src/plat/sys_plat.c.obj"
 
 # External object files for target test1
 test1_EXTERNAL_OBJECTS =
 
 test/test1.exe: test/CMakeFiles/test1.dir/test.c.obj
+test/test1.exe: test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.obj
+test/test1.exe: test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.obj
 test/test1.exe: test/CMakeFiles/test1.dir/__/src/plat/sys_plat.c.obj
 test/test1.exe: test/CMakeFiles/test1.dir/build.make
 test/test1.exe: test/CMakeFiles/test1.dir/linkLibs.rsp
 test/test1.exe: test/CMakeFiles/test1.dir/objects1.rsp
 test/test1.exe: test/CMakeFiles/test1.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable test1.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable test1.exe"
 	cd /d F:\code\c++code\mini-tcpip\build\test && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\test1.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

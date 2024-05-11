@@ -1,4 +1,8 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.obj"
+  "CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.obj.d"
+  "CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.obj"
+  "CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.obj.d"
   "CMakeFiles/test1.dir/__/src/plat/sys_plat.c.obj"
   "CMakeFiles/test1.dir/__/src/plat/sys_plat.c.obj.d"
   "CMakeFiles/test1.dir/test.c.obj"

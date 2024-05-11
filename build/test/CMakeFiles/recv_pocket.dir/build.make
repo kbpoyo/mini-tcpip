@@ -83,11 +83,41 @@ test/CMakeFiles/recv_pocket.dir/recv_pocket.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/recv_pocket.dir/recv_pocket.c.s"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\test\recv_pocket.c -o CMakeFiles\recv_pocket.dir\recv_pocket.c.s
 
+test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.obj: test/CMakeFiles/recv_pocket.dir/flags.make
+test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.obj: test/CMakeFiles/recv_pocket.dir/includes_C.rsp
+test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.obj: F:/code/c++code/mini-tcpip/src/app/echo/tcp_echo_client.c
+test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.obj: test/CMakeFiles/recv_pocket.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.obj"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.obj -MF CMakeFiles\recv_pocket.dir\__\src\app\echo\tcp_echo_client.c.obj.d -o CMakeFiles\recv_pocket.dir\__\src\app\echo\tcp_echo_client.c.obj -c F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_client.c
+
+test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.i"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_client.c > CMakeFiles\recv_pocket.dir\__\src\app\echo\tcp_echo_client.c.i
+
+test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.s"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_client.c -o CMakeFiles\recv_pocket.dir\__\src\app\echo\tcp_echo_client.c.s
+
+test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.obj: test/CMakeFiles/recv_pocket.dir/flags.make
+test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.obj: test/CMakeFiles/recv_pocket.dir/includes_C.rsp
+test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.obj: F:/code/c++code/mini-tcpip/src/app/echo/tcp_echo_server.c
+test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.obj: test/CMakeFiles/recv_pocket.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.obj"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.obj -MF CMakeFiles\recv_pocket.dir\__\src\app\echo\tcp_echo_server.c.obj.d -o CMakeFiles\recv_pocket.dir\__\src\app\echo\tcp_echo_server.c.obj -c F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_server.c
+
+test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.i"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_server.c > CMakeFiles\recv_pocket.dir\__\src\app\echo\tcp_echo_server.c.i
+
+test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.s"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_server.c -o CMakeFiles\recv_pocket.dir\__\src\app\echo\tcp_echo_server.c.s
+
 test/CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.obj: test/CMakeFiles/recv_pocket.dir/flags.make
 test/CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.obj: test/CMakeFiles/recv_pocket.dir/includes_C.rsp
 test/CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.obj: F:/code/c++code/mini-tcpip/src/plat/sys_plat.c
 test/CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.obj: test/CMakeFiles/recv_pocket.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object test/CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object test/CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.obj"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.obj -MF CMakeFiles\recv_pocket.dir\__\src\plat\sys_plat.c.obj.d -o CMakeFiles\recv_pocket.dir\__\src\plat\sys_plat.c.obj -c F:\code\c++code\mini-tcpip\src\plat\sys_plat.c
 
 test/CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.i: cmake_force
@@ -101,18 +131,22 @@ test/CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.s: cmake_force
 # Object files for target recv_pocket
 recv_pocket_OBJECTS = \
 "CMakeFiles/recv_pocket.dir/recv_pocket.c.obj" \
+"CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.obj" \
+"CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.obj" \
 "CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.obj"
 
 # External object files for target recv_pocket
 recv_pocket_EXTERNAL_OBJECTS =
 
 test/recv_pocket.exe: test/CMakeFiles/recv_pocket.dir/recv_pocket.c.obj
+test/recv_pocket.exe: test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.obj
+test/recv_pocket.exe: test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.obj
 test/recv_pocket.exe: test/CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.obj
 test/recv_pocket.exe: test/CMakeFiles/recv_pocket.dir/build.make
 test/recv_pocket.exe: test/CMakeFiles/recv_pocket.dir/linkLibs.rsp
 test/recv_pocket.exe: test/CMakeFiles/recv_pocket.dir/objects1.rsp
 test/recv_pocket.exe: test/CMakeFiles/recv_pocket.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable recv_pocket.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable recv_pocket.exe"
 	cd /d F:\code\c++code\mini-tcpip\build\test && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\recv_pocket.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

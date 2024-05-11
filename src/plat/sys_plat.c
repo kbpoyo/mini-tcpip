@@ -271,6 +271,15 @@ void sys_thread_exit (int error) {
     ExitThread((DWORD)error);
 }
 
+/**
+ * @brief 等待线程结束 
+ * 
+ * @param thread 
+ */
+void sys_thread_join(sys_thread_t thread) {
+    WaitForSingleObject(thread, INFINITE);
+}
+
 sys_thread_t sys_thread_self (void) {
     return GetCurrentThread();
 }

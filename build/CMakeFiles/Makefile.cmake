@@ -139,4 +139,8 @@ set(CMAKE_DEPEND_INFO_FILES
   "test/CMakeFiles/test1.dir/DependInfo.cmake"
   "test/CMakeFiles/send_pocket.dir/DependInfo.cmake"
   "test/CMakeFiles/recv_pocket.dir/DependInfo.cmake"
+  "test/CMakeFiles/multi_thread.dir/DependInfo.cmake"
+  "test/CMakeFiles/circular_queue.dir/DependInfo.cmake"
+  "test/CMakeFiles/test_tcp_echo_client.dir/DependInfo.cmake"
+  "test/CMakeFiles/test_tcp_echo_server.dir/DependInfo.cmake"
   )

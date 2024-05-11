@@ -168,6 +168,7 @@ int sys_mutex_is_valid(sys_mutex_t mutex);
 typedef void (*sys_thread_func_t)(void * arg);
 sys_thread_t sys_thread_create(sys_thread_func_t entry, void* arg);
 void sys_thread_exit (int error);
+void sys_thread_join(sys_thread_t thread);
 void sys_sleep(int ms);
 sys_thread_t sys_thread_self (void);
 

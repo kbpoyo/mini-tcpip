@@ -177,6 +177,106 @@ recv_pocket/fast:
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/build
 .PHONY : recv_pocket/fast
 
+#=============================================================================
+# Target rules for targets named multi_thread
+
+# Build rule for target.
+multi_thread: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 multi_thread
+.PHONY : multi_thread
+
+# fast build rule for target.
+multi_thread/fast:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/build
+.PHONY : multi_thread/fast
+
+#=============================================================================
+# Target rules for targets named circular_queue
+
+# Build rule for target.
+circular_queue: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 circular_queue
+.PHONY : circular_queue
+
+# fast build rule for target.
+circular_queue/fast:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/build
+.PHONY : circular_queue/fast
+
+#=============================================================================
+# Target rules for targets named test_tcp_echo_client
+
+# Build rule for target.
+test_tcp_echo_client: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test_tcp_echo_client
+.PHONY : test_tcp_echo_client
+
+# fast build rule for target.
+test_tcp_echo_client/fast:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/build
+.PHONY : test_tcp_echo_client/fast
+
+#=============================================================================
+# Target rules for targets named test_tcp_echo_server
+
+# Build rule for target.
+test_tcp_echo_server: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test_tcp_echo_server
+.PHONY : test_tcp_echo_server
+
+# fast build rule for target.
+test_tcp_echo_server/fast:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/build
+.PHONY : test_tcp_echo_server/fast
+
+src/app/echo/tcp_echo_client.obj: src/app/echo/tcp_echo_client.c.obj
+.PHONY : src/app/echo/tcp_echo_client.obj
+
+# target to build an object file
+src/app/echo/tcp_echo_client.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/echo/tcp_echo_client.c.obj
+.PHONY : src/app/echo/tcp_echo_client.c.obj
+
+src/app/echo/tcp_echo_client.i: src/app/echo/tcp_echo_client.c.i
+.PHONY : src/app/echo/tcp_echo_client.i
+
+# target to preprocess a source file
+src/app/echo/tcp_echo_client.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/echo/tcp_echo_client.c.i
+.PHONY : src/app/echo/tcp_echo_client.c.i
+
+src/app/echo/tcp_echo_client.s: src/app/echo/tcp_echo_client.c.s
+.PHONY : src/app/echo/tcp_echo_client.s
+
+# target to generate assembly for a file
+src/app/echo/tcp_echo_client.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/echo/tcp_echo_client.c.s
+.PHONY : src/app/echo/tcp_echo_client.c.s
+
+src/app/echo/tcp_echo_server.obj: src/app/echo/tcp_echo_server.c.obj
+.PHONY : src/app/echo/tcp_echo_server.obj
+
+# target to build an object file
+src/app/echo/tcp_echo_server.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.obj
+.PHONY : src/app/echo/tcp_echo_server.c.obj
+
+src/app/echo/tcp_echo_server.i: src/app/echo/tcp_echo_server.c.i
+.PHONY : src/app/echo/tcp_echo_server.i
+
+# target to preprocess a source file
+src/app/echo/tcp_echo_server.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.i
+.PHONY : src/app/echo/tcp_echo_server.c.i
+
+src/app/echo/tcp_echo_server.s: src/app/echo/tcp_echo_server.c.s
+.PHONY : src/app/echo/tcp_echo_server.s
+
+# target to generate assembly for a file
+src/app/echo/tcp_echo_server.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.s
+.PHONY : src/app/echo/tcp_echo_server.c.s
+
 src/app/main.obj: src/app/main.c.obj
 .PHONY : src/app/main.obj
 
@@ -234,10 +334,20 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... test
+	@echo ... circular_queue
+	@echo ... multi_thread
 	@echo ... net
 	@echo ... recv_pocket
 	@echo ... send_pocket
 	@echo ... test1
+	@echo ... test_tcp_echo_client
+	@echo ... test_tcp_echo_server
+	@echo ... src/app/echo/tcp_echo_client.obj
+	@echo ... src/app/echo/tcp_echo_client.i
+	@echo ... src/app/echo/tcp_echo_client.s
+	@echo ... src/app/echo/tcp_echo_server.obj
+	@echo ... src/app/echo/tcp_echo_server.i
+	@echo ... src/app/echo/tcp_echo_server.s
 	@echo ... src/app/main.obj
 	@echo ... src/app/main.i
 	@echo ... src/app/main.s

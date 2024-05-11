@@ -1,51 +1,59 @@
-﻿#include <stdio.h>
+﻿#include <stdint.h>
+#include <stdio.h>
 
 #include "sys_plat.h"
 
-static sys_sem_t sem = SYS_SEM_INVALID;
+static sys_sem_t sem_read = SYS_SEM_INVALID;
+static sys_sem_t sem_write = SYS_SEM_INVALID;
 static sys_mutex_t mutex = SYS_MUTEx_INVALID;
 
-int count = 0;
+#define Buffer_Size 100
+static char buffer[Buffer_Size];
+static int write_index = 0;
+static int read_index = 0;
+static int data_cnt = 0;
 
 void thread1_entry(void *arg) {
-	for (int i = 0; i < 1000000; i++) {
-		sys_mutex_lock(mutex);
-		count++;
+  for (int i = 0; i < 2 * sizeof(buffer); i++) {
+    sys_sem_wait(sem_read, 0);
+    char data = buffer[read_index++];
+    read_index %= Buffer_Size;
 
-		sys_mutex_unlock(mutex);
-	}
+    sys_mutex_lock(mutex);
+    data_cnt--;
+    sys_mutex_unlock(mutex);
+    
+    plat_printf("thread1 read data = %d\n", (uint8_t)data);
+    sys_sem_notify(sem_write);
 
+    sys_sleep(10);
+  }
 
-	plat_printf("thread1 count = %d\n", count);
-
-	while (1) {
-		plat_printf("thread1 %s\n", (char*)arg);
-		sys_sem_notify(sem);
-		sys_sleep(1000);
-	}
+  plat_printf("data_cnt = %d\n", data_cnt);
 }
 
 void thread2_entry(void *arg) {
-	for (int i = 0; i < 1000000; i++) {
-		sys_mutex_lock(mutex);
-		count--;
-		sys_mutex_unlock(mutex);
-	}
+  for (int i = 0; i < 2 * sizeof(buffer); i++) {
+    sys_sem_wait(sem_write, 0);
+    buffer[write_index++] = i;
+    write_index %= Buffer_Size;
+    
+    sys_mutex_lock(mutex);
+    data_cnt++;
+    sys_mutex_unlock(mutex);
 
-	plat_printf("thread2 count = %d\n", count);
-	while (1) {
-		sys_sem_wait(sem, 0);
-		plat_printf("thread2 %s\n", (char*)arg);
-	}
+    plat_printf("thread2 write data = %d\n", i);
+    sys_sem_notify(sem_read);
+  }
 }
 
 int main(void) {
-	sem = sys_sem_create(0);
-	mutex = sys_mutex_create();
+  sem_read = sys_sem_create(0);
+  sem_write = sys_sem_create(Buffer_Size);
+  mutex = sys_mutex_create();
 
-	sys_thread_create(thread1_entry, "aaaa");
-	sys_thread_create(thread2_entry, "bbbb");
-
+  sys_thread_create(thread1_entry, "aaaa");
+  sys_thread_create(thread2_entry, "bbbb");
 
   // 打开物理网卡，设置好硬件地址
   static const uint8_t netdev0_hwaddr[] = {0x00, 0x50, 0x56, 0xc0, 0x00, 0x11};

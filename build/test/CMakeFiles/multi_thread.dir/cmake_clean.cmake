@@ -1,0 +1,19 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/multi_thread.dir/__/src/app/echo/tcp_echo_client.c.obj"
+  "CMakeFiles/multi_thread.dir/__/src/app/echo/tcp_echo_client.c.obj.d"
+  "CMakeFiles/multi_thread.dir/__/src/app/echo/tcp_echo_server.c.obj"
+  "CMakeFiles/multi_thread.dir/__/src/app/echo/tcp_echo_server.c.obj.d"
+  "CMakeFiles/multi_thread.dir/__/src/plat/sys_plat.c.obj"
+  "CMakeFiles/multi_thread.dir/__/src/plat/sys_plat.c.obj.d"
+  "CMakeFiles/multi_thread.dir/multi_thread.c.obj"
+  "CMakeFiles/multi_thread.dir/multi_thread.c.obj.d"
+  "libmulti_thread.dll.a"
+  "multi_thread.exe"
+  "multi_thread.exe.manifest"
+  "multi_thread.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang C)
+  include(CMakeFiles/multi_thread.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

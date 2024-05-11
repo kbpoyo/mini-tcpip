@@ -8,6 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "F:/code/c++code/mini-tcpip/src/app/echo/tcp_echo_client.c" "test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.obj" "gcc" "test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.obj.d"
+  "F:/code/c++code/mini-tcpip/src/app/echo/tcp_echo_server.c" "test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.obj" "gcc" "test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.obj.d"
   "F:/code/c++code/mini-tcpip/src/plat/sys_plat.c" "test/CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.obj" "gcc" "test/CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.obj.d"
   "F:/code/c++code/mini-tcpip/test/recv_pocket.c" "test/CMakeFiles/recv_pocket.dir/recv_pocket.c.obj" "gcc" "test/CMakeFiles/recv_pocket.dir/recv_pocket.c.obj.d"
   )

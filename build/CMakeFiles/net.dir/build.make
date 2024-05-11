@@ -68,11 +68,41 @@ include CMakeFiles/net.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/net.dir/flags.make
 
+CMakeFiles/net.dir/src/app/echo/tcp_echo_client.c.obj: CMakeFiles/net.dir/flags.make
+CMakeFiles/net.dir/src/app/echo/tcp_echo_client.c.obj: CMakeFiles/net.dir/includes_C.rsp
+CMakeFiles/net.dir/src/app/echo/tcp_echo_client.c.obj: F:/code/c++code/mini-tcpip/src/app/echo/tcp_echo_client.c
+CMakeFiles/net.dir/src/app/echo/tcp_echo_client.c.obj: CMakeFiles/net.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/net.dir/src/app/echo/tcp_echo_client.c.obj"
+	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/net.dir/src/app/echo/tcp_echo_client.c.obj -MF CMakeFiles\net.dir\src\app\echo\tcp_echo_client.c.obj.d -o CMakeFiles\net.dir\src\app\echo\tcp_echo_client.c.obj -c F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_client.c
+
+CMakeFiles/net.dir/src/app/echo/tcp_echo_client.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/net.dir/src/app/echo/tcp_echo_client.c.i"
+	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_client.c > CMakeFiles\net.dir\src\app\echo\tcp_echo_client.c.i
+
+CMakeFiles/net.dir/src/app/echo/tcp_echo_client.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/net.dir/src/app/echo/tcp_echo_client.c.s"
+	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_client.c -o CMakeFiles\net.dir\src\app\echo\tcp_echo_client.c.s
+
+CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.obj: CMakeFiles/net.dir/flags.make
+CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.obj: CMakeFiles/net.dir/includes_C.rsp
+CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.obj: F:/code/c++code/mini-tcpip/src/app/echo/tcp_echo_server.c
+CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.obj: CMakeFiles/net.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.obj"
+	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.obj -MF CMakeFiles\net.dir\src\app\echo\tcp_echo_server.c.obj.d -o CMakeFiles\net.dir\src\app\echo\tcp_echo_server.c.obj -c F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_server.c
+
+CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.i"
+	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_server.c > CMakeFiles\net.dir\src\app\echo\tcp_echo_server.c.i
+
+CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.s"
+	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\src\app\echo\tcp_echo_server.c -o CMakeFiles\net.dir\src\app\echo\tcp_echo_server.c.s
+
 CMakeFiles/net.dir/src/app/main.c.obj: CMakeFiles/net.dir/flags.make
 CMakeFiles/net.dir/src/app/main.c.obj: CMakeFiles/net.dir/includes_C.rsp
 CMakeFiles/net.dir/src/app/main.c.obj: F:/code/c++code/mini-tcpip/src/app/main.c
 CMakeFiles/net.dir/src/app/main.c.obj: CMakeFiles/net.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/net.dir/src/app/main.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/net.dir/src/app/main.c.obj"
 	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/net.dir/src/app/main.c.obj -MF CMakeFiles\net.dir\src\app\main.c.obj.d -o CMakeFiles\net.dir\src\app\main.c.obj -c F:\code\c++code\mini-tcpip\src\app\main.c
 
 CMakeFiles/net.dir/src/app/main.c.i: cmake_force
@@ -87,7 +117,7 @@ CMakeFiles/net.dir/src/plat/sys_plat.c.obj: CMakeFiles/net.dir/flags.make
 CMakeFiles/net.dir/src/plat/sys_plat.c.obj: CMakeFiles/net.dir/includes_C.rsp
 CMakeFiles/net.dir/src/plat/sys_plat.c.obj: F:/code/c++code/mini-tcpip/src/plat/sys_plat.c
 CMakeFiles/net.dir/src/plat/sys_plat.c.obj: CMakeFiles/net.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/net.dir/src/plat/sys_plat.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/net.dir/src/plat/sys_plat.c.obj"
 	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/net.dir/src/plat/sys_plat.c.obj -MF CMakeFiles\net.dir\src\plat\sys_plat.c.obj.d -o CMakeFiles\net.dir\src\plat\sys_plat.c.obj -c F:\code\c++code\mini-tcpip\src\plat\sys_plat.c
 
 CMakeFiles/net.dir/src/plat/sys_plat.c.i: cmake_force
@@ -100,19 +130,23 @@ CMakeFiles/net.dir/src/plat/sys_plat.c.s: cmake_force
 
 # Object files for target net
 net_OBJECTS = \
+"CMakeFiles/net.dir/src/app/echo/tcp_echo_client.c.obj" \
+"CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.obj" \
 "CMakeFiles/net.dir/src/app/main.c.obj" \
 "CMakeFiles/net.dir/src/plat/sys_plat.c.obj"
 
 # External object files for target net
 net_EXTERNAL_OBJECTS =
 
+net.exe: CMakeFiles/net.dir/src/app/echo/tcp_echo_client.c.obj
+net.exe: CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.obj
 net.exe: CMakeFiles/net.dir/src/app/main.c.obj
 net.exe: CMakeFiles/net.dir/src/plat/sys_plat.c.obj
 net.exe: CMakeFiles/net.dir/build.make
 net.exe: CMakeFiles/net.dir/linkLibs.rsp
 net.exe: CMakeFiles/net.dir/objects1.rsp
 net.exe: CMakeFiles/net.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable net.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable net.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\net.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

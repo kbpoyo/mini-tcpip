@@ -167,6 +167,146 @@ recv_pocket/fast:
 	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/build
 .PHONY : recv_pocket/fast
 
+# Convenience name for target.
+test/CMakeFiles/multi_thread.dir/rule:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/multi_thread.dir/rule
+.PHONY : test/CMakeFiles/multi_thread.dir/rule
+
+# Convenience name for target.
+multi_thread: test/CMakeFiles/multi_thread.dir/rule
+.PHONY : multi_thread
+
+# fast build rule for target.
+multi_thread/fast:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/build
+.PHONY : multi_thread/fast
+
+# Convenience name for target.
+test/CMakeFiles/circular_queue.dir/rule:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/circular_queue.dir/rule
+.PHONY : test/CMakeFiles/circular_queue.dir/rule
+
+# Convenience name for target.
+circular_queue: test/CMakeFiles/circular_queue.dir/rule
+.PHONY : circular_queue
+
+# fast build rule for target.
+circular_queue/fast:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/build
+.PHONY : circular_queue/fast
+
+# Convenience name for target.
+test/CMakeFiles/test_tcp_echo_client.dir/rule:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/test_tcp_echo_client.dir/rule
+.PHONY : test/CMakeFiles/test_tcp_echo_client.dir/rule
+
+# Convenience name for target.
+test_tcp_echo_client: test/CMakeFiles/test_tcp_echo_client.dir/rule
+.PHONY : test_tcp_echo_client
+
+# fast build rule for target.
+test_tcp_echo_client/fast:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/build
+.PHONY : test_tcp_echo_client/fast
+
+# Convenience name for target.
+test/CMakeFiles/test_tcp_echo_server.dir/rule:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/test_tcp_echo_server.dir/rule
+.PHONY : test/CMakeFiles/test_tcp_echo_server.dir/rule
+
+# Convenience name for target.
+test_tcp_echo_server: test/CMakeFiles/test_tcp_echo_server.dir/rule
+.PHONY : test_tcp_echo_server
+
+# fast build rule for target.
+test_tcp_echo_server/fast:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/build
+.PHONY : test_tcp_echo_server/fast
+
+__/src/app/echo/tcp_echo_client.obj: __/src/app/echo/tcp_echo_client.c.obj
+.PHONY : __/src/app/echo/tcp_echo_client.obj
+
+# target to build an object file
+__/src/app/echo/tcp_echo_client.c.obj:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/app/echo/tcp_echo_client.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/app/echo/tcp_echo_client.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_client.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/app/echo/tcp_echo_client.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/echo/tcp_echo_client.c.obj
+.PHONY : __/src/app/echo/tcp_echo_client.c.obj
+
+__/src/app/echo/tcp_echo_client.i: __/src/app/echo/tcp_echo_client.c.i
+.PHONY : __/src/app/echo/tcp_echo_client.i
+
+# target to preprocess a source file
+__/src/app/echo/tcp_echo_client.c.i:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/app/echo/tcp_echo_client.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/app/echo/tcp_echo_client.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_client.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/app/echo/tcp_echo_client.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/echo/tcp_echo_client.c.i
+.PHONY : __/src/app/echo/tcp_echo_client.c.i
+
+__/src/app/echo/tcp_echo_client.s: __/src/app/echo/tcp_echo_client.c.s
+.PHONY : __/src/app/echo/tcp_echo_client.s
+
+# target to generate assembly for a file
+__/src/app/echo/tcp_echo_client.c.s:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/app/echo/tcp_echo_client.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/app/echo/tcp_echo_client.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_client.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/app/echo/tcp_echo_client.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/echo/tcp_echo_client.c.s
+.PHONY : __/src/app/echo/tcp_echo_client.c.s
+
+__/src/app/echo/tcp_echo_server.obj: __/src/app/echo/tcp_echo_server.c.obj
+.PHONY : __/src/app/echo/tcp_echo_server.obj
+
+# target to build an object file
+__/src/app/echo/tcp_echo_server.c.obj:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/app/echo/tcp_echo_server.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/app/echo/tcp_echo_server.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_server.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/app/echo/tcp_echo_server.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/echo/tcp_echo_server.c.obj
+.PHONY : __/src/app/echo/tcp_echo_server.c.obj
+
+__/src/app/echo/tcp_echo_server.i: __/src/app/echo/tcp_echo_server.c.i
+.PHONY : __/src/app/echo/tcp_echo_server.i
+
+# target to preprocess a source file
+__/src/app/echo/tcp_echo_server.c.i:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/app/echo/tcp_echo_server.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/app/echo/tcp_echo_server.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_server.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/app/echo/tcp_echo_server.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/echo/tcp_echo_server.c.i
+.PHONY : __/src/app/echo/tcp_echo_server.c.i
+
+__/src/app/echo/tcp_echo_server.s: __/src/app/echo/tcp_echo_server.c.s
+.PHONY : __/src/app/echo/tcp_echo_server.s
+
+# target to generate assembly for a file
+__/src/app/echo/tcp_echo_server.c.s:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/app/echo/tcp_echo_server.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/app/echo/tcp_echo_server.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_server.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/app/echo/tcp_echo_server.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/echo/tcp_echo_server.c.s
+.PHONY : __/src/app/echo/tcp_echo_server.c.s
+
 __/src/plat/sys_plat.obj: __/src/plat/sys_plat.c.obj
 .PHONY : __/src/plat/sys_plat.obj
 
@@ -175,6 +315,10 @@ __/src/plat/sys_plat.c.obj:
 	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/plat/sys_plat.c.obj
 	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/plat/sys_plat.c.obj
 	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/plat/sys_plat.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/plat/sys_plat.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/plat/sys_plat.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/plat/sys_plat.c.obj
 .PHONY : __/src/plat/sys_plat.c.obj
 
 __/src/plat/sys_plat.i: __/src/plat/sys_plat.c.i
@@ -185,6 +329,10 @@ __/src/plat/sys_plat.c.i:
 	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/plat/sys_plat.c.i
 	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/plat/sys_plat.c.i
 	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/plat/sys_plat.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/plat/sys_plat.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/plat/sys_plat.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/plat/sys_plat.c.i
 .PHONY : __/src/plat/sys_plat.c.i
 
 __/src/plat/sys_plat.s: __/src/plat/sys_plat.c.s
@@ -195,7 +343,59 @@ __/src/plat/sys_plat.c.s:
 	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/plat/sys_plat.c.s
 	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/plat/sys_plat.c.s
 	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/plat/sys_plat.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/plat/sys_plat.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/plat/sys_plat.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/plat/sys_plat.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/plat/sys_plat.c.s
 .PHONY : __/src/plat/sys_plat.c.s
+
+circular_queue.obj: circular_queue.c.obj
+.PHONY : circular_queue.obj
+
+# target to build an object file
+circular_queue.c.obj:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/circular_queue.c.obj
+.PHONY : circular_queue.c.obj
+
+circular_queue.i: circular_queue.c.i
+.PHONY : circular_queue.i
+
+# target to preprocess a source file
+circular_queue.c.i:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/circular_queue.c.i
+.PHONY : circular_queue.c.i
+
+circular_queue.s: circular_queue.c.s
+.PHONY : circular_queue.s
+
+# target to generate assembly for a file
+circular_queue.c.s:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/circular_queue.c.s
+.PHONY : circular_queue.c.s
+
+multi_thread.obj: multi_thread.c.obj
+.PHONY : multi_thread.obj
+
+# target to build an object file
+multi_thread.c.obj:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/multi_thread.c.obj
+.PHONY : multi_thread.c.obj
+
+multi_thread.i: multi_thread.c.i
+.PHONY : multi_thread.i
+
+# target to preprocess a source file
+multi_thread.c.i:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/multi_thread.c.i
+.PHONY : multi_thread.c.i
+
+multi_thread.s: multi_thread.c.s
+.PHONY : multi_thread.s
+
+# target to generate assembly for a file
+multi_thread.c.s:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/multi_thread.c.s
+.PHONY : multi_thread.c.s
 
 recv_pocket.obj: recv_pocket.c.obj
 .PHONY : recv_pocket.obj
@@ -269,6 +469,54 @@ test.c.s:
 	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/test.c.s
 .PHONY : test.c.s
 
+test_tcp_echo_client.obj: test_tcp_echo_client.c.obj
+.PHONY : test_tcp_echo_client.obj
+
+# target to build an object file
+test_tcp_echo_client.c.obj:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/test_tcp_echo_client.c.obj
+.PHONY : test_tcp_echo_client.c.obj
+
+test_tcp_echo_client.i: test_tcp_echo_client.c.i
+.PHONY : test_tcp_echo_client.i
+
+# target to preprocess a source file
+test_tcp_echo_client.c.i:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/test_tcp_echo_client.c.i
+.PHONY : test_tcp_echo_client.c.i
+
+test_tcp_echo_client.s: test_tcp_echo_client.c.s
+.PHONY : test_tcp_echo_client.s
+
+# target to generate assembly for a file
+test_tcp_echo_client.c.s:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/test_tcp_echo_client.c.s
+.PHONY : test_tcp_echo_client.c.s
+
+test_tcp_echo_server.obj: test_tcp_echo_server.c.obj
+.PHONY : test_tcp_echo_server.obj
+
+# target to build an object file
+test_tcp_echo_server.c.obj:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/test_tcp_echo_server.c.obj
+.PHONY : test_tcp_echo_server.c.obj
+
+test_tcp_echo_server.i: test_tcp_echo_server.c.i
+.PHONY : test_tcp_echo_server.i
+
+# target to preprocess a source file
+test_tcp_echo_server.c.i:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/test_tcp_echo_server.c.i
+.PHONY : test_tcp_echo_server.c.i
+
+test_tcp_echo_server.s: test_tcp_echo_server.c.s
+.PHONY : test_tcp_echo_server.s
+
+# target to generate assembly for a file
+test_tcp_echo_server.c.s:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/test_tcp_echo_server.c.s
+.PHONY : test_tcp_echo_server.c.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -278,12 +526,28 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... test
+	@echo ... circular_queue
+	@echo ... multi_thread
 	@echo ... recv_pocket
 	@echo ... send_pocket
 	@echo ... test1
+	@echo ... test_tcp_echo_client
+	@echo ... test_tcp_echo_server
+	@echo ... __/src/app/echo/tcp_echo_client.obj
+	@echo ... __/src/app/echo/tcp_echo_client.i
+	@echo ... __/src/app/echo/tcp_echo_client.s
+	@echo ... __/src/app/echo/tcp_echo_server.obj
+	@echo ... __/src/app/echo/tcp_echo_server.i
+	@echo ... __/src/app/echo/tcp_echo_server.s
 	@echo ... __/src/plat/sys_plat.obj
 	@echo ... __/src/plat/sys_plat.i
 	@echo ... __/src/plat/sys_plat.s
+	@echo ... circular_queue.obj
+	@echo ... circular_queue.i
+	@echo ... circular_queue.s
+	@echo ... multi_thread.obj
+	@echo ... multi_thread.i
+	@echo ... multi_thread.s
 	@echo ... recv_pocket.obj
 	@echo ... recv_pocket.i
 	@echo ... recv_pocket.s
@@ -293,6 +557,12 @@ help:
 	@echo ... test.obj
 	@echo ... test.i
 	@echo ... test.s
+	@echo ... test_tcp_echo_client.obj
+	@echo ... test_tcp_echo_client.i
+	@echo ... test_tcp_echo_client.s
+	@echo ... test_tcp_echo_server.obj
+	@echo ... test_tcp_echo_server.i
+	@echo ... test_tcp_echo_server.s
 .PHONY : help
 
 
