@@ -10,7 +10,15 @@
         "time.h": "c",
         "winsock2.h": "c",
         "*.ipp": "c",
-        "tcp_echo_client.h": "c"
+        "tcp_echo_client.h": "c",
+        "net.h": "c",
+        "thread": "c",
+        "exmsg.h": "c",
+        "netif_pcap.h": "c",
+        "dbg.h": "c",
+        "nlocker.h": "c",
+        "mblock.h": "c",
+        "nlist.h": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [

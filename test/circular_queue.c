@@ -5,7 +5,7 @@
 
 static sys_sem_t sem_read = SYS_SEM_INVALID;
 static sys_sem_t sem_write = SYS_SEM_INVALID;
-static sys_mutex_t mutex = SYS_MUTEx_INVALID;
+static sys_mutex_t mutex = SYS_MUTEX_INVALID;
 
 #define Buffer_Size 100
 static char buffer[Buffer_Size];

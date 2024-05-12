@@ -2,7 +2,7 @@
 
 #include "sys_plat.h"
 
-static sys_mutex_t mutex = SYS_MUTEx_INVALID;
+static sys_mutex_t mutex = SYS_MUTEX_INVALID;
 
 int count = 0;
 

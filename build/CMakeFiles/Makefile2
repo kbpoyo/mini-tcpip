@@ -86,6 +86,7 @@ test/all: test/CMakeFiles/multi_thread.dir/all
 test/all: test/CMakeFiles/circular_queue.dir/all
 test/all: test/CMakeFiles/test_tcp_echo_client.dir/all
 test/all: test/CMakeFiles/test_tcp_echo_server.dir/all
+test/all: test/CMakeFiles/test_mblock.dir/all
 .PHONY : test/all
 
 # Recursive "preinstall" directory target.
@@ -100,6 +101,7 @@ test/clean: test/CMakeFiles/multi_thread.dir/clean
 test/clean: test/CMakeFiles/circular_queue.dir/clean
 test/clean: test/CMakeFiles/test_tcp_echo_client.dir/clean
 test/clean: test/CMakeFiles/test_tcp_echo_server.dir/clean
+test/clean: test/CMakeFiles/test_mblock.dir/clean
 .PHONY : test/clean
 
 #=============================================================================
@@ -109,12 +111,12 @@ test/clean: test/CMakeFiles/test_tcp_echo_server.dir/clean
 CMakeFiles/net.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=11,12,13,14,15 "Built target net"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=23,24,25,26,27,28,29,30,31,32,33 "Built target net"
 .PHONY : CMakeFiles/net.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/net.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/net.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 0
 .PHONY : CMakeFiles/net.dir/rule
@@ -135,12 +137,12 @@ CMakeFiles/net.dir/clean:
 test/CMakeFiles/test1.dir/all:
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/depend
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=26,27,28,29,30 "Built target test1"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=56,57,58,59,60,61,62,63,64,65,66 "Built target test1"
 .PHONY : test/CMakeFiles/test1.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/test1.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/test1.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 0
 .PHONY : test/CMakeFiles/test1.dir/rule
@@ -161,12 +163,12 @@ test/CMakeFiles/test1.dir/clean:
 test/CMakeFiles/send_pocket.dir/all:
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/depend
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=21,22,23,24,25 "Built target send_pocket"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=45,46,47,48,49,50,51,52,53,54,55 "Built target send_pocket"
 .PHONY : test/CMakeFiles/send_pocket.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/send_pocket.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/send_pocket.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 0
 .PHONY : test/CMakeFiles/send_pocket.dir/rule
@@ -187,12 +189,12 @@ test/CMakeFiles/send_pocket.dir/clean:
 test/CMakeFiles/recv_pocket.dir/all:
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/depend
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=16,17,18,19,20 "Built target recv_pocket"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=34,35,36,37,38,39,40,41,42,43,44 "Built target recv_pocket"
 .PHONY : test/CMakeFiles/recv_pocket.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/recv_pocket.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/recv_pocket.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 0
 .PHONY : test/CMakeFiles/recv_pocket.dir/rule
@@ -213,12 +215,12 @@ test/CMakeFiles/recv_pocket.dir/clean:
 test/CMakeFiles/multi_thread.dir/all:
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/depend
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=6,7,8,9,10 "Built target multi_thread"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=12,13,14,15,16,17,18,19,20,21,22 "Built target multi_thread"
 .PHONY : test/CMakeFiles/multi_thread.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/multi_thread.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/multi_thread.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 0
 .PHONY : test/CMakeFiles/multi_thread.dir/rule
@@ -239,12 +241,12 @@ test/CMakeFiles/multi_thread.dir/clean:
 test/CMakeFiles/circular_queue.dir/all:
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/depend
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=1,2,3,4,5 "Built target circular_queue"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target circular_queue"
 .PHONY : test/CMakeFiles/circular_queue.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/circular_queue.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/circular_queue.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 0
 .PHONY : test/CMakeFiles/circular_queue.dir/rule
@@ -265,12 +267,12 @@ test/CMakeFiles/circular_queue.dir/clean:
 test/CMakeFiles/test_tcp_echo_client.dir/all:
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/depend
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=31,32,33,34,35 "Built target test_tcp_echo_client"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=78,79,80,81,82,83,84,85,86,87,88 "Built target test_tcp_echo_client"
 .PHONY : test/CMakeFiles/test_tcp_echo_client.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/test_tcp_echo_client.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/test_tcp_echo_client.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 0
 .PHONY : test/CMakeFiles/test_tcp_echo_client.dir/rule
@@ -291,12 +293,12 @@ test/CMakeFiles/test_tcp_echo_client.dir/clean:
 test/CMakeFiles/test_tcp_echo_server.dir/all:
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/depend
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=36,37,38,39,40 "Built target test_tcp_echo_server"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=89,90,91,92,93,94,95,96,97,98,99,100 "Built target test_tcp_echo_server"
 .PHONY : test/CMakeFiles/test_tcp_echo_server.dir/all
 
 # Build rule for subdir invocation for target.
 test/CMakeFiles/test_tcp_echo_server.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/test_tcp_echo_server.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 0
 .PHONY : test/CMakeFiles/test_tcp_echo_server.dir/rule
@@ -309,6 +311,32 @@ test_tcp_echo_server: test/CMakeFiles/test_tcp_echo_server.dir/rule
 test/CMakeFiles/test_tcp_echo_server.dir/clean:
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/clean
 .PHONY : test/CMakeFiles/test_tcp_echo_server.dir/clean
+
+#=============================================================================
+# Target rules for target test/CMakeFiles/test_mblock.dir
+
+# All Build rule for target.
+test/CMakeFiles/test_mblock.dir/all:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/depend
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=67,68,69,70,71,72,73,74,75,76,77 "Built target test_mblock"
+.PHONY : test/CMakeFiles/test_mblock.dir/all
+
+# Build rule for subdir invocation for target.
+test/CMakeFiles/test_mblock.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 11
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/test_mblock.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start F:\code\c++code\mini-tcpip\build\CMakeFiles 0
+.PHONY : test/CMakeFiles/test_mblock.dir/rule
+
+# Convenience name for target.
+test_mblock: test/CMakeFiles/test_mblock.dir/rule
+.PHONY : test_mblock
+
+# clean rule for target.
+test/CMakeFiles/test_mblock.dir/clean:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/clean
+.PHONY : test/CMakeFiles/test_mblock.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

@@ -229,6 +229,19 @@ test_tcp_echo_server/fast:
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/build
 .PHONY : test_tcp_echo_server/fast
 
+#=============================================================================
+# Target rules for targets named test_mblock
+
+# Build rule for target.
+test_mblock: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test_mblock
+.PHONY : test_mblock
+
+# fast build rule for target.
+test_mblock/fast:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/build
+.PHONY : test_mblock/fast
+
 src/app/echo/tcp_echo_client.obj: src/app/echo/tcp_echo_client.c.obj
 .PHONY : src/app/echo/tcp_echo_client.obj
 
@@ -301,6 +314,198 @@ src/app/main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/main.c.s
 .PHONY : src/app/main.c.s
 
+src/net/src/dbg.obj: src/net/src/dbg.c.obj
+.PHONY : src/net/src/dbg.obj
+
+# target to build an object file
+src/net/src/dbg.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/dbg.c.obj
+.PHONY : src/net/src/dbg.c.obj
+
+src/net/src/dbg.i: src/net/src/dbg.c.i
+.PHONY : src/net/src/dbg.i
+
+# target to preprocess a source file
+src/net/src/dbg.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/dbg.c.i
+.PHONY : src/net/src/dbg.c.i
+
+src/net/src/dbg.s: src/net/src/dbg.c.s
+.PHONY : src/net/src/dbg.s
+
+# target to generate assembly for a file
+src/net/src/dbg.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/dbg.c.s
+.PHONY : src/net/src/dbg.c.s
+
+src/net/src/exmsg.obj: src/net/src/exmsg.c.obj
+.PHONY : src/net/src/exmsg.obj
+
+# target to build an object file
+src/net/src/exmsg.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/exmsg.c.obj
+.PHONY : src/net/src/exmsg.c.obj
+
+src/net/src/exmsg.i: src/net/src/exmsg.c.i
+.PHONY : src/net/src/exmsg.i
+
+# target to preprocess a source file
+src/net/src/exmsg.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/exmsg.c.i
+.PHONY : src/net/src/exmsg.c.i
+
+src/net/src/exmsg.s: src/net/src/exmsg.c.s
+.PHONY : src/net/src/exmsg.s
+
+# target to generate assembly for a file
+src/net/src/exmsg.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/exmsg.c.s
+.PHONY : src/net/src/exmsg.c.s
+
+src/net/src/mblock.obj: src/net/src/mblock.c.obj
+.PHONY : src/net/src/mblock.obj
+
+# target to build an object file
+src/net/src/mblock.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/mblock.c.obj
+.PHONY : src/net/src/mblock.c.obj
+
+src/net/src/mblock.i: src/net/src/mblock.c.i
+.PHONY : src/net/src/mblock.i
+
+# target to preprocess a source file
+src/net/src/mblock.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/mblock.c.i
+.PHONY : src/net/src/mblock.c.i
+
+src/net/src/mblock.s: src/net/src/mblock.c.s
+.PHONY : src/net/src/mblock.s
+
+# target to generate assembly for a file
+src/net/src/mblock.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/mblock.c.s
+.PHONY : src/net/src/mblock.c.s
+
+src/net/src/net.obj: src/net/src/net.c.obj
+.PHONY : src/net/src/net.obj
+
+# target to build an object file
+src/net/src/net.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/net.c.obj
+.PHONY : src/net/src/net.c.obj
+
+src/net/src/net.i: src/net/src/net.c.i
+.PHONY : src/net/src/net.i
+
+# target to preprocess a source file
+src/net/src/net.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/net.c.i
+.PHONY : src/net/src/net.c.i
+
+src/net/src/net.s: src/net/src/net.c.s
+.PHONY : src/net/src/net.s
+
+# target to generate assembly for a file
+src/net/src/net.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/net.c.s
+.PHONY : src/net/src/net.c.s
+
+src/net/src/nlist.obj: src/net/src/nlist.c.obj
+.PHONY : src/net/src/nlist.obj
+
+# target to build an object file
+src/net/src/nlist.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/nlist.c.obj
+.PHONY : src/net/src/nlist.c.obj
+
+src/net/src/nlist.i: src/net/src/nlist.c.i
+.PHONY : src/net/src/nlist.i
+
+# target to preprocess a source file
+src/net/src/nlist.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/nlist.c.i
+.PHONY : src/net/src/nlist.c.i
+
+src/net/src/nlist.s: src/net/src/nlist.c.s
+.PHONY : src/net/src/nlist.s
+
+# target to generate assembly for a file
+src/net/src/nlist.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/nlist.c.s
+.PHONY : src/net/src/nlist.c.s
+
+src/net/src/nlocker.obj: src/net/src/nlocker.c.obj
+.PHONY : src/net/src/nlocker.obj
+
+# target to build an object file
+src/net/src/nlocker.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/nlocker.c.obj
+.PHONY : src/net/src/nlocker.c.obj
+
+src/net/src/nlocker.i: src/net/src/nlocker.c.i
+.PHONY : src/net/src/nlocker.i
+
+# target to preprocess a source file
+src/net/src/nlocker.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/nlocker.c.i
+.PHONY : src/net/src/nlocker.c.i
+
+src/net/src/nlocker.s: src/net/src/nlocker.c.s
+.PHONY : src/net/src/nlocker.s
+
+# target to generate assembly for a file
+src/net/src/nlocker.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/nlocker.c.s
+.PHONY : src/net/src/nlocker.c.s
+
+src/plat/net_plat.obj: src/plat/net_plat.c.obj
+.PHONY : src/plat/net_plat.obj
+
+# target to build an object file
+src/plat/net_plat.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/plat/net_plat.c.obj
+.PHONY : src/plat/net_plat.c.obj
+
+src/plat/net_plat.i: src/plat/net_plat.c.i
+.PHONY : src/plat/net_plat.i
+
+# target to preprocess a source file
+src/plat/net_plat.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/plat/net_plat.c.i
+.PHONY : src/plat/net_plat.c.i
+
+src/plat/net_plat.s: src/plat/net_plat.c.s
+.PHONY : src/plat/net_plat.s
+
+# target to generate assembly for a file
+src/plat/net_plat.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/plat/net_plat.c.s
+.PHONY : src/plat/net_plat.c.s
+
+src/plat/netif_pcap.obj: src/plat/netif_pcap.c.obj
+.PHONY : src/plat/netif_pcap.obj
+
+# target to build an object file
+src/plat/netif_pcap.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/plat/netif_pcap.c.obj
+.PHONY : src/plat/netif_pcap.c.obj
+
+src/plat/netif_pcap.i: src/plat/netif_pcap.c.i
+.PHONY : src/plat/netif_pcap.i
+
+# target to preprocess a source file
+src/plat/netif_pcap.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/plat/netif_pcap.c.i
+.PHONY : src/plat/netif_pcap.c.i
+
+src/plat/netif_pcap.s: src/plat/netif_pcap.c.s
+.PHONY : src/plat/netif_pcap.s
+
+# target to generate assembly for a file
+src/plat/netif_pcap.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/plat/netif_pcap.c.s
+.PHONY : src/plat/netif_pcap.c.s
+
 src/plat/sys_plat.obj: src/plat/sys_plat.c.obj
 .PHONY : src/plat/sys_plat.obj
 
@@ -340,6 +545,7 @@ help:
 	@echo ... recv_pocket
 	@echo ... send_pocket
 	@echo ... test1
+	@echo ... test_mblock
 	@echo ... test_tcp_echo_client
 	@echo ... test_tcp_echo_server
 	@echo ... src/app/echo/tcp_echo_client.obj
@@ -351,6 +557,30 @@ help:
 	@echo ... src/app/main.obj
 	@echo ... src/app/main.i
 	@echo ... src/app/main.s
+	@echo ... src/net/src/dbg.obj
+	@echo ... src/net/src/dbg.i
+	@echo ... src/net/src/dbg.s
+	@echo ... src/net/src/exmsg.obj
+	@echo ... src/net/src/exmsg.i
+	@echo ... src/net/src/exmsg.s
+	@echo ... src/net/src/mblock.obj
+	@echo ... src/net/src/mblock.i
+	@echo ... src/net/src/mblock.s
+	@echo ... src/net/src/net.obj
+	@echo ... src/net/src/net.i
+	@echo ... src/net/src/net.s
+	@echo ... src/net/src/nlist.obj
+	@echo ... src/net/src/nlist.i
+	@echo ... src/net/src/nlist.s
+	@echo ... src/net/src/nlocker.obj
+	@echo ... src/net/src/nlocker.i
+	@echo ... src/net/src/nlocker.s
+	@echo ... src/plat/net_plat.obj
+	@echo ... src/plat/net_plat.i
+	@echo ... src/plat/net_plat.s
+	@echo ... src/plat/netif_pcap.obj
+	@echo ... src/plat/netif_pcap.i
+	@echo ... src/plat/netif_pcap.s
 	@echo ... src/plat/sys_plat.obj
 	@echo ... src/plat/sys_plat.i
 	@echo ... src/plat/sys_plat.s
