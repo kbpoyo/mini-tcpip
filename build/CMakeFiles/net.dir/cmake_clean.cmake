@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/net.dir/src/net/src/dbg.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/exmsg.c.obj"
   "CMakeFiles/net.dir/src/net/src/exmsg.c.obj.d"
+  "CMakeFiles/net.dir/src/net/src/fixq.c.obj"
+  "CMakeFiles/net.dir/src/net/src/fixq.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/mblock.c.obj"
   "CMakeFiles/net.dir/src/net/src/mblock.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/net.c.obj"

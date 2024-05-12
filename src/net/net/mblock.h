@@ -34,4 +34,7 @@ void *mblock_alloc(mblock_t *mblock, int ms);
 
 int mblock_free_cnt(mblock_t *mblock);
 
+void mblock_free(mblock_t *mblock, void *block);
+void mblock_destroy(mblock_t *mblock);
+
 #endif  // MBLOCK_H

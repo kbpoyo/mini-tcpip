@@ -7,6 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/dbg.c.obj.d"
   "CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/exmsg.c.obj"
   "CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/exmsg.c.obj.d"
+  "CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/fixq.c.obj"
+  "CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/fixq.c.obj.d"
   "CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/mblock.c.obj"
   "CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/mblock.c.obj.d"
   "CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/net.c.obj"

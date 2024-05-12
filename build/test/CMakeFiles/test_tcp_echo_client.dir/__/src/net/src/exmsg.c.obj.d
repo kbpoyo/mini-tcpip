@@ -2,6 +2,10 @@ test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/exmsg.c.obj: \
  F:\code\c++code\mini-tcpip\src\net\src\exmsg.c \
  F:/code/c++code/mini-tcpip/src/net/net/exmsg.h \
  F:/code/c++code/mini-tcpip/src/net/net/net_err.h \
+ F:/code/c++code/mini-tcpip/src/net/net/net_sys.h \
+ F:/code/c++code/mini-tcpip/src/net/net/net_cfg.h \
+ F:/code/c++code/mini-tcpip/src/plat/net_plat.h \
+ F:/code/c++code/mini-tcpip/src/net/net/net_err.h \
  F:/code/c++code/mini-tcpip/src/plat/sys_plat.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/stdio.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/corecrt_stdio_config.h \
@@ -240,4 +244,10 @@ test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/exmsg.c.obj: \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/psdk_inc/_ip_mreq1.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/mstcpip.h \
  F:/code/c++code/mini-tcpip/npcap/Include/pcap/bpf.h \
- F:/code/c++code/mini-tcpip/npcap/Include/pcap/dlt.h
+ F:/code/c++code/mini-tcpip/npcap/Include/pcap/dlt.h \
+ F:/code/c++code/mini-tcpip/src/net/net/fixq.h \
+ F:/code/c++code/mini-tcpip/src/net/net/nlocker.h \
+ F:/code/c++code/mini-tcpip/src/net/net/net_sys.h \
+ F:/code/c++code/mini-tcpip/src/net/net/mblock.h \
+ F:/code/c++code/mini-tcpip/src/net/net/nlist.h \
+ F:/code/c++code/mini-tcpip/src/net/net/dbg.h

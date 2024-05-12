@@ -12,7 +12,7 @@
 #ifndef NLOCKER_H
 #define NLOCKER_H
 
-#include "sys_plat.h"
+#include "net_sys.h"
 #include "net_err.h"
 
 

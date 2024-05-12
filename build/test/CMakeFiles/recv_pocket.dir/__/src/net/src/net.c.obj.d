@@ -244,4 +244,5 @@ test/CMakeFiles/recv_pocket.dir/__/src/net/src/net.c.obj: \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/mstcpip.h \
  F:/code/c++code/mini-tcpip/npcap/Include/pcap/bpf.h \
  F:/code/c++code/mini-tcpip/npcap/Include/pcap/dlt.h \
- F:/code/c++code/mini-tcpip/src/plat/sys_plat.h
+ F:/code/c++code/mini-tcpip/src/net/net/net_sys.h \
+ F:/code/c++code/mini-tcpip/src/net/net/net_cfg.h

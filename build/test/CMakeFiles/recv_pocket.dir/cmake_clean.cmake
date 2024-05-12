@@ -7,6 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/recv_pocket.dir/__/src/net/src/dbg.c.obj.d"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/exmsg.c.obj"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/exmsg.c.obj.d"
+  "CMakeFiles/recv_pocket.dir/__/src/net/src/fixq.c.obj"
+  "CMakeFiles/recv_pocket.dir/__/src/net/src/fixq.c.obj.d"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/mblock.c.obj"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/mblock.c.obj.d"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/net.c.obj"

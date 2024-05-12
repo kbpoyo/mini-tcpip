@@ -7,6 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/circular_queue.dir/__/src/net/src/dbg.c.obj.d"
   "CMakeFiles/circular_queue.dir/__/src/net/src/exmsg.c.obj"
   "CMakeFiles/circular_queue.dir/__/src/net/src/exmsg.c.obj.d"
+  "CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.obj"
+  "CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.obj.d"
   "CMakeFiles/circular_queue.dir/__/src/net/src/mblock.c.obj"
   "CMakeFiles/circular_queue.dir/__/src/net/src/mblock.c.obj.d"
   "CMakeFiles/circular_queue.dir/__/src/net/src/net.c.obj"

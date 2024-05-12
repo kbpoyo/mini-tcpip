@@ -10,6 +10,10 @@ test/CMakeFiles/recv_pocket.dir/__/src/net/src/dbg.c.obj: \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/_mingw_mac.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/_mingw_secapi.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h \
+ F:/code/c++code/mini-tcpip/src/net/net/net_sys.h \
+ F:/code/c++code/mini-tcpip/src/net/net/net_err.h \
+ F:/code/c++code/mini-tcpip/src/plat/net_plat.h \
+ F:/code/c++code/mini-tcpip/src/net/net/net_err.h \
  F:/code/c++code/mini-tcpip/src/plat/sys_plat.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/stdio.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/corecrt_stdio_config.h \

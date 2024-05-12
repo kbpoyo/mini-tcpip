@@ -417,6 +417,51 @@ __/src/net/src/exmsg.c.s:
 	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/exmsg.c.s
 .PHONY : __/src/net/src/exmsg.c.s
 
+__/src/net/src/fixq.obj: __/src/net/src/fixq.c.obj
+.PHONY : __/src/net/src/fixq.obj
+
+# target to build an object file
+__/src/net/src/fixq.c.obj:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/net/src/fixq.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/net/src/fixq.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/net/src/fixq.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/net/src/fixq.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/fixq.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/fixq.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.obj
+.PHONY : __/src/net/src/fixq.c.obj
+
+__/src/net/src/fixq.i: __/src/net/src/fixq.c.i
+.PHONY : __/src/net/src/fixq.i
+
+# target to preprocess a source file
+__/src/net/src/fixq.c.i:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/net/src/fixq.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/net/src/fixq.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/net/src/fixq.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/net/src/fixq.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/fixq.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/fixq.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.i
+.PHONY : __/src/net/src/fixq.c.i
+
+__/src/net/src/fixq.s: __/src/net/src/fixq.c.s
+.PHONY : __/src/net/src/fixq.s
+
+# target to generate assembly for a file
+__/src/net/src/fixq.c.s:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/net/src/fixq.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/net/src/fixq.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/net/src/fixq.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/net/src/fixq.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/fixq.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/fixq.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.s
+.PHONY : __/src/net/src/fixq.c.s
+
 __/src/net/src/mblock.obj: __/src/net/src/mblock.c.obj
 .PHONY : __/src/net/src/mblock.obj
 
@@ -953,6 +998,9 @@ help:
 	@echo ... __/src/net/src/exmsg.obj
 	@echo ... __/src/net/src/exmsg.i
 	@echo ... __/src/net/src/exmsg.s
+	@echo ... __/src/net/src/fixq.obj
+	@echo ... __/src/net/src/fixq.i
+	@echo ... __/src/net/src/fixq.s
 	@echo ... __/src/net/src/mblock.obj
 	@echo ... __/src/net/src/mblock.i
 	@echo ... __/src/net/src/mblock.s

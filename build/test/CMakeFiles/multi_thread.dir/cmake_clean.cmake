@@ -7,6 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/multi_thread.dir/__/src/net/src/dbg.c.obj.d"
   "CMakeFiles/multi_thread.dir/__/src/net/src/exmsg.c.obj"
   "CMakeFiles/multi_thread.dir/__/src/net/src/exmsg.c.obj.d"
+  "CMakeFiles/multi_thread.dir/__/src/net/src/fixq.c.obj"
+  "CMakeFiles/multi_thread.dir/__/src/net/src/fixq.c.obj.d"
   "CMakeFiles/multi_thread.dir/__/src/net/src/mblock.c.obj"
   "CMakeFiles/multi_thread.dir/__/src/net/src/mblock.c.obj.d"
   "CMakeFiles/multi_thread.dir/__/src/net/src/net.c.obj"
