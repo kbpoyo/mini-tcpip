@@ -16,10 +16,10 @@
 /**
  * @brief 消息队列初始化
  *
- * @param q
- * @param buf
- * @param size
- * @param locker_type
+ * @param q 消息队列
+ * @param buf 消息队列缓冲区
+ * @param size 消息队列大小
+ * @param locker_type 使用的锁类型
  * @return net_err_t
  */
 net_err_t fixq_init(fixq_t *q, void **buf, int size,
@@ -66,34 +66,94 @@ init_failed:
 
 /**
  * @brief 向消息队列发送消息
- * 
- * @param q 
- * @param msg 
+ *
+ * @param q
+ * @param msg
  * @param tmo_ms 等待时间
- * @return net_err_t 
+ * @return net_err_t
  */
 net_err_t fixq_send(fixq_t *q, void *msg, int tmo_ms) {
   nlocker_lock(&q->locker);
 
-  if (tmo_ms < 0 && q->cnt >= q->size) {  //消息队列已满，且不进行等待
+  if (tmo_ms < 0 && q->cnt >= q->size) {  // 消息队列已满，且不进行等待
     nlocker_unlock(&q->locker);
     return NET_ERR_FIXQ_FULL;
   }
   nlocker_unlock(&q->locker);
 
+  // 等待消息队列中有空闲位置
   if (sys_sem_wait(q->send_sem, tmo_ms) < 0) {
     return NET_ERR_TIMEOUT;
   }
 
+  // 向消息队列中发送消息
   nlocker_lock(&q->locker);
-
   q->buf[(q->in)++] = msg;
-  q->in %= q->size; //循环队列
+  q->in %= q->size;  // 循环队列
   q->cnt++;
-
   nlocker_unlock(&q->locker);
 
+  // 通知接收线程
   sys_sem_notify(q->recv_sem);
 
   return NET_ERR_OK;
+}
+
+/**
+ * @brief 从消息队列接收消息
+ *
+ * @param q
+ * @param ms
+ * @return void*
+ */
+void *fixq_recv(fixq_t *q, int tmo_ms) {
+  nlocker_lock(&q->locker);
+
+  if (q->cnt == 0 && tmo_ms < 0) {  // 消息队列为空，且不进行等待
+    nlocker_unlock(&q->locker);
+    return (void *)0;
+  }
+  nlocker_unlock(&q->locker);
+
+  // 等待消息队列中有消息
+  if (sys_sem_wait(q->recv_sem, tmo_ms) < 0) {
+    return (void *)0;
+  }
+
+  // 从消息队列中取出消息
+  nlocker_lock(&q->locker);
+  void *msg = q->buf[(q->out)++];
+  q->out %= q->size;
+  q->cnt--;
+  nlocker_unlock(&q->locker);
+
+  // 通知发送线程
+  sys_sem_notify(q->send_sem);
+
+  return msg;
+}
+
+/**
+ * @brief 获取消息队列中的消息数量
+ * 
+ * @param q 
+ */
+int fixq_count(fixq_t *q) {
+  nlocker_lock(&q->locker);
+  int cnt = q->cnt;
+  nlocker_unlock(&q->locker);
+
+  return cnt;
+
+}
+
+/**
+ * @brief 销毁消息队列对象
+ * 
+ * @param q 
+ */
+void fixq_destroy(fixq_t *q) {
+  nlocker_destroy(&q->locker);
+  sys_sem_free(q->recv_sem);
+  sys_sem_free(q->send_sem);
 }

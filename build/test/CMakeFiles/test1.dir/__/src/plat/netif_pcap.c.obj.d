@@ -240,4 +240,6 @@ test/CMakeFiles/test1.dir/__/src/plat/netif_pcap.c.obj: \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/psdk_inc/_ip_mreq1.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/mstcpip.h \
  F:/code/c++code/mini-tcpip/npcap/Include/pcap/bpf.h \
- F:/code/c++code/mini-tcpip/npcap/Include/pcap/dlt.h
+ F:/code/c++code/mini-tcpip/npcap/Include/pcap/dlt.h \
+ F:/code/c++code/mini-tcpip/src/net/net/exmsg.h \
+ F:/code/c++code/mini-tcpip/src/net/net/net_err.h

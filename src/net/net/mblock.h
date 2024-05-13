@@ -1,7 +1,7 @@
 /**
  * @file mblock.h
  * @author kbpoyo (kbpoyo@qq.com)
- * @brief
+ * @brief   内存块管理模块
  * @version 0.1
  * @date 2024-05-12
  *
@@ -23,7 +23,7 @@ typedef struct _mblock_t {
   void *start;  //记录内存块的起始地址
 
   nlocker_t locker;  //内存块资源的锁
-  sys_sem_t alloc_sem;  //内存卡资源的信号量
+  sys_sem_t alloc_sem;  //内存块资源的信号量
 
 } mblock_t;
 

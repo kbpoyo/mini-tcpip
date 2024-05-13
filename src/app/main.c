@@ -43,7 +43,7 @@ int main(void) {
 
   netdev_init();
 
-  mblock_test();
+  // mblock_test();
 
   dbg_info(DBG_TEST, "debug info");
   dbg_warning(DBG_TEST, "debug waring");

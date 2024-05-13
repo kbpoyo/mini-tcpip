@@ -6,6 +6,8 @@
 
 
 typedef struct _exmsg_t {
+    double time;
+    double delay;
     enum {
         EXMSG_NETIF_IN,
     }type;

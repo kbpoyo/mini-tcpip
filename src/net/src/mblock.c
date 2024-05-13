@@ -18,7 +18,7 @@
  *
  * @param mblock 内存块管理结构
  * @param mem_start 管理的内存块的起始地址
- * @param blk_size 内存块的大小
+ * @param blk_size 内存块的大小, 必须大于一个node节点对象的大小，64位系统下为16字节，32位系统下为8字节
  * @param blk_cnt  内存块的数量
  * @param locker_type 使用的锁类型
  * @return net_err_t
@@ -46,6 +46,8 @@ net_err_t mblock_init(mblock_t *mblock, void *mem_start, size_t blk_size,
       return NET_ERR_SYS;
     }
   }
+
+    return NET_ERR_OK;
 }
 
 /**
