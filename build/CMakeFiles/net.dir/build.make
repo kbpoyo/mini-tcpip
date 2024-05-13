@@ -218,11 +218,26 @@ CMakeFiles/net.dir/src/net/src/nlocker.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/net.dir/src/net/src/nlocker.c.s"
 	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\src\net\src\nlocker.c -o CMakeFiles\net.dir\src\net\src\nlocker.c.s
 
+CMakeFiles/net.dir/src/net/src/pktbuf.c.obj: CMakeFiles/net.dir/flags.make
+CMakeFiles/net.dir/src/net/src/pktbuf.c.obj: CMakeFiles/net.dir/includes_C.rsp
+CMakeFiles/net.dir/src/net/src/pktbuf.c.obj: F:/code/c++code/mini-tcpip/src/net/src/pktbuf.c
+CMakeFiles/net.dir/src/net/src/pktbuf.c.obj: CMakeFiles/net.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object CMakeFiles/net.dir/src/net/src/pktbuf.c.obj"
+	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/net.dir/src/net/src/pktbuf.c.obj -MF CMakeFiles\net.dir\src\net\src\pktbuf.c.obj.d -o CMakeFiles\net.dir\src\net\src\pktbuf.c.obj -c F:\code\c++code\mini-tcpip\src\net\src\pktbuf.c
+
+CMakeFiles/net.dir/src/net/src/pktbuf.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/net.dir/src/net/src/pktbuf.c.i"
+	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E F:\code\c++code\mini-tcpip\src\net\src\pktbuf.c > CMakeFiles\net.dir\src\net\src\pktbuf.c.i
+
+CMakeFiles/net.dir/src/net/src/pktbuf.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/net.dir/src/net/src/pktbuf.c.s"
+	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\src\net\src\pktbuf.c -o CMakeFiles\net.dir\src\net\src\pktbuf.c.s
+
 CMakeFiles/net.dir/src/plat/net_plat.c.obj: CMakeFiles/net.dir/flags.make
 CMakeFiles/net.dir/src/plat/net_plat.c.obj: CMakeFiles/net.dir/includes_C.rsp
 CMakeFiles/net.dir/src/plat/net_plat.c.obj: F:/code/c++code/mini-tcpip/src/plat/net_plat.c
 CMakeFiles/net.dir/src/plat/net_plat.c.obj: CMakeFiles/net.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object CMakeFiles/net.dir/src/plat/net_plat.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object CMakeFiles/net.dir/src/plat/net_plat.c.obj"
 	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/net.dir/src/plat/net_plat.c.obj -MF CMakeFiles\net.dir\src\plat\net_plat.c.obj.d -o CMakeFiles\net.dir\src\plat\net_plat.c.obj -c F:\code\c++code\mini-tcpip\src\plat\net_plat.c
 
 CMakeFiles/net.dir/src/plat/net_plat.c.i: cmake_force
@@ -237,7 +252,7 @@ CMakeFiles/net.dir/src/plat/netif_pcap.c.obj: CMakeFiles/net.dir/flags.make
 CMakeFiles/net.dir/src/plat/netif_pcap.c.obj: CMakeFiles/net.dir/includes_C.rsp
 CMakeFiles/net.dir/src/plat/netif_pcap.c.obj: F:/code/c++code/mini-tcpip/src/plat/netif_pcap.c
 CMakeFiles/net.dir/src/plat/netif_pcap.c.obj: CMakeFiles/net.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object CMakeFiles/net.dir/src/plat/netif_pcap.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object CMakeFiles/net.dir/src/plat/netif_pcap.c.obj"
 	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/net.dir/src/plat/netif_pcap.c.obj -MF CMakeFiles\net.dir\src\plat\netif_pcap.c.obj.d -o CMakeFiles\net.dir\src\plat\netif_pcap.c.obj -c F:\code\c++code\mini-tcpip\src\plat\netif_pcap.c
 
 CMakeFiles/net.dir/src/plat/netif_pcap.c.i: cmake_force
@@ -252,7 +267,7 @@ CMakeFiles/net.dir/src/plat/sys_plat.c.obj: CMakeFiles/net.dir/flags.make
 CMakeFiles/net.dir/src/plat/sys_plat.c.obj: CMakeFiles/net.dir/includes_C.rsp
 CMakeFiles/net.dir/src/plat/sys_plat.c.obj: F:/code/c++code/mini-tcpip/src/plat/sys_plat.c
 CMakeFiles/net.dir/src/plat/sys_plat.c.obj: CMakeFiles/net.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object CMakeFiles/net.dir/src/plat/sys_plat.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object CMakeFiles/net.dir/src/plat/sys_plat.c.obj"
 	"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/net.dir/src/plat/sys_plat.c.obj -MF CMakeFiles\net.dir\src\plat\sys_plat.c.obj.d -o CMakeFiles\net.dir\src\plat\sys_plat.c.obj -c F:\code\c++code\mini-tcpip\src\plat\sys_plat.c
 
 CMakeFiles/net.dir/src/plat/sys_plat.c.i: cmake_force
@@ -275,6 +290,7 @@ net_OBJECTS = \
 "CMakeFiles/net.dir/src/net/src/net.c.obj" \
 "CMakeFiles/net.dir/src/net/src/nlist.c.obj" \
 "CMakeFiles/net.dir/src/net/src/nlocker.c.obj" \
+"CMakeFiles/net.dir/src/net/src/pktbuf.c.obj" \
 "CMakeFiles/net.dir/src/plat/net_plat.c.obj" \
 "CMakeFiles/net.dir/src/plat/netif_pcap.c.obj" \
 "CMakeFiles/net.dir/src/plat/sys_plat.c.obj"
@@ -292,6 +308,7 @@ net.exe: CMakeFiles/net.dir/src/net/src/mblock.c.obj
 net.exe: CMakeFiles/net.dir/src/net/src/net.c.obj
 net.exe: CMakeFiles/net.dir/src/net/src/nlist.c.obj
 net.exe: CMakeFiles/net.dir/src/net/src/nlocker.c.obj
+net.exe: CMakeFiles/net.dir/src/net/src/pktbuf.c.obj
 net.exe: CMakeFiles/net.dir/src/plat/net_plat.c.obj
 net.exe: CMakeFiles/net.dir/src/plat/netif_pcap.c.obj
 net.exe: CMakeFiles/net.dir/src/plat/sys_plat.c.obj
@@ -299,7 +316,7 @@ net.exe: CMakeFiles/net.dir/build.make
 net.exe: CMakeFiles/net.dir/linkLibs.rsp
 net.exe: CMakeFiles/net.dir/objects1.rsp
 net.exe: CMakeFiles/net.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking C executable net.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking C executable net.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\net.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

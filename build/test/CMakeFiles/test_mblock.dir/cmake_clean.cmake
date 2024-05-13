@@ -17,6 +17,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/test_mblock.dir/__/src/net/src/nlist.c.obj.d"
   "CMakeFiles/test_mblock.dir/__/src/net/src/nlocker.c.obj"
   "CMakeFiles/test_mblock.dir/__/src/net/src/nlocker.c.obj.d"
+  "CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.obj"
+  "CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.obj.d"
   "CMakeFiles/test_mblock.dir/__/src/plat/net_plat.c.obj"
   "CMakeFiles/test_mblock.dir/__/src/plat/net_plat.c.obj.d"
   "CMakeFiles/test_mblock.dir/__/src/plat/netif_pcap.c.obj"

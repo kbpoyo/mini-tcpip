@@ -245,4 +245,6 @@ test/CMakeFiles/send_pocket.dir/__/src/net/src/net.c.obj: \
  F:/code/c++code/mini-tcpip/npcap/Include/pcap/bpf.h \
  F:/code/c++code/mini-tcpip/npcap/Include/pcap/dlt.h \
  F:/code/c++code/mini-tcpip/src/net/net/net_sys.h \
- F:/code/c++code/mini-tcpip/src/net/net/net_cfg.h
+ F:/code/c++code/mini-tcpip/src/net/net/net_cfg.h \
+ F:/code/c++code/mini-tcpip/src/net/net/pktbuf.h \
+ F:/code/c++code/mini-tcpip/src/net/net/nlist.h

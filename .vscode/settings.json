@@ -18,7 +18,8 @@
         "dbg.h": "c",
         "nlocker.h": "c",
         "mblock.h": "c",
-        "nlist.h": "c"
+        "nlist.h": "c",
+        "pktbuf.h": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [
