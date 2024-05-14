@@ -28,5 +28,6 @@ void dbg_print(int module_level, int default_level, const char *file, const char
     } \
 }
 
+#define DBG_DISP_ENABLED(module) (module >= DBG_LEVEL_INFO)
 
 #endif // DBG_H

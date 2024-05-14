@@ -6,6 +6,7 @@
 #include "net.h"
 #include "netif_pcap.h"
 #include "sys_plat.h"
+#include "pktbuf.h"
 
 net_err_t netdev_init(void) {
   netif_pcap_open();
@@ -34,22 +35,35 @@ void mblock_test(void) {
   mblock_destroy(&blist);
 }
 
+void pktbuf_test() {
+  pktbuf_t *pktbuf = pktbuf_alloc(10000);
+
+}
+
+void basic_test(void) {
+
+  // mblock_test();
+  pktbuf_test();
+
+}
+
 #define DBG_TEST DBG_LEVEL_INFO
 
 int main(void) {
   net_init();
 
-  net_start();
+  //  net_start();
 
-  netdev_init();
+  // netdev_init();
 
-  // mblock_test();
+  basic_test();
 
-  dbg_info(DBG_TEST, "debug info");
-  dbg_warning(DBG_TEST, "debug waring");
-  dbg_error(DBG_TEST, "debug error");
 
-  dbg_assert(1 == 2, "assert error")
+  // dbg_info(DBG_TEST, "debug info");
+  // dbg_warning(DBG_TEST, "debug waring");
+  // dbg_error(DBG_TEST, "debug error");
+
+  // dbg_assert(1 == 2, "assert error")
 
       while (1) {
     sys_sleep(10);

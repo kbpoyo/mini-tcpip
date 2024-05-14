@@ -17,6 +17,9 @@
 #include "net_cfg.h"
 #include "net_err.h"
 
+#define PKTBUF_LIST_INSERT_HEAD 0
+#define PKTBUF_LIST_INSERT_TAIL 1
+
 /**
  * @brief 定义数据块结构
  * 
@@ -40,8 +43,42 @@ typedef struct _pktbuf_t {
 } pktbuf_t;
 
 
+
 net_err_t pktbuf_init(void);
 
+pktbuf_t *pktbuf_alloc(int size);
+void pktbuf_free(pktbuf_t *pktbuf);
 
+/**
+ * 获取当前block的下一个子包
+ */
+static inline pktblk_t * pktbuf_blk_next(pktblk_t *blk) {
+    nlist_node_t * next = nlist_node_next(&blk->node);
+    return nlist_entry(next, pktblk_t, node);
+}
+
+/**
+ * 取buf的第一个数据块
+ * @param buf 数据缓存buf
+ * @return 第一个数据块
+ */
+static inline pktblk_t * pktbuf_blk_first(pktbuf_t * buf) {
+    nlist_node_t * first = nlist_first(&buf->blk_list);
+    return nlist_entry(first, pktblk_t, node);
+}
+
+/**
+ * 取buf的最后一个数据块
+ * @param buf buf 数据缓存buf
+ * @return 最后一个数据块
+ */
+static inline pktblk_t * pktbuf_blk_last(pktbuf_t * buf) {
+    nlist_node_t * first = nlist_last(&buf->blk_list);
+    return nlist_entry(first, pktblk_t, node);
+}
+
+static int inline pktbuf_total_size (pktbuf_t * buf) {
+    return buf->total_size;
+}
 
 #endif  // PKTBUF_H
