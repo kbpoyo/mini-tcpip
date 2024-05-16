@@ -5,8 +5,8 @@
 #include "mblock.h"
 #include "net.h"
 #include "netif_pcap.h"
-#include "sys_plat.h"
 #include "pktbuf.h"
+#include "sys_plat.h"
 
 net_err_t netdev_init(void) {
   netif_pcap_open();
@@ -37,14 +37,46 @@ void mblock_test(void) {
 
 void pktbuf_test() {
   pktbuf_t *pktbuf = pktbuf_alloc(10000);
+  pktbuf_free(pktbuf);
+
+  // pktbuf = pktbuf_alloc(5000);
+  // for (int i = 0; i < 16; i++) {
+  //   pktbuf_add_header(pktbuf, 33, PKTBUF_ADD_HEADER_CONT);
+  // }
+
+  // for (int i = 0; i < 16; i++) {
+  //   pktbuf_remove_header(pktbuf, 33);
+  // }
+
+  // for (int i = 0; i < 16; i++) {
+  //   pktbuf_add_header(pktbuf, 33, PKTBUF_ADD_HEADER_UNCONT);
+  // }
+
+  // for (int i = 0; i < 16; i++) {
+  //   pktbuf_remove_header(pktbuf, 33);
+  // }
+
+  // pktbuf_free(pktbuf);
+
+  // pktbuf = pktbuf_alloc(8);
+  // pktbuf_resize(pktbuf, 32);
+  // pktbuf_resize(pktbuf, 288);
+  // pktbuf_resize(pktbuf, 4922);
+
+  // pktbuf_resize(pktbuf, 32);
+  // pktbuf_resize(pktbuf, 0);
+  // pktbuf_free(pktbuf);
+
+  pktbuf = pktbuf_alloc(689);
+  pktbuf_t *srcbuf = pktbuf_alloc(892);
+  pktbuf_join(pktbuf, srcbuf);
+  pktbuf_free(pktbuf);
 
 }
 
 void basic_test(void) {
-
   // mblock_test();
   pktbuf_test();
-
 }
 
 #define DBG_TEST DBG_LEVEL_INFO
@@ -58,14 +90,13 @@ int main(void) {
 
   basic_test();
 
-
   // dbg_info(DBG_TEST, "debug info");
   // dbg_warning(DBG_TEST, "debug waring");
   // dbg_error(DBG_TEST, "debug error");
 
   // dbg_assert(1 == 2, "assert error")
 
-      while (1) {
+  while (1) {
     sys_sleep(10);
   }
 

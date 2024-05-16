@@ -138,7 +138,7 @@ void nlist_insert_after(nlist_t *list, nlist_node_t *pre, nlist_node_t *node) {
  * @param front 放在前面的链表, 合并后会被修改
  * @param behind 放在后面的链表
  */
-void nlist_merge(nlist_t *front, nlist_t *behind) {
+void nlist_join(nlist_t *front, nlist_t *behind) {
   // 如果behind为空，则直接返回
   if (behind->first == (nlist_node_t *)0) {
     return;
