@@ -39,6 +39,7 @@ void pktbuf_test() {
   pktbuf_t *pktbuf = pktbuf_alloc(10000);
   pktbuf_free(pktbuf);
 
+  // 测试包头添加和删除函数 pktbuf_add_header, pktbuf_remove_header
   // pktbuf = pktbuf_alloc(5000);
   // for (int i = 0; i < 16; i++) {
   //   pktbuf_add_header(pktbuf, 33, PKTBUF_ADD_HEADER_CONT);
@@ -58,18 +59,36 @@ void pktbuf_test() {
 
   // pktbuf_free(pktbuf);
 
-  // pktbuf = pktbuf_alloc(8);
-  // pktbuf_resize(pktbuf, 32);
-  // pktbuf_resize(pktbuf, 288);
-  // pktbuf_resize(pktbuf, 4922);
+  // 测试包大小调整函数 pktbuf_resize
+  pktbuf = pktbuf_alloc(8);
+  pktbuf_resize(pktbuf, 32);
+  pktbuf_resize(pktbuf, 288);
+  pktbuf_resize(pktbuf, 4922);
 
-  // pktbuf_resize(pktbuf, 32);
-  // pktbuf_resize(pktbuf, 0);
-  // pktbuf_free(pktbuf);
+  pktbuf_resize(pktbuf, 32);
+  pktbuf_resize(pktbuf, 0);
+  pktbuf_free(pktbuf);
 
+  // 测试包合并函数 pktbuf_join
   pktbuf = pktbuf_alloc(689);
   pktbuf_t *srcbuf = pktbuf_alloc(892);
   pktbuf_join(pktbuf, srcbuf);
+  pktbuf_free(pktbuf);
+
+  // 测试包连续设置函数 ptkbuf_set_cont
+  pktbuf = pktbuf_alloc(32);
+  pktbuf_join(pktbuf, pktbuf_alloc(4));
+  pktbuf_join(pktbuf, pktbuf_alloc(16));
+  pktbuf_join(pktbuf, pktbuf_alloc(54));
+  pktbuf_join(pktbuf, pktbuf_alloc(32));
+  pktbuf_join(pktbuf, pktbuf_alloc(38));
+
+  pktbuf_set_cont(pktbuf, 44);
+  pktbuf_set_cont(pktbuf, 60);
+  pktbuf_set_cont(pktbuf, 44);
+  pktbuf_set_cont(pktbuf, 128);
+  pktbuf_set_cont(pktbuf, 135);
+
   pktbuf_free(pktbuf);
 
 }
