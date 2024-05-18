@@ -20,7 +20,7 @@
  * @brief 定义封装的锁类型
  */
 typedef enum _nlocker_type_t {
-    NLOCKER_NONE = 0,  //普通互斥锁
+    NLOCKER_NONE = 0,  //无锁
     NLOCKER_THREAD,  //线程互斥锁
 } nlocker_type_t;
 

@@ -59,37 +59,103 @@ void pktbuf_test() {
 
   // pktbuf_free(pktbuf);
 
-  // 测试包大小调整函数 pktbuf_resize
-  pktbuf = pktbuf_alloc(8);
-  pktbuf_resize(pktbuf, 32);
-  pktbuf_resize(pktbuf, 288);
-  pktbuf_resize(pktbuf, 4922);
+  // // 测试包大小调整函数 pktbuf_resize
+  // pktbuf = pktbuf_alloc(8);
+  // pktbuf_resize(pktbuf, 32);
+  // pktbuf_resize(pktbuf, 288);
+  // pktbuf_resize(pktbuf, 4922);
 
-  pktbuf_resize(pktbuf, 32);
-  pktbuf_resize(pktbuf, 0);
+  // pktbuf_resize(pktbuf, 32);
+  // pktbuf_resize(pktbuf, 0);
+  // pktbuf_free(pktbuf);
+
+  // // 测试包合并函数 pktbuf_join
+  // pktbuf = pktbuf_alloc(689);
+  // pktbuf_t *srcbuf = pktbuf_alloc(892);
+  // pktbuf_join(pktbuf, srcbuf);
+  // pktbuf_free(pktbuf);
+
+  // // 测试包连续设置函数 ptkbuf_set_cont
+  // pktbuf = pktbuf_alloc(32);
+  // pktbuf_join(pktbuf, pktbuf_alloc(4));
+  // pktbuf_join(pktbuf, pktbuf_alloc(16));
+  // pktbuf_join(pktbuf, pktbuf_alloc(54));
+  // pktbuf_join(pktbuf, pktbuf_alloc(32));
+  // pktbuf_join(pktbuf, pktbuf_alloc(38));
+
+  // pktbuf_set_cont(pktbuf, 44);
+  // pktbuf_set_cont(pktbuf, 60);
+  // pktbuf_set_cont(pktbuf, 44);
+  // pktbuf_set_cont(pktbuf, 128);
+  // // pktbuf_set_cont(pktbuf, 135);
+
+  // pktbuf_free(pktbuf);
+
+  // 测试包访问位置重置函数 pktbuf_acc_reset
+  pktbuf = pktbuf_alloc(965);
+  pktbuf_acc_reset(pktbuf);
+
+  // 测试包读取与写入函数 pktbuf_write pktbuf_read
+  static uint16_t temp_wirte[1000];
+  for (int i = 0; i < 1000; i++) {
+    temp_wirte[i] = i;
+  }
+
+  pktbuf_write(pktbuf, (uint8_t *)temp_wirte, pktbuf_total_size(pktbuf));
+
+  static uint16_t temp_read[1000];
+  plat_memset(temp_read, 0, sizeof(temp_read));
+
+  pktbuf_acc_reset(pktbuf); // 重置访问位置
+  pktbuf_read(pktbuf, (uint8_t *)temp_read, pktbuf_total_size(pktbuf));
+
+  if (plat_memcmp(temp_wirte, temp_read, pktbuf_total_size(pktbuf)) != 0) {
+    plat_printf("pktbuf write and read test failed.\n");
+  }
+
+
+  // 测试包访问位置偏移函数 pktbuf_seek
+  plat_memset(temp_read, 0, sizeof(temp_read));
+  pktbuf_seek(pktbuf, 18 * 2);
+  pktbuf_read(pktbuf, (uint8_t *)temp_read, 56);
+  if (plat_memcmp(temp_wirte + 18, temp_read, 56) != 0) {
+    plat_printf("pktbuf seek test failed.\n");
+  }
+
+  plat_memset(temp_read, 0, sizeof(temp_read));
+  pktbuf_seek(pktbuf, 85 * 2);
+  pktbuf_read(pktbuf, (uint8_t *)temp_read, 256);
+  if (plat_memcmp(temp_wirte + 85, temp_read, 256) != 0) {
+    plat_printf("pktbuf seek test failed.\n");
+  }
+
+  // 测试包拷贝函数 pktbuf_copy
+  pktbuf_t *dest = pktbuf_alloc(1024);
+  pktbuf_seek(dest, 600);
+  pktbuf_seek(pktbuf, 200);
+  pktbuf_copy(dest, pktbuf, 122);
+
+  plat_memset(temp_read, 0, sizeof(temp_read));
+  pktbuf_seek(dest, 600);
+  pktbuf_read(dest, (uint8_t *)temp_read, 122);
+  if (plat_memcmp(temp_wirte + 100, temp_read, 122) != 0) {
+    plat_printf("pktbuf copy test failed.\n");
+  }
+
   pktbuf_free(pktbuf);
+  pktbuf_free(dest);
 
-  // 测试包合并函数 pktbuf_join
-  pktbuf = pktbuf_alloc(689);
-  pktbuf_t *srcbuf = pktbuf_alloc(892);
-  pktbuf_join(pktbuf, srcbuf);
-  pktbuf_free(pktbuf);
-
-  // 测试包连续设置函数 ptkbuf_set_cont
-  pktbuf = pktbuf_alloc(32);
-  pktbuf_join(pktbuf, pktbuf_alloc(4));
-  pktbuf_join(pktbuf, pktbuf_alloc(16));
-  pktbuf_join(pktbuf, pktbuf_alloc(54));
-  pktbuf_join(pktbuf, pktbuf_alloc(32));
-  pktbuf_join(pktbuf, pktbuf_alloc(38));
-
-  pktbuf_set_cont(pktbuf, 44);
-  pktbuf_set_cont(pktbuf, 60);
-  pktbuf_set_cont(pktbuf, 44);
-  pktbuf_set_cont(pktbuf, 128);
-  pktbuf_set_cont(pktbuf, 135);
-
-  pktbuf_free(pktbuf);
+  // 测试数据包填充函数 pktbuf_fill
+  pktbuf = pktbuf_alloc(1024);
+  pktbuf_fill(pktbuf, 55, pktbuf_total_size(pktbuf));
+  pktbuf_acc_reset(pktbuf);
+  pktbuf_read(pktbuf, (uint8_t *)temp_read, pktbuf_total_size(pktbuf));
+  for (int i = 0; i < pktbuf_total_size(pktbuf); i++) {
+    if (((uint8_t*)temp_read)[i] != 55) {
+      plat_printf("pktbuf fill test failed.\n");
+      break;
+    }
+  }
 
 }
 
@@ -103,7 +169,7 @@ void basic_test(void) {
 int main(void) {
   net_init();
 
-  //  net_start();
+   net_start();
 
   // netdev_init();
 

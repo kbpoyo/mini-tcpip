@@ -13,6 +13,7 @@
 #define NET_CFG_H
 
 // 调试信息相关配置
+#define DBG_INIT DBG_LEVEL_INFO
 #define DBG_MBLOCK DBG_LEVEL_INFO
 #define DBG_FIXQ DBG_LEVEL_INFO
 #define DBG_EXMSG DBG_LEVEL_INFO
