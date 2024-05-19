@@ -54,7 +54,7 @@ static inline int pktbuf_currblk_remain_size(pktbuf_t *buf) {
  * @param blk
  * @return int
  */
-static inline int blk_tail_free_size(pktblk_t *blk) {
+static inline int pktblk_tail_free_size(pktblk_t *blk) {
   return (int)((blk->payload + PKTBUF_BLK_SIZE) - (blk->data + blk->data_size));
 }
 
@@ -85,7 +85,7 @@ static void display_check_buf(pktbuf_t *pktbuf) {
     int used_size = curr->data_size;
     plat_printf("used: %d B,\t", used_size);
 
-    int free_size = blk_tail_free_size(curr);
+    int free_size = pktblk_tail_free_size(curr);
     plat_printf("free: %d B\n", free_size);
 
     int blk_total_size = pre_size + used_size + free_size;
@@ -113,14 +113,20 @@ static void display_check_buf(pktbuf_t *pktbuf) {
  *
  * @return net_err_t
  */
-net_err_t pktbuf_init(void) {
+net_err_t pktbuf_module_init(void) {
   dbg_info(DBG_PKTBUF, "pktbuf init....");
 
-  nlocker_init(&pkt_locker, NLOCKER_THREAD);
-  mblock_init(&pktblk_list, pktblk_pool, sizeof(pktblk_t), PKTBUF_BLK_CNT,
-              NLOCKER_NONE);
-  mblock_init(&pktbuf_list, pktbuf_pool, sizeof(pktbuf_t), PKTBUF_BUF_CNT,
-              NLOCKER_NONE);
+  // TODO: 当前只使用一个互斥锁来保护数据包模块, 后续可以考虑使用更细粒度的锁
+  net_err_t err = nlocker_init(&pkt_locker, NLOCKER_THREAD);
+  Net_Err_Check(err);
+
+  err = mblock_init(&pktblk_list, pktblk_pool, sizeof(pktblk_t), PKTBUF_BLK_CNT,
+                    NLOCKER_NONE);
+  Net_Err_Check(err);
+
+  err = mblock_init(&pktbuf_list, pktbuf_pool, sizeof(pktbuf_t), PKTBUF_BUF_CNT,
+                    NLOCKER_NONE);
+  Net_Err_Check(err);
 
   dbg_info(DBG_PKTBUF, "pktbuf init success....");
   return NET_ERR_OK;
@@ -132,7 +138,6 @@ net_err_t pktbuf_init(void) {
  * @return pktblk_t*
  */
 static pktblk_t *pktblock_alloc(void) {
-
   nlocker_lock(&pkt_locker);  // 加锁
   pktblk_t *pktblk = (pktblk_t *)mblock_alloc(&pktblk_list, -1);
   nlocker_unlock(&pkt_locker);  // 解锁
@@ -247,8 +252,11 @@ static net_err_t pktblock_list_alloc(pktbuf_t *pktbuf, int size,
  * @return pktbuf_t*
  */
 pktbuf_t *pktbuf_alloc(int size) {
+  nlocker_lock(&pkt_locker);  // 加锁
   // 分配一个数据包
   pktbuf_t *pktbuf = (pktbuf_t *)mblock_alloc(&pktbuf_list, -1);
+  nlocker_unlock(&pkt_locker);  // 解锁
+
   if (pktbuf == (pktbuf_t *)0) {
     dbg_error(DBG_PKTBUF, "pktbuf alloc failed, no buffer.");
     return (pktbuf_t *)0;
@@ -263,9 +271,12 @@ pktbuf_t *pktbuf_alloc(int size) {
   if (size > 0) {
     // 为数据包分配数据块列表
     net_err_t err = pktblock_list_alloc(pktbuf, size, PKTBUF_LIST_INSERT_HEAD);
-    if (err != NET_ERR_OK) {  // 分配失败
+    if (err != NET_ERR_OK) {      // 分配失败
+      nlocker_lock(&pkt_locker);  // 加锁
       // 释放数据包
       mblock_free(&pktbuf_list, pktbuf);
+
+      nlocker_unlock(&pkt_locker);  // 解锁
       return (pktbuf_t *)0;
     }
   }
@@ -283,21 +294,18 @@ pktbuf_t *pktbuf_alloc(int size) {
  *
  * @param pktbuf
  */
-void pktbuf_free(pktbuf_t *pktbuf) {
-  if (pktbuf == (pktbuf_t *)0) {
-    dbg_error(DBG_PKTBUF, "invalid pktbuf, pktbuf is null.");
-    return;
-  }
+void pktbuf_free(pktbuf_t *buf) {
+  pktbuf_check_buf(buf);
 
-  nlocker_lock(&pkt_locker);  // 加锁
+  // 将包的ref_cnt也保护起来，避免包递交给其它线程后，当前线程和其它线程同时对其进行释放
 
-  if (--(pktbuf->ref_cnt) == 0) {  // 引用计数为0,释放数据包
+  nlocker_lock(&pkt_locker);    // 加锁
+  if (--(buf->ref_cnt) == 0) {  // 引用计数为0,释放数据包
     // 释放数据块列表
-    pktblock_list_free(&(pktbuf->blk_list));
+    pktblock_list_free(&(buf->blk_list));
     // 释放数据包
-    mblock_free(&pktbuf_list, pktbuf);
+    mblock_free(&pktbuf_list, buf);
   }
-
   nlocker_unlock(&pkt_locker);  // 解锁
 }
 
@@ -310,14 +318,14 @@ void pktbuf_free(pktbuf_t *pktbuf) {
  * 若头部数据块剩余空间不够,是否将数据内容全部放入新的数据块中，以保证数据在内存上的连续
  * @return net_err_t
  */
-net_err_t pktbuf_add_header(pktbuf_t *buf, int size, int is_cont) {
-  dbg_assert(buf->ref_cnt != 0, "buf ref_cnt == 0.");
+net_err_t pktbuf_header_add(pktbuf_t *buf, int size, int is_cont) {
+  pktbuf_check_buf(buf);
 
   // 将当前数据包的第一个数据块剩余空闲空间利用起来
   pktblk_t *block = pktbuf_blk_first(buf);
   // 计算当前数据块头部的剩余空闲空间
   int resv_size = (int)(block->data - block->payload);
-  if (size <= resv_size) {
+  if (size <= resv_size) {  // 头部剩余空间足够拓展
     block->data -= size;
     block->data_size += size;
     buf->total_size += size;
@@ -326,10 +334,10 @@ net_err_t pktbuf_add_header(pktbuf_t *buf, int size, int is_cont) {
     return NET_ERR_OK;
   }
 
-  // 第一块数据块的剩余空闲空间不够
+  // 头部数据块的剩余空闲空间不够
   // 再为数据包分配数据块列表
   if (is_cont == PKTBUF_ADD_HEADER_CONT) {  // 保证数据在内存上的连续
-    // 待分配内存大于数据块大小，无法实现在内存上的连续
+    // 待分配内存大于数据块有效载荷大小，无法实现在内存上的连续
     if (size > PKTBUF_BLK_SIZE) {
       dbg_error(DBG_PKTBUF, "can't set cont, size too big: %d > %d.", size,
                 PKTBUF_BLK_SIZE);
@@ -364,8 +372,9 @@ net_err_t pktbuf_add_header(pktbuf_t *buf, int size, int is_cont) {
  * @param size
  * @return net_err_t
  */
-net_err_t pktbuf_remove_header(pktbuf_t *buf, int size) {
-  dbg_assert(buf->ref_cnt != 0, "buf ref_cnt == 0.");
+net_err_t pktbuf_header_remove(pktbuf_t *buf, int size) {
+  pktbuf_check_buf(buf);
+
   // 获取数据包的第一个数据块
   pktblk_t *block = pktbuf_blk_first(buf);
 
@@ -402,7 +411,7 @@ net_err_t pktbuf_remove_header(pktbuf_t *buf, int size) {
  * @return net_err_t
  */
 net_err_t pktbuf_resize(pktbuf_t *buf, int to_size) {
-  dbg_assert(buf->ref_cnt != 0, "buf ref_cnt == 0.");
+  pktbuf_check_buf(buf);
 
   if (to_size == buf->total_size) {
     return NET_ERR_OK;
@@ -419,6 +428,7 @@ net_err_t pktbuf_resize(pktbuf_t *buf, int to_size) {
     pktblock_list_free(&(buf->blk_list));
     buf->total_size = 0;
     nlist_init(&(buf->blk_list));
+    pktbuf_acc_reset(buf);
 
   } else if (to_size > buf->total_size) {  // 目标数据大小大于当前数据包大小,
                                            // 需要增加数据包大小
@@ -428,7 +438,7 @@ net_err_t pktbuf_resize(pktbuf_t *buf, int to_size) {
     // 计算增加的大小
     int inc_size = to_size - buf->total_size;
     // 计算尾部数据块的剩余空闲空间
-    int remain_size = blk_tail_free_size(tail_blk);
+    int remain_size = pktblk_tail_free_size(tail_blk);
     // 调整数据包大小
     if (remain_size >= inc_size) {  // 尾部数据块剩余空间足够
       tail_blk->data_size += inc_size;
@@ -449,19 +459,19 @@ net_err_t pktbuf_resize(pktbuf_t *buf, int to_size) {
     }
   } else {  // 目标数据大小小于当前数据大小，需要减小数据包大小
     int dest_total_size = 0;  //  记录目标大小
-    pktblk_t *tail_blk = (pktblk_t *)0;
+    pktblk_t *curr_blk = (pktblk_t *)0;
 
     // 从头部开始遍历数据块, 记录总的数据大小,
     // 当总的数据大小大于等于目标大小则停止
-    for (tail_blk = pktbuf_blk_first(buf); tail_blk;
-         tail_blk = pktbuf_blk_next(tail_blk)) {
-      dest_total_size += tail_blk->data_size;
+    for (curr_blk = pktbuf_blk_first(buf); curr_blk;
+         curr_blk = pktbuf_blk_next(curr_blk)) {
+      dest_total_size += curr_blk->data_size;
       if (dest_total_size >= to_size) {
         break;
       }
     }
 
-    if (tail_blk == (pktblk_t *)0) {
+    if (curr_blk == (pktblk_t *)0) {  // 目标大小达不到，返回错误值
       dbg_error(DBG_PKTBUF,
                 "pktbuf resize failed, decrease size error(size %d to %d).",
                 buf->total_size, to_size);
@@ -469,7 +479,8 @@ net_err_t pktbuf_resize(pktbuf_t *buf, int to_size) {
     }
 
     // 目标大小已经达到, 移除多余的数据块
-    pktblk_t *curr_blk = pktbuf_blk_next(tail_blk);
+    pktblk_t *tail_blk = curr_blk;  // 记录新的尾部数据块
+    curr_blk = pktbuf_blk_next(curr_blk);
     while (curr_blk) {
       pktblk_t *next_blk = pktbuf_blk_next(curr_blk);
 
@@ -507,11 +518,8 @@ net_err_t pktbuf_resize(pktbuf_t *buf, int to_size) {
  * @return net_err_t
  */
 net_err_t pktbuf_join(pktbuf_t *dest, pktbuf_t *src) {
-  dbg_assert((dest->ref_cnt != 0 && src->ref_cnt != 0), "buf ref_cnt == 0.");
-  if (dest == (pktbuf_t *)0 || src == (pktbuf_t *)0) {
-    dbg_error(DBG_PKTBUF, "pktbuf join failed, invalid pktbuf.");
-    return NET_ERR_PARAM;
-  }
+  pktbuf_check_buf(dest);
+  pktbuf_check_buf(src);
 
   // 将src的数据块列表添加到dest的数据块列表中
   nlist_join(&(dest->blk_list), &(src->blk_list));
@@ -527,15 +535,15 @@ net_err_t pktbuf_join(pktbuf_t *dest, pktbuf_t *src) {
 }
 
 /**
- * @brief 设置数据包数据块列表中前size个字节的数据在内存上的连续
- * 即将数据包前size个字节调整到第一个数据块中
+ * @brief 设置数据包前size个字节的数据在内存上连续，
+ * 即将数据包前size个字节调整到头部数据块中
  *
  * @param buf
  * @param size
  * @return net_err_t
  */
 net_err_t pktbuf_set_cont(pktbuf_t *buf, int size) {
-  dbg_assert(buf->ref_cnt != 0, "buf ref_cnt == 0.");
+  pktbuf_check_buf(buf);
 
   if (size > buf->total_size ||
       size > PKTBUF_BLK_SIZE) {  // size大于数据包总大小或数据块有效载荷大小
@@ -573,10 +581,11 @@ net_err_t pktbuf_set_cont(pktbuf_t *buf, int size) {
     // 将当前块待调整的数据调整到第一个数据块中
     plat_memcpy(dest, curr_blk->data, curr_size);
 
-    // 更新dest，remain_size和头部数据块与当前数据块参数
-    first_blk->data_size += curr_size;
+    // 更新dest，remain_size
     dest += curr_size;
     remain_size -= curr_size;
+    // 更新头部数据块与当前数据块
+    first_blk->data_size += curr_size;
     curr_blk->data += curr_size;
     curr_blk->data_size -= curr_size;
 
@@ -601,12 +610,7 @@ net_err_t pktbuf_set_cont(pktbuf_t *buf, int size) {
  * @param buf
  */
 void pktbuf_acc_reset(pktbuf_t *buf) {
-  if (buf == (pktbuf_t *)0) {
-    dbg_error(DBG_PKTBUF, "pktbuf acc reset failed, invalid pktbuf.");
-    return;
-  }
-
-  dbg_assert(buf->ref_cnt != 0, "buf ref_cnt == 0.");
+  pktbuf_check_buf(buf);
 
   buf->pos = 0;
   buf->curr_blk = pktbuf_blk_first(buf);
@@ -620,10 +624,6 @@ void pktbuf_acc_reset(pktbuf_t *buf) {
  * @param size
  */
 static void pktbuf_pos_move_forward(pktbuf_t *buf, int size) {
-  if (buf == (pktbuf_t *)0 || size < 0 || size > pktbuf_remain_size(buf)) {
-    dbg_error(DBG_PKTBUF, "pktbuf pos move failed, invalid param.");
-    return;
-  }
 
   while (size && buf->curr_blk) {
     int currblk_remain_size = pktbuf_currblk_remain_size(buf);
@@ -636,7 +636,7 @@ static void pktbuf_pos_move_forward(pktbuf_t *buf, int size) {
     size -= curr_move_size;
 
     // 当前数据块已访问完，更新当前数据块和当前位置到下一个数据块
-    if (buf->curr_pos >= (buf->curr_blk->data + buf->curr_blk->data_size)) {
+    if (buf->curr_pos >= (buf->curr_blk->data + buf->curr_blk->data_size)) {  // 实际情况中应该只有等于
       buf->curr_blk = pktbuf_blk_next(buf->curr_blk);
       buf->curr_pos = buf->curr_blk ? buf->curr_blk->data : (uint8_t *)0;
     }
@@ -656,12 +656,12 @@ static void pktbuf_pos_move_forward(pktbuf_t *buf, int size) {
  * @return net_err_t
  */
 net_err_t pktbuf_write(pktbuf_t *buf, uint8_t *src, int size) {
-  if (buf == (pktbuf_t *)0 || src == (uint8_t *)0 || size < 0) {
+  pktbuf_check_buf(buf);
+
+  if (src == (uint8_t *)0 || size < 0) {
     dbg_error(DBG_PKTBUF, "pktbuf write failed, invalid param.");
     return NET_ERR_PARAM;
   }
-
-  dbg_assert(buf->ref_cnt != 0, "buf ref_cnt == 0.");
 
   // 检查数据包是否有足够的空间
   int remain_size = pktbuf_remain_size(buf);
@@ -695,12 +695,13 @@ net_err_t pktbuf_write(pktbuf_t *buf, uint8_t *src, int size) {
  * @return net_err_t
  */
 net_err_t pktbuf_read(pktbuf_t *buf, uint8_t *dest, int size) {
-  if (buf == (pktbuf_t *)0 || dest == (uint8_t *)0 || size < 0) {
+  pktbuf_check_buf(buf);
+
+  if (dest == (uint8_t *)0 || size < 0) {
     dbg_error(DBG_PKTBUF, "pktbuf read failed, invalid param.");
     return NET_ERR_PARAM;
   }
 
-  dbg_assert(buf->ref_cnt != 0, "buf ref_cnt == 0.");
   // 检查数据包是否有足够的空间
   int remain_size = pktbuf_remain_size(buf);
   if (remain_size < size) {
@@ -731,7 +732,8 @@ net_err_t pktbuf_read(pktbuf_t *buf, uint8_t *dest, int size) {
  * @return net_err_t
  */
 net_err_t pktbuf_seek(pktbuf_t *buf, int offset) {
-  dbg_assert(buf->ref_cnt != 0, "buf ref_cnt == 0.");
+  pktbuf_check_buf(buf);
+
   if (buf->pos == offset) {  // 当前位置已经在目标位置
     return NET_ERR_OK;
   }
@@ -767,15 +769,17 @@ net_err_t pktbuf_seek(pktbuf_t *buf, int offset) {
  * @return net_err_t
  */
 net_err_t pktbuf_copy(pktbuf_t *dest, pktbuf_t *src, int size) {
-  if (dest == (pktbuf_t *)0 || src == (pktbuf_t *)0 || size < 0) {
+  pktbuf_check_buf(dest);
+  pktbuf_check_buf(src);
+
+  if (size < 0) {
     dbg_error(DBG_PKTBUF, "pktbuf copy failed, invalid param.");
     return NET_ERR_PARAM;
   }
-  dbg_assert((dest->ref_cnt != 0 && src->ref_cnt != 0), "buf ref_cnt == 0.");
 
   if (pktbuf_remain_size(src) < size || pktbuf_remain_size(dest) < size) {
     dbg_error(DBG_PKTBUF, "pktbuf copy failed, dest or src size too small.");
-    return NET_ERR_SIZE;
+    return NET_ERR_PARAM;
   }
 
   // 进行数据拷贝
@@ -808,12 +812,12 @@ net_err_t pktbuf_copy(pktbuf_t *dest, pktbuf_t *src, int size) {
  * @return net_err_t
  */
 net_err_t pktbuf_fill(pktbuf_t *buf, uint8_t data, int size) {
-  if (buf == (pktbuf_t *)0 || size < 0) {
+  pktbuf_check_buf(buf);
+
+  if (size < 0) {
     dbg_error(DBG_PKTBUF, "pktbuf write failed, invalid param.");
     return NET_ERR_PARAM;
   }
-
-  dbg_assert(buf->ref_cnt != 0, "buf ref_cnt == 0.");
 
   // 检查数据包是否有足够的空间
   int remain_size = pktbuf_remain_size(buf);
@@ -847,12 +851,9 @@ net_err_t pktbuf_fill(pktbuf_t *buf, uint8_t data, int size) {
  * @param buf
  */
 void pktbuf_inc_ref(pktbuf_t *buf) {
-  if (buf == (pktbuf_t *)0) {
-    dbg_error(DBG_PKTBUF, "pktbuf inc ref failed, invalid pktbuf.");
-    return;
-  }
+  pktbuf_check_buf(buf);
 
-  dbg_assert(buf->ref_cnt != 0, "buf ref_cnt == 0.");
+  // 数据包的引用计数可能被多个线程操作，需要对其进行加锁保护
 
   nlocker_lock(&pkt_locker);  // 加锁
   buf->ref_cnt++;

@@ -247,4 +247,6 @@ test/CMakeFiles/recv_pocket.dir/__/src/net/src/net.c.obj: \
  F:/code/c++code/mini-tcpip/src/net/net/net_sys.h \
  F:/code/c++code/mini-tcpip/src/net/net/net_cfg.h \
  F:/code/c++code/mini-tcpip/src/net/net/pktbuf.h \
- F:/code/c++code/mini-tcpip/src/net/net/nlist.h
+ F:/code/c++code/mini-tcpip/src/net/net/dbg.h \
+ F:/code/c++code/mini-tcpip/src/net/net/nlist.h \
+ F:/code/c++code/mini-tcpip/src/net/net/dbg.h

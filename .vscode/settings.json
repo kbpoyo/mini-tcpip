@@ -19,7 +19,8 @@
         "nlocker.h": "c",
         "mblock.h": "c",
         "nlist.h": "c",
-        "pktbuf.h": "c"
+        "pktbuf.h": "c",
+        "net_cfg.h": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [

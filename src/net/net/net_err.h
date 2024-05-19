@@ -12,4 +12,11 @@ typedef enum _net_err_t {
   NET_ERR_PARAM = -7,
 } net_err_t;
 
+
+#define Net_Err_Check(err) { \
+ if (err != NET_ERR_OK) { \
+    return err; \
+ }\
+}
+
 #endif  // NET_ERR_H

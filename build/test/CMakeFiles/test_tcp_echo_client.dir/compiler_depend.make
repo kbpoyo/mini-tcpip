@@ -1574,6 +1574,7 @@ test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/net.c.obj: F:/code/c++co
   F:/code/c++code/mini-tcpip/npcap/Include/pcap/pcap-inttypes.h \
   F:/code/c++code/mini-tcpip/npcap/Include/pcap/pcap.h \
   F:/code/c++code/mini-tcpip/npcap/Include/pcap/socket.h \
+  F:/code/c++code/mini-tcpip/src/net/net/dbg.h \
   F:/code/c++code/mini-tcpip/src/net/net/exmsg.h \
   F:/code/c++code/mini-tcpip/src/net/net/net.h \
   F:/code/c++code/mini-tcpip/src/net/net/net_cfg.h \
@@ -2310,6 +2311,8 @@ test/CMakeFiles/test_tcp_echo_client.dir/__/src/plat/net_plat.c.obj: F:/code/c++
   F:/code/c++code/mini-tcpip/npcap/Include/pcap/pcap-inttypes.h \
   F:/code/c++code/mini-tcpip/npcap/Include/pcap/pcap.h \
   F:/code/c++code/mini-tcpip/npcap/Include/pcap/socket.h \
+  F:/code/c++code/mini-tcpip/src/net/net/dbg.h \
+  F:/code/c++code/mini-tcpip/src/net/net/net_cfg.h \
   F:/code/c++code/mini-tcpip/src/net/net/net_err.h \
   F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/adxintrin.h \
   F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/ammintrin.h \

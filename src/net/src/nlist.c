@@ -133,7 +133,7 @@ void nlist_insert_after(nlist_t *list, nlist_node_t *pre, nlist_node_t *node) {
 }
 
 /**
- * @brief 合并两个链表
+ * @brief 合并两个链表, 合并成功后，behind链表将清空
  *
  * @param front 放在前面的链表, 合并后会被修改
  * @param behind 放在后面的链表
