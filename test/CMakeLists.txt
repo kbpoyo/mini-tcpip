@@ -19,6 +19,7 @@ add_executable(circular_queue "circular_queue.c" ${SOURCE_LIST})
 add_executable(test_tcp_echo_client "test_tcp_echo_client.c" ${SOURCE_LIST})
 add_executable(test_tcp_echo_server "test_tcp_echo_server.c" ${SOURCE_LIST})
 add_executable(test_mblock "test_mblock.c" ${SOURCE_LIST})
+add_executable(test_pktbuf "test_pktbuf.c" ${SOURCE_LIST})
 
 target_link_libraries(test1 ${LINK_LIBS_LIST})
 target_link_libraries(send_pocket ${LINK_LIBS_LIST})
@@ -28,6 +29,7 @@ target_link_libraries(circular_queue ${LINK_LIBS_LIST})
 target_link_libraries(test_tcp_echo_client ${LINK_LIBS_LIST})
 target_link_libraries(test_tcp_echo_server ${LINK_LIBS_LIST})
 target_link_libraries(test_mblock ${LINK_LIBS_LIST})
+target_link_libraries(test_pktbuf ${LINK_LIBS_LIST})
 
 add_test(
   NAME test1
@@ -67,4 +69,9 @@ add_test(
 add_test(
   NAME test_mblock
   COMMAND $<TARGET_FILE:test_mblock>
+)
+
+add_test(
+  NAME test_pktbuf
+  COMMAND $<TARGET_FILE:test_pktbuf>
 )

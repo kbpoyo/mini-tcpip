@@ -22,14 +22,26 @@ static mblock_t pktbuf_list;  // 数据包链表(管理数据包池)
 
 static nlocker_t pkt_locker;  // 数据包模块锁
 
-/**
- * @brief 获取数据包剩余待读取字节数
- *
- * @param buf
- * @return int
- */
-static inline int pktbuf_remain_size(pktbuf_t *buf) {
-  return buf->total_size - buf->pos;
+static void pktbuf_pos_move_forward(pktbuf_t *buf, int size);
+
+static inline void pktbuf_update_pos(pktbuf_t *buf) {
+  dbg_assert(buf->pos >= 0, "pos error.");
+
+  // 当前数据包访问位置已更新到无效位置
+  if (buf->pos >= buf->total_size) {
+    buf->pos = buf->total_size;
+    buf->curr_blk = (pktblk_t *)0;
+    buf->curr_pos = (uint8_t *)0;
+    return;
+  }
+
+  // 当前数据包访问位置已更新到有效位置
+  if (buf->curr_blk == (pktblk_t *)0 && buf->curr_pos == (uint8_t *)0) {
+  
+    int offset = buf->pos;
+    pktbuf_acc_reset(buf);  // 重置数据包的访问位置到数据包的起始位置
+    pktbuf_pos_move_forward(buf, offset);  // 移动数据包的访问位置到指定位置
+  }
 }
 
 /**
@@ -310,7 +322,7 @@ void pktbuf_free(pktbuf_t *buf) {
 }
 
 /**
- * @brief 在数据包的头部增加数据块
+ * @brief 在数据包的头部增加size个字节的数据
  *
  * @param buf
  * @param size
@@ -320,6 +332,18 @@ void pktbuf_free(pktbuf_t *buf) {
  */
 net_err_t pktbuf_header_add(pktbuf_t *buf, int size, int is_cont) {
   pktbuf_check_buf(buf);
+
+  // 如果当前数据包为空,直接分配数据块列表
+  if (buf->total_size == 0) {
+    net_err_t err = pktblock_list_alloc(buf, size, PKTBUF_LIST_INSERT_HEAD);
+    if (err != NET_ERR_OK) {
+      dbg_error(DBG_PKTBUF,
+                "pktbuf add header failed, no buffer for (size %d).", size);
+      return NET_ERR_NOSRC;
+    }
+
+    return NET_ERR_OK;
+  }
 
   // 将当前数据包的第一个数据块剩余空闲空间利用起来
   pktblk_t *block = pktbuf_blk_first(buf);
@@ -366,7 +390,7 @@ net_err_t pktbuf_header_add(pktbuf_t *buf, int size, int is_cont) {
 }
 
 /**
- * @brief 移除数据包头部的数据块
+ * @brief 从数据包头部移除size个字节的数据
  *
  * @param buf
  * @param size
@@ -428,7 +452,6 @@ net_err_t pktbuf_resize(pktbuf_t *buf, int to_size) {
     pktblock_list_free(&(buf->blk_list));
     buf->total_size = 0;
     nlist_init(&(buf->blk_list));
-    pktbuf_acc_reset(buf);
 
   } else if (to_size > buf->total_size) {  // 目标数据大小大于当前数据包大小,
                                            // 需要增加数据包大小
@@ -504,6 +527,9 @@ net_err_t pktbuf_resize(pktbuf_t *buf, int to_size) {
     return NET_ERR_SIZE;
   }
 
+  // 更新数据包的访问位置
+  pktbuf_update_pos(buf);
+
   display_check_buf(buf);  // 检查数据包是否正确
 
   return NET_ERR_OK;
@@ -528,6 +554,10 @@ net_err_t pktbuf_join(pktbuf_t *dest, pktbuf_t *src) {
 
   // 释放src数据包
   pktbuf_free(src);
+
+
+  // 更新数据包的访问位置
+  pktbuf_update_pos(dest);
 
   display_check_buf(dest);  // 检查数据包是否正确
 
@@ -624,7 +654,6 @@ void pktbuf_acc_reset(pktbuf_t *buf) {
  * @param size
  */
 static void pktbuf_pos_move_forward(pktbuf_t *buf, int size) {
-
   while (size && buf->curr_blk) {
     int currblk_remain_size = pktbuf_currblk_remain_size(buf);
     int curr_move_size =
@@ -636,7 +665,9 @@ static void pktbuf_pos_move_forward(pktbuf_t *buf, int size) {
     size -= curr_move_size;
 
     // 当前数据块已访问完，更新当前数据块和当前位置到下一个数据块
-    if (buf->curr_pos >= (buf->curr_blk->data + buf->curr_blk->data_size)) {  // 实际情况中应该只有等于
+    if (buf->curr_pos >=
+        (buf->curr_blk->data +
+         buf->curr_blk->data_size)) {  // 实际情况中应该只有等于
       buf->curr_blk = pktbuf_blk_next(buf->curr_blk);
       buf->curr_pos = buf->curr_blk ? buf->curr_blk->data : (uint8_t *)0;
     }

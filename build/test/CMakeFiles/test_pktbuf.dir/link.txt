@@ -1,0 +1,3 @@
+F:\software\work_space\cmake-3.29.3-windows-x86_64\bin\cmake.exe -E rm -f CMakeFiles\test_pktbuf.dir/objects.a
+"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\ar.exe" qc CMakeFiles\test_pktbuf.dir/objects.a @CMakeFiles\test_pktbuf.dir\objects1.rsp
+"F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" -g -Wl,--whole-archive CMakeFiles\test_pktbuf.dir/objects.a -Wl,--no-whole-archive -o test_pktbuf.exe -Wl,--out-implib,libtest_pktbuf.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\test_pktbuf.dir\linkLibs.rsp

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20240519-0658-Experimental"
+	Name="(empty)"
+	Generator="ctest-3.29.3"
+	CompilerName=""
+	CompilerVersion=""
+	OSName="Windows"
+	Hostname="kbpoyo"
+	OSRelease=" Professional"
+	OSVersion=" (Build 22631)"
+	OSPlatform="AMD64"
+	Is64Bits="1"
+	VendorString="AuthenticAMD"
+	VendorID="Advanced Micro Devices"
+	FamilyID="15"
+	ModelID="0"
+	ProcessorCacheSize="64"
+	NumberOfLogicalCPU="16"
+	NumberOfPhysicalCPU="8"
+	TotalVirtualMemory="49583"
+	TotalPhysicalMemory="32175"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="2894"
+	>
+	<Testing>
+		<StartDateTime>May 19 18:42 [NON-UTF-8-BYTE-0xD6]й[NON-UTF-8-BYTE-0xFA][NON-UTF-8-BYTE-0xB1][NON-UTF-8-BYTE-0xEA]׼ʱ[NON-UTF-8-BYTE-0xBC][NON-UTF-8-BYTE-0xE4]</StartDateTime>
+		<StartTestTime>1716115355</StartTestTime>
+		<TestList>
+			<Test>./test/test_pktbuf</Test>
+		</TestList>
+		<Test Status="passed">
+			<Name>test_pktbuf</Name>
+			<Path>./test</Path>
+			<FullName>./test/test_pktbuf</FullName>
+			<FullCommandLine>F:\code\c++code\mini-tcpip\build\test\test_pktbuf.exe</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>3.34441</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>F:\code\c++code\mini-tcpip\build\test\test_pktbuf.exe</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Environment">
+					<Value>#CTEST_RESOURCE_GROUP_COUNT=</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value encoding="base64" compression="gzip">eJyN072OgzAMAOC5vEIXj3dSW4UEAnTsM9yGqooGR6DyJxLu7+kvCOnSZKjiyXHsb7L3JaN9O8jxbXro+yJP4rglt36slw5v7dDqY0yL9/NWh7VwMhHtS9Lvw8YT5oyDWoRApf4Z0aB4wNZxBmIik5KziouKcnIAPeqqu6n2F81v9Kr77nXHUUmu5900rznN4HLYLQpr81hTOeMqwuWVyYhnUsfk1qThZuqZzDFTa7Jws/LMxDETaybhpvTM1DGZNdNgM0k8kzsmtSYPNwvPzBwztmYWbqJn5o5JrJkHmynzzOLZjAtrFuFm7u88cdD8aemJr64XWH40rYKpmjWMEnSDoFGZfNHTouGrUjBjP35iDaodBII5YPwWiLXampsZVTN29TodE7No9x8DnK7RH9mASs8=</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<EndDateTime>May 19 18:42 [NON-UTF-8-BYTE-0xD6]й[NON-UTF-8-BYTE-0xFA][NON-UTF-8-BYTE-0xB1][NON-UTF-8-BYTE-0xEA]׼ʱ[NON-UTF-8-BYTE-0xBC][NON-UTF-8-BYTE-0xE4]</EndDateTime>
+		<EndTestTime>1716115359</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

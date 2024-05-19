@@ -112,6 +112,17 @@ static inline void *pktbuf_data_ptr(pktbuf_t *buf) {
   return first_blk ? first_blk->data : (void *)0;
 }
 
+/**
+ * @brief 获取数据包剩余待读取字节数
+ *
+ * @param buf
+ * @return int
+ */
+static inline int pktbuf_remain_size(pktbuf_t *buf) {
+  return buf->total_size - buf->pos;
+}
+
+
 net_err_t pktbuf_module_init(void);
 pktbuf_t *pktbuf_alloc(int size);
 void pktbuf_free(pktbuf_t *buf);

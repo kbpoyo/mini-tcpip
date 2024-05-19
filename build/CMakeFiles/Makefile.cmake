@@ -60,4 +60,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "test/CMakeFiles/test_tcp_echo_client.dir/DependInfo.cmake"
   "test/CMakeFiles/test_tcp_echo_server.dir/DependInfo.cmake"
   "test/CMakeFiles/test_mblock.dir/DependInfo.cmake"
+  "test/CMakeFiles/test_pktbuf.dir/DependInfo.cmake"
   )

@@ -242,6 +242,19 @@ test_mblock/fast:
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/build
 .PHONY : test_mblock/fast
 
+#=============================================================================
+# Target rules for targets named test_pktbuf
+
+# Build rule for target.
+test_pktbuf: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test_pktbuf
+.PHONY : test_pktbuf
+
+# fast build rule for target.
+test_pktbuf/fast:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/build
+.PHONY : test_pktbuf/fast
+
 src/app/echo/tcp_echo_client.obj: src/app/echo/tcp_echo_client.c.obj
 .PHONY : src/app/echo/tcp_echo_client.obj
 
@@ -594,6 +607,7 @@ help:
 	@echo ... send_pocket
 	@echo ... test1
 	@echo ... test_mblock
+	@echo ... test_pktbuf
 	@echo ... test_tcp_echo_client
 	@echo ... test_tcp_echo_server
 	@echo ... src/app/echo/tcp_echo_client.obj
