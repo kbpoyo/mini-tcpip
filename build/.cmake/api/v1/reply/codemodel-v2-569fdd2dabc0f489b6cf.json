@@ -1,0 +1,174 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22.1"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "test",
+					"jsonFile" : "directory-test-Debug-f18be1977b403cfd1a50.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22.1"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "test",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "net",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "test",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "circular_queue::@36f028580bb02cc8272a",
+					"jsonFile" : "target-circular_queue-Debug-0198cd269fe909cd9f32.json",
+					"name" : "circular_queue",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "multi_thread::@36f028580bb02cc8272a",
+					"jsonFile" : "target-multi_thread-Debug-817eac4c580a5e019023.json",
+					"name" : "multi_thread",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "net::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-net-Debug-bcb0e42ae34d2bd2d723.json",
+					"name" : "net",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "recv_pocket::@36f028580bb02cc8272a",
+					"jsonFile" : "target-recv_pocket-Debug-fade5cebd214175a72f5.json",
+					"name" : "recv_pocket",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "send_pocket::@36f028580bb02cc8272a",
+					"jsonFile" : "target-send_pocket-Debug-703bce5291d9cfadbcf5.json",
+					"name" : "send_pocket",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "test1::@36f028580bb02cc8272a",
+					"jsonFile" : "target-test1-Debug-c9015528c3be7427c5a4.json",
+					"name" : "test1",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "test_mblock::@36f028580bb02cc8272a",
+					"jsonFile" : "target-test_mblock-Debug-d36be306f14a916b7296.json",
+					"name" : "test_mblock",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "test_pktbuf::@36f028580bb02cc8272a",
+					"jsonFile" : "target-test_pktbuf-Debug-4b594f729a93beb750a4.json",
+					"name" : "test_pktbuf",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "test_tcp_echo_client::@36f028580bb02cc8272a",
+					"jsonFile" : "target-test_tcp_echo_client-Debug-e077cf9ff9842376076f.json",
+					"name" : "test_tcp_echo_client",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "test_tcp_echo_server::@36f028580bb02cc8272a",
+					"jsonFile" : "target-test_tcp_echo_server-Debug-829a8888d1ad55ee4a3c.json",
+					"name" : "test_tcp_echo_server",
+					"projectIndex" : 1
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "F:/code/c++code/mini-tcpip/build",
+		"source" : "F:/code/c++code/mini-tcpip"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

@@ -30,6 +30,11 @@
 #define PKTBUF_BLK_CNT 128   // 数据块池中的数据块数量
 #define PKTBUF_BUF_CNT 128   // 数据包池中的数据包数量
 
+// 网络接口相关配置
+#define NETIF_HWADDR_SIZE 10  // 网络接口硬件地址长度
+#define NETIF_NAME_SIZE 10    // 网络接口名称长度
+#define NETIF_RECV_BUFSIZE 50 // 网络接口接收缓冲区大小
+#define NETIF_SEND_BUFSIZE 50 // 网络接口发送缓冲区大小
 
 
 #endif  // NET_CFG_H
