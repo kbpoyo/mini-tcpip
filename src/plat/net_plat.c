@@ -10,7 +10,7 @@
  */
 net_err_t net_plat_init(void) {
     dbg_info(DBG_PLAT, "init plat....");
-    dbg_info(DBG_PLAT, "init plat ok\n");
+    dbg_info(DBG_PLAT, "init plat ok.");
 
     return NET_ERR_OK;
 }

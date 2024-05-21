@@ -135,8 +135,8 @@ void *fixq_recv(fixq_t *q, int tmo_ms) {
 
 /**
  * @brief 获取消息队列中的消息数量
- * 
- * @param q 
+ *
+ * @param q
  */
 int fixq_count(fixq_t *q) {
   nlocker_lock(&q->locker);
@@ -144,13 +144,12 @@ int fixq_count(fixq_t *q) {
   nlocker_unlock(&q->locker);
 
   return cnt;
-
 }
 
 /**
  * @brief 销毁消息队列对象
- * 
- * @param q 
+ *
+ * @param q
  */
 void fixq_destroy(fixq_t *q) {
   nlocker_destroy(&q->locker);

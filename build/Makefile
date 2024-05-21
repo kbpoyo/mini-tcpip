@@ -399,6 +399,54 @@ src/net/src/fixq.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/fixq.c.s
 .PHONY : src/net/src/fixq.c.s
 
+src/net/src/ipaddr.obj: src/net/src/ipaddr.c.obj
+.PHONY : src/net/src/ipaddr.obj
+
+# target to build an object file
+src/net/src/ipaddr.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/ipaddr.c.obj
+.PHONY : src/net/src/ipaddr.c.obj
+
+src/net/src/ipaddr.i: src/net/src/ipaddr.c.i
+.PHONY : src/net/src/ipaddr.i
+
+# target to preprocess a source file
+src/net/src/ipaddr.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/ipaddr.c.i
+.PHONY : src/net/src/ipaddr.c.i
+
+src/net/src/ipaddr.s: src/net/src/ipaddr.c.s
+.PHONY : src/net/src/ipaddr.s
+
+# target to generate assembly for a file
+src/net/src/ipaddr.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/ipaddr.c.s
+.PHONY : src/net/src/ipaddr.c.s
+
+src/net/src/loop.obj: src/net/src/loop.c.obj
+.PHONY : src/net/src/loop.obj
+
+# target to build an object file
+src/net/src/loop.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/loop.c.obj
+.PHONY : src/net/src/loop.c.obj
+
+src/net/src/loop.i: src/net/src/loop.c.i
+.PHONY : src/net/src/loop.i
+
+# target to preprocess a source file
+src/net/src/loop.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/loop.c.i
+.PHONY : src/net/src/loop.c.i
+
+src/net/src/loop.s: src/net/src/loop.c.s
+.PHONY : src/net/src/loop.s
+
+# target to generate assembly for a file
+src/net/src/loop.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/loop.c.s
+.PHONY : src/net/src/loop.c.s
+
 src/net/src/mblock.obj: src/net/src/mblock.c.obj
 .PHONY : src/net/src/mblock.obj
 
@@ -446,6 +494,30 @@ src/net/src/net.s: src/net/src/net.c.s
 src/net/src/net.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/net.c.s
 .PHONY : src/net/src/net.c.s
+
+src/net/src/netif.obj: src/net/src/netif.c.obj
+.PHONY : src/net/src/netif.obj
+
+# target to build an object file
+src/net/src/netif.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/netif.c.obj
+.PHONY : src/net/src/netif.c.obj
+
+src/net/src/netif.i: src/net/src/netif.c.i
+.PHONY : src/net/src/netif.i
+
+# target to preprocess a source file
+src/net/src/netif.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/netif.c.i
+.PHONY : src/net/src/netif.c.i
+
+src/net/src/netif.s: src/net/src/netif.c.s
+.PHONY : src/net/src/netif.s
+
+# target to generate assembly for a file
+src/net/src/netif.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/netif.c.s
+.PHONY : src/net/src/netif.c.s
 
 src/net/src/nlist.obj: src/net/src/nlist.c.obj
 .PHONY : src/net/src/nlist.obj
@@ -628,12 +700,21 @@ help:
 	@echo ... src/net/src/fixq.obj
 	@echo ... src/net/src/fixq.i
 	@echo ... src/net/src/fixq.s
+	@echo ... src/net/src/ipaddr.obj
+	@echo ... src/net/src/ipaddr.i
+	@echo ... src/net/src/ipaddr.s
+	@echo ... src/net/src/loop.obj
+	@echo ... src/net/src/loop.i
+	@echo ... src/net/src/loop.s
 	@echo ... src/net/src/mblock.obj
 	@echo ... src/net/src/mblock.i
 	@echo ... src/net/src/mblock.s
 	@echo ... src/net/src/net.obj
 	@echo ... src/net/src/net.i
 	@echo ... src/net/src/net.s
+	@echo ... src/net/src/netif.obj
+	@echo ... src/net/src/netif.i
+	@echo ... src/net/src/netif.s
 	@echo ... src/net/src/nlist.obj
 	@echo ... src/net/src/nlist.i
 	@echo ... src/net/src/nlist.s

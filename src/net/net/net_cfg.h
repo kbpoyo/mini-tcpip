@@ -19,6 +19,8 @@
 #define DBG_FIXQ DBG_LEVEL_INFO
 #define DBG_EXMSG DBG_LEVEL_INFO
 #define DBG_PKTBUF DBG_LEVEL_INFO
+#define DBG_NETIF DBG_LEVEL_INFO
+#define DBG_LOOP DBG_LEVEL_INFO
 
 // 消息队列相关配置
 #define EXMSG_MSG_CNT 10                    // 消息队列大小
@@ -35,6 +37,7 @@
 #define NETIF_NAME_SIZE 10    // 网络接口名称长度
 #define NETIF_RECV_BUFSIZE 50 // 网络接口接收缓冲区大小
 #define NETIF_SEND_BUFSIZE 50 // 网络接口发送缓冲区大小
+#define NETIF_MAX_CNT 10       // 网络接口最大数量
 
 
 #endif  // NET_CFG_H

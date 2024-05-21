@@ -17,7 +17,7 @@ typedef struct _exmsg_t {
 } exmsg_t;
 
 
-net_err_t exmsg_init(void);
+net_err_t exmsg_module_init(void);
 net_err_t exmsg_start(void);
 net_err_t exmsg_netif_in(void);
 

@@ -27,8 +27,8 @@ static mblock_t msg_mblock;  // 消息结构缓冲区内存块管理对象
  *
  * @return net_err_t
  */
-net_err_t exmsg_init(void) {
-  dbg_info(DBG_EXMSG, "exmsg init....");
+net_err_t exmsg_module_init(void) {
+  dbg_info(DBG_EXMSG, "init exmsg module....");
 
   // 初始化使用的消息队列
   net_err_t err =
@@ -46,7 +46,7 @@ net_err_t exmsg_init(void) {
     return err;
   }
 
-  dbg_info(DBG_EXMSG, "exmsg init success....");
+  dbg_info(DBG_EXMSG, "init exmsg module ok.");
   return NET_ERR_OK;
 }
 

@@ -20,7 +20,8 @@
         "mblock.h": "c",
         "nlist.h": "c",
         "pktbuf.h": "c",
-        "net_cfg.h": "c"
+        "net_cfg.h": "c",
+        "ipaddr.h": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [

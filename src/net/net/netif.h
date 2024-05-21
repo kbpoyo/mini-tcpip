@@ -36,6 +36,19 @@ typedef enum _netif_type_t {
   NETIF_TYPE_PPP,       // ppp
 } netif_type_t;
 
+struct _netif_t;
+
+/**
+ * @brief 对网络接口的操作方法进行抽象
+ *
+ */
+typedef struct _netif_ops_t {
+  net_err_t (*open)(struct _netif_t *netif, void *data);  // 初始化接口
+  void (*close)(struct _netif_t *netif);                  // 关闭接口
+  net_err_t (*send)(struct _netif_t *netif);              // 发送数据
+
+} netif_ops_t;
+
 /**
  * @brief 网络接口结构
  */
@@ -56,10 +69,17 @@ typedef struct _netif_t {
     NETIF_STATE_ACVTIVE,     // 接口激活
   } state;                   // 接口状态
 
-  fixq_t recv_fixq;                  // 接收缓冲队列
+  const netif_ops_t *ops;  // 接口操作方法
+  void *ops_data;    // 接口操作数据
+
+  fixq_t recv_fixq;                    // 接收缓冲队列
   void *recv_buf[NETIF_RECV_BUFSIZE];  // 接收缓冲区
-  fixq_t send_fixq;                  // 发送缓冲队列
+  fixq_t send_fixq;                    // 发送缓冲队列
   void *send_buf[NETIF_SEND_BUFSIZE];  // 发送缓冲区
 } netif_t;
+
+net_err_t netif_module_init(void);
+
+netif_t *netif_open(const char *dev_name, const netif_ops_t *ops, void *ops_data);
 
 #endif

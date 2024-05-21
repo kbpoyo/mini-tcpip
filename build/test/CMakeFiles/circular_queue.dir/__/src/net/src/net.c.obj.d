@@ -249,4 +249,10 @@ test/CMakeFiles/circular_queue.dir/__/src/net/src/net.c.obj: \
  F:/code/c++code/mini-tcpip/src/net/net/pktbuf.h \
  F:/code/c++code/mini-tcpip/src/net/net/dbg.h \
  F:/code/c++code/mini-tcpip/src/net/net/nlist.h \
- F:/code/c++code/mini-tcpip/src/net/net/dbg.h
+ F:/code/c++code/mini-tcpip/src/net/net/dbg.h \
+ F:/code/c++code/mini-tcpip/src/net/net/netif.h \
+ F:/code/c++code/mini-tcpip/src/net/net/fixq.h \
+ F:/code/c++code/mini-tcpip/src/net/net/nlocker.h \
+ F:/code/c++code/mini-tcpip/src/net/net/net_sys.h \
+ F:/code/c++code/mini-tcpip/src/net/net/ipaddr.h \
+ F:/code/c++code/mini-tcpip/src/net/net/loop.h

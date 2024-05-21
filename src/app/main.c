@@ -7,6 +7,7 @@
 #include "netif_pcap.h"
 #include "pktbuf.h"
 #include "sys_plat.h"
+#include "netif.h"
 
 net_err_t netdev_init(void) {
   netif_pcap_open();
@@ -161,7 +162,7 @@ void pktbuf_test() {
 
 void basic_test(void) {
   // mblock_test();
-  pktbuf_test();
+  // pktbuf_test();
 }
 
 #define DBG_TEST DBG_LEVEL_INFO
