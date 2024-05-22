@@ -44,6 +44,20 @@ static void loop_close(netif_t *netif) {
  * @return net_err_t 
  */
 static net_err_t loop_send(netif_t *netif) {
+    // 从发送队列中获取数据包
+    pktbuf_t *buf = netif_sendq_get(netif, -1);
+    if (buf == (pktbuf_t *)0) {
+        dbg_info(DBG_LOOP, "no data to send.");
+        return NET_ERR_OK;
+    }
+
+    // 将数据包放入接收队列
+    net_err_t err = netif_recvq_put(netif, buf, -1);
+    if (err != NET_ERR_OK) {    //  如果放入失败,则释放数据包
+        pktbuf_free(buf);
+        return err;
+    }
+
     return NET_ERR_OK;
 }
 
@@ -77,6 +91,16 @@ net_err_t loop_module_init(void) {
     ipaddr_t ip, mask;
     ipaddr_from_str(&ip, "127.0.0.1");
     ipaddr_from_str(&mask, "255.0.0.0");
+    netif_set_addr(netif, &ip, &mask, (ipaddr_t *)0);   // 环回接口不需要设置网关
+
+    // 设置环回接口为激活态
+    netif_set_acticve(netif);
+
+    // 测试环回接口
+    pktbuf_t *buf = pktbuf_alloc(100);
+    netif_send(netif, 0, buf);
+
+
 
 
 

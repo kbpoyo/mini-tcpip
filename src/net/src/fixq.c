@@ -1,7 +1,7 @@
 /**
  * @file fixq.c
  * @author kbpoyo (kbpoyo@qq.com)
- * @brief 消息队列模块
+ * @brief 定长队列模块
  * @version 0.1
  * @date 2024-05-12
  *
@@ -14,11 +14,11 @@
 #include "dbg.h"
 
 /**
- * @brief 消息队列初始化
+ * @brief 定长队列初始化
  *
- * @param q 消息队列
- * @param buf 消息队列缓冲区
- * @param size 消息队列大小
+ * @param q 定长队列
+ * @param buf 定长队列缓冲区
+ * @param size 定长队列大小
  * @param locker_type 使用的锁类型
  * @return net_err_t
  */
@@ -65,7 +65,7 @@ init_failed:
 }
 
 /**
- * @brief 向消息队列发送消息
+ * @brief 向队列发送数据
  *
  * @param q
  * @param msg
@@ -75,18 +75,18 @@ init_failed:
 net_err_t fixq_send(fixq_t *q, void *msg, int tmo_ms) {
   nlocker_lock(&q->locker);
 
-  if (tmo_ms < 0 && q->cnt >= q->size) {  // 消息队列已满，且不进行等待
+  if (tmo_ms < 0 && q->cnt >= q->size) {  // 队列已满，且不进行等待
     nlocker_unlock(&q->locker);
-    return NET_ERR_FIXQ_FULL;
+    return NET_ERR_FULL;
   }
   nlocker_unlock(&q->locker);
 
-  // 等待消息队列中有空闲位置
+  // 等待队列中有空闲位置
   if (sys_sem_wait(q->send_sem, tmo_ms) < 0) {
     return NET_ERR_TIMEOUT;
   }
 
-  // 向消息队列中发送消息
+  // 向队列中发送数据
   nlocker_lock(&q->locker);
   q->buf[(q->in)++] = msg;
   q->in %= q->size;  // 循环队列
@@ -100,7 +100,7 @@ net_err_t fixq_send(fixq_t *q, void *msg, int tmo_ms) {
 }
 
 /**
- * @brief 从消息队列接收消息
+ * @brief 从队列接收数据
  *
  * @param q
  * @param ms
@@ -109,18 +109,18 @@ net_err_t fixq_send(fixq_t *q, void *msg, int tmo_ms) {
 void *fixq_recv(fixq_t *q, int tmo_ms) {
   nlocker_lock(&q->locker);
 
-  if (q->cnt == 0 && tmo_ms < 0) {  // 消息队列为空，且不进行等待
+  if (q->cnt == 0 && tmo_ms < 0) {  // 队列为空，且不进行等待
     nlocker_unlock(&q->locker);
     return (void *)0;
   }
   nlocker_unlock(&q->locker);
 
-  // 等待消息队列中有消息
+  // 等待队列中有数据
   if (sys_sem_wait(q->recv_sem, tmo_ms) < 0) {
     return (void *)0;
   }
 
-  // 从消息队列中取出消息
+  // 从队列中取出数据
   nlocker_lock(&q->locker);
   void *msg = q->buf[(q->out)++];
   q->out %= q->size;
@@ -134,7 +134,7 @@ void *fixq_recv(fixq_t *q, int tmo_ms) {
 }
 
 /**
- * @brief 获取消息队列中的消息数量
+ * @brief 获取队列中的数据数量
  *
  * @param q
  */
@@ -147,7 +147,7 @@ int fixq_count(fixq_t *q) {
 }
 
 /**
- * @brief 销毁消息队列对象
+ * @brief 销毁队列对象
  *
  * @param q
  */

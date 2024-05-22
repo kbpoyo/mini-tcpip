@@ -21,7 +21,8 @@
         "nlist.h": "c",
         "pktbuf.h": "c",
         "net_cfg.h": "c",
-        "ipaddr.h": "c"
+        "ipaddr.h": "c",
+        "netif.h": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [

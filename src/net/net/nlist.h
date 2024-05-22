@@ -96,8 +96,8 @@ static inline nlist_node_t *nlist_last(nlist_t *list) { return list->last; }
   ((parent_type *)(node ? noffset_to_parent((node), parent_type, node_name) \
                         : 0))
 
-#define nlist_for_each(node, list) \
-  for (node = (list)->first; node; node = node->next)
+#define nlist_for_each(node_ptr, list_ptr) \
+  for (node_ptr = (list_ptr)->first; node_ptr; node_ptr = node_ptr->next)
 
 void nlist_insert_first(nlist_t *list, nlist_node_t *node);
 nlist_node_t *nlist_remove(nlist_t *list, nlist_node_t *node);

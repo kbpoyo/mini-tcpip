@@ -1,7 +1,7 @@
 /**
  * @file fixq.h
  * @author kbpoyo (kbpoyo@qq.com)
- * @brief 消息队列模块
+ * @brief 定长队列模块
  * @version 0.1
  * @date 2024-05-12
  *
@@ -19,7 +19,7 @@ typedef struct _fixq_t {
     int size; // 队列大小
     int in, out, cnt;   // in:入队索引 out:出队索引 cnt:队列中元素个数
 
-    void **buf; // 消息队列缓冲区
+    void **buf; // 定长队列数据缓冲区
 
     nlocker_t locker; // 锁
     sys_sem_t recv_sem; // 接收线程信号量

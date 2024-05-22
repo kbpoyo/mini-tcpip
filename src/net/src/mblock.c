@@ -60,16 +60,16 @@ net_err_t mblock_init(mblock_t *mblock, void *mem_start, size_t blk_size,
 void *mblock_alloc(mblock_t *mblock, int ms) {
   // 若ms < 0 或者内存管理块结构不需要锁，则内存块的分配不需要等待
   if (ms < 0 || mblock->locker.type == NLOCKER_NONE) {
-    nlocker_lock(&mblock->locker);  // 在ms < 0时且有锁的情况下有效
+    nlocker_lock(&(mblock->locker));  // 在ms < 0时且有锁的情况下有效
 
-    int count = nlist_count(&mblock->free_list);
+    int count = nlist_count(&(mblock->free_list));
     if (count == 0) {  // 没有空闲内存块直接返回
-      nlocker_unlock(&mblock->locker);
+      nlocker_unlock(&(mblock->locker));
       return (void *)0;
     } else {
       // 将内存卡从空闲链表中取出并返回给调用者使用
-      nlist_node_t *block = nlist_remove_first(&mblock->free_list);
-      nlocker_unlock(&mblock->locker);
+      nlist_node_t *block = nlist_remove_first(&(mblock->free_list));
+      nlocker_unlock(&(mblock->locker));
 
       return block;
     }
@@ -80,9 +80,9 @@ void *mblock_alloc(mblock_t *mblock, int ms) {
     if (sys_sem_wait(mblock->alloc_sem, ms) < 0) {  // 等待超时或出错
       return (void *)0;
     } else {  // 获取资源成功，进行内存块的分配
-      nlocker_lock(&mblock->locker);
-      nlist_node_t *block = nlist_remove_first(&mblock->free_list);
-      nlocker_unlock(&mblock->locker);
+      nlocker_lock(&(mblock->locker));
+      nlist_node_t *block = nlist_remove_first(&(mblock->free_list));
+      nlocker_unlock(&(mblock->locker));
       return block;
     }
   }

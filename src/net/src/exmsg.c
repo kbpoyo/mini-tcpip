@@ -70,7 +70,7 @@ static void work_thread(void *arg) {
  *
  * @return net_err_t
  */
-net_err_t exmsg_netif_in(void) {
+net_err_t exmsg_netif_recv(netif_t *netif) {
   exmsg_t *msg = (exmsg_t *)mblock_alloc(&msg_mblock, -1);
   if (!msg) {
     dbg_warning(DBG_EXMSG, "no free msg.");

@@ -15,6 +15,7 @@
 #include "fixq.h"
 #include "ipaddr.h"
 #include "nlist.h"
+#include "pktbuf.h"
 
 /**
  * @brief 网络接口硬件地址结构
@@ -81,5 +82,61 @@ typedef struct _netif_t {
 net_err_t netif_module_init(void);
 
 netif_t *netif_open(const char *dev_name, const netif_ops_t *ops, void *ops_data);
+net_err_t netif_close(netif_t *netif);
+
+net_err_t netif_set_addr(netif_t *netif, const ipaddr_t *ip, const ipaddr_t *mask, const ipaddr_t *gateway);
+net_err_t netif_set_hwaddr(netif_t *netif, const uint8_t *hwaddr, uint32_t len);
+net_err_t netif_set_acticve(netif_t *netif);
+net_err_t netif_set_inactive(netif_t *netif);
+void netif_set_default(netif_t *netif);
+
+net_err_t netif_recvq_put(netif_t *netif, pktbuf_t *buf, int tmo);
+pktbuf_t *netif_recvq_get(netif_t *netif, int tmo);
+net_err_t netif_sendq_put(netif_t *netif, pktbuf_t *buf, int tmo);
+pktbuf_t *netif_sendq_get(netif_t *netif, int tmo);
+
+
+pktbuf_t *netif_recv(netif_t *netif);
+net_err_t netif_send(netif_t *netif, ipaddr_t *ipaddr, pktbuf_t *buf);
+/**
+ * @brief 打印MAC地址信息
+ * 
+ * @param msg 
+ * @param hwaddr 
+ * @param len 
+ */
+static void netif_dum_hwaddr(const char *msg, const netif_hwaddr_t *hwaddr) {
+  if (msg) {
+    plat_printf("%s", msg);
+  
+  }
+
+  if (hwaddr) {
+    for (int i = 0; i < hwaddr->valid_len; i++) {
+      plat_printf("%02x", hwaddr->addr[i]);
+      if (i < hwaddr->valid_len - 1) {
+        plat_printf("-");
+      }
+    }
+  }
+}
+
+
+/**
+ * @brief 打印IP地址信息
+ * 
+ * @param msg 
+ * @param ipadr 
+ */
+static void netif_dum_ip(const char *msg, const ipaddr_t *ipaddr) {
+  if (msg) {
+    plat_printf("%s", msg);
+  }
+
+  if (ipaddr) {
+    plat_printf("%d.%d.%d.%d", ipaddr->addr_bytes[0], ipaddr->addr_bytes[1], ipaddr->addr_bytes[2],
+                ipaddr->addr_bytes[3]);
+  }
+}
 
 #endif

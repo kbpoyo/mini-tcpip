@@ -11,7 +11,7 @@
 void recv_thread(void *arg) {
   printf("recv thread is start....\n");
   while (1) {
-    exmsg_netif_in();
+    exmsg_netif_recv(0);
     sys_sleep(1);
    
   }

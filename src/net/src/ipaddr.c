@@ -29,7 +29,7 @@ void ipaddr_set_any(ipaddr_t *ipaddr) {
  * @return net_err_t
  */
 net_err_t ipaddr_from_str(ipaddr_t *dest, const char *src) {
-  if (!dest || !src) {
+  if (dest == (ipaddr_t *)0 || src == (char *)0) {
     return NET_ERR_PARAM;
   }
 
@@ -46,14 +46,40 @@ net_err_t ipaddr_from_str(ipaddr_t *dest, const char *src) {
     if (c >= '0' && c <= '9') {
       sub_addr = sub_addr * 10 + (c - '0');
     } else if (c == '.') {
-      *(p++) = sub_addr;    // 写入子地址
+      *(p++) = sub_addr;  // 写入子地址
       sub_addr = 0;
     } else {
       return NET_ERR_PARAM;
     }
   }
 
-  *p = sub_addr;    // 最后一个子地址
+  *p = sub_addr;  // 最后一个子地址
 
   return NET_ERR_OK;
+}
+
+/**
+ * @brief 复制ip地址
+ *
+ * @param dest
+ * @param src
+ */
+void ipaddr_copy(ipaddr_t *dest, const ipaddr_t *src) {
+  if (dest == (ipaddr_t *)0 || src == (ipaddr_t *)0) {
+    return;
+  }
+
+  dest->type = src->type;
+  dest->addr = src->addr;
+}
+
+/**
+ * @brief 获取默认的空ip地址(0.0.0.0)
+ * 
+ * @return ipaddr_t* 
+ */
+ipaddr_t *ipaddr_get_any(void) {
+    static const ipaddr_t ipaddr_any = {.type = IPADDR_V4, .addr = 0};
+
+    return (ipaddr_t *)&ipaddr_any;
 }

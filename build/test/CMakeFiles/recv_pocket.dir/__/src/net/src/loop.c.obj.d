@@ -250,4 +250,6 @@ test/CMakeFiles/recv_pocket.dir/__/src/net/src/loop.c.obj: \
  F:/code/c++code/mini-tcpip/npcap/Include/pcap/bpf.h \
  F:/code/c++code/mini-tcpip/npcap/Include/pcap/dlt.h \
  F:/code/c++code/mini-tcpip/src/net/net/ipaddr.h \
- F:/code/c++code/mini-tcpip/src/net/net/nlist.h
+ F:/code/c++code/mini-tcpip/src/net/net/nlist.h \
+ F:/code/c++code/mini-tcpip/src/net/net/pktbuf.h \
+ F:/code/c++code/mini-tcpip/src/net/net/dbg.h

@@ -242,4 +242,15 @@ test/CMakeFiles/test_tcp_echo_client.dir/__/src/plat/netif_pcap.c.obj: \
  F:/code/c++code/mini-tcpip/npcap/Include/pcap/bpf.h \
  F:/code/c++code/mini-tcpip/npcap/Include/pcap/dlt.h \
  F:/code/c++code/mini-tcpip/src/net/net/exmsg.h \
- F:/code/c++code/mini-tcpip/src/net/net/net_err.h
+ F:/code/c++code/mini-tcpip/src/net/net/net_err.h \
+ F:/code/c++code/mini-tcpip/src/net/net/netif.h \
+ F:/code/c++code/mini-tcpip/src/net/net/fixq.h \
+ F:/code/c++code/mini-tcpip/src/net/net/nlocker.h \
+ F:/code/c++code/mini-tcpip/src/net/net/net_sys.h \
+ F:/code/c++code/mini-tcpip/src/net/net/net_cfg.h \
+ F:/code/c++code/mini-tcpip/src/plat/net_plat.h \
+ F:/code/c++code/mini-tcpip/src/plat/sys_plat.h \
+ F:/code/c++code/mini-tcpip/src/net/net/ipaddr.h \
+ F:/code/c++code/mini-tcpip/src/net/net/nlist.h \
+ F:/code/c++code/mini-tcpip/src/net/net/pktbuf.h \
+ F:/code/c++code/mini-tcpip/src/net/net/dbg.h
