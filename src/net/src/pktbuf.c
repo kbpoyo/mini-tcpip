@@ -881,12 +881,12 @@ net_err_t pktbuf_fill(pktbuf_t *buf, uint8_t data, int size) {
  *
  * @param buf
  */
-void pktbuf_inc_ref(pktbuf_t *buf) {
-  pktbuf_check_buf(buf);
-
+pktbuf_t *pktbuf_inc_ref(pktbuf_t *buf) {
   // 数据包的引用计数可能被多个线程操作，需要对其进行加锁保护
 
   nlocker_lock(&pkt_locker);  // 加锁
   buf->ref_cnt++;
   nlocker_unlock(&pkt_locker);  // 解锁
+
+  return buf;
 }

@@ -15,6 +15,7 @@
 #include "fixq.h"
 #include "mblock.h"
 #include "net_sys.h"
+#include "netif.h"
 
 static void *msg_tbl[EXMSG_MSG_CNT];  // 消息队列缓冲区，存放消息指针
 static fixq_t msg_queue;              // 消息队列
@@ -50,19 +51,36 @@ net_err_t exmsg_module_init(void) {
   return NET_ERR_OK;
 }
 
-static void work_thread(void *arg) {
-  dbg_info(DBG_EXMSG, "exmsg work thread start....");
-
-  while (1) {
-    // 以阻塞方式从消息队列中接收消息
-    exmsg_t *msg = (exmsg_t *)fixq_recv(&msg_queue, 0);
-
-    // 根据消息类型进行相应的处理
-    plat_printf("recv a msg: id = %d\n", msg->id);
-
-    // 释放消息结构的内存块
-    mblock_free(&msg_mblock, msg);
+/**
+ * @brief 分配一个消息结构
+ *
+ * @return exmsg_t*
+ */
+static exmsg_t *exmsg_alloc(void) {
+  exmsg_t *msg = (exmsg_t *)mblock_alloc(&msg_mblock, -1);
+  if (!msg) {
+    dbg_warning(DBG_EXMSG, "no free msg buffer.");
+    return (void *)0;
   }
+
+  return msg;
+}
+
+/**
+ * @brief 释放一个消息结构
+ *
+ * @param msg
+ */
+static void exmsg_free(exmsg_t *msg) {
+  switch (msg->type) {
+    case EXMSG_NETIF_RECV:
+      break;
+    default:
+      dbg_warning(DBG_EXMSG, "unknown msg type.");
+      break;
+  }
+
+  mblock_free(&msg_mblock, msg);
 }
 
 /**
@@ -71,24 +89,86 @@ static void work_thread(void *arg) {
  * @return net_err_t
  */
 net_err_t exmsg_netif_recv(netif_t *netif) {
-  exmsg_t *msg = (exmsg_t *)mblock_alloc(&msg_mblock, -1);
+  exmsg_t *msg = exmsg_alloc();
   if (!msg) {
-    dbg_warning(DBG_EXMSG, "no free msg.");
+    dbg_warning(DBG_EXMSG, "msg alloc failed.");
     return NET_ERR_MEM;
   }
 
-  static int id = 0;
-  msg->type = EXMSG_NETIF_IN;
-  msg->id = id++;
+  msg->type = EXMSG_NETIF_RECV;  // 设置消息类型为接收到数据包
+  msg->msg_netif.netif = netif;  // 设置要传递的消息数据(接收到数据包的网络接口)
 
   net_err_t err = fixq_send(&msg_queue, msg, -1);
   if (err != NET_ERR_OK) {
-    dbg_error(DBG_EXMSG, "fixq full.");
-    mblock_free(&msg_mblock, msg);
+    dbg_error(DBG_EXMSG, "msg queue send failed.");
+    exmsg_free(msg);
     return err;
   }
 
+  // TODO: 消息已发送到消息队列，msg不由当前线程管理，不需要释放msg
+
   return NET_ERR_OK;
+}
+
+/**
+ * @brief 处理消息: 网络接口接收到数据包
+ *
+ * @param msg
+ */
+static void exmsg_handle_netif_recv(exmsg_t *msg) {
+  // 获取网络接口
+  netif_t *netif = msg->msg_netif.netif;
+
+  // 从网络接口接收数据包
+  pktbuf_t *buf = (pktbuf_t *)0;
+  while (buf = netif_recvq_get(netif, -1)) {  // 以非阻塞方式获取数据包
+    if (!buf) {
+      dbg_warning(DBG_EXMSG, "no packet received.");
+      return;
+    }
+
+    // 处理数据包
+    dbg_info(DBG_EXMSG, "received packet from %s\n", netif->name);
+    pktbuf_acc_reset(buf);
+    pktbuf_fill(buf, 0x11, 6);
+
+    // 发送数据包
+    net_err_t err = netif_send(netif, (ipaddr_t *)0, buf);  //TODO: 数据包交给底层函数，若执行成功，则由底层函数释放数据包
+    if (err != NET_ERR_OK) {  // 发送数据包失败
+      dbg_error(DBG_EXMSG, "send packet failed.");
+      pktbuf_free(buf); // 释放数据包
+    }
+  }
+}
+
+/**
+ * @brief 消息队列模块的工作线程，用于处理消息
+ *
+ * @param arg
+ */
+static void exmsg_work_thread(void *arg) {
+  dbg_info(DBG_EXMSG, "exmsg work thread is running....");
+
+  while (1) {
+    // 以阻塞方式从消息队列中接收消息
+    exmsg_t *msg = (exmsg_t *)fixq_recv(&msg_queue, 0);
+    if (!msg) {
+      dbg_warning(DBG_EXMSG, "no msg.");
+      continue;
+    }
+
+    switch (msg->type) {
+      case EXMSG_NETIF_RECV:
+        exmsg_handle_netif_recv(msg);
+        break;
+      default:
+        dbg_warning(DBG_EXMSG, "unknown msg type.");
+        break;
+    }
+
+    // TODO：当前线程已处理完消息，需要释放消息结构
+    exmsg_free(msg);
+  }
 }
 
 /**
@@ -97,7 +177,7 @@ net_err_t exmsg_netif_recv(netif_t *netif) {
  * @return net_err_t
  */
 net_err_t exmsg_start(void) {
-  sys_thread_t thread = sys_thread_create(work_thread, (void *)0);
+  sys_thread_t thread = sys_thread_create(exmsg_work_thread, (void *)0);
 
   if (thread == SYS_THREAD_INVALID) {
     return NET_ERR_SYS;

@@ -12,6 +12,11 @@
 #ifndef NET_CFG_H
 #define NET_CFG_H
 
+// 协议栈相关配置
+#define NET_MAC_FRAME_MTU 1500 // MAC帧最大传输单元
+#define NET_MAC_FRAME_MAX_SIZE  (6 + 6 + 2 + NET_MAC_FRAME_MTU) // MAC帧最大大小, 6B目的地址 + 6B源地址 + 2B类型 + 1500B数据, (4B的校验码由网卡自动添加)
+
+
 // 调试信息相关配置
 #define DBG_PLAT DBG_LEVEL_INFO
 #define DBG_INIT DBG_LEVEL_INFO

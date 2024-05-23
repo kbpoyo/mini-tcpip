@@ -140,6 +140,9 @@ net_err_t pktbuf_read(pktbuf_t *buf, uint8_t *dest, int size);
 net_err_t pktbuf_seek(pktbuf_t *buf, int offset);
 net_err_t pktbuf_copy(pktbuf_t *dest, pktbuf_t *src, int size);
 net_err_t pktbuf_fill(pktbuf_t *buf, uint8_t data, int size);
-void pktbuf_inc_ref(pktbuf_t *buf);
+pktbuf_t* pktbuf_inc_ref(pktbuf_t *buf);
+ 
+// 外部函数在传递pktbuf_t指针时，使用PKTBUF_ARG宏, 每一个拥有pktbuf_t指针的函数在完成后，都需要对pktbuf进行释放
+#define PKTBUF_ARG(buf) pktbuf_inc_ref(buf)
 
 #endif  // PKTBUF_H

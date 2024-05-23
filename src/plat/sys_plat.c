@@ -592,7 +592,7 @@ int pcap_show_list(void) {
             if (name == NULL) {
                 name = item->name;
             }
-            printf("%d: IP:%s name: %s, \n",
+            printf("%d: name:%s IP: %s, \n",
                 count++,
                 name ? name : "unknown",
                 inet_ntop(AF_INET, &ip_addr->sin_addr, str, sizeof(str))
@@ -618,7 +618,7 @@ int pcap_show_list(void) {
 pcap_t * pcap_device_open(const char* ip, const uint8_t* mac_addr) {
     // 加载pcap库
     if (load_pcap_lib() < 0) {
-        fprintf(stderr, "load pcap lib error。在windows上，请课程提供的安装npcap.dll\n");
+        fprintf(stderr, "load pcap lib error。\n");
         return (pcap_t *)0;
     }
 

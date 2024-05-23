@@ -11,6 +11,7 @@ typedef enum _net_err_t {
   NET_ERR_NOSRC = -6,
   NET_ERR_PARAM = -7,
   NET_ERR_STATE = -8,
+  NET_ERR_DEV = -9,
 } net_err_t;
 
 

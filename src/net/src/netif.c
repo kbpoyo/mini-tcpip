@@ -123,22 +123,22 @@ netif_t *netif_open(const char *dev_name, const netif_ops_t *ops,
   err = fixq_init(&(netif->send_fixq), netif->send_buf, NETIF_SEND_BUFSIZE,
                   NLOCKER_THREAD);  // 初始化发送缓冲队列
   if (err != NET_ERR_OK) {
-    dbg_error(DBG_NETIF, "send_fixq failed.\n");
+    dbg_error(DBG_NETIF, "send_fixq failed.");
     fixq_destroy(&(netif->recv_fixq));  // 销毁接收缓冲队列
     goto init_failed;
   }
 
+  netif->ops = ops;            // 设置接口操作方法
+  netif->ops_data = ops_data;  // 设置接口操作数据
   err = ops->open(netif, ops_data);  // 使用特定操作方法对接口进行进一步的初始化
   if (err != NET_ERR_OK) {
-    dbg_error(DBG_NETIF, "netif ops open failed or netif is typeless.\n");
+    dbg_error(DBG_NETIF, "netif %s open failed.", dev_name);
     fixq_destroy(&(netif->recv_fixq));  // 销毁接收缓冲队列
     fixq_destroy(&(netif->send_fixq));  // 销毁发送缓冲队列
     goto init_failed;
   }
 
   netif->state = NETIF_STATE_OPENED;  // 设置接口状态为打开
-  netif->ops = ops;                   // 设置接口操作方法
-  netif->ops_data = ops_data;         // 设置接口操作数据
   nlist_insert_last(&netif_list,
                     &(netif->node));  // 将接口挂载到已使用网络接口链表中
 
@@ -162,7 +162,7 @@ net_err_t netif_close(netif_t *netif) {
 
   // 若网络接口为激活状态，则不能关闭
   if (netif->state == NETIF_STATE_ACVTIVE) {
-    dbg_error(DBG_NETIF, "netif is active.\n");
+    dbg_error(DBG_NETIF, "netif is active.");
     return NET_ERR_STATE;
   }
 
@@ -299,7 +299,7 @@ net_err_t netif_recvq_put(netif_t *netif, pktbuf_t *buf, int tmo) {
     return NET_ERR_FULL;
   }
 
-  // 测试用, 从网卡接收队列中取出数据包,
+  // 测试用, 通知工作线程有数据到达
   // 发送到消息队列(网卡管理线程与数据包处理线程)中
   exmsg_netif_recv(netif);
 
@@ -363,25 +363,40 @@ pktbuf_t *netif_sendq_get(netif_t *netif, int tmo) {
 
 /**
  * @brief 向网络接口发送数据包
- * 
- * @param netif 
- * @param ipaddr 
- * @param buf 
- * @return net_err_t 
+ *
+ * @param netif
+ * @param ipaddr
+ * @param buf
+ * @return net_err_t
  */
 net_err_t netif_send(netif_t *netif, ipaddr_t *ipaddr, pktbuf_t *buf) {
-    if (netif == (netif_t *)0 || buf == (pktbuf_t *)0) {
-        return NET_ERR_PARAM;
-    }
+  if (netif == (netif_t *)0 || buf == (pktbuf_t *)0) {
+    return NET_ERR_PARAM;
+  }
 
-    // 将数据包放到发送队列中
-    net_err_t err = netif_sendq_put(netif, buf, -1);
-    if (err != NET_ERR_OK) {
-        dbg_info(DBG_NETIF, "pktbuf send failed.\n");
-        return err;
-    }
+  // 将数据包放到发送队列中
+  net_err_t err = netif_sendq_put(netif, buf, -1);
+  if (err != NET_ERR_OK) {
+    dbg_info(DBG_NETIF, "pktbuf send failed.\n");
+    return err;
+  }
 
-    // 调用网络接口特定的操作方法发送数据包
-    return netif->ops->send(netif);
- 
+
+  // 调用网络接口特定的操作方法发送数据包
+  return netif->ops->send(netif);
+}
+
+/**
+ * @brief 从网络接口接收数据包
+ *
+ * @param netif
+ * @return pktbuf_t*
+ */
+pktbuf_t *netif_recv(netif_t *netif) {
+  if (netif == (netif_t *)0) {
+    return (pktbuf_t *)0;
+  }
+
+  // 从接收队列中获取数据包
+  return netif_recvq_get(netif, -1);
 }
