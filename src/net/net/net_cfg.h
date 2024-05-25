@@ -44,5 +44,4 @@
 #define NETIF_SEND_BUFSIZE 50 // 网络接口发送缓冲区大小
 #define NETIF_MAX_CNT 10       // 网络接口最大数量
 
-
 #endif  // NET_CFG_H

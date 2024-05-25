@@ -129,7 +129,6 @@ static void exmsg_handle_netif_recv(exmsg_t *msg) {
 
     // 处理数据包
     dbg_info(DBG_EXMSG, "received packet from %s\n", netif->name);
-    pktbuf_acc_reset(buf);
     pktbuf_fill(buf, 0x11, 6);
 
     // 发送数据包

@@ -89,7 +89,6 @@ void send_thread(void *arg) {
     }
 
     int total_size = pktbuf_total_size(buf);  // 获取数据包的总长度
-    pktbuf_acc_reset(buf);
     pktbuf_read(buf, send_buf, total_size);  // 读取数据包内容
 
     pktbuf_free(buf);  // TODO: 当前线程成功完成数据包的最后处理，释放该数据包

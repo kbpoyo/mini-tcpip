@@ -19,6 +19,8 @@
 #include "nlocker.h"
 #include "pktbuf.h"
 
+static const link_layer_t *link_layers[NETIF_TYPE_CNT];
+
 // 网络接口状态字符串
 static const char *netif_state_str[] = {[NETIF_STATE_OPENED] = "opened",
                                         [NETIF_STATE_ACVTIVE] = "active",
@@ -77,8 +79,36 @@ net_err_t netif_module_init(void) {
   // 设置默认网络接口为空
   netif_default = (netif_t *)0;
 
+  // 初始化协议栈支持的链路层的回调接口指针
+  plat_memset(link_layers, 0, sizeof(link_layers));
+
   dbg_info(DBG_NETIF, "init netif module ok.");
 
+  return NET_ERR_OK;
+}
+
+/**
+ * @brief 注册链路层的回调接口
+ *
+ * @param type
+ * @param layer
+ * @return net_err_t
+ */
+net_err_t netif_layer_register(netif_type_t type, const link_layer_t *layer) {
+  if (type < 0 || type >= NETIF_TYPE_CNT || layer == (link_layer_t *)0) {
+    dbg_error(DBG_NETIF, "layer type error.");
+    return NET_ERR_PARAM;
+  }
+
+  if (link_layers[type] !=
+      (link_layer_t *)0) {  // 若已经注册过该类型的链路层回调接口, 则返回错误
+    dbg_error(DBG_NETIF, "layer type %s has been registered.",
+              netif_type_str[type]);
+    return NET_ERR_EXIST;
+  }
+
+  // 记录链路层的回调接口的指针，以便后续用链路层类型获取对应的回调接口
+  link_layers[type] = layer;
   return NET_ERR_OK;
 }
 
@@ -137,8 +167,17 @@ netif_t *netif_open(const char *dev_name, const netif_ops_t *ops,
     fixq_destroy(&(netif->send_fixq));  // 销毁发送缓冲队列
     goto init_failed;
   }
-
   netif->state = NETIF_STATE_OPENED;  // 设置接口状态为打开
+
+
+  netif->link_layer = link_layers[netif->type];  // 设置链路层回调接口
+  if (!(netif->link_layer) && netif->type != NETIF_TYPE_LOOP) {  // 若未注册链路层回调接口(环回接口不需要进行链路层处理)
+    dbg_error(DBG_NETIF, "no link layer for netif %s.", dev_name);
+    fixq_destroy(&(netif->recv_fixq));  // 销毁接收缓冲队列
+    fixq_destroy(&(netif->send_fixq));  // 销毁发送缓冲队列
+    goto init_failed;
+  }
+
   nlist_insert_last(&netif_list,
                     &(netif->node));  // 将接口挂载到已使用网络接口链表中
 
@@ -381,22 +420,6 @@ net_err_t netif_send(netif_t *netif, ipaddr_t *ipaddr, pktbuf_t *buf) {
     return err;
   }
 
-
   // 调用网络接口特定的操作方法发送数据包
   return netif->ops->send(netif);
-}
-
-/**
- * @brief 从网络接口接收数据包
- *
- * @param netif
- * @return pktbuf_t*
- */
-pktbuf_t *netif_recv(netif_t *netif) {
-  if (netif == (netif_t *)0) {
-    return (pktbuf_t *)0;
-  }
-
-  // 从接收队列中获取数据包
-  return netif_recvq_get(netif, -1);
 }
