@@ -128,11 +128,26 @@ test/CMakeFiles/test_mblock.dir/__/src/net/src/dbg.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/test_mblock.dir/__/src/net/src/dbg.c.s"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\src\net\src\dbg.c -o CMakeFiles\test_mblock.dir\__\src\net\src\dbg.c.s
 
+test/CMakeFiles/test_mblock.dir/__/src/net/src/ether.c.obj: test/CMakeFiles/test_mblock.dir/flags.make
+test/CMakeFiles/test_mblock.dir/__/src/net/src/ether.c.obj: test/CMakeFiles/test_mblock.dir/includes_C.rsp
+test/CMakeFiles/test_mblock.dir/__/src/net/src/ether.c.obj: F:/code/c++code/mini-tcpip/src/net/src/ether.c
+test/CMakeFiles/test_mblock.dir/__/src/net/src/ether.c.obj: test/CMakeFiles/test_mblock.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/ether.c.obj"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test_mblock.dir/__/src/net/src/ether.c.obj -MF CMakeFiles\test_mblock.dir\__\src\net\src\ether.c.obj.d -o CMakeFiles\test_mblock.dir\__\src\net\src\ether.c.obj -c F:\code\c++code\mini-tcpip\src\net\src\ether.c
+
+test/CMakeFiles/test_mblock.dir/__/src/net/src/ether.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/test_mblock.dir/__/src/net/src/ether.c.i"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E F:\code\c++code\mini-tcpip\src\net\src\ether.c > CMakeFiles\test_mblock.dir\__\src\net\src\ether.c.i
+
+test/CMakeFiles/test_mblock.dir/__/src/net/src/ether.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/test_mblock.dir/__/src/net/src/ether.c.s"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\src\net\src\ether.c -o CMakeFiles\test_mblock.dir\__\src\net\src\ether.c.s
+
 test/CMakeFiles/test_mblock.dir/__/src/net/src/exmsg.c.obj: test/CMakeFiles/test_mblock.dir/flags.make
 test/CMakeFiles/test_mblock.dir/__/src/net/src/exmsg.c.obj: test/CMakeFiles/test_mblock.dir/includes_C.rsp
 test/CMakeFiles/test_mblock.dir/__/src/net/src/exmsg.c.obj: F:/code/c++code/mini-tcpip/src/net/src/exmsg.c
 test/CMakeFiles/test_mblock.dir/__/src/net/src/exmsg.c.obj: test/CMakeFiles/test_mblock.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/exmsg.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/exmsg.c.obj"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test_mblock.dir/__/src/net/src/exmsg.c.obj -MF CMakeFiles\test_mblock.dir\__\src\net\src\exmsg.c.obj.d -o CMakeFiles\test_mblock.dir\__\src\net\src\exmsg.c.obj -c F:\code\c++code\mini-tcpip\src\net\src\exmsg.c
 
 test/CMakeFiles/test_mblock.dir/__/src/net/src/exmsg.c.i: cmake_force
@@ -147,7 +162,7 @@ test/CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.obj: test/CMakeFiles/test_
 test/CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.obj: test/CMakeFiles/test_mblock.dir/includes_C.rsp
 test/CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.obj: F:/code/c++code/mini-tcpip/src/net/src/fixq.c
 test/CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.obj: test/CMakeFiles/test_mblock.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.obj"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.obj -MF CMakeFiles\test_mblock.dir\__\src\net\src\fixq.c.obj.d -o CMakeFiles\test_mblock.dir\__\src\net\src\fixq.c.obj -c F:\code\c++code\mini-tcpip\src\net\src\fixq.c
 
 test/CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.i: cmake_force
@@ -162,7 +177,7 @@ test/CMakeFiles/test_mblock.dir/__/src/net/src/ipaddr.c.obj: test/CMakeFiles/tes
 test/CMakeFiles/test_mblock.dir/__/src/net/src/ipaddr.c.obj: test/CMakeFiles/test_mblock.dir/includes_C.rsp
 test/CMakeFiles/test_mblock.dir/__/src/net/src/ipaddr.c.obj: F:/code/c++code/mini-tcpip/src/net/src/ipaddr.c
 test/CMakeFiles/test_mblock.dir/__/src/net/src/ipaddr.c.obj: test/CMakeFiles/test_mblock.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/ipaddr.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/ipaddr.c.obj"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test_mblock.dir/__/src/net/src/ipaddr.c.obj -MF CMakeFiles\test_mblock.dir\__\src\net\src\ipaddr.c.obj.d -o CMakeFiles\test_mblock.dir\__\src\net\src\ipaddr.c.obj -c F:\code\c++code\mini-tcpip\src\net\src\ipaddr.c
 
 test/CMakeFiles/test_mblock.dir/__/src/net/src/ipaddr.c.i: cmake_force
@@ -177,7 +192,7 @@ test/CMakeFiles/test_mblock.dir/__/src/net/src/loop.c.obj: test/CMakeFiles/test_
 test/CMakeFiles/test_mblock.dir/__/src/net/src/loop.c.obj: test/CMakeFiles/test_mblock.dir/includes_C.rsp
 test/CMakeFiles/test_mblock.dir/__/src/net/src/loop.c.obj: F:/code/c++code/mini-tcpip/src/net/src/loop.c
 test/CMakeFiles/test_mblock.dir/__/src/net/src/loop.c.obj: test/CMakeFiles/test_mblock.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/loop.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/loop.c.obj"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test_mblock.dir/__/src/net/src/loop.c.obj -MF CMakeFiles\test_mblock.dir\__\src\net\src\loop.c.obj.d -o CMakeFiles\test_mblock.dir\__\src\net\src\loop.c.obj -c F:\code\c++code\mini-tcpip\src\net\src\loop.c
 
 test/CMakeFiles/test_mblock.dir/__/src/net/src/loop.c.i: cmake_force
@@ -192,7 +207,7 @@ test/CMakeFiles/test_mblock.dir/__/src/net/src/mblock.c.obj: test/CMakeFiles/tes
 test/CMakeFiles/test_mblock.dir/__/src/net/src/mblock.c.obj: test/CMakeFiles/test_mblock.dir/includes_C.rsp
 test/CMakeFiles/test_mblock.dir/__/src/net/src/mblock.c.obj: F:/code/c++code/mini-tcpip/src/net/src/mblock.c
 test/CMakeFiles/test_mblock.dir/__/src/net/src/mblock.c.obj: test/CMakeFiles/test_mblock.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/mblock.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/mblock.c.obj"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test_mblock.dir/__/src/net/src/mblock.c.obj -MF CMakeFiles\test_mblock.dir\__\src\net\src\mblock.c.obj.d -o CMakeFiles\test_mblock.dir\__\src\net\src\mblock.c.obj -c F:\code\c++code\mini-tcpip\src\net\src\mblock.c
 
 test/CMakeFiles/test_mblock.dir/__/src/net/src/mblock.c.i: cmake_force
@@ -207,7 +222,7 @@ test/CMakeFiles/test_mblock.dir/__/src/net/src/net.c.obj: test/CMakeFiles/test_m
 test/CMakeFiles/test_mblock.dir/__/src/net/src/net.c.obj: test/CMakeFiles/test_mblock.dir/includes_C.rsp
 test/CMakeFiles/test_mblock.dir/__/src/net/src/net.c.obj: F:/code/c++code/mini-tcpip/src/net/src/net.c
 test/CMakeFiles/test_mblock.dir/__/src/net/src/net.c.obj: test/CMakeFiles/test_mblock.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/net.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/net.c.obj"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test_mblock.dir/__/src/net/src/net.c.obj -MF CMakeFiles\test_mblock.dir\__\src\net\src\net.c.obj.d -o CMakeFiles\test_mblock.dir\__\src\net\src\net.c.obj -c F:\code\c++code\mini-tcpip\src\net\src\net.c
 
 test/CMakeFiles/test_mblock.dir/__/src/net/src/net.c.i: cmake_force
@@ -222,7 +237,7 @@ test/CMakeFiles/test_mblock.dir/__/src/net/src/netif.c.obj: test/CMakeFiles/test
 test/CMakeFiles/test_mblock.dir/__/src/net/src/netif.c.obj: test/CMakeFiles/test_mblock.dir/includes_C.rsp
 test/CMakeFiles/test_mblock.dir/__/src/net/src/netif.c.obj: F:/code/c++code/mini-tcpip/src/net/src/netif.c
 test/CMakeFiles/test_mblock.dir/__/src/net/src/netif.c.obj: test/CMakeFiles/test_mblock.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/netif.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/netif.c.obj"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test_mblock.dir/__/src/net/src/netif.c.obj -MF CMakeFiles\test_mblock.dir\__\src\net\src\netif.c.obj.d -o CMakeFiles\test_mblock.dir\__\src\net\src\netif.c.obj -c F:\code\c++code\mini-tcpip\src\net\src\netif.c
 
 test/CMakeFiles/test_mblock.dir/__/src/net/src/netif.c.i: cmake_force
@@ -237,7 +252,7 @@ test/CMakeFiles/test_mblock.dir/__/src/net/src/nlist.c.obj: test/CMakeFiles/test
 test/CMakeFiles/test_mblock.dir/__/src/net/src/nlist.c.obj: test/CMakeFiles/test_mblock.dir/includes_C.rsp
 test/CMakeFiles/test_mblock.dir/__/src/net/src/nlist.c.obj: F:/code/c++code/mini-tcpip/src/net/src/nlist.c
 test/CMakeFiles/test_mblock.dir/__/src/net/src/nlist.c.obj: test/CMakeFiles/test_mblock.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/nlist.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/nlist.c.obj"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test_mblock.dir/__/src/net/src/nlist.c.obj -MF CMakeFiles\test_mblock.dir\__\src\net\src\nlist.c.obj.d -o CMakeFiles\test_mblock.dir\__\src\net\src\nlist.c.obj -c F:\code\c++code\mini-tcpip\src\net\src\nlist.c
 
 test/CMakeFiles/test_mblock.dir/__/src/net/src/nlist.c.i: cmake_force
@@ -252,7 +267,7 @@ test/CMakeFiles/test_mblock.dir/__/src/net/src/nlocker.c.obj: test/CMakeFiles/te
 test/CMakeFiles/test_mblock.dir/__/src/net/src/nlocker.c.obj: test/CMakeFiles/test_mblock.dir/includes_C.rsp
 test/CMakeFiles/test_mblock.dir/__/src/net/src/nlocker.c.obj: F:/code/c++code/mini-tcpip/src/net/src/nlocker.c
 test/CMakeFiles/test_mblock.dir/__/src/net/src/nlocker.c.obj: test/CMakeFiles/test_mblock.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/nlocker.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/nlocker.c.obj"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test_mblock.dir/__/src/net/src/nlocker.c.obj -MF CMakeFiles\test_mblock.dir\__\src\net\src\nlocker.c.obj.d -o CMakeFiles\test_mblock.dir\__\src\net\src\nlocker.c.obj -c F:\code\c++code\mini-tcpip\src\net\src\nlocker.c
 
 test/CMakeFiles/test_mblock.dir/__/src/net/src/nlocker.c.i: cmake_force
@@ -267,7 +282,7 @@ test/CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.obj: test/CMakeFiles/tes
 test/CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.obj: test/CMakeFiles/test_mblock.dir/includes_C.rsp
 test/CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.obj: F:/code/c++code/mini-tcpip/src/net/src/pktbuf.c
 test/CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.obj: test/CMakeFiles/test_mblock.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.obj"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.obj -MF CMakeFiles\test_mblock.dir\__\src\net\src\pktbuf.c.obj.d -o CMakeFiles\test_mblock.dir\__\src\net\src\pktbuf.c.obj -c F:\code\c++code\mini-tcpip\src\net\src\pktbuf.c
 
 test/CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.i: cmake_force
@@ -278,11 +293,26 @@ test/CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.s"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\src\net\src\pktbuf.c -o CMakeFiles\test_mblock.dir\__\src\net\src\pktbuf.c.s
 
+test/CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.obj: test/CMakeFiles/test_mblock.dir/flags.make
+test/CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.obj: test/CMakeFiles/test_mblock.dir/includes_C.rsp
+test/CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.obj: F:/code/c++code/mini-tcpip/src/net/src/tools.c
+test/CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.obj: test/CMakeFiles/test_mblock.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building C object test/CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.obj"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.obj -MF CMakeFiles\test_mblock.dir\__\src\net\src\tools.c.obj.d -o CMakeFiles\test_mblock.dir\__\src\net\src\tools.c.obj -c F:\code\c++code\mini-tcpip\src\net\src\tools.c
+
+test/CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.i"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E F:\code\c++code\mini-tcpip\src\net\src\tools.c > CMakeFiles\test_mblock.dir\__\src\net\src\tools.c.i
+
+test/CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.s"
+	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S F:\code\c++code\mini-tcpip\src\net\src\tools.c -o CMakeFiles\test_mblock.dir\__\src\net\src\tools.c.s
+
 test/CMakeFiles/test_mblock.dir/__/src/plat/net_plat.c.obj: test/CMakeFiles/test_mblock.dir/flags.make
 test/CMakeFiles/test_mblock.dir/__/src/plat/net_plat.c.obj: test/CMakeFiles/test_mblock.dir/includes_C.rsp
 test/CMakeFiles/test_mblock.dir/__/src/plat/net_plat.c.obj: F:/code/c++code/mini-tcpip/src/plat/net_plat.c
 test/CMakeFiles/test_mblock.dir/__/src/plat/net_plat.c.obj: test/CMakeFiles/test_mblock.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object test/CMakeFiles/test_mblock.dir/__/src/plat/net_plat.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building C object test/CMakeFiles/test_mblock.dir/__/src/plat/net_plat.c.obj"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test_mblock.dir/__/src/plat/net_plat.c.obj -MF CMakeFiles\test_mblock.dir\__\src\plat\net_plat.c.obj.d -o CMakeFiles\test_mblock.dir\__\src\plat\net_plat.c.obj -c F:\code\c++code\mini-tcpip\src\plat\net_plat.c
 
 test/CMakeFiles/test_mblock.dir/__/src/plat/net_plat.c.i: cmake_force
@@ -297,7 +327,7 @@ test/CMakeFiles/test_mblock.dir/__/src/plat/netif_pcap.c.obj: test/CMakeFiles/te
 test/CMakeFiles/test_mblock.dir/__/src/plat/netif_pcap.c.obj: test/CMakeFiles/test_mblock.dir/includes_C.rsp
 test/CMakeFiles/test_mblock.dir/__/src/plat/netif_pcap.c.obj: F:/code/c++code/mini-tcpip/src/plat/netif_pcap.c
 test/CMakeFiles/test_mblock.dir/__/src/plat/netif_pcap.c.obj: test/CMakeFiles/test_mblock.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building C object test/CMakeFiles/test_mblock.dir/__/src/plat/netif_pcap.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building C object test/CMakeFiles/test_mblock.dir/__/src/plat/netif_pcap.c.obj"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test_mblock.dir/__/src/plat/netif_pcap.c.obj -MF CMakeFiles\test_mblock.dir\__\src\plat\netif_pcap.c.obj.d -o CMakeFiles\test_mblock.dir\__\src\plat\netif_pcap.c.obj -c F:\code\c++code\mini-tcpip\src\plat\netif_pcap.c
 
 test/CMakeFiles/test_mblock.dir/__/src/plat/netif_pcap.c.i: cmake_force
@@ -312,7 +342,7 @@ test/CMakeFiles/test_mblock.dir/__/src/plat/sys_plat.c.obj: test/CMakeFiles/test
 test/CMakeFiles/test_mblock.dir/__/src/plat/sys_plat.c.obj: test/CMakeFiles/test_mblock.dir/includes_C.rsp
 test/CMakeFiles/test_mblock.dir/__/src/plat/sys_plat.c.obj: F:/code/c++code/mini-tcpip/src/plat/sys_plat.c
 test/CMakeFiles/test_mblock.dir/__/src/plat/sys_plat.c.obj: test/CMakeFiles/test_mblock.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building C object test/CMakeFiles/test_mblock.dir/__/src/plat/sys_plat.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building C object test/CMakeFiles/test_mblock.dir/__/src/plat/sys_plat.c.obj"
 	cd /d F:\code\c++code\mini-tcpip\build\test && "F:\software\work_space\Toolbox _APP\CLion Nova\bin\mingw\bin\gcc.exe" $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/test_mblock.dir/__/src/plat/sys_plat.c.obj -MF CMakeFiles\test_mblock.dir\__\src\plat\sys_plat.c.obj.d -o CMakeFiles\test_mblock.dir\__\src\plat\sys_plat.c.obj -c F:\code\c++code\mini-tcpip\src\plat\sys_plat.c
 
 test/CMakeFiles/test_mblock.dir/__/src/plat/sys_plat.c.i: cmake_force
@@ -329,6 +359,7 @@ test_mblock_OBJECTS = \
 "CMakeFiles/test_mblock.dir/__/src/app/echo/tcp_echo_client.c.obj" \
 "CMakeFiles/test_mblock.dir/__/src/app/echo/tcp_echo_server.c.obj" \
 "CMakeFiles/test_mblock.dir/__/src/net/src/dbg.c.obj" \
+"CMakeFiles/test_mblock.dir/__/src/net/src/ether.c.obj" \
 "CMakeFiles/test_mblock.dir/__/src/net/src/exmsg.c.obj" \
 "CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.obj" \
 "CMakeFiles/test_mblock.dir/__/src/net/src/ipaddr.c.obj" \
@@ -339,6 +370,7 @@ test_mblock_OBJECTS = \
 "CMakeFiles/test_mblock.dir/__/src/net/src/nlist.c.obj" \
 "CMakeFiles/test_mblock.dir/__/src/net/src/nlocker.c.obj" \
 "CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.obj" \
+"CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.obj" \
 "CMakeFiles/test_mblock.dir/__/src/plat/net_plat.c.obj" \
 "CMakeFiles/test_mblock.dir/__/src/plat/netif_pcap.c.obj" \
 "CMakeFiles/test_mblock.dir/__/src/plat/sys_plat.c.obj"
@@ -350,6 +382,7 @@ test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/test_mblock.c.obj
 test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/__/src/app/echo/tcp_echo_client.c.obj
 test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/__/src/app/echo/tcp_echo_server.c.obj
 test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/__/src/net/src/dbg.c.obj
+test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/__/src/net/src/ether.c.obj
 test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/__/src/net/src/exmsg.c.obj
 test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.obj
 test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/__/src/net/src/ipaddr.c.obj
@@ -360,6 +393,7 @@ test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/__/src/net/src/netif.c.obj
 test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/__/src/net/src/nlist.c.obj
 test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/__/src/net/src/nlocker.c.obj
 test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.obj
+test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.obj
 test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/__/src/plat/net_plat.c.obj
 test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/__/src/plat/netif_pcap.c.obj
 test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/__/src/plat/sys_plat.c.obj
@@ -367,7 +401,7 @@ test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/build.make
 test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/linkLibs.rsp
 test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/objects1.rsp
 test/test_mblock.exe: test/CMakeFiles/test_mblock.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Linking C executable test_mblock.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=F:\code\c++code\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Linking C executable test_mblock.exe"
 	cd /d F:\code\c++code\mini-tcpip\build\test && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\test_mblock.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -128,7 +128,7 @@ static void display_check_buf(pktbuf_t *pktbuf) {
 net_err_t pktbuf_module_init(void) {
   dbg_info(DBG_PKTBUF, "init pktbuf module....");
 
-  // TODO: 当前只使用一个互斥锁来保护数据包模块, 后续可以考虑使用更细粒度的锁
+  // TODO: 当前只使用一个互斥锁来保护数据包模块(包括数据包池和数据块池), 后续可以考虑使用更细粒度的锁
   net_err_t err = nlocker_init(&pkt_locker, NLOCKER_THREAD);
   Net_Err_Check(err);
 

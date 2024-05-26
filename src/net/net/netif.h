@@ -118,7 +118,7 @@ pktbuf_t *netif_sendq_get(netif_t *netif, int tmo);
 
 net_err_t netif_send(netif_t *netif, ipaddr_t *ipaddr, pktbuf_t *buf);
 
-net_err_t netif_layer_register(netif_type_t type, const link_layer_t *layer);
+net_err_t netif_layer_register(const link_layer_t *layer);
 
 /**
  * @brief 打印MAC地址信息

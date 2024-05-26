@@ -94,8 +94,15 @@ net_err_t netif_module_init(void) {
  * @param layer
  * @return net_err_t
  */
-net_err_t netif_layer_register(netif_type_t type, const link_layer_t *layer) {
-  if (type < 0 || type >= NETIF_TYPE_CNT || layer == (link_layer_t *)0) {
+net_err_t netif_layer_register(const link_layer_t *layer) {
+  if (layer == (link_layer_t *)0) {
+    dbg_error(DBG_NETIF, "layer is null.");
+    return NET_ERR_PARAM;
+  }
+
+  netif_type_t type = layer->type;
+
+  if (type < 0 || type >= NETIF_TYPE_CNT) {
     dbg_error(DBG_NETIF, "layer type error.");
     return NET_ERR_PARAM;
   }
@@ -128,9 +135,9 @@ netif_t *netif_open(const char *dev_name, const netif_ops_t *ops,
   }
 
   // 初始化网络接口对象
-  ipaddr_set_any(&(netif->ipaddr));   // 设置ip地址为任意地址
-  ipaddr_set_any(&(netif->netmask));  // 设置子网掩码为任意地址
-  ipaddr_set_any(&(netif->gateway));  // 设置网关地址为任意地址
+  ipaddr_set_any(&(netif->ipaddr));   // 初始化ip
+  ipaddr_set_any(&(netif->netmask));  // 初始化子网掩码
+  ipaddr_set_any(&(netif->gateway));  // 初始化网关地址
 
   plat_strncpy(netif->name, dev_name, NETIF_NAME_SIZE);  // 设置接口名称
   netif->name[NETIF_NAME_SIZE - 1] = '\0';  // 设置字符串结束符, 确保内存安全
@@ -167,11 +174,12 @@ netif_t *netif_open(const char *dev_name, const netif_ops_t *ops,
     fixq_destroy(&(netif->send_fixq));  // 销毁发送缓冲队列
     goto init_failed;
   }
-  netif->state = NETIF_STATE_OPENED;  // 设置接口状态为打开
-
+  netif->state = NETIF_STATE_OPENED;  // 打开成功，设置接口状态为打开
 
   netif->link_layer = link_layers[netif->type];  // 设置链路层回调接口
-  if (!(netif->link_layer) && netif->type != NETIF_TYPE_LOOP) {  // 若未注册链路层回调接口(环回接口不需要进行链路层处理)
+  if (!(netif->link_layer) &&
+      netif->type !=
+          NETIF_TYPE_LOOP) {  // 若未注册链路层回调接口(环回接口不需要进行链路层处理)
     dbg_error(DBG_NETIF, "no link layer for netif %s.", dev_name);
     fixq_destroy(&(netif->recv_fixq));  // 销毁接收缓冲队列
     fixq_destroy(&(netif->send_fixq));  // 销毁发送缓冲队列
@@ -270,11 +278,20 @@ net_err_t netif_set_acticve(netif_t *netif) {
     return NET_ERR_STATE;
   }
 
-  netif->state = NETIF_STATE_ACVTIVE;
+  netif->state = NETIF_STATE_ACVTIVE;  // 设置网络接口状态为激活
 
   // 若默认网络接口为空，则将当前激活的网络接口设置为默认网络接口(不能将环回接口设置为默认接口)
   if (netif_default == (netif_t *)0 && netif->type != NETIF_TYPE_LOOP) {
     netif_set_default(netif);
+  }
+
+  // 若当前网络接口拥有链路层回调接口，则调用链路层回调接口的open方法以便进行链路层相关的初始化
+  if (netif->link_layer) {
+    net_err_t err = netif->link_layer->open(netif);
+    if (err != NET_ERR_OK) {
+      dbg_error(DBG_NETIF, "link layer open failed.\n");
+      return err;
+    }
   }
 
   display_netif_list();
@@ -294,12 +311,12 @@ net_err_t netif_set_inactive(netif_t *netif) {
   }
 
   void *pkt = 0;
-  // 释放接收队列中的数据
+  // 释放接收队列中的数据包
   while ((pkt = fixq_recv(&(netif->recv_fixq), -1)) != (void *)0) {
     pktbuf_free(pkt);
   }
 
-  // 释放发送队列中的数据
+  // 释放发送队列中的数据包
   while ((pkt = fixq_recv(&(netif->send_fixq), -1)) != (void *)0) {
     pktbuf_free(pkt);
   }
@@ -311,6 +328,11 @@ net_err_t netif_set_inactive(netif_t *netif) {
 
   // 设置网络接口状态为打开
   netif->state = NETIF_STATE_OPENED;
+
+  // 若当前网络接口拥有链路层回调接口，则调用链路层回调接口的close方法以便进行链路层相关的清理
+  if (netif->link_layer) {
+    netif->link_layer->close(netif);
+  }
 
   display_netif_list();
   return NET_ERR_OK;
@@ -334,13 +356,17 @@ void netif_set_default(netif_t *netif) { netif_default = netif; }
 net_err_t netif_recvq_put(netif_t *netif, pktbuf_t *buf, int tmo) {
   net_err_t err = fixq_send(&(netif->recv_fixq), (void *)buf, tmo);
   if (err < 0) {
-    dbg_warning(DBG_NETIF, "netif recv queue full.\n");
+    dbg_warning(DBG_NETIF, "netif recv queue full.");
     return NET_ERR_FULL;
   }
 
   // 测试用, 通知工作线程有数据到达
   // 发送到消息队列(网卡管理线程与数据包处理线程)中
-  exmsg_netif_recv(netif);
+  err = exmsg_netif_recv(netif);
+  if (err != NET_ERR_OK) {
+    dbg_warning(DBG_NETIF, "exmsg netif recv failed.");
+    return err;
+  }
 
   return NET_ERR_OK;
 }
@@ -355,7 +381,6 @@ pktbuf_t *netif_recvq_get(netif_t *netif, int tmo) {
   pktbuf_t *buf = (pktbuf_t *)fixq_recv(&(netif->recv_fixq), tmo);
 
   if (buf == (pktbuf_t *)0) {  // 接收队列为空
-    dbg_info(DBG_NETIF, "netif recv queue empty.\n");
     return (pktbuf_t *)0;
   }
 
@@ -374,7 +399,7 @@ pktbuf_t *netif_recvq_get(netif_t *netif, int tmo) {
 net_err_t netif_sendq_put(netif_t *netif, pktbuf_t *buf, int tmo) {
   net_err_t err = fixq_send(&(netif->send_fixq), (void *)buf, tmo);
   if (err < 0) {
-    dbg_warning(DBG_NETIF, "netif send queue full.\n");
+    dbg_warning(DBG_NETIF, "netif send queue full.");
     return NET_ERR_FULL;
   }
 

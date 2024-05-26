@@ -7,11 +7,16 @@
 #include "dbg.h"
 #include "netif.h"
 #include "loop.h"
+#include "ether.h"
+#include "tools.h"
 
 
 net_err_t net_init(void) {
 
     net_plat_init();
+
+    // 初始化tools模块
+    tools_module_init();
 
     // 初始化数据包模块
     pktbuf_module_init();
@@ -22,6 +27,9 @@ net_err_t net_init(void) {
     // 初始化环回接口模块
     loop_module_init();
 
+    // 初始化以太网协议层
+    ether_module_init();
+
     // 初始化消息队列工作模块
     exmsg_module_init();
 
@@ -31,7 +39,7 @@ net_err_t net_init(void) {
 net_err_t net_start(void) {
 
     exmsg_start();
-    dbg_info(DBG_INIT, "net is running\n");
+    dbg_info(DBG_INIT, "net is running");
 
     return NET_ERR_OK;
 }

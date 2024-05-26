@@ -15,6 +15,7 @@
 #include "exmsg.h"
 #include "pcap.h"
 #include "sys_plat.h"
+#include "ether.h"
 
 /**
  * @brief 网络包接收线程
@@ -22,7 +23,7 @@
  * @param arg
  */
 void recv_thread(void *arg) {
-  dbg_info(DBG_NETIF, "pcap recv thread is running....\n");
+  dbg_info(DBG_NETIF, "pcap recv thread is running....");
   // 获取到线程所管理的网络接口与pcap设备
   netif_t *netif = (netif_t *)arg;
   pcap_t *pcap = (pcap_t *)netif->ops_data;
@@ -71,7 +72,7 @@ void recv_thread(void *arg) {
  * @param arg
  */
 void send_thread(void *arg) {
-  dbg_info(DBG_NETIF, "send thread is running.\n");
+  dbg_info(DBG_NETIF, "send thread is running.");
 
   // 数据包发送缓冲区
   static uint8_t send_buf[NET_MAC_FRAME_MAX_SIZE];
@@ -124,7 +125,7 @@ static net_err_t netif_pcap_open(netif_t *netif, void *data) {
   // 设置网络接口类型为以太网接口
   netif->type = NETIF_TYPE_ETHER;
   // 设置最大传输单元(ETHER II 帧格式中mtu为1500字节)
-  netif->mtu = 1500;
+  netif->mtu = ETHER_MTU;
   // 记录打开的pcap设备
   netif->ops_data = pcap;
   // 设置接口硬件地址

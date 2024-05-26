@@ -351,6 +351,30 @@ src/net/src/dbg.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/dbg.c.s
 .PHONY : src/net/src/dbg.c.s
 
+src/net/src/ether.obj: src/net/src/ether.c.obj
+.PHONY : src/net/src/ether.obj
+
+# target to build an object file
+src/net/src/ether.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/ether.c.obj
+.PHONY : src/net/src/ether.c.obj
+
+src/net/src/ether.i: src/net/src/ether.c.i
+.PHONY : src/net/src/ether.i
+
+# target to preprocess a source file
+src/net/src/ether.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/ether.c.i
+.PHONY : src/net/src/ether.c.i
+
+src/net/src/ether.s: src/net/src/ether.c.s
+.PHONY : src/net/src/ether.s
+
+# target to generate assembly for a file
+src/net/src/ether.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/ether.c.s
+.PHONY : src/net/src/ether.c.s
+
 src/net/src/exmsg.obj: src/net/src/exmsg.c.obj
 .PHONY : src/net/src/exmsg.obj
 
@@ -591,6 +615,30 @@ src/net/src/pktbuf.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/pktbuf.c.s
 .PHONY : src/net/src/pktbuf.c.s
 
+src/net/src/tools.obj: src/net/src/tools.c.obj
+.PHONY : src/net/src/tools.obj
+
+# target to build an object file
+src/net/src/tools.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tools.c.obj
+.PHONY : src/net/src/tools.c.obj
+
+src/net/src/tools.i: src/net/src/tools.c.i
+.PHONY : src/net/src/tools.i
+
+# target to preprocess a source file
+src/net/src/tools.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tools.c.i
+.PHONY : src/net/src/tools.c.i
+
+src/net/src/tools.s: src/net/src/tools.c.s
+.PHONY : src/net/src/tools.s
+
+# target to generate assembly for a file
+src/net/src/tools.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tools.c.s
+.PHONY : src/net/src/tools.c.s
+
 src/plat/net_plat.obj: src/plat/net_plat.c.obj
 .PHONY : src/plat/net_plat.obj
 
@@ -694,6 +742,9 @@ help:
 	@echo ... src/net/src/dbg.obj
 	@echo ... src/net/src/dbg.i
 	@echo ... src/net/src/dbg.s
+	@echo ... src/net/src/ether.obj
+	@echo ... src/net/src/ether.i
+	@echo ... src/net/src/ether.s
 	@echo ... src/net/src/exmsg.obj
 	@echo ... src/net/src/exmsg.i
 	@echo ... src/net/src/exmsg.s
@@ -724,6 +775,9 @@ help:
 	@echo ... src/net/src/pktbuf.obj
 	@echo ... src/net/src/pktbuf.i
 	@echo ... src/net/src/pktbuf.s
+	@echo ... src/net/src/tools.obj
+	@echo ... src/net/src/tools.i
+	@echo ... src/net/src/tools.s
 	@echo ... src/plat/net_plat.obj
 	@echo ... src/plat/net_plat.i
 	@echo ... src/plat/net_plat.s

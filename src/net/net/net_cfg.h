@@ -12,6 +12,9 @@
 #ifndef NET_CFG_H
 #define NET_CFG_H
 
+// 系统相关配置
+#define SYS_ENDIAN_LITTLE 1 // 小端模式
+
 // 协议栈相关配置
 #define NET_MAC_FRAME_MTU 1500 // MAC帧最大传输单元
 #define NET_MAC_FRAME_MAX_SIZE  (6 + 6 + 2 + NET_MAC_FRAME_MTU) // MAC帧最大大小, 6B目的地址 + 6B源地址 + 2B类型 + 1500B数据, (4B的校验码由网卡自动添加)
@@ -26,6 +29,8 @@
 #define DBG_PKTBUF DBG_LEVEL_INFO
 #define DBG_NETIF DBG_LEVEL_INFO
 #define DBG_LOOP DBG_LEVEL_INFO
+#define DBG_ETHER DBG_LEVEL_INFO
+#define DBG_TOOLS DBG_LEVEL_INFO
 
 // 消息队列相关配置
 #define EXMSG_MSG_CNT 10                    // 消息队列大小

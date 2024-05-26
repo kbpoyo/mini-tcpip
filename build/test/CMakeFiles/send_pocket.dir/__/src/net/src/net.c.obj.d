@@ -257,4 +257,6 @@ test/CMakeFiles/send_pocket.dir/__/src/net/src/net.c.obj: \
  F:/code/c++code/mini-tcpip/src/net/net/pktbuf.h \
  F:/code/c++code/mini-tcpip/src/net/net/dbg.h \
  F:/code/c++code/mini-tcpip/src/net/net/netif.h \
- F:/code/c++code/mini-tcpip/src/net/net/loop.h
+ F:/code/c++code/mini-tcpip/src/net/net/loop.h \
+ F:/code/c++code/mini-tcpip/src/net/net/ether.h \
+ F:/code/c++code/mini-tcpip/src/net/net/tools.h

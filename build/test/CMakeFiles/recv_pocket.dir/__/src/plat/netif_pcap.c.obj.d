@@ -256,4 +256,5 @@ test/CMakeFiles/recv_pocket.dir/__/src/plat/netif_pcap.c.obj: \
  F:/code/c++code/mini-tcpip/src/net/net/dbg.h \
  F:/code/c++code/mini-tcpip/src/net/net/exmsg.h \
  F:/code/c++code/mini-tcpip/src/net/net/netif.h \
- F:\code\c++code\mini-tcpip\src\plat\sys_plat.h
+ F:\code\c++code\mini-tcpip\src\plat\sys_plat.h \
+ F:/code/c++code/mini-tcpip/src/net/net/ether.h

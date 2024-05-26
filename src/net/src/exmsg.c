@@ -112,30 +112,34 @@ net_err_t exmsg_netif_recv(netif_t *netif) {
 
 /**
  * @brief 处理消息: 网络接口接收到数据包
- *
+ * 该函数对数据包的生命周期进行部分管理
+ * 当数据包传给外部协议层处理时，数据包的生命周期由外部协议层管理
+ * 当外部协议层处理成功时，数据包由外部协议层释放
+ * 当外部协议层处理失败时，数据包由该函数释放
  * @param msg
  */
 static void exmsg_handle_netif_recv(exmsg_t *msg) {
+  net_err_t err = NET_ERR_OK;
+
   // 获取网络接口
   netif_t *netif = msg->msg_netif.netif;
 
   // 从网络接口接收数据包
   pktbuf_t *buf = (pktbuf_t *)0;
-  while (buf = netif_recvq_get(netif, -1)) {  // 以非阻塞方式获取数据包
-    if (!buf) {
-      dbg_warning(DBG_EXMSG, "no packet received.");
-      return;
-    }
+  while ((buf = netif_recvq_get(netif, -1))) {  // 以非阻塞方式获取数据包
+
+    dbg_info(DBG_EXMSG, "%s: received packet.", netif->name);
 
     // 处理数据包
-    dbg_info(DBG_EXMSG, "received packet from %s\n", netif->name);
-    pktbuf_fill(buf, 0x11, 6);
-
-    // 发送数据包
-    net_err_t err = netif_send(netif, (ipaddr_t *)0, buf);  //TODO: 数据包交给底层函数，若执行成功，则由底层函数释放数据包
-    if (err != NET_ERR_OK) {  // 发送数据包失败
-      dbg_error(DBG_EXMSG, "send packet failed.");
-      pktbuf_free(buf); // 释放数据包
+    if (netif->link_layer) {
+      err =
+          netif->link_layer->recv(netif, buf);  // 交给链路层处理接收到的数据包
+      if (err != NET_ERR_OK) {
+        dbg_warning(DBG_EXMSG, "loss packet: link layer recv failed.");
+        pktbuf_free(buf);  // 释放数据包
+      }
+    } else {  // TODO: 暂时没有其它协议层的处理
+      pktbuf_free(buf);  // 释放数据包
     }
   }
 }
