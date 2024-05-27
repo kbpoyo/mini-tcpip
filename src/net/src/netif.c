@@ -18,6 +18,8 @@
 #include "nlist.h"
 #include "nlocker.h"
 #include "pktbuf.h"
+#include "protocol.h"
+#include "ether.h"
 
 static const link_layer_t *link_layers[NETIF_TYPE_CNT];
 
@@ -49,10 +51,11 @@ void display_netif_list(void) {  // 显示网络接口列表
                 netif_type_str[netif->type], netif_state_str[netif->state],
                 netif->mtu);
 
-    netif_dum_hwaddr("hwaddr: ", &(netif->hwaddr));  // 显示硬件地址
-    netif_dum_ip(" ip: ", &(netif->ipaddr));         // 显示ip地址
-    netif_dum_ip(" mask: ", &(netif->netmask));      // 显示子网掩码
-    netif_dum_ip(" gateway: ", &(netif->gateway));   // 显示网关地址
+    netif_dum_hwaddr("hwaddr: ", netif->hwaddr.addr,
+                     netif->hwaddr.valid_len);      // 显示硬件地址
+    netif_dum_ip(" ip: ", &(netif->ipaddr));        // 显示ip地址
+    netif_dum_ip(" mask: ", &(netif->netmask));     // 显示子网掩码
+    netif_dum_ip(" gateway: ", &(netif->gateway));  // 显示网关地址
 
     plat_printf("\n");
   }
@@ -434,17 +437,27 @@ pktbuf_t *netif_sendq_get(netif_t *netif, int tmo) {
  * @return net_err_t
  */
 net_err_t netif_send(netif_t *netif, ipaddr_t *ipaddr, pktbuf_t *buf) {
-  if (netif == (netif_t *)0 || buf == (pktbuf_t *)0) {
-    return NET_ERR_PARAM;
+  pktbuf_check_buf(buf);  // 检查数据包的有效性
+
+  net_err_t err = NET_ERR_OK;
+
+  if (netif->link_layer) {  // 进行链路层处理
+    // netif->link_layer->send(netif, ipaddr, buf);
+    err = ether_raw_send(netif, NET_PROTOCOL_ARP, ether_broadcast_addr(), buf);  //TODO: 链路层测试发送
+    if (err != NET_ERR_OK) {
+      dbg_warning(DBG_NETIF, "link layer send failed.");
+    }
+
+  } else {
+    // 将数据包放到发送队列中
+    err = netif_sendq_put(netif, buf, -1);
+    if (err != NET_ERR_OK) {
+      dbg_warning(DBG_NETIF, "pktbuf send failed.\n");
+    }
+    // 调用网络接口特定的操作方法发送数据包
+    err = netif->ops->send(netif);
   }
 
-  // 将数据包放到发送队列中
-  net_err_t err = netif_sendq_put(netif, buf, -1);
-  if (err != NET_ERR_OK) {
-    dbg_info(DBG_NETIF, "pktbuf send failed.\n");
-    return err;
-  }
 
-  // 调用网络接口特定的操作方法发送数据包
-  return netif->ops->send(netif);
+  return err;
 }

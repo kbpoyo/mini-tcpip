@@ -127,15 +127,15 @@ net_err_t netif_layer_register(const link_layer_t *layer);
  * @param hwaddr
  * @param len
  */
-static void netif_dum_hwaddr(const char *msg, const netif_hwaddr_t *hwaddr) {
+static void netif_dum_hwaddr(const char *msg, const uint8_t* hwaddr, uint32_t len) {
   if (msg) {
     plat_printf("%s", msg);
   }
 
   if (hwaddr) {
-    for (int i = 0; i < hwaddr->valid_len; i++) {
-      plat_printf("%02x", hwaddr->addr[i]);
-      if (i < hwaddr->valid_len - 1) {
+    for (int i = 0; i < len; i++) {
+      plat_printf("%02x", hwaddr[i]);
+      if (i < len - 1) {
         plat_printf("-");
       }
     }

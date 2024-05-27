@@ -27,6 +27,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/multi_thread.dir/__/src/net/src/nlocker.c.obj.d"
   "CMakeFiles/multi_thread.dir/__/src/net/src/pktbuf.c.obj"
   "CMakeFiles/multi_thread.dir/__/src/net/src/pktbuf.c.obj.d"
+  "CMakeFiles/multi_thread.dir/__/src/net/src/timer.c.obj"
+  "CMakeFiles/multi_thread.dir/__/src/net/src/timer.c.obj.d"
   "CMakeFiles/multi_thread.dir/__/src/net/src/tools.c.obj"
   "CMakeFiles/multi_thread.dir/__/src/net/src/tools.c.obj.d"
   "CMakeFiles/multi_thread.dir/__/src/plat/net_plat.c.obj"

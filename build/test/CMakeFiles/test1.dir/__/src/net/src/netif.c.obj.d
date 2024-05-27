@@ -258,4 +258,7 @@ test/CMakeFiles/test1.dir/__/src/net/src/netif.c.obj: \
  F:/code/c++code/mini-tcpip/src/net/net/mblock.h \
  F:/code/c++code/mini-tcpip/src/net/net/nlist.h \
  F:/code/c++code/mini-tcpip/src/net/net/nlocker.h \
- F:/code/c++code/mini-tcpip/src/net/net/pktbuf.h
+ F:/code/c++code/mini-tcpip/src/net/net/pktbuf.h \
+ F:/code/c++code/mini-tcpip/src/net/net/protocol.h \
+ F:/code/c++code/mini-tcpip/src/net/net/ether.h \
+ F:/code/c++code/mini-tcpip/src/net/net/protocol.h

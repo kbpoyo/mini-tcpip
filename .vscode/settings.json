@@ -23,7 +23,8 @@
         "net_cfg.h": "c",
         "ipaddr.h": "c",
         "netif.h": "c",
-        "tools.h": "c"
+        "tools.h": "c",
+        "protocol.h": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [

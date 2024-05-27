@@ -27,6 +27,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/send_pocket.dir/__/src/net/src/nlocker.c.obj.d"
   "CMakeFiles/send_pocket.dir/__/src/net/src/pktbuf.c.obj"
   "CMakeFiles/send_pocket.dir/__/src/net/src/pktbuf.c.obj.d"
+  "CMakeFiles/send_pocket.dir/__/src/net/src/timer.c.obj"
+  "CMakeFiles/send_pocket.dir/__/src/net/src/timer.c.obj.d"
   "CMakeFiles/send_pocket.dir/__/src/net/src/tools.c.obj"
   "CMakeFiles/send_pocket.dir/__/src/net/src/tools.c.obj.d"
   "CMakeFiles/send_pocket.dir/__/src/plat/net_plat.c.obj"

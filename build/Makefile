@@ -615,6 +615,30 @@ src/net/src/pktbuf.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/pktbuf.c.s
 .PHONY : src/net/src/pktbuf.c.s
 
+src/net/src/timer.obj: src/net/src/timer.c.obj
+.PHONY : src/net/src/timer.obj
+
+# target to build an object file
+src/net/src/timer.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/timer.c.obj
+.PHONY : src/net/src/timer.c.obj
+
+src/net/src/timer.i: src/net/src/timer.c.i
+.PHONY : src/net/src/timer.i
+
+# target to preprocess a source file
+src/net/src/timer.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/timer.c.i
+.PHONY : src/net/src/timer.c.i
+
+src/net/src/timer.s: src/net/src/timer.c.s
+.PHONY : src/net/src/timer.s
+
+# target to generate assembly for a file
+src/net/src/timer.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/timer.c.s
+.PHONY : src/net/src/timer.c.s
+
 src/net/src/tools.obj: src/net/src/tools.c.obj
 .PHONY : src/net/src/tools.obj
 
@@ -775,6 +799,9 @@ help:
 	@echo ... src/net/src/pktbuf.obj
 	@echo ... src/net/src/pktbuf.i
 	@echo ... src/net/src/pktbuf.s
+	@echo ... src/net/src/timer.obj
+	@echo ... src/net/src/timer.i
+	@echo ... src/net/src/timer.s
 	@echo ... src/net/src/tools.obj
 	@echo ... src/net/src/tools.i
 	@echo ... src/net/src/tools.s

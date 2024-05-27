@@ -31,6 +31,7 @@
 #define DBG_LOOP DBG_LEVEL_INFO
 #define DBG_ETHER DBG_LEVEL_INFO
 #define DBG_TOOLS DBG_LEVEL_INFO
+#define DBG_TIMER DBG_LEVEL_INFO
 
 // 消息队列相关配置
 #define EXMSG_MSG_CNT 10                    // 消息队列大小

@@ -259,4 +259,6 @@ test/CMakeFiles/test_pktbuf.dir/__/src/net/src/net.c.obj: \
  F:/code/c++code/mini-tcpip/src/net/net/netif.h \
  F:/code/c++code/mini-tcpip/src/net/net/loop.h \
  F:/code/c++code/mini-tcpip/src/net/net/ether.h \
- F:/code/c++code/mini-tcpip/src/net/net/tools.h
+ F:/code/c++code/mini-tcpip/src/net/net/protocol.h \
+ F:/code/c++code/mini-tcpip/src/net/net/tools.h \
+ F:/code/c++code/mini-tcpip/src/net/net/timer.h

@@ -9,6 +9,7 @@
 #include "loop.h"
 #include "ether.h"
 #include "tools.h"
+#include "timer.h"
 
 
 net_err_t net_init(void) {
@@ -20,6 +21,9 @@ net_err_t net_init(void) {
 
     // 初始化数据包模块
     pktbuf_module_init();
+
+    // 初始化定时器模块
+    net_timer_module_init();
 
     // 初始化网络接口模块
     netif_module_init();

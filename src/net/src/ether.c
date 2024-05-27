@@ -10,22 +10,75 @@
  */
 
 #include "ether.h"
+
+#include "dbg.h"
 #include "netif.h"
- 
+#include "protocol.h"
+#include "tools.h"
 
-static net_err_t ether_frame_check(ether_frame_t *frame, int total_size) {
-    if (total_size > sizeof(ether_hdr_t) + ETHER_MTU) { // 以太网帧大小超过最大值
-        dbg_warning(DBG_ETHER, "ether frame size is too large.");
-        return NET_ERR_SIZE;
-    }
+#if DBG_DISP_ENABLED(DBG_ETHER)
 
-    //! 以太网帧最小值应该为 MAC包头(14B) + 最小负载(46B) = 60B
-    //! 但是PCAP库会自动将有效载荷中的填充字节去掉，所以导致接收到的以太网帧的有效载荷
-    //! 可能小于46B，所以这里只判断以太网帧的大小是否小于MAC包头的大小， 不对有效载荷大小进行判断
-    if (total_size < sizeof(ether_hdr_t)) { // 以太网帧大小小于最小值
-        dbg_warning(DBG_ETHER, "ether frame size is too small.");
-        return NET_ERR_SIZE;
-    }
+/**
+ * @brief 打印以太网帧信息
+ *
+ * @param msg
+ * @param pkt
+ * @param total_size
+ */
+static void display_ether_pkt(char *msg, ether_pkt_t *pkt, int total_size) {
+  // 获取以太网帧头部
+  ether_hdr_t *hdr = &(pkt->hdr);
+  plat_printf("--------------- %s ----------------\n", msg);
+  plat_printf("\tlen: %d bytes", total_size);
+
+  netif_dum_hwaddr("\tdest: ", hdr->dest, ETHER_MAC_LEN);
+  netif_dum_hwaddr("\tsrc: ", hdr->src, ETHER_MAC_LEN);
+
+  uint16_t protocol_type = net_ntohs(hdr->protocol_type);
+  plat_printf(
+      "\ttype: 0x%04x",
+      protocol_type);  // 协议类型为u16，需要将网络字节序转换为主机字节序
+
+  switch (protocol_type) {
+    case NET_PROTOCOL_ARP:
+      plat_printf("\tarp\n");
+      break;
+    case NET_PROTOCOL_IPV4:
+      plat_printf("\tipv4\n");
+      break;
+    default:
+      plat_printf("\tunknown\n");
+      break;
+  }
+}
+
+#else
+
+#define display_ether_pkt(msg, pkt, total_size)
+
+#endif
+
+/**
+ * @brief 检查以太网帧的正确性
+ *
+ * @param pkt
+ * @param total_size
+ * @return net_err_t
+ */
+static net_err_t ether_pkt_check(ether_pkt_t *pkt, int total_size) {
+  if (total_size > sizeof(ether_hdr_t) + ETHER_MTU) {  // 以太网帧大小超过最大值
+    dbg_warning(DBG_ETHER, "ether pkt size is too large.");
+    return NET_ERR_SIZE;
+  }
+
+  //! 以太网帧最小值应该为 MAC包头(14B) + 最小负载(46B) = 60B
+  //! 但是PCAP库会自动将有效载荷中的填充字节去掉，所以导致接收到的以太网帧的有效载荷
+  //! 可能小于46B，所以这里只判断以太网帧的大小是否小于MAC包头的大小，
+  //! 不对有效载荷大小进行判断
+  if (total_size < sizeof(ether_hdr_t)) {  // 以太网帧大小小于最小值
+    dbg_warning(DBG_ETHER, "ether pkt size is too small.");
+    return NET_ERR_SIZE;
+  }
   return NET_ERR_OK;
 }
 
@@ -45,30 +98,33 @@ static net_err_t ether_open(netif_t *netif) { return NET_ERR_OK; }
 static void ether_close(netif_t *netif) { return; }
 
 /**
- * @brief 从以太网协议层接收数据包
+ * @brief 完成以太网协议层对接收数据包的处理
  *
  * @param netif
  * @param pktbuf
  * @return net_err_t
  */
 static net_err_t ether_recv(netif_t *netif, pktbuf_t *buf) {
+  dbg_info(DBG_ETHER, "link layer ether recving....");
 
-    dbg_info(DBG_ETHER, "link layer ether recving....");
+  net_err_t err = NET_ERR_OK;
 
-    net_err_t err = NET_ERR_OK;
+  // 获取以太网帧
+  pktbuf_set_cont(buf, sizeof(ether_hdr_t));  // 确保帧头部在内存上的连续性
+  ether_pkt_t *pkt = (ether_pkt_t *)pktbuf_data_ptr(buf);
 
-    // 获取以太网帧
-    ether_frame_t *frame = (ether_frame_t *)pktbuf_data_ptr(buf);
+  if ((err = ether_pkt_check(pkt, pktbuf_total_size(buf))) != NET_ERR_OK) {
+    dbg_error(DBG_ETHER, "link layer ether recv failed.");
+    return err;
+  }
 
-    if ((err = ether_frame_check(frame, pktbuf_total_size(buf))) != NET_ERR_OK) {
-        dbg_error(DBG_ETHER, "link layer ether recv failed.");
-        return err;
-    }
+  // 打印以太网帧
+  display_ether_pkt("ether recv", pkt, pktbuf_total_size(buf));
 
-    // 数据包处理成功，由当前函数释放数据包
-    pktbuf_free(buf);
+  // 数据包处理成功，由当前函数释放数据包
+  pktbuf_free(buf);
 
-    dbg_info(DBG_ETHER, "link layer ether recv ok.");
+  dbg_info(DBG_ETHER, "link layer ether recv ok.");
 
   return NET_ERR_OK;
 }
@@ -107,4 +163,74 @@ net_err_t ether_module_init(void) {
   }
 
   dbg_info(DBG_ETHER, "init ether ok.");
+}
+
+/**
+ * @brief 获取以太网广播地址
+ * 广播：FF-FF-FF-FF-FF-FF
+ * 多播(组播)
+ * 单播
+ *
+ *
+ * @return const uint8_t*
+ */
+const uint8_t *ether_broadcast_addr(void) {
+  static const uint8_t broadcast_addr[ETHER_MAC_LEN] = {0xFF, 0xFF, 0xFF,
+                                                        0xFF, 0xFF, 0xFF};
+
+  return broadcast_addr;
+}
+
+/**
+ * @brief 封装以太网帧并发送
+ *
+ * @param netif
+ * @param protocol
+ * @param dest_mac_addr
+ * @param buf
+ * @return net_err_t
+ */
+net_err_t ether_raw_send(netif_t *netif, protocol_type_t protocol,
+                         const uint8_t *dest_mac_addr, pktbuf_t *buf) {
+  net_err_t err = NET_ERR_OK;
+  int total_size = pktbuf_total_size(buf);
+
+  if (total_size < ETHER_DATA_MIN) {
+    dbg_info(DBG_ETHER, "resize ether data from %d to %d.", total_size,
+             ETHER_DATA_MIN);
+
+    // 重新调整数据包大小到以太网数据载荷最小值
+    err = pktbuf_resize(buf, ETHER_DATA_MIN);
+
+    pktbuf_seek(buf, total_size);  // 访问位置移动到补充区域的起始位置
+    pktbuf_fill(buf, 0, ETHER_DATA_MIN - total_size);  // 在补充的区域填充0
+  }
+
+  // 添加以太网包头，确保以太网包头在内存上的连续性
+  err = pktbuf_header_add(buf, sizeof(ether_hdr_t), PKTBUF_ADD_HEADER_CONT);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_ETHER, "add ether header failed.");
+    return err;
+  }
+
+  // 填写以太网包头信息
+  ether_pkt_t *pkt = (ether_pkt_t *)pktbuf_data_ptr(buf);
+  plat_memcpy(pkt->hdr.dest, dest_mac_addr, ETHER_MAC_LEN);  // 目的mac地址
+  plat_memcpy(pkt->hdr.src, netif->hwaddr.addr, ETHER_MAC_LEN);  // 源mac地址
+  pkt->hdr.protocol_type = net_htons(protocol);  // 帧协议类型
+
+  display_ether_pkt("ehter send pkt: ", pkt, pktbuf_total_size(buf));
+
+  if (plat_memcmp(netif->hwaddr.addr, pkt->hdr.dest, ETHER_MAC_LEN) == 0) {
+    // 目的mac地址与本地mac地址相同，直接放入接收队列
+    return netif_recvq_put(netif, buf, -1);
+  } else {
+    // 将数据包放入发送队列
+    err = netif_sendq_put(netif, buf, -1);
+    if (err != NET_ERR_OK) {
+      dbg_warning(DBG_ETHER, "send ether pkt failed.");
+      return err;
+    }
+    return netif->ops->send(netif);  // 通过网卡发送数据包
+  }
 }

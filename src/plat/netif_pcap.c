@@ -154,6 +154,7 @@ static void netif_pcap_close(netif_t *netif) {
 
 /**
  * @brief 使用pcap接口发送数据
+ * pcap接口由发送线程发送数据，不需要在此处发送数据
  *
  * @param netif
  * @param data

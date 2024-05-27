@@ -251,4 +251,9 @@ CMakeFiles/net.dir/src/net/src/ether.c.obj: \
  F:/code/c++code/mini-tcpip/src/net/net/ipaddr.h \
  F:/code/c++code/mini-tcpip/src/net/net/nlist.h \
  F:/code/c++code/mini-tcpip/src/net/net/pktbuf.h \
- F:/code/c++code/mini-tcpip/src/net/net/dbg.h
+ F:/code/c++code/mini-tcpip/src/net/net/dbg.h \
+ F:/code/c++code/mini-tcpip/src/net/net/protocol.h \
+ F:/code/c++code/mini-tcpip/src/net/net/dbg.h \
+ F:/code/c++code/mini-tcpip/src/net/net/netif.h \
+ F:/code/c++code/mini-tcpip/src/net/net/protocol.h \
+ F:/code/c++code/mini-tcpip/src/net/net/tools.h
