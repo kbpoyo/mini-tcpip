@@ -6,8 +6,8 @@
  * 采用的是双向链表，方便结点的删除。
  */
 typedef struct _nlist_node_t {
-  struct _nlist_node_t *next;  // 前驱结点
-  struct _nlist_node_t *pre;   // 后继结点
+  struct _nlist_node_t *next;  // 后继结点
+  struct _nlist_node_t *pre;   // 前驱结点
 } nlist_node_t;
 
 /**
@@ -57,16 +57,16 @@ static inline int nlist_is_empty(nlist_t *list) { return list->count == 0; }
 static inline int nlist_count(nlist_t *list) { return list->count; }
 
 /**
- * 获取指定链表的第一个表项
+ * 获取指定链表的第一个元素
  * @param list 查询的链表
- * @return 第一个表项
+ * @return 第一个元素
  */
 static inline nlist_node_t *nlist_first(nlist_t *list) { return list->first; }
 
 /**
- * 获取指定链接的最后一个表项
+ * 获取指定链接的最后一个元素
  * @param list 查询的链表
- * @return 最后一个表项
+ * @return 最后一个元素
  */
 static inline nlist_node_t *nlist_last(nlist_t *list) { return list->last; }
 
@@ -127,6 +127,7 @@ static inline nlist_node_t *nlist_remove_last(nlist_t *list) {
 }
 
 void nlist_insert_after(nlist_t *list, nlist_node_t *pre, nlist_node_t *node);
+void nlist_insert_before(nlist_t *list, nlist_node_t *next, nlist_node_t *node);
 
 void nlist_join(nlist_t *front, nlist_t *behind);
 

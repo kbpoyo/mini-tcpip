@@ -99,26 +99,26 @@ void nlist_insert_last(nlist_t *list, nlist_node_t *node) {
 
 /**
  * 将Node插入指定结点之后
- * @param 操作的链表
+ * @param list 操作的链表
  * @param pre 前一结点
  * @param node 待插入的结点
  */
 void nlist_insert_after(nlist_t *list, nlist_node_t *pre, nlist_node_t *node) {
   if (list == (nlist_t *)0 || pre == (nlist_node_t *)0 ||
-      node == (nlist_node_t *)0)
-    return;
-
-  // 原链表为空
-  if (nlist_is_empty(list)) {
-    nlist_insert_first(list, node);
+      node == (nlist_node_t *)0) {
     return;
   }
 
-  // node的下一结点，应当为pre的下一结点
-  node->next = pre->next;
-  node->pre = pre;
+  // 原链表为空
+  if (nlist_is_empty(list)) {
+    return;
+  }
 
-  // 先调整后继，再更新自己
+  // 调整node
+  node->pre = pre;
+  node->next = pre->next;
+
+  // 调整pre的后继
   if (pre->next) {
     pre->next->pre = node;
   }
@@ -127,6 +127,43 @@ void nlist_insert_after(nlist_t *list, nlist_node_t *pre, nlist_node_t *node) {
   // 如果pre恰好位于表尾，则新的表尾就需要更新成node
   if (list->last == pre) {
     list->last = node;
+  }
+
+  list->count++;
+}
+
+/**
+ * @brief 将node插入到next之前
+ *
+ * @param list
+ * @param next
+ * @param node
+ */
+void nlist_insert_before(nlist_t *list, nlist_node_t *next,
+                         nlist_node_t *node) {
+  if (list == (nlist_t *)0 || next == (nlist_node_t *)0 ||
+      node == (nlist_node_t *)0) {
+    return;
+  }
+
+  // 原链表为空
+  if (nlist_is_empty(list)) {
+    return;
+  }
+
+  // 调整node
+  node->next = next;
+  node->pre = next->pre;
+
+  // 调整next的前驱
+  if (next->pre) {
+    next->pre->next = node;
+  }
+  next->pre = node;
+
+  // 如果next是表头，则需要调整表头
+  if (list->first == next) {
+    list->first = node;
   }
 
   list->count++;

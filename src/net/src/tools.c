@@ -30,6 +30,11 @@ static int is_litte_endian(void) {
 
 }
 
+/**
+ * @brief 初始化工具函数模块，检查系统字节序
+ * 
+ * @return net_err_t 
+ */
 net_err_t tools_module_init(void) {
   dbg_info(DBG_TOOLS, "init tools module....");
 

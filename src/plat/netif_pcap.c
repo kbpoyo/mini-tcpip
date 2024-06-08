@@ -55,7 +55,7 @@ void recv_thread(void *arg) {
     }
 
     // 数据包拷贝成功，将数据包放入接收队列
-    err = netif_recvq_put(netif, pktbuf, 0);  // 阻塞方式放入接收队列
+    err = netif_recvq_put(netif, pktbuf, -1);  // 非阻塞方式放入接收队列
     if (err != NET_ERR_OK) {                  // 失败，释放pktbuf
       pktbuf_free(pktbuf);
       dbg_warning(DBG_NETIF, "packet loss: netif recvq put failed!");
@@ -89,6 +89,7 @@ void send_thread(void *arg) {
       continue;
     }
 
+    pktbuf_acc_reset(buf);
     int total_size = pktbuf_total_size(buf);  // 获取数据包的总长度
     pktbuf_read(buf, send_buf, total_size);  // 读取数据包内容
 

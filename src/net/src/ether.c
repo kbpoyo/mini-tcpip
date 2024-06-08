@@ -76,7 +76,7 @@ static net_err_t ether_pkt_check(ether_pkt_t *pkt, int total_size) {
   //! 可能小于46B，所以这里只判断以太网帧的大小是否小于MAC包头的大小，
   //! 不对有效载荷大小进行判断
   if (total_size < sizeof(ether_hdr_t)) {  // 以太网帧大小小于最小值
-    dbg_warning(DBG_ETHER, "ether pkt size is too small.");
+    dbg_warning(DBG_ETHER, "ether pkt size less than ether header size.");
     return NET_ERR_SIZE;
   }
   return NET_ERR_OK;

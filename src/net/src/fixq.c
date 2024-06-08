@@ -27,7 +27,7 @@ net_err_t fixq_init(fixq_t *q, void **buf, int size,
   q->size = size;
   q->in = q->out = q->cnt = 0;
   q->buf = buf;
-  q->recv_sem = q->send_sem = SYS_SEM_INVALID;
+  q->get_sem = q->put_sem = SYS_SEM_INVALID;
 
   // 初始化锁
   net_err_t err = nlocker_init(&q->locker, locker_type);
@@ -36,17 +36,17 @@ net_err_t fixq_init(fixq_t *q, void **buf, int size,
     return err;
   }
 
-  // 初始化接收信号量
-  q->recv_sem = sys_sem_create(0);
-  if (q->recv_sem == SYS_SEM_INVALID) {
-    dbg_error(DBG_FIXQ, "recv_sem init failed.");
+  // 初始化接get信号量
+  q->get_sem = sys_sem_create(0);
+  if (q->get_sem == SYS_SEM_INVALID) {
+    dbg_error(DBG_FIXQ, "get_sem init failed.");
     goto init_failed;
   }
 
-  // 初始化发送信号量
-  q->send_sem = sys_sem_create(size);
-  if (q->send_sem == SYS_SEM_INVALID) {
-    dbg_error(DBG_FIXQ, "send_sem init failed.");
+  // 初始化put信号量
+  q->put_sem = sys_sem_create(size);
+  if (q->put_sem == SYS_SEM_INVALID) {
+    dbg_error(DBG_FIXQ, "put_sem init failed.");
     goto init_failed;
   }
 
@@ -55,24 +55,24 @@ net_err_t fixq_init(fixq_t *q, void **buf, int size,
 init_failed:
   nlocker_destroy(&(q->locker));
 
-  if (q->recv_sem != SYS_SEM_INVALID) {
-    sys_sem_free(q->recv_sem);
+  if (q->get_sem != SYS_SEM_INVALID) {
+    sys_sem_free(q->get_sem);
   }
-  if (q->send_sem != SYS_SEM_INVALID) {
-    sys_sem_free(q->send_sem);
+  if (q->put_sem != SYS_SEM_INVALID) {
+    sys_sem_free(q->put_sem);
   }
   return NET_ERR_SYS;
 }
 
 /**
- * @brief 向队列发送数据
+ * @brief 向队列中放入数据
  *
  * @param q
  * @param msg
  * @param tmo_ms 等待时间
  * @return net_err_t
  */
-net_err_t fixq_send(fixq_t *q, void *msg, int tmo_ms) {
+net_err_t fixq_put(fixq_t *q, void *msg, int tmo_ms) {
   nlocker_lock(&q->locker);
 
   if (tmo_ms < 0 && q->cnt >= q->size) {  // 队列已满，且不进行等待
@@ -82,7 +82,7 @@ net_err_t fixq_send(fixq_t *q, void *msg, int tmo_ms) {
   nlocker_unlock(&q->locker);
 
   // 等待队列中有空闲位置
-  if (sys_sem_wait(q->send_sem, tmo_ms) < 0) {
+  if (sys_sem_wait(q->put_sem, tmo_ms) < 0) {
     return NET_ERR_TIMEOUT;
   }
 
@@ -94,19 +94,19 @@ net_err_t fixq_send(fixq_t *q, void *msg, int tmo_ms) {
   nlocker_unlock(&q->locker);
 
   // 通知接收线程
-  sys_sem_notify(q->recv_sem);
+  sys_sem_notify(q->get_sem);
 
   return NET_ERR_OK;
 }
 
 /**
- * @brief 从队列接收数据
+ * @brief 从队列中取出数据
  *
  * @param q
  * @param ms
  * @return void*
  */
-void *fixq_recv(fixq_t *q, int tmo_ms) {
+void *fixq_get(fixq_t *q, int tmo_ms) {
   nlocker_lock(&q->locker);
 
   if (q->cnt == 0 && tmo_ms < 0) {  // 队列为空，且不进行等待
@@ -116,7 +116,7 @@ void *fixq_recv(fixq_t *q, int tmo_ms) {
   nlocker_unlock(&q->locker);
 
   // 等待队列中有数据
-  if (sys_sem_wait(q->recv_sem, tmo_ms) < 0) {
+  if (sys_sem_wait(q->get_sem, tmo_ms) < 0) {
     return (void *)0;
   }
 
@@ -128,7 +128,7 @@ void *fixq_recv(fixq_t *q, int tmo_ms) {
   nlocker_unlock(&q->locker);
 
   // 通知发送线程
-  sys_sem_notify(q->send_sem);
+  sys_sem_notify(q->put_sem);
 
   return msg;
 }
@@ -153,6 +153,6 @@ int fixq_count(fixq_t *q) {
  */
 void fixq_destroy(fixq_t *q) {
   nlocker_destroy(&q->locker);
-  sys_sem_free(q->recv_sem);
-  sys_sem_free(q->send_sem);
+  sys_sem_free(q->get_sem);
+  sys_sem_free(q->put_sem);
 }

@@ -98,7 +98,7 @@ net_err_t exmsg_netif_recv(netif_t *netif) {
   msg->type = EXMSG_NETIF_RECV;  // 设置消息类型为接收到数据包
   msg->msg_netif.netif = netif;  // 设置要传递的消息数据(接收到数据包的网络接口)
 
-  net_err_t err = fixq_send(&msg_queue, msg, -1);
+  net_err_t err = fixq_put(&msg_queue, msg, -1);
   if (err != NET_ERR_OK) {
     dbg_error(DBG_EXMSG, "msg queue send failed.");
     exmsg_free(msg);
@@ -154,7 +154,7 @@ static void exmsg_work_thread(void *arg) {
 
   while (1) {
     // 以阻塞方式从消息队列中接收消息
-    exmsg_t *msg = (exmsg_t *)fixq_recv(&msg_queue, 0);
+    exmsg_t *msg = (exmsg_t *)fixq_get(&msg_queue, 0);
     if (!msg) {
       dbg_warning(DBG_EXMSG, "no msg.");
       continue;

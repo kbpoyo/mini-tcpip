@@ -58,15 +58,21 @@ void timer3_handle(net_timer_t *timer, void *arg) {
   static int count3 = 1;
   dbg_info(DBG_TIMER, "thist is %s: %d\n", timer->name, count3++);
 }
+void timer4_handle(net_timer_t *timer, void *arg) {
+  static int count4 = 1;
+  dbg_info(DBG_TIMER, "thist is %s: %d\n", timer->name, count4++);
+}
+
 
 void timer_test() {
-  static net_timer_t t0, t1, t2, t3;
+  static net_timer_t t0, t1, t2, t3, t4;
 
   net_timer_add(&t0, "t0", timer0_handle, 0, 200, 0);
 
-  net_timer_add(&t1, "t1", timer1_handle, 0, 1000, NET_TIMER_RELOAD);
+  net_timer_add(&t1, "t1", timer1_handle, 0, 4000, NET_TIMER_RELOAD);
   net_timer_add(&t2, "t2", timer2_handle, 0, 1000, NET_TIMER_RELOAD);
-  net_timer_add(&t3, "t3", timer3_handle, 0, 4000, NET_TIMER_RELOAD);
+  net_timer_add(&t3, "t3", timer3_handle, 0, 200, NET_TIMER_RELOAD);
+  net_timer_add(&t4, "t4", timer4_handle, 0, 5000, NET_TIMER_RELOAD);
 }
 
 

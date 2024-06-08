@@ -103,12 +103,6 @@ net_err_t loop_module_init(void) {
     pktbuf_t *buf = pktbuf_alloc(100);
     netif_send(netif, 0, buf);
 
-
-
-
-
-
-
     dbg_info(DBG_LOOP, "init loop module ok.");
 
     return NET_ERR_OK;

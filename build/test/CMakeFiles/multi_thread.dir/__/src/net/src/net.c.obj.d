@@ -2,23 +2,29 @@ test/CMakeFiles/multi_thread.dir/__/src/net/src/net.c.obj: \
  F:\code\c++code\mini-tcpip\src\net\src\net.c \
  F:/code/c++code/mini-tcpip/src/net/net/net.h \
  F:/code/c++code/mini-tcpip/src/net/net/net_err.h \
- F:/code/c++code/mini-tcpip/src/net/net/net_err.h \
- F:/code/c++code/mini-tcpip/src/net/net/exmsg.h \
- F:/code/c++code/mini-tcpip/src/net/net/netif.h \
- F:/code/c++code/mini-tcpip/src/net/net/fixq.h \
- F:/code/c++code/mini-tcpip/src/net/net/nlocker.h \
- F:/code/c++code/mini-tcpip/src/net/net/net_sys.h \
+ F:/code/c++code/mini-tcpip/src/net/net/dbg.h \
  F:/code/c++code/mini-tcpip/src/net/net/net_cfg.h \
- F:/code/c++code/mini-tcpip/src/plat/net_plat.h \
- F:/code/c++code/mini-tcpip/src/plat/sys_plat.h \
- F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/stdio.h \
- F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/corecrt_stdio_config.h \
+ F:/code/c++code/mini-tcpip/src/net/net/ether.h \
+ F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stdint.h \
+ F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/stdint.h \
+ F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/crtdefs.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/corecrt.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/_mingw.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/_mingw_mac.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/_mingw_secapi.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/vadefs.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h \
+ F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stddef.h \
+ F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/stddef.h \
+ F:/code/c++code/mini-tcpip/src/net/net/netif.h \
+ F:/code/c++code/mini-tcpip/src/net/net/fixq.h \
+ F:/code/c++code/mini-tcpip/src/net/net/nlocker.h \
+ F:/code/c++code/mini-tcpip/src/net/net/net_sys.h \
+ F:/code/c++code/mini-tcpip/src/plat/net_plat.h \
+ F:/code/c++code/mini-tcpip/src/net/net/net_err.h \
+ F:/code/c++code/mini-tcpip/src/plat/sys_plat.h \
+ F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/stdio.h \
+ F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/corecrt_stdio_config.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/_mingw_off_t.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/swprintf.inl \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/sec_api/stdio_s.h \
@@ -27,15 +33,10 @@ test/CMakeFiles/multi_thread.dir/__/src/net/src/net.c.obj: \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/limits.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/syslimits.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/limits.h \
- F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/crtdefs.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/sec_api/stdlib_s.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/malloc.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/mm_malloc.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/errno.h \
- F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stdint.h \
- F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/stdint.h \
- F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stddef.h \
- F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/stddef.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/time.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/sys/timeb.h \
  F:/software/work_space/Toolbox\ _APP/CLion\ Nova/bin/mingw/x86_64-w64-mingw32/include/sec_api/sys/timeb_s.h \
@@ -253,12 +254,11 @@ test/CMakeFiles/multi_thread.dir/__/src/net/src/net.c.obj: \
  F:/code/c++code/mini-tcpip/src/net/net/nlist.h \
  F:/code/c++code/mini-tcpip/src/net/net/pktbuf.h \
  F:/code/c++code/mini-tcpip/src/net/net/dbg.h \
- F:/code/c++code/mini-tcpip/src/net/net/net_sys.h \
- F:/code/c++code/mini-tcpip/src/net/net/pktbuf.h \
- F:/code/c++code/mini-tcpip/src/net/net/dbg.h \
- F:/code/c++code/mini-tcpip/src/net/net/netif.h \
- F:/code/c++code/mini-tcpip/src/net/net/loop.h \
- F:/code/c++code/mini-tcpip/src/net/net/ether.h \
  F:/code/c++code/mini-tcpip/src/net/net/protocol.h \
- F:/code/c++code/mini-tcpip/src/net/net/tools.h \
- F:/code/c++code/mini-tcpip/src/net/net/timer.h
+ F:/code/c++code/mini-tcpip/src/net/net/exmsg.h \
+ F:/code/c++code/mini-tcpip/src/net/net/loop.h \
+ F:/code/c++code/mini-tcpip/src/net/net/net_sys.h \
+ F:/code/c++code/mini-tcpip/src/net/net/netif.h \
+ F:/code/c++code/mini-tcpip/src/net/net/pktbuf.h \
+ F:/code/c++code/mini-tcpip/src/net/net/timer.h \
+ F:/code/c++code/mini-tcpip/src/net/net/tools.h

@@ -22,15 +22,15 @@ typedef struct _fixq_t {
     void **buf; // 定长队列数据缓冲区
 
     nlocker_t locker; // 锁
-    sys_sem_t recv_sem; // 接收线程信号量
-    sys_sem_t send_sem; // 发送线程信号量
+    sys_sem_t get_sem; // 队列可被获取的有效单元信号量
+    sys_sem_t put_sem; // 队列可被放入的空闲单元信号量
 
 } fixq_t;
 
 
 net_err_t fixq_init(fixq_t *q, void **buf, int size, nlocker_type_t locker_type);
-net_err_t fixq_send(fixq_t *q, void *msg, int ms);
-void *fixq_recv(fixq_t *q, int tmo_ms);
+net_err_t fixq_put(fixq_t *q, void *msg, int ms);
+void *fixq_get(fixq_t *q, int tmo_ms);
 void fixq_destroy(fixq_t *q);
 int fixq_count(fixq_t *q);
 

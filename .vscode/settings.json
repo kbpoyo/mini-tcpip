@@ -24,7 +24,8 @@
         "ipaddr.h": "c",
         "netif.h": "c",
         "tools.h": "c",
-        "protocol.h": "c"
+        "protocol.h": "c",
+        "ether.h": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [

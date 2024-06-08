@@ -82,7 +82,7 @@ net_err_t netif_module_init(void) {
   // 设置默认网络接口为空
   netif_default = (netif_t *)0;
 
-  // 初始化协议栈支持的链路层的回调接口指针
+  // 清理协议栈支持的链路层的回调接口指针数组
   plat_memset(link_layers, 0, sizeof(link_layers));
 
   dbg_info(DBG_NETIF, "init netif module ok.");
@@ -91,9 +91,8 @@ net_err_t netif_module_init(void) {
 }
 
 /**
- * @brief 注册链路层的回调接口
- *
- * @param type
+ * @brief 注册链路层的回调接口，
+ *        设置link_layers[layer->type] = layer
  * @param layer
  * @return net_err_t
  */
@@ -125,7 +124,9 @@ net_err_t netif_layer_register(const link_layer_t *layer) {
 /**
  * @brief 打开一个网络接口
  *
- * @param dev_name
+ * @param dev_name 设备名称
+ * @param ops 该网络接口的特化操作方法集合的指针
+ * @param ops_data  该网络接口的特化操作方法需要的数据
  * @return netif_t*
  */
 netif_t *netif_open(const char *dev_name, const netif_ops_t *ops,
@@ -156,14 +157,14 @@ netif_t *netif_open(const char *dev_name, const netif_ops_t *ops,
       fixq_init(&(netif->recv_fixq), netif->recv_buf, NETIF_RECV_BUFSIZE,
                 NLOCKER_THREAD);  // 初始化接收缓冲队列
   if (err != NET_ERR_OK) {
-    dbg_error(DBG_NETIF, "recv_fixq failed.\n");
+    dbg_error(DBG_NETIF, "init recv_fixq failed.\n");
     goto init_failed;
   }
 
   err = fixq_init(&(netif->send_fixq), netif->send_buf, NETIF_SEND_BUFSIZE,
                   NLOCKER_THREAD);  // 初始化发送缓冲队列
   if (err != NET_ERR_OK) {
-    dbg_error(DBG_NETIF, "send_fixq failed.");
+    dbg_error(DBG_NETIF, "init send_fixq failed.");
     fixq_destroy(&(netif->recv_fixq));  // 销毁接收缓冲队列
     goto init_failed;
   }
@@ -194,8 +195,8 @@ netif_t *netif_open(const char *dev_name, const netif_ops_t *ops,
 
   return netif;
 
-init_failed:
-  mblock_free(&netif_mblock, netif);  // 释放网络接口对象
+init_failed: // 初始化失败，释放网络接口对象
+  mblock_free(&netif_mblock, netif); 
   return (netif_t *)0;
 }
 
@@ -212,7 +213,7 @@ net_err_t netif_close(netif_t *netif) {
 
   // 若网络接口为激活状态，则不能关闭
   if (netif->state == NETIF_STATE_ACVTIVE) {
-    dbg_error(DBG_NETIF, "netif is active.");
+    dbg_error(DBG_NETIF, "netif close error, it is active.");
     return NET_ERR_STATE;
   }
 
@@ -263,7 +264,7 @@ net_err_t netif_set_hwaddr(netif_t *netif, const uint8_t *hwaddr,
     return NET_ERR_PARAM;
   }
 
-  plat_memcpy(&(netif->hwaddr), hwaddr, len);
+  plat_memcpy(&(netif->hwaddr.addr), hwaddr, len);
   netif->hwaddr.valid_len = len;
 
   return NET_ERR_OK;
@@ -277,7 +278,7 @@ net_err_t netif_set_hwaddr(netif_t *netif, const uint8_t *hwaddr,
  */
 net_err_t netif_set_acticve(netif_t *netif) {
   if (netif->state != NETIF_STATE_OPENED) {
-    dbg_error(DBG_NETIF, "netif is not opened.\n");
+    dbg_error(DBG_NETIF, "netif %s set active error: it not opened.\n", netif->name);
     return NET_ERR_STATE;
   }
 
@@ -292,7 +293,7 @@ net_err_t netif_set_acticve(netif_t *netif) {
   if (netif->link_layer) {
     net_err_t err = netif->link_layer->open(netif);
     if (err != NET_ERR_OK) {
-      dbg_error(DBG_NETIF, "link layer open failed.\n");
+      dbg_error(DBG_NETIF, "netif %s set active error: link layer open failed.\n", netif->name);
       return err;
     }
   }
@@ -309,18 +310,18 @@ net_err_t netif_set_acticve(netif_t *netif) {
  */
 net_err_t netif_set_inactive(netif_t *netif) {
   if (netif->state != NETIF_STATE_ACVTIVE) {
-    dbg_error(DBG_NETIF, "netif is not active.\n");
+    dbg_error(DBG_NETIF, "netif %s set inactive error: it not active.\n", netif->name);
     return NET_ERR_STATE;
   }
 
   void *pkt = 0;
   // 释放接收队列中的数据包
-  while ((pkt = fixq_recv(&(netif->recv_fixq), -1)) != (void *)0) {
+  while ((pkt = fixq_get(&(netif->recv_fixq), -1)) != (void *)0) {
     pktbuf_free(pkt);
   }
 
   // 释放发送队列中的数据包
-  while ((pkt = fixq_recv(&(netif->send_fixq), -1)) != (void *)0) {
+  while ((pkt = fixq_get(&(netif->send_fixq), -1)) != (void *)0) {
     pktbuf_free(pkt);
   }
 
@@ -349,17 +350,17 @@ net_err_t netif_set_inactive(netif_t *netif) {
 void netif_set_default(netif_t *netif) { netif_default = netif; }
 
 /**
- * @brief 向接收队列中放入数据包
+ * @brief 向接网络接口的接收队列中放入数据包
  *
  * @param netif
- * @param buf
- * @param tmo
+ * @param buf 数据包
+ * @param tmo 超时时间
  * @return net_err_t
  */
 net_err_t netif_recvq_put(netif_t *netif, pktbuf_t *buf, int tmo) {
-  net_err_t err = fixq_send(&(netif->recv_fixq), (void *)buf, tmo);
+  net_err_t err = fixq_put(&(netif->recv_fixq), (void *)buf, tmo);
   if (err < 0) {
-    dbg_warning(DBG_NETIF, "netif recv queue full.");
+    dbg_warning(DBG_NETIF, "netif %s pktbuf put error: recv queue is full.", netif->name);
     return NET_ERR_FULL;
   }
 
@@ -374,35 +375,34 @@ net_err_t netif_recvq_put(netif_t *netif, pktbuf_t *buf, int tmo) {
   return NET_ERR_OK;
 }
 /**
- * @brief 从接收队列中获取数据包
+ * @brief 从网络接口的接收队列中获取数据包
  *
  * @param netif
- * @param tmo
+ * @param tmo 超时时间
  * @return pktbuf_t*
  */
 pktbuf_t *netif_recvq_get(netif_t *netif, int tmo) {
-  pktbuf_t *buf = (pktbuf_t *)fixq_recv(&(netif->recv_fixq), tmo);
+  pktbuf_t *buf = (pktbuf_t *)fixq_get(&(netif->recv_fixq), tmo);
 
   if (buf == (pktbuf_t *)0) {  // 接收队列为空
     return (pktbuf_t *)0;
   }
 
-  pktbuf_acc_reset(buf);  // 重置数据包的访问位置
   return buf;
 }
 
 /**
- * @brief 向发送队列中放入数据包
+ * @brief 向发网络接口的发送队列中放入数据包
  *
  * @param netif
- * @param buf
+ * @param buf 数据包
  * @param tmo
  * @return net_err_t
  */
 net_err_t netif_sendq_put(netif_t *netif, pktbuf_t *buf, int tmo) {
-  net_err_t err = fixq_send(&(netif->send_fixq), (void *)buf, tmo);
+  net_err_t err = fixq_put(&(netif->send_fixq), (void *)buf, tmo);
   if (err < 0) {
-    dbg_warning(DBG_NETIF, "netif send queue full.");
+    dbg_warning(DBG_NETIF, "netif %s put buf into send_queue error: send queue is full.", netif->name);
     return NET_ERR_FULL;
   }
 
@@ -417,14 +417,12 @@ net_err_t netif_sendq_put(netif_t *netif, pktbuf_t *buf, int tmo) {
  * @return pktbuf_t*
  */
 pktbuf_t *netif_sendq_get(netif_t *netif, int tmo) {
-  pktbuf_t *buf = (pktbuf_t *)fixq_recv(&(netif->send_fixq), tmo);
+  pktbuf_t *buf = (pktbuf_t *)fixq_get(&(netif->send_fixq), tmo);
 
   if (buf == (pktbuf_t *)0) {  // 接收队列为空
-    dbg_info(DBG_NETIF, "netif send queue empty.\n");
-    return (pktbuf_t *)0;
+    dbg_warning(DBG_NETIF, "netif %s send_queue get buf error: send queue is empty.", netif->name);
   }
 
-  pktbuf_acc_reset(buf);  // 重置数据包的访问位置
   return buf;
 }
 
@@ -445,16 +443,18 @@ net_err_t netif_send(netif_t *netif, ipaddr_t *ipaddr, pktbuf_t *buf) {
     // netif->link_layer->send(netif, ipaddr, buf);
     err = ether_raw_send(netif, NET_PROTOCOL_ARP, ether_broadcast_addr(), buf);  //TODO: 链路层测试发送
     if (err != NET_ERR_OK) {
-      dbg_warning(DBG_NETIF, "link layer send failed.");
+      dbg_warning(DBG_NETIF, "netif %s send buf error: link layer send failed.", netif->name);
     }
 
   } else {
     // 将数据包放到发送队列中
     err = netif_sendq_put(netif, buf, -1);
     if (err != NET_ERR_OK) {
-      dbg_warning(DBG_NETIF, "pktbuf send failed.\n");
+      dbg_warning(DBG_NETIF, "netif %s send buf error: put buf into send_queue failed.", netif->name);
     }
-    // 调用网络接口特定的操作方法发送数据包
+
+
+    // 数据包处理完毕，调用网络接口特定的操作方法发送数据包
     err = netif->ops->send(netif);
   }
 
