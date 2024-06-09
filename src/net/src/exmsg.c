@@ -16,6 +16,7 @@
 #include "mblock.h"
 #include "net_sys.h"
 #include "netif.h"
+#include "timer.h"
 
 static void *msg_tbl[EXMSG_MSG_CNT];  // 消息队列缓冲区，存放消息指针
 static fixq_t msg_queue;              // 消息队列
@@ -138,39 +139,46 @@ static void exmsg_handle_netif_recv(exmsg_t *msg) {
         dbg_warning(DBG_EXMSG, "loss packet: link layer recv failed.");
         pktbuf_free(buf);  // 释放数据包
       }
-    } else {  // TODO: 暂时没有其它协议层的处理
+    } else {             // TODO: 暂时没有其它协议层的处理
       pktbuf_free(buf);  // 释放数据包
     }
   }
 }
 
 /**
- * @brief 消息队列模块的工作线程，用于处理消息
+ * @brief 消息队列模块的工作线程，用于处理消息事件和定时器事件
  *
  * @param arg
  */
 static void exmsg_work_thread(void *arg) {
   dbg_info(DBG_EXMSG, "exmsg work thread is running....");
 
+  // 获取系统当前时间
+  net_time_t sys_time;
+  sys_time_curr(&sys_time);
+
   while (1) {
-    // 以阻塞方式从消息队列中接收消息
-    exmsg_t *msg = (exmsg_t *)fixq_get(&msg_queue, 0);
-    if (!msg) {
+    // 以阻塞方式从消息队列中接收消息, 并设置超时时间为当前最先到期的定时器时间
+    exmsg_t *msg = (exmsg_t *)fixq_get(&msg_queue, net_timer_first_tmo());
+    if (msg) {                  // 有消息
+      switch (msg->type) {      // 根据消息类型处理消息
+        case EXMSG_NETIF_RECV:  // 网络接口接收到数据包
+          exmsg_handle_netif_recv(msg);
+          break;
+        default:
+          dbg_warning(DBG_EXMSG, "unknown msg type.");
+          break;
+      }
+
+      // TODO：当前线程已处理完消息，需要释放消息结构
+      exmsg_free(msg);
+    } else {  // 没有消息
       dbg_warning(DBG_EXMSG, "no msg.");
-      continue;
     }
 
-    switch (msg->type) {
-      case EXMSG_NETIF_RECV:
-        exmsg_handle_netif_recv(msg);
-        break;
-      default:
-        dbg_warning(DBG_EXMSG, "unknown msg type.");
-        break;
-    }
-
-    // TODO：当前线程已处理完消息，需要释放消息结构
-    exmsg_free(msg);
+    // 获取本次消息处理耗时, 并扫描定时器
+    int diff_ms = sys_time_goes(&sys_time);
+    net_timer_check_tmo(diff_ms);
   }
 }
 

@@ -19,7 +19,10 @@
 #include "nlist.h"
 
 #define TIMER_NAME_SIZE 32         // 定时器名字长度
+
+// 定时器属性标志位宏
 #define NET_TIMER_RELOAD (1 << 0)  // 重复定时器
+#define NET_TIMER_ACTIVE (1 << 1)  // 定时器激活
 
 struct _net_timer_t;
 
@@ -44,5 +47,9 @@ typedef struct _net_timer_t {
 net_err_t net_timer_module_init(void);
 
 net_err_t net_timer_add(net_timer_t *timer, const char *name, timer_handle_t handle, void *arg, int ms, int flags);
+void net_timer_remove(net_timer_t *timer);
+
+net_err_t net_timer_check_tmo(int diff_ms);
+int net_timer_first_tmo(void);
 
 #endif  // TIMER_H

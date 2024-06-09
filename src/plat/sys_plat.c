@@ -174,8 +174,7 @@ void sys_time_curr (net_time_t * time) {
 }
 
 /**
- * @brief 返回当前时间与传入的time之间时间差值, 调用完成之后，time被更新为当前时间
- * 
+ * @brief 返回系统当前时间与传入的时间pre之间的差值(ms), 调用完成之后，pre被更新为当前时间。
  * 第一次调用时，返回的时间差值无效
  */
 int sys_time_goes (net_time_t * pre) {

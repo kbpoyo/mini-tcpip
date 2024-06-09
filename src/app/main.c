@@ -44,35 +44,41 @@ net_err_t netdev_init(void) {
 
 void timer0_handle(net_timer_t *timer, void *arg) {
   static int count0 = 1;
-  dbg_info(DBG_TIMER, "thist is %s: %d\n", timer->name, count0++);
+  plat_printf("thist is %s: %d\n", timer->name, count0++);
 }
 void timer1_handle(net_timer_t *timer, void *arg) {
   static int count1 = 1;
-  dbg_info(DBG_TIMER, "thist is %s: %d\n", timer->name, count1++);
+  plat_printf("thist is %s: %d\n", timer->name, count1++);
 }
 void timer2_handle(net_timer_t *timer, void *arg) {
   static int count2 = 1;
-  dbg_info(DBG_TIMER, "thist is %s: %d\n", timer->name, count2++);
+  plat_printf("thist is %s: %d\n", timer->name, count2++);
 }
 void timer3_handle(net_timer_t *timer, void *arg) {
   static int count3 = 1;
-  dbg_info(DBG_TIMER, "thist is %s: %d\n", timer->name, count3++);
+  plat_printf("thist is %s: %d\n", timer->name, count3++);
 }
 void timer4_handle(net_timer_t *timer, void *arg) {
   static int count4 = 1;
-  dbg_info(DBG_TIMER, "thist is %s: %d\n", timer->name, count4++);
+  plat_printf("thist is %s: %d\n", timer->name, count4++);
 }
 
 
 void timer_test() {
   static net_timer_t t0, t1, t2, t3, t4;
 
-  net_timer_add(&t0, "t0", timer0_handle, 0, 200, 0);
+  net_timer_add(&t0, "t0", timer0_handle, 0, 1000, NET_TIMER_ACTIVE);
 
-  net_timer_add(&t1, "t1", timer1_handle, 0, 4000, NET_TIMER_RELOAD);
-  net_timer_add(&t2, "t2", timer2_handle, 0, 1000, NET_TIMER_RELOAD);
-  net_timer_add(&t3, "t3", timer3_handle, 0, 200, NET_TIMER_RELOAD);
-  net_timer_add(&t4, "t4", timer4_handle, 0, 5000, NET_TIMER_RELOAD);
+  net_timer_add(&t1, "t1", timer1_handle, 0, 1000, NET_TIMER_RELOAD | NET_TIMER_ACTIVE);
+  net_timer_add(&t2, "t2", timer2_handle, 0, 2000, NET_TIMER_RELOAD | NET_TIMER_ACTIVE);
+  net_timer_add(&t3, "t3", timer3_handle, 0, 3000, NET_TIMER_RELOAD | NET_TIMER_ACTIVE);
+  net_timer_add(&t4, "t4", timer4_handle, 0, 4000, NET_TIMER_RELOAD | NET_TIMER_ACTIVE);
+
+  // net_timer_remove(&t0);
+
+  // net_timer_check_tmo(100);
+  // net_timer_check_tmo(1200);
+  // net_timer_check_tmo(6000);
 }
 
 

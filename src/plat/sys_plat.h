@@ -152,6 +152,11 @@ pcap_t * pcap_device_open(const char* ip, const uint8_t* mac_addr);
     #error "Unkonw platform"
 #endif // Unix/Linux
 
+// 时间相关: 由具体平台实现
+void sys_time_curr (net_time_t * time);
+int sys_time_goes (net_time_t * pre);
+
+// 信号量：由具体平台实现
 sys_sem_t sys_sem_create(int init_count);
 void sys_sem_free(sys_sem_t sem);
 int sys_sem_wait(sys_sem_t sem, uint32_t ms);
