@@ -327,6 +327,30 @@ src/app/main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/main.c.s
 .PHONY : src/app/main.c.s
 
+src/net/src/arp.obj: src/net/src/arp.c.obj
+.PHONY : src/net/src/arp.obj
+
+# target to build an object file
+src/net/src/arp.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/arp.c.obj
+.PHONY : src/net/src/arp.c.obj
+
+src/net/src/arp.i: src/net/src/arp.c.i
+.PHONY : src/net/src/arp.i
+
+# target to preprocess a source file
+src/net/src/arp.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/arp.c.i
+.PHONY : src/net/src/arp.c.i
+
+src/net/src/arp.s: src/net/src/arp.c.s
+.PHONY : src/net/src/arp.s
+
+# target to generate assembly for a file
+src/net/src/arp.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/arp.c.s
+.PHONY : src/net/src/arp.c.s
+
 src/net/src/dbg.obj: src/net/src/dbg.c.obj
 .PHONY : src/net/src/dbg.obj
 
@@ -763,6 +787,9 @@ help:
 	@echo ... src/app/main.obj
 	@echo ... src/app/main.i
 	@echo ... src/app/main.s
+	@echo ... src/net/src/arp.obj
+	@echo ... src/net/src/arp.i
+	@echo ... src/net/src/arp.s
 	@echo ... src/net/src/dbg.obj
 	@echo ... src/net/src/dbg.i
 	@echo ... src/net/src/dbg.s

@@ -15,16 +15,16 @@
 #include <stdint.h>
 #include "net_err.h"
 
-#define IPADDR_SIZE 4  // ip地址长度
+#define IPV4_ADDR_SIZE 4  // ip地址长度
 
 typedef struct _ipaddr_t {
   enum {
     IPADDR_V4 = 0,  // ipv4地址
   } type;           // ip地址类型
 
-  union {
+  union { // ipv4地址
     uint32_t addr;                    // ip地址
-    uint8_t addr_bytes[IPADDR_SIZE];  // ip地址字节
+    uint8_t addr_bytes[IPV4_ADDR_SIZE];  // ip地址字节
   };
 
 } ipaddr_t;
@@ -34,5 +34,6 @@ void ipaddr_set_any(ipaddr_t *ipaddr);
 net_err_t ipaddr_from_str(ipaddr_t *dest, const char *src);
 void ipaddr_copy(ipaddr_t *dest, const ipaddr_t *src);
 ipaddr_t *ipaddr_get_any(void);
+int ipaddr_is_equal(const ipaddr_t *ip1, const ipaddr_t *ip2);
 
 #endif  // IPADDR_H

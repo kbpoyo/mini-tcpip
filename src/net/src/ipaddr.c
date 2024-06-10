@@ -83,3 +83,14 @@ ipaddr_t *ipaddr_get_any(void) {
 
     return (ipaddr_t *)&ipaddr_any;
 }
+
+/**
+ * @brief 判断ip1和ip2是否相等
+ * 
+ * @param ip1 
+ * @param ip2 
+ * @return int 
+ */
+int ipaddr_is_equal(const ipaddr_t *ip1, const ipaddr_t *ip2) {
+  return ip1->addr == ip2->addr;
+}

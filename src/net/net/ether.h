@@ -18,7 +18,7 @@
 #include "netif.h"
 #include "protocol.h"
 
-#define ETHER_MAC_LEN 6  // mac地址长度
+#define ETHER_MAC_SIZE 6  // mac地址长度
 #define ETHER_MTU 1500   // 以太网最大传输单元
 #define ETHER_DATA_MIN  46  // 以太网最小数据长度
 
@@ -28,8 +28,8 @@
  * @brief 以太网帧头部结构
  */
 typedef struct _ether_hdr_t {
-  uint8_t dest[ETHER_MAC_LEN];  // 目的mac地址
-  uint8_t src[ETHER_MAC_LEN];   // 源mac地址
+  uint8_t dest[ETHER_MAC_SIZE];  // 目的mac地址
+  uint8_t src[ETHER_MAC_SIZE];   // 源mac地址
   uint16_t protocol_type;       // 帧协议类型
 } ether_hdr_t;
 

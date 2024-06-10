@@ -26,7 +26,8 @@
         "tools.h": "c",
         "protocol.h": "c",
         "ether.h": "c",
-        "fixq.h": "c"
+        "fixq.h": "c",
+        "arp.h": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [

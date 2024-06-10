@@ -11,8 +11,10 @@
 
 #include "ether.h"
 
+#include "arp.h"
 #include "dbg.h"
 #include "netif.h"
+#include "pktbuf.h"
 #include "protocol.h"
 #include "tools.h"
 
@@ -28,11 +30,11 @@
 static void display_ether_pkt(char *msg, ether_pkt_t *pkt, int total_size) {
   // 获取以太网帧头部
   ether_hdr_t *hdr = &(pkt->hdr);
-  plat_printf("--------------- %s ----------------\n", msg);
-  plat_printf("\tlen: %d bytes", total_size);
+  plat_printf("------------------------------ %s -----------------------------\n", msg);
+  plat_printf("len: %d bytes", total_size);
 
-  netif_dum_hwaddr("\tdest: ", hdr->dest, ETHER_MAC_LEN);
-  netif_dum_hwaddr("\tsrc: ", hdr->src, ETHER_MAC_LEN);
+  netif_dum_hwaddr("\tdest: ", hdr->dest, ETHER_MAC_SIZE);
+  netif_dum_hwaddr("\tsrc: ", hdr->src, ETHER_MAC_SIZE);
 
   uint16_t protocol_type = net_ntohs(hdr->protocol_type);
   plat_printf(
@@ -50,6 +52,8 @@ static void display_ether_pkt(char *msg, ether_pkt_t *pkt, int total_size) {
       plat_printf("\tunknown\n");
       break;
   }
+
+  plat_printf("-----------------------------------------------------------------------\n");
 }
 
 #else
@@ -84,11 +88,13 @@ static net_err_t ether_pkt_check(ether_pkt_t *pkt, int total_size) {
 
 /**
  * @brief 进行以太网协议层相关的初始化
- *
  * @param netif
  * @return net_err_t
  */
-static net_err_t ether_open(netif_t *netif) { return NET_ERR_OK; }
+static net_err_t ether_open(netif_t *netif) {
+  // 发送免费ARP请求
+  return arp_make_gratuitous(netif);
+}
 
 /**
  * @brief 完成以太网协议层相关的清理
@@ -121,8 +127,27 @@ static net_err_t ether_recv(netif_t *netif, pktbuf_t *buf) {
   // 打印以太网帧
   display_ether_pkt("ether recv", pkt, pktbuf_total_size(buf));
 
-  // 数据包处理成功，由当前函数释放数据包
-  pktbuf_free(buf);
+  // 判断协议类型
+  switch (net_ntohs(pkt->hdr.protocol_type)) {
+    case NET_PROTOCOL_ARP: {
+      // ARP协议
+      err = pktbuf_header_remove(buf, sizeof(ether_hdr_t));  // 移除以太网帧头部
+      Net_Err_Check(err);
+      err = arp_recv(netif, buf);
+      if (err != NET_ERR_OK) {
+        dbg_error(DBG_ETHER, "link layer ether recv error: arp recv failed.");
+        return err;
+      }
+    } break;
+    case NET_PROTOCOL_IPV4: {
+      // IPv4协议
+      // err = netif_recvq_put(netif, buf, -1);
+    } break;
+    default:
+      dbg_warning(DBG_ETHER,
+                  "link layer ether recv warning: unknown protocol.");
+      break;
+  }
 
   dbg_info(DBG_ETHER, "link layer ether recv ok.");
 
@@ -138,6 +163,18 @@ static net_err_t ether_recv(netif_t *netif, pktbuf_t *buf) {
  * @return net_err_t
  */
 static net_err_t ether_send(netif_t *netif, ipaddr_t *ipdest, pktbuf_t *buf) {
+  if (ipaddr_is_equal(ipdest, &netif->ipaddr)) {
+    // 目的IP地址与本地IP地址相同，则无需进行arp查询，直接发送
+    return ether_raw_send(netif, NET_PROTOCOL_IPV4, netif->hwaddr.addr, buf);
+  }
+
+  // 发送一个ARP请求，刷新arp缓存, 以获取目的IP地址对应的MAC地址
+  net_err_t err = arp_make_request(netif, ipdest);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_ETHER, "send error: make arp request failed.");
+    return err;
+  }
+
   return NET_ERR_OK;
 }
 
@@ -175,8 +212,8 @@ net_err_t ether_module_init(void) {
  * @return const uint8_t*
  */
 const uint8_t *ether_broadcast_addr(void) {
-  static const uint8_t broadcast_addr[ETHER_MAC_LEN] = {0xFF, 0xFF, 0xFF,
-                                                        0xFF, 0xFF, 0xFF};
+  static const uint8_t broadcast_addr[ETHER_MAC_SIZE] = {0xFF, 0xFF, 0xFF,
+                                                         0xFF, 0xFF, 0xFF};
 
   return broadcast_addr;
 }
@@ -201,6 +238,7 @@ net_err_t ether_raw_send(netif_t *netif, protocol_type_t protocol,
 
     // 重新调整数据包大小到以太网数据载荷最小值
     err = pktbuf_resize(buf, ETHER_DATA_MIN);
+    Net_Err_Check(err);
 
     pktbuf_seek(buf, total_size);  // 访问位置移动到补充区域的起始位置
     pktbuf_fill(buf, 0, ETHER_DATA_MIN - total_size);  // 在补充的区域填充0
@@ -215,13 +253,13 @@ net_err_t ether_raw_send(netif_t *netif, protocol_type_t protocol,
 
   // 填写以太网包头信息
   ether_pkt_t *pkt = (ether_pkt_t *)pktbuf_data_ptr(buf);
-  plat_memcpy(pkt->hdr.dest, dest_mac_addr, ETHER_MAC_LEN);  // 目的mac地址
-  plat_memcpy(pkt->hdr.src, netif->hwaddr.addr, ETHER_MAC_LEN);  // 源mac地址
+  plat_memcpy(pkt->hdr.dest, dest_mac_addr, ETHER_MAC_SIZE);  // 目的mac地址
+  plat_memcpy(pkt->hdr.src, netif->hwaddr.addr, ETHER_MAC_SIZE);  // 源mac地址
   pkt->hdr.protocol_type = net_htons(protocol);  // 帧协议类型
 
   display_ether_pkt("ehter send pkt: ", pkt, pktbuf_total_size(buf));
 
-  if (plat_memcmp(netif->hwaddr.addr, pkt->hdr.dest, ETHER_MAC_LEN) == 0) {
+  if (plat_memcmp(netif->hwaddr.addr, pkt->hdr.dest, ETHER_MAC_SIZE) == 0) {
     // 目的mac地址与本地mac地址相同，直接放入接收队列
     return netif_recvq_put(netif, buf, -1);
   } else {

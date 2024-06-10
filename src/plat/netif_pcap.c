@@ -93,7 +93,7 @@ void send_thread(void *arg) {
     int total_size = pktbuf_total_size(buf);  // 获取数据包的总长度
     pktbuf_read(buf, send_buf, total_size);  // 读取数据包内容
 
-    pktbuf_free(buf);  // TODO: 当前线程成功完成数据包的最后处理，释放该数据包
+    pktbuf_free(buf);  //!!! 数据包发送成功，释放数据包
 
     if (pcap_inject(pcap, send_buf, total_size) == -1) {  // 发送数据包
       dbg_warning(DBG_NETIF, "pcap send packet failed: %s", pcap_geterr(pcap));

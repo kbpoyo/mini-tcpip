@@ -39,7 +39,11 @@ typedef struct _pktblk_t {
 
 /**
  * @brief 定义数据包结构
- *
+ * 数据包的生命周期为：
+ *  1. 函数Fun1通过pktbuf_alloc()分配一个数据包buf
+ *  2. 若Fun1需要传递buf给Fun2，且Fun2函数执行成功，则由Fun2负责调用pktbuf_free()释放buf
+ *  3. 若Fun1需要传递buf给Fun2，且Fun2函数执行失败，则由Fun1负责调用pktbuf_free()释放buf
+ *  4. Fun1到Fun2的传播链路中的其它函数，不需要调用pktbuf_free()释放buf
  */
 typedef struct _pktbuf_t {
   nlist_node_t node;  // 数据包链表结点

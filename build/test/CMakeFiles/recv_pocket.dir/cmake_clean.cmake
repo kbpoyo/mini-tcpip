@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_client.c.obj.d"
   "CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.obj"
   "CMakeFiles/recv_pocket.dir/__/src/app/echo/tcp_echo_server.c.obj.d"
+  "CMakeFiles/recv_pocket.dir/__/src/net/src/arp.c.obj"
+  "CMakeFiles/recv_pocket.dir/__/src/net/src/arp.c.obj.d"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/dbg.c.obj"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/dbg.c.obj.d"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/ether.c.obj"

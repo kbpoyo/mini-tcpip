@@ -1,5 +1,6 @@
 #include "net.h"
 
+#include "arp.h"
 #include "dbg.h"
 #include "ether.h"
 #include "exmsg.h"
@@ -35,6 +36,9 @@ net_err_t net_init(void) {
 
   // 初始化以太网协议层
   ether_module_init();
+
+  // 初始化ARP协议模块
+  arp_module_init();
 
   return NET_ERR_OK;
 }

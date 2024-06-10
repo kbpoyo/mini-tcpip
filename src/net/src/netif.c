@@ -427,11 +427,11 @@ pktbuf_t *netif_sendq_get(netif_t *netif, int tmo) {
 }
 
 /**
- * @brief 向网络接口发送数据包
+ * @brief 通过网络接口发送数据包
  *
- * @param netif
- * @param ipaddr
- * @param buf
+ * @param netif 网络接口
+ * @param ipaddr 目的IP地址
+ * @param buf 数据包
  * @return net_err_t
  */
 net_err_t netif_send(netif_t *netif, ipaddr_t *ipaddr, pktbuf_t *buf) {
@@ -440,8 +440,7 @@ net_err_t netif_send(netif_t *netif, ipaddr_t *ipaddr, pktbuf_t *buf) {
   net_err_t err = NET_ERR_OK;
 
   if (netif->link_layer) {  // 进行链路层处理
-    // netif->link_layer->send(netif, ipaddr, buf);
-    err = ether_raw_send(netif, NET_PROTOCOL_ARP, ether_broadcast_addr(), buf);  //TODO: 链路层测试发送
+    err = netif->link_layer->send(netif, ipaddr, buf);
     if (err != NET_ERR_OK) {
       dbg_warning(DBG_NETIF, "netif %s send buf error: link layer send failed.", netif->name);
     }

@@ -428,7 +428,7 @@ net_err_t pktbuf_header_remove(pktbuf_t *buf, int size) {
 }
 
 /**
- * @brief 调整数据包大小, 从尾部开始调整
+ * @brief 调整数据包大小为to_size, 且从尾部开始调整
  *
  * @param buf
  * @param to_size

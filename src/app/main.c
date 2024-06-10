@@ -37,7 +37,10 @@ net_err_t netdev_init(void) {
 
   pktbuf_t *buf = pktbuf_alloc(32);
   pktbuf_fill(buf, 0x53, 32);
-  netif_send(netif, (ipaddr_t*)0, buf);
+
+  ipaddr_t dest;
+  ipaddr_from_str(&dest, "192.168.74.3");
+  netif_send(netif, &dest, buf);
 
   return NET_ERR_OK;
 }
@@ -83,7 +86,7 @@ void timer_test() {
 
 
 void basic_test(void) {
-  timer_test();
+  // timer_test();
 }
 
 #define DBG_TEST DBG_LEVEL_INFO

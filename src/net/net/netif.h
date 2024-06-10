@@ -36,7 +36,7 @@ typedef enum _netif_type_t {
   NETIF_TYPE_WIFI,      // wifi
   NETIF_TYPE_PPP,       // ppp
 
-  NETIF_TYPE_CNT,   // 特殊：记录网络接口类型数量
+  NETIF_TYPE_CNT,  // 特殊：记录网络接口类型数量
 } netif_type_t;
 
 struct _netif_t;
@@ -100,25 +100,22 @@ typedef struct _netif_t {
 
 net_err_t netif_module_init(void);
 
+net_err_t netif_layer_register(const link_layer_t *layer);
+
 netif_t *netif_open(const char *dev_name, const netif_ops_t *ops,
                     void *ops_data);
 net_err_t netif_close(netif_t *netif);
-
 net_err_t netif_set_addr(netif_t *netif, const ipaddr_t *ip,
                          const ipaddr_t *mask, const ipaddr_t *gateway);
 net_err_t netif_set_hwaddr(netif_t *netif, const uint8_t *hwaddr, uint32_t len);
 net_err_t netif_set_acticve(netif_t *netif);
 net_err_t netif_set_inactive(netif_t *netif);
 void netif_set_default(netif_t *netif);
-
 net_err_t netif_recvq_put(netif_t *netif, pktbuf_t *buf, int tmo);
 pktbuf_t *netif_recvq_get(netif_t *netif, int tmo);
 net_err_t netif_sendq_put(netif_t *netif, pktbuf_t *buf, int tmo);
 pktbuf_t *netif_sendq_get(netif_t *netif, int tmo);
-
 net_err_t netif_send(netif_t *netif, ipaddr_t *ipaddr, pktbuf_t *buf);
-
-net_err_t netif_layer_register(const link_layer_t *layer);
 
 /**
  * @brief 打印MAC地址信息
@@ -127,7 +124,8 @@ net_err_t netif_layer_register(const link_layer_t *layer);
  * @param hwaddr
  * @param len
  */
-static void netif_dum_hwaddr(const char *msg, const uint8_t* hwaddr, uint32_t len) {
+static void netif_dum_hwaddr(const char *msg, const uint8_t *hwaddr,
+                             uint32_t len) {
   if (msg) {
     plat_printf("%s", msg);
   }
