@@ -162,20 +162,13 @@ static net_err_t ether_recv(netif_t *netif, pktbuf_t *buf) {
  * @param buf
  * @return net_err_t
  */
-static net_err_t ether_send(netif_t *netif, ipaddr_t *ipdest, pktbuf_t *buf) {
+static net_err_t ether_send(netif_t *netif, const ipaddr_t *ipdest, pktbuf_t *buf) {
   if (ipaddr_is_equal(ipdest, &netif->ipaddr)) {
     // 目的IP地址与本地IP地址相同，则无需进行arp查询，直接发送
-    return ether_raw_send(netif, NET_PROTOCOL_IPV4, netif->hwaddr.addr, buf);
+    return ether_raw_send(netif, NET_PROTOCOL_IPV4, netif->hwaddr.addr, buf); //!!! 数据包传递
   }
 
-  // 发送一个ARP请求，刷新arp缓存, 以获取目的IP地址对应的MAC地址
-  net_err_t err = arp_make_request(netif, ipdest);
-  if (err != NET_ERR_OK) {
-    dbg_error(DBG_ETHER, "send error: make arp request failed.");
-    return err;
-  }
-
-  return NET_ERR_OK;
+  return arp_send(netif, ipdest, buf);  //!!! 数据包传递
 }
 
 /**

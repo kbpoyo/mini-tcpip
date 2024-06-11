@@ -63,7 +63,7 @@ typedef struct _link_layer_t {
   net_err_t (*open)(struct _netif_t *netif);  // 完成链路层相关的初始化工作
   void (*close)(struct _netif_t *netif);                     // 关闭链路层
   net_err_t (*recv)(struct _netif_t *netif, pktbuf_t *buf);  // 从链路层接收数据
-  net_err_t (*send)(struct _netif_t *netif, ipaddr_t *ipdest,
+  net_err_t (*send)(struct _netif_t *netif, const ipaddr_t *ipdest,
                     pktbuf_t *buf);  // 向链路层发送数据
 
 } link_layer_t;

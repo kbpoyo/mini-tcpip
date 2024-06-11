@@ -55,5 +55,6 @@
 
 // ARP模块相关配置
 #define ARP_CACHE_SIZE 50  // arp缓存表大小
+#define ARP_WAIT_PKT_MAXCNT  5// arp缓存表对应的等待数据包的最大数量
 
 #endif  // NET_CFG_H

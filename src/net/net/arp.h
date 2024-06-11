@@ -42,22 +42,22 @@ typedef struct _arp_pkt_t {
 
 // arp缓存表项结构
 typedef struct _arp_entry_t {
-  uint8_t ipaddr[IPV4_ADDR_SIZE];  // ip地址(ipv4)
-  uint8_t hwaddr[ETHER_MAC_SIZE];  // 硬件地址(以太网mac地址)
+  nlist_node_t node;  // 用于挂载的链表节点
+
+  nlist_t buf_list;  // 数据包缓存链表
+  netif_t *netif;    // 使用的网络接口
 
   int tmo;    // 超时时间
   int retry;  // 重试次数
 
   enum {
     NET_ARP_FREE,      // 空闲
-    NET_ARP_WATTING,   // 等待响应
+    NET_ARP_WAITING,   // 等待响II
     NET_ARP_RESOLVED,  // 已获取响应
   } state;             // arp表项状态
 
-  nlist_t *buf_list;  // 数据包缓存链表
-  netif_t *netif;     // 使用的网络接口
-
-  nlist_node_t node;  // 用于挂载的链表节点
+  uint8_t ipaddr[IPV4_ADDR_SIZE];  // ip地址(ipv4)
+  uint8_t hwaddr[ETHER_MAC_SIZE];  // 硬件地址(以太网mac地址)
 } arp_entry_t;
 
 net_err_t arp_module_init(void);
@@ -65,6 +65,9 @@ net_err_t arp_module_init(void);
 net_err_t arp_make_request(netif_t *netif, const ipaddr_t *dest);
 net_err_t arp_make_gratuitous(netif_t *netif);
 net_err_t arp_make_reply(netif_t *netif, pktbuf_t *buf);
+
 net_err_t arp_recv(netif_t *netif, pktbuf_t *buf);
+net_err_t arp_send(netif_t *netif, const ipaddr_t *ipdest, pktbuf_t *buf);
+
 
 #endif  // ARP_H

@@ -400,7 +400,7 @@ pktbuf_t *netif_recvq_get(netif_t *netif, int tmo) {
  * @return net_err_t
  */
 net_err_t netif_sendq_put(netif_t *netif, pktbuf_t *buf, int tmo) {
-  net_err_t err = fixq_put(&(netif->send_fixq), (void *)buf, tmo);
+  net_err_t err = fixq_put(&(netif->send_fixq), (void *)buf, tmo); //!!! 数据包转交
   if (err < 0) {
     dbg_warning(DBG_NETIF, "netif %s put buf into send_queue error: send queue is full.", netif->name);
     return NET_ERR_FULL;
@@ -440,14 +440,14 @@ net_err_t netif_send(netif_t *netif, ipaddr_t *ipaddr, pktbuf_t *buf) {
   net_err_t err = NET_ERR_OK;
 
   if (netif->link_layer) {  // 进行链路层处理
-    err = netif->link_layer->send(netif, ipaddr, buf);
+    err = netif->link_layer->send(netif, ipaddr, buf); //!!! 数据包传递
     if (err != NET_ERR_OK) {
       dbg_warning(DBG_NETIF, "netif %s send buf error: link layer send failed.", netif->name);
     }
 
   } else {
     // 将数据包放到发送队列中
-    err = netif_sendq_put(netif, buf, -1);
+    err = netif_sendq_put(netif, buf, -1);  //!!! 数据包传递
     if (err != NET_ERR_OK) {
       dbg_warning(DBG_NETIF, "netif %s send buf error: put buf into send_queue failed.", netif->name);
     }
