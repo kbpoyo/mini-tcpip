@@ -27,7 +27,8 @@ net_err_t netdev_init(void) {
 
   // 设置接口的ip地址和子网掩码
   ipaddr_t ip, mask, gw;
-  ipaddr_from_str(&ip, netdev0_ip);
+  ipaddr_from_str(&ip, "192.168.74.3");
+  // ipaddr_from_str(&ip, netdev0_ip);
   ipaddr_from_str(&mask, netdev0_mask);
   ipaddr_from_str(&gw, netdev0_gw);
   netif_set_addr(netif, &ip, &mask, &gw);

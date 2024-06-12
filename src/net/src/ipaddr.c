@@ -94,3 +94,33 @@ ipaddr_t *ipaddr_get_any(void) {
 int ipaddr_is_equal(const ipaddr_t *ip1, const ipaddr_t *ip2) {
   return ip1->addr == ip2->addr;
 }
+
+/**
+ * @brief 将字节数组转换为ip地址结构
+ * 
+ * @param dest 
+ * @param src 
+ */
+void ipaddr_from_bytes(ipaddr_t *dest, const uint8_t *src) {
+  if (dest == (ipaddr_t *)0 || src == (uint8_t *)0) {
+    return;
+  }
+
+  dest->type = IPADDR_V4;
+  dest->addr = *(uint32_t *)src;
+}
+
+/**
+ * @brief 将ip地址结构转换为字节数组
+ * 
+ * @param src 
+ * @param dest 
+ */
+void ipaddr_to_bytes(const ipaddr_t *src, uint8_t *dest) {
+  if (src == (ipaddr_t *)0 || dest == (uint8_t *)0) {
+    return;
+  }
+
+  *(uint32_t *)dest = src->addr;
+}
+

@@ -36,4 +36,11 @@ void ipaddr_copy(ipaddr_t *dest, const ipaddr_t *src);
 ipaddr_t *ipaddr_get_any(void);
 int ipaddr_is_equal(const ipaddr_t *ip1, const ipaddr_t *ip2);
 
+void ipaddr_from_bytes(ipaddr_t *dest, const uint8_t *src);
+void ipaddr_to_bytes(const ipaddr_t *src, uint8_t *dest);
+
+static inline const uint8_t *ipaddr_get_bytes(const ipaddr_t *ipaddr) {
+ return ipaddr ? ipaddr->addr_bytes : (uint8_t *)0;
+}
+
 #endif  // IPADDR_H

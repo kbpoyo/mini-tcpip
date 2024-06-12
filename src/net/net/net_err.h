@@ -14,6 +14,7 @@ typedef enum _net_err_t {
   NET_ERR_DEV = -9,
   NET_ERR_EXIST = -10,
   NET_ERR_PROTO = -11,
+  NET_ERR_NOSUPPORT = -12,
 } net_err_t;
 
 

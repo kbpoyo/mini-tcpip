@@ -62,12 +62,13 @@ typedef struct _arp_entry_t {
 
 net_err_t arp_module_init(void);
 
-net_err_t arp_make_request(netif_t *netif, const ipaddr_t *dest);
+net_err_t arp_make_request(netif_t *netif, const uint8_t *dest_ipaddr_bytes);
 net_err_t arp_make_gratuitous(netif_t *netif);
 net_err_t arp_make_reply(netif_t *netif, pktbuf_t *buf);
+net_err_t arp_make_probe(netif_t *netif);
 
 net_err_t arp_recv(netif_t *netif, pktbuf_t *buf);
-net_err_t arp_send(netif_t *netif, const ipaddr_t *ipdest, pktbuf_t *buf);
+net_err_t arp_send(netif_t *netif, const uint8_t *dest_ipaddr_bytes, pktbuf_t *buf);
 
 
 #endif  // ARP_H

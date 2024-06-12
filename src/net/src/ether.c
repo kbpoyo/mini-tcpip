@@ -30,7 +30,8 @@
 static void display_ether_pkt(char *msg, ether_pkt_t *pkt, int total_size) {
   // 获取以太网帧头部
   ether_hdr_t *hdr = &(pkt->hdr);
-  plat_printf("------------------------------ %s -----------------------------\n", msg);
+  plat_printf(
+      "------------------------------ %s -----------------------------\n", msg);
   plat_printf("len: %d bytes", total_size);
 
   netif_dum_hwaddr("\tdest: ", hdr->dest, ETHER_MAC_SIZE);
@@ -53,7 +54,9 @@ static void display_ether_pkt(char *msg, ether_pkt_t *pkt, int total_size) {
       break;
   }
 
-  plat_printf("-----------------------------------------------------------------------\n");
+  plat_printf(
+      "-----------------------------------------------------------------------"
+      "\n");
 }
 
 #else
@@ -92,6 +95,13 @@ static net_err_t ether_pkt_check(ether_pkt_t *pkt, int total_size) {
  * @return net_err_t
  */
 static net_err_t ether_open(netif_t *netif) {
+  // 发送arp探测请求
+  arp_make_probe(netif);
+
+  sys_sleep(1000);
+
+  arp_make_probe(netif);
+
   // 发送免费ARP请求
   return arp_make_gratuitous(netif);
 }
@@ -135,7 +145,8 @@ static net_err_t ether_recv(netif_t *netif, pktbuf_t *buf) {
       Net_Err_Check(err);
       err = arp_recv(netif, buf);
       if (err != NET_ERR_OK) {
-        dbg_error(DBG_ETHER, "link layer ether recv error: arp recv failed.");
+        dbg_warning(DBG_ETHER,
+                    "link layer ether recv warning: arp recv failed.");
         return err;
       }
     } break;
@@ -162,13 +173,15 @@ static net_err_t ether_recv(netif_t *netif, pktbuf_t *buf) {
  * @param buf
  * @return net_err_t
  */
-static net_err_t ether_send(netif_t *netif, const ipaddr_t *ipdest, pktbuf_t *buf) {
+static net_err_t ether_send(netif_t *netif, const ipaddr_t *ipdest,
+                            pktbuf_t *buf) {
   if (ipaddr_is_equal(ipdest, &netif->ipaddr)) {
     // 目的IP地址与本地IP地址相同，则无需进行arp查询，直接发送
-    return ether_raw_send(netif, NET_PROTOCOL_IPV4, netif->hwaddr.addr, buf); //!!! 数据包传递
+    return ether_raw_send(netif, NET_PROTOCOL_IPV4, netif->hwaddr.addr,
+                          buf);  //!!! 数据包传递
   }
 
-  return arp_send(netif, ipdest, buf);  //!!! 数据包传递
+  return arp_send(netif, ipaddr_get_bytes(ipdest), buf);  //!!! 数据包传递
 }
 
 /**

@@ -12,10 +12,10 @@
 #include "netif_pcap.h"
 
 #include "dbg.h"
+#include "ether.h"
 #include "exmsg.h"
 #include "pcap.h"
 #include "sys_plat.h"
-#include "ether.h"
 
 /**
  * @brief 网络包接收线程
@@ -32,7 +32,7 @@ void recv_thread(void *arg) {
   while (1) {
     struct pcap_pkthdr *pkthdr =
         (struct pcap_pkthdr *)0;  // 记录数据包的信息，
-                                   // 时间戳(ts)，总长度(len)，有效长度(caplen)
+                                  // 时间戳(ts)，总长度(len)，有效长度(caplen)
     const uint8_t *pktdata = (uint8_t *)0;  // 记录数据包内容的起始地址
     if (pcap_next_ex(pcap, &pkthdr, &pktdata) != 1) {  // 从pcap设备接收数据包
       continue;
@@ -40,7 +40,7 @@ void recv_thread(void *arg) {
 
     // 接收到数据包，将数据包内容拷贝到pktbuf_t数据包中
     // 从数据包池中分配一个数据包
-    pktbuf_t *pktbuf = pktbuf_alloc(pkthdr->len);
+    pktbuf_t *pktbuf = pktbuf_alloc(pkthdr->len);  //!!! 分配数据包
     if (pktbuf == (pktbuf_t *)0) {  // 失败，丢弃从pcap设备接收到的数据包
       dbg_warning(DBG_NETIF, "packet loss: pktbuf == NULL!");
       continue;
@@ -48,21 +48,19 @@ void recv_thread(void *arg) {
 
     // pktbuf分配成功，将数据包内容拷贝到pktbuf中
     net_err_t err = pktbuf_write(pktbuf, (uint8_t *)pktdata, pkthdr->len);
-    if (err != NET_ERR_OK) {  // 失败，释放pktbuf
-      pktbuf_free(pktbuf);
+    if (err != NET_ERR_OK) {
+      pktbuf_free(pktbuf);  //!!! 释放数据包
       dbg_warning(DBG_NETIF, "packet loss: pktbuf write failed!");
       continue;
     }
 
-    // 数据包拷贝成功，将数据包放入接收队列
-    err = netif_recvq_put(netif, pktbuf, -1);  // 非阻塞方式放入接收队列
-    if (err != NET_ERR_OK) {                  // 失败，释放pktbuf
-      pktbuf_free(pktbuf);
+    // 数据包拷贝成功，以非阻塞的方式将数据包放入接收队列
+    err = netif_recvq_put(netif, pktbuf, -1);  //!!! 数据包转交
+    if (err != NET_ERR_OK) {
+      pktbuf_free(pktbuf);  //!!! 释放数据包
       dbg_warning(DBG_NETIF, "packet loss: netif recvq put failed!");
       continue;
     }
-
-    // TODO: 数据包已放入接收队列，不由当前线程管理，不需要释放pktbuf
   }
 }
 
@@ -91,7 +89,7 @@ void send_thread(void *arg) {
 
     pktbuf_acc_reset(buf);
     int total_size = pktbuf_total_size(buf);  // 获取数据包的总长度
-    pktbuf_read(buf, send_buf, total_size);  // 读取数据包内容
+    pktbuf_read(buf, send_buf, total_size);   // 读取数据包内容
 
     pktbuf_free(buf);  //!!! 数据包发送成功，释放数据包
 
