@@ -16,11 +16,13 @@
 #include "net_cfg.h"
 #include "net_err.h"
 #include "nlocker.h"
+#include "timer.h"
 #include "tools.h"
 
 static arp_entry_t cache_tbl[ARP_CACHE_SIZE];  // arp缓存表
 static mblock_t cache_tbl_mblock;  // arp缓存表内存块管理对象
 static nlist_t cache_entry_list;   // 管理已分配的arp缓存表
+static net_timer_t cache_timer;    // arp缓存表定时器
 
 #if DBG_DISP_ENABLED(DBG_ARP)
 
@@ -108,25 +110,6 @@ static void arp_pkt_display(arp_pkt_t *arp_pkt) {
 #endif
 
 /**
- * @brief 初始化arp缓存表
- *
- * @return net_err_t
- */
-static net_err_t arp_cache_init(void) {
-  net_err_t err = NET_ERR_OK;
-  // 初始化arp缓存表链表
-  nlist_init(&cache_entry_list);
-
-  // 初始化arp缓存表内存块管理对象
-  // 只由arp模块使用，并且只由一个工作线程管理，不需要锁保护
-  err = mblock_init(&cache_tbl_mblock, cache_tbl, sizeof(arp_entry_t),
-                    ARP_CACHE_SIZE, NLOCKER_NONE);
-  Net_Err_Check(err);
-
-  return NET_ERR_OK;
-}
-
-/**
  * @brief 清空arp缓存表项所缓存的数据包
  *
  * @param entry
@@ -158,6 +141,89 @@ static void arp_entry_free(arp_entry_t *entry) {
   // 释放该arp缓存表项
   mblock_free(&cache_tbl_mblock, entry);
 }
+
+
+/**
+ * @brief arp缓存表定时器回调函数，用于扫描并处理arp缓存表项超时
+ *
+ * @param timer
+ * @param arg
+ */
+static void arp_cache_tmo(net_timer_t *timer, void *arg) {
+  nlist_node_t *node;
+  int flag = 0;  // 标记是否有超时的表项
+
+  // 遍历arp缓存表, 处理超时的arp缓存表项
+  nlist_for_each(node, &cache_entry_list) {
+    arp_entry_t *entry = nlist_entry(node, arp_entry_t, node);
+
+    if (--entry->tmo > 0) {  // 未超时
+      continue;
+    }
+
+    flag = 1;  // 标记有超时的表项
+
+    // 超时处理
+    switch (entry->state) {
+      case NET_ARP_RESOLVED: {  // 当前arp缓存表项已解析，重新获取目标mac地址以更新
+        dbg_info(DBG_ARP, "arp cache tmo info: arp entry resolved tmo.");
+        arp_entry_display(entry);
+
+        // 重载表项的tmo和retry，并进入等待状态
+        entry->tmo = ARP_ENTRY_WAITING_TMO;
+        entry->retry = ARP_ENTRY_RETRY_CNT;
+        entry->state = NET_ARP_WAITING;
+
+        // 发送arp请求包
+        arp_make_request(entry->netif, entry->ipaddr);
+      } break;
+      case NET_ARP_WAITING: {  // 当前缓存表项未解析，尝试重新发送arp请求包
+        dbg_info(DBG_ARP, "arp cache tmo info: arp entry waiting tmo.");
+        arp_entry_display(entry);
+
+        if (entry->retry-- > 0) {  // 未达到最大重试次数，可再次发送arp请求包
+          // 重载表项的tmo，并继续等待
+          entry->tmo = ARP_ENTRY_WAITING_TMO;
+
+          // 发送arp请求包
+          arp_make_request(entry->netif, entry->ipaddr);
+        } else {  // 达到最大重试次数，释放该表项
+          dbg_warning(DBG_ARP, "arp cache tmo warning: arp entry retry max.");
+          arp_entry_free(entry);
+        }
+
+      } break;
+      default: {  // 未知状态,释放该表项
+        dbg_error(DBG_ARP, "arp cache tmo error: unknown arp entry state.");
+        arp_entry_free(entry);
+      } break;
+    }
+  }
+
+  if (flag) {  // 有超时的表项，打印arp缓存表
+    arp_tbl_display();
+  }
+}
+
+/**
+ * @brief 初始化arp缓存表
+ *
+ * @return net_err_t
+ */
+static net_err_t arp_cache_init(void) {
+  net_err_t err = NET_ERR_OK;
+  // 初始化arp缓存表链表
+  nlist_init(&cache_entry_list);
+
+  // 初始化arp缓存表内存块管理对象
+  // 只由arp模块使用，并且只由一个工作线程管理，不需要锁保护
+  err = mblock_init(&cache_tbl_mblock, cache_tbl, sizeof(arp_entry_t),
+                    ARP_CACHE_SIZE, NLOCKER_NONE);
+  Net_Err_Check(err);
+
+  return NET_ERR_OK;
+}
+
 
 /**
  * @brief 分配一个arp缓存表项
@@ -226,8 +292,14 @@ static void arp_entry_set(arp_entry_t *entry, const uint8_t *ipaddr_bytes,
   plat_memcpy(entry->hwaddr, hwaddr_bytes, ETHER_MAC_SIZE);
   entry->netif = netif;
   entry->state = state;
-  entry->tmo = 0;
-  entry->retry = 0;
+  entry->retry = ARP_ENTRY_RETRY_CNT;
+
+  // 根据状态设置表项的超时时间
+  if (state == NET_ARP_RESOLVED) {
+    entry->tmo = ARP_ENTRY_RESOLVED_TMO;
+  } else {
+    entry->tmo = ARP_ENTRY_WAITING_TMO;
+  }
 }
 
 /**
@@ -269,9 +341,10 @@ static net_err_t arp_entry_send_all(arp_entry_t *entry) {
  */
 static net_err_t arp_entry_insert(netif_t *netif, const uint8_t *ipaddr_bytes,
                                   uint8_t *hwaddr, int force) {
-  // if (*(uint32_t *)ipaddr_bytes == 0) {
-  //   return NET_ERR_NOSUPPORT;
-  // }
+  // 空的ip地址不进行缓存
+  if (*(uint32_t *)ipaddr_bytes == 0) {
+    return NET_ERR_NOSUPPORT;
+  }
 
   net_err_t err = NET_ERR_OK;
 
@@ -320,6 +393,15 @@ net_err_t arp_module_init(void) {
   err = arp_cache_init();
   if (err != NET_ERR_OK) {
     dbg_error(DBG_ARP, "arp module init error: arp cache init failed.");
+    return err;
+  }
+
+  // 初始化arp缓存表定时器
+  err =
+      net_timer_add(&cache_timer, "arp cache timer", arp_cache_tmo, (void *)0,
+                    ARP_CACHE_TMO * 1000, NET_TIMER_ACTIVE | NET_TIMER_RELOAD);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_ARP, "arp module init error: arp cache timer init failed.");
     return err;
   }
 
@@ -408,7 +490,7 @@ net_err_t arp_make_reply(netif_t *netif, pktbuf_t *buf) {
 
 /**
  * @brief 发送一个arp包警告地址冲突
- *
+ * 还可以更新局域网其它设备的arp缓存表
  * @param netif
  * @param buf
  * @return net_err_t
@@ -488,7 +570,7 @@ net_err_t arp_make_probe(netif_t *netif) {
 }
 
 /**
- * @brief 发送免费ARP包，免费arp(gratuitous arp)的作用:
+ * @brief 发送免费ARP包(arp通告包)，免费arp(gratuitous arp)的作用:
  *  1. 检测本网络接口的IP地址在局域网中是否已被使用
  *  2. 若IP未被使用，通知局域网中的其他设备，本机已经使用了该IP地址, 、
  *     若其它设备之前向该ip地址发送过arp请求，那么它们会同时更新自己的arp缓存表，使该ip地址映射到本机的mac地址
@@ -571,9 +653,22 @@ net_err_t arp_recv(netif_t *netif, pktbuf_t *buf) {
 
   arp_pkt_display(arp_pkt);
 
+  // 检测arp数据包发送方的ip地址是否与本机的ip地址相同
+  ipaddr_t ipaddr;
+  ipaddr_from_bytes(&ipaddr, arp_pkt->sender_proto_addr);
+  if (ipaddr_is_equal(&ipaddr, &netif->ipaddr)) {
+    dbg_warning(DBG_ARP,
+                "arp recv warning: send ipaddr is same as local ipaddr.");
+    // 根据当前网卡的状态，决定是否发送arp冲突包
+    if (netif->state == NETIF_STATE_ACVTIVE) {  // 网卡已激活, 发送arp冲突包
+      return arp_make_conflict(netif, buf);  //!!! 数据包传递
+    } else {  // 网卡未激活，设置网卡状态为ip地址冲突
+      netif_set_ipconflict(netif);
+    }
+    return NET_ERR_CONFLICT;
+  }
 
   // 检测arp数据包是否是发给本机的
-  ipaddr_t ipaddr;
   ipaddr_from_bytes(&ipaddr, arp_pkt->target_proto_addr);
   if (ipaddr_is_equal(&ipaddr,
                       &netif->ipaddr)) {  // 是发给本机的, 进行数据包处理
@@ -584,8 +679,8 @@ net_err_t arp_recv(netif_t *netif, pktbuf_t *buf) {
         err = arp_entry_insert(netif, arp_pkt->sender_proto_addr,
                                arp_pkt->sender_hw_addr, 1);
         if (err != NET_ERR_OK) {
-          dbg_error(DBG_ARP, "arp recv error: insert arp cache entry failed.");
-          return err;
+          dbg_warning(DBG_ARP,
+                      "arp recv warning: insert arp cache entry failed.");
         }
 
         return arp_make_reply(netif, buf);  //!!! 传递数据包
@@ -597,7 +692,8 @@ net_err_t arp_recv(netif_t *netif, pktbuf_t *buf) {
         err = arp_entry_insert(netif, arp_pkt->sender_proto_addr,
                                arp_pkt->sender_hw_addr, 1);
         if (err != NET_ERR_OK) {
-          dbg_error(DBG_ARP, "arp recv error: insert arp cache entry failed.");
+          dbg_warning(DBG_ARP,
+                      "arp recv warning: insert arp cache entry failed.");
           return err;
         }
       }

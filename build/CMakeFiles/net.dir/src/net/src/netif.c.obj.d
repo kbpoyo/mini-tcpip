@@ -252,13 +252,13 @@ CMakeFiles/net.dir/src/net/src/netif.c.obj: \
  F:/code/c++code/mini-tcpip/src/net/net/pktbuf.h \
  F:/code/c++code/mini-tcpip/src/net/net/dbg.h \
  F:/code/c++code/mini-tcpip/src/net/net/dbg.h \
- F:/code/c++code/mini-tcpip/src/net/net/exmsg.h \
+ F:/code/c++code/mini-tcpip/src/net/net/ether.h \
  F:/code/c++code/mini-tcpip/src/net/net/netif.h \
+ F:/code/c++code/mini-tcpip/src/net/net/protocol.h \
+ F:/code/c++code/mini-tcpip/src/net/net/exmsg.h \
  F:/code/c++code/mini-tcpip/src/net/net/fixq.h \
  F:/code/c++code/mini-tcpip/src/net/net/mblock.h \
  F:/code/c++code/mini-tcpip/src/net/net/nlist.h \
  F:/code/c++code/mini-tcpip/src/net/net/nlocker.h \
  F:/code/c++code/mini-tcpip/src/net/net/pktbuf.h \
- F:/code/c++code/mini-tcpip/src/net/net/protocol.h \
- F:/code/c++code/mini-tcpip/src/net/net/ether.h \
  F:/code/c++code/mini-tcpip/src/net/net/protocol.h

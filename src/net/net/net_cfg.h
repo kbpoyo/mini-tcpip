@@ -55,6 +55,10 @@
 
 // ARP模块相关配置
 #define ARP_CACHE_SIZE 50  // arp缓存表大小
-#define ARP_WAIT_PKT_MAXCNT  5// arp缓存表对应的等待数据包的最大数量
+#define ARP_WAIT_PKT_MAXCNT 5  // arp缓存表对应的等待数据包的最大数量
+#define ARP_CACHE_TMO 1  // arp缓存表的扫描定时器的超时时间(s)
+#define ARP_ENTRY_WAITING_TMO (3 * ARP_CACHE_TMO)  // 待解析的arp缓存表项的超时时间(s)
+#define ARP_ENTRY_RESOLVED_TMO (5 * ARP_CACHE_TMO)  // 已解析的arp缓存表项的超时时间(s)
+#define ARP_ENTRY_RETRY_CNT 5  // arp缓存表项允许的重复请求次数
 
 #endif  // NET_CFG_H

@@ -96,12 +96,15 @@ static net_err_t ether_pkt_check(ether_pkt_t *pkt, int total_size) {
  */
 static net_err_t ether_open(netif_t *netif) {
   // 发送arp探测请求
-  arp_make_probe(netif);
 
-  sys_sleep(1000);
-
-  arp_make_probe(netif);
-
+  for (int i = 0; i < 3; i++) {
+    arp_make_probe(netif);
+    sys_sleep(1000);
+    //TODO: 该线程只负责读取state状态，且只有一个线程在写入，可能会有数据竞争，但这里依靠sleep就大概率不会出现问题
+    if (netif->state == NETIF_STATE_IPCONFLICT) {
+      return NET_ERR_CONFLICT;
+    }
+  }
   // 发送免费ARP请求
   return arp_make_gratuitous(netif);
 }
