@@ -100,7 +100,8 @@ static net_err_t ether_open(netif_t *netif) {
   for (int i = 0; i < 3; i++) {
     arp_make_probe(netif);
     sys_sleep(1000);
-    //TODO: 该线程只负责读取state状态，且只有一个线程在写入，可能会有数据竞争，但这里依靠sleep就大概率不会出现问题
+    // TODO:
+    // 该线程只负责读取state状态，且只有一个线程在写入，可能会有数据竞争，但这里依靠sleep就大概率不会出现问题
     if (netif->state == NETIF_STATE_IPCONFLICT) {
       return NET_ERR_CONFLICT;
     }
@@ -114,7 +115,10 @@ static net_err_t ether_open(netif_t *netif) {
  *
  * @param netif
  */
-static void ether_close(netif_t *netif) { return; }
+static void ether_close(netif_t *netif) {
+  // 清除网络接口对应的ARP缓存
+  arp_clear(netif);
+}
 
 /**
  * @brief 完成以太网协议层对接收数据包的处理
@@ -184,6 +188,13 @@ static net_err_t ether_send(netif_t *netif, const ipaddr_t *ipdest,
                           buf);  //!!! 数据包传递
   }
 
+  if (ipaddr_is_local_broadcast(ipdest) || ipaddr_is_direct_broadcast(ipdest, &netif->netmask)) {
+    // 目的IP地址为广播地址
+    return ether_raw_send(netif, NET_PROTOCOL_IPV4, ether_broadcast_addr(),
+                          buf);  //!!! 数据包传递
+  }
+
+  // 通过ARP模块进行发送，ARP模块会根据目的IP地址查询对应的MAC地址
   return arp_send(netif, ipaddr_get_bytes(ipdest), buf);  //!!! 数据包传递
 }
 

@@ -70,5 +70,6 @@ net_err_t arp_make_probe(netif_t *netif);
 net_err_t arp_recv(netif_t *netif, pktbuf_t *buf);
 net_err_t arp_send(netif_t *netif, const uint8_t *dest_ipaddr_bytes, pktbuf_t *buf);
 
+void arp_clear(netif_t *netif);
 
 #endif  // ARP_H

@@ -768,3 +768,23 @@ net_err_t arp_send(netif_t *netif, const uint8_t *dest_ipaddr_bytes,
 
   return NET_ERR_OK;
 }
+
+
+/**
+ * @brief 清空网络接口对应的arp缓存表
+ * 
+ * @param netif 
+ */
+void arp_clear(netif_t *netif) {
+  nlist_node_t *node, *next;
+  arp_entry_t *entry;
+
+  for (node = nlist_first(&cache_entry_list); node; node = next) {
+    next = nlist_node_next(node);
+    entry = nlist_entry(node, arp_entry_t, node);
+
+    if (entry->netif == netif) {
+      arp_entry_free(entry);
+    }
+  }
+}
