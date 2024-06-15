@@ -104,7 +104,7 @@ static void arp_pkt_display(arp_pkt_t *arp_pkt) {
 }
 
 #else
-#define arp_cache_entry_display(entry)
+#define arp_entry_display(entry)
 #define arp_tbl_display()
 #define arp_pkt_display(arp_pkt)
 #endif

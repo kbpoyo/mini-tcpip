@@ -12,6 +12,7 @@
 #include "pktbuf.h"
 #include "timer.h"
 #include "tools.h"
+#include "ipv4.h"
 
 net_err_t net_init(void) {
   net_plat_init();
@@ -39,6 +40,10 @@ net_err_t net_init(void) {
 
   // 初始化ARP协议模块
   arp_module_init();
+
+  // 初始化ipv4协议模块
+  ipv4_module_init();
+
 
   return NET_ERR_OK;
 }

@@ -471,6 +471,30 @@ src/net/src/ipaddr.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/ipaddr.c.s
 .PHONY : src/net/src/ipaddr.c.s
 
+src/net/src/ipv4.obj: src/net/src/ipv4.c.obj
+.PHONY : src/net/src/ipv4.obj
+
+# target to build an object file
+src/net/src/ipv4.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/ipv4.c.obj
+.PHONY : src/net/src/ipv4.c.obj
+
+src/net/src/ipv4.i: src/net/src/ipv4.c.i
+.PHONY : src/net/src/ipv4.i
+
+# target to preprocess a source file
+src/net/src/ipv4.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/ipv4.c.i
+.PHONY : src/net/src/ipv4.c.i
+
+src/net/src/ipv4.s: src/net/src/ipv4.c.s
+.PHONY : src/net/src/ipv4.s
+
+# target to generate assembly for a file
+src/net/src/ipv4.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/ipv4.c.s
+.PHONY : src/net/src/ipv4.c.s
+
 src/net/src/loop.obj: src/net/src/loop.c.obj
 .PHONY : src/net/src/loop.obj
 
@@ -805,6 +829,9 @@ help:
 	@echo ... src/net/src/ipaddr.obj
 	@echo ... src/net/src/ipaddr.i
 	@echo ... src/net/src/ipaddr.s
+	@echo ... src/net/src/ipv4.obj
+	@echo ... src/net/src/ipv4.i
+	@echo ... src/net/src/ipv4.s
 	@echo ... src/net/src/loop.obj
 	@echo ... src/net/src/loop.i
 	@echo ... src/net/src/loop.s

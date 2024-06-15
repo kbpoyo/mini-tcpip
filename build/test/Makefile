@@ -635,6 +635,54 @@ __/src/net/src/ipaddr.c.s:
 	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/ipaddr.c.s
 .PHONY : __/src/net/src/ipaddr.c.s
 
+__/src/net/src/ipv4.obj: __/src/net/src/ipv4.c.obj
+.PHONY : __/src/net/src/ipv4.obj
+
+# target to build an object file
+__/src/net/src/ipv4.c.obj:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/net/src/ipv4.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/net/src/ipv4.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/net/src/ipv4.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/net/src/ipv4.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/net/src/ipv4.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/ipv4.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/ipv4.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/ipv4.c.obj
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/ipv4.c.obj
+.PHONY : __/src/net/src/ipv4.c.obj
+
+__/src/net/src/ipv4.i: __/src/net/src/ipv4.c.i
+.PHONY : __/src/net/src/ipv4.i
+
+# target to preprocess a source file
+__/src/net/src/ipv4.c.i:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/net/src/ipv4.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/net/src/ipv4.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/net/src/ipv4.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/net/src/ipv4.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/net/src/ipv4.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/ipv4.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/ipv4.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/ipv4.c.i
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/ipv4.c.i
+.PHONY : __/src/net/src/ipv4.c.i
+
+__/src/net/src/ipv4.s: __/src/net/src/ipv4.c.s
+.PHONY : __/src/net/src/ipv4.s
+
+# target to generate assembly for a file
+__/src/net/src/ipv4.c.s:
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/net/src/ipv4.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/net/src/ipv4.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/net/src/ipv4.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/net/src/ipv4.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/net/src/ipv4.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/ipv4.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/ipv4.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/ipv4.c.s
+	cd /d F:\code\c++code\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/ipv4.c.s
+.PHONY : __/src/net/src/ipv4.c.s
+
 __/src/net/src/loop.obj: __/src/net/src/loop.c.obj
 .PHONY : __/src/net/src/loop.obj
 
@@ -1469,6 +1517,9 @@ help:
 	@echo ... __/src/net/src/ipaddr.obj
 	@echo ... __/src/net/src/ipaddr.i
 	@echo ... __/src/net/src/ipaddr.s
+	@echo ... __/src/net/src/ipv4.obj
+	@echo ... __/src/net/src/ipv4.i
+	@echo ... __/src/net/src/ipv4.s
 	@echo ... __/src/net/src/loop.obj
 	@echo ... __/src/net/src/loop.i
 	@echo ... __/src/net/src/loop.s

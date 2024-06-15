@@ -34,7 +34,8 @@
 #define DBG_ETHER DBG_LEVEL_INFO
 #define DBG_TOOLS DBG_LEVEL_WARN
 #define DBG_TIMER DBG_LEVEL_ERROR
-#define DBG_ARP DBG_LEVEL_INFO
+#define DBG_ARP DBG_LEVEL_WARN
+#define DBG_IPV4 DBG_LEVEL_INFO
 
 // 消息队列相关配置
 #define EXMSG_MSG_CNT 10                  // 消息队列大小
