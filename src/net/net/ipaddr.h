@@ -16,7 +16,7 @@
 
 #include "net_err.h"
 
-#define IPV4_ADDR_SIZE 4  // ip地址长度
+#define IP_ADDR_SIZE 4  // ip地址长度, 暂时只支持ipv4
 
 typedef struct _ipaddr_t {
   enum {
@@ -25,7 +25,7 @@ typedef struct _ipaddr_t {
 
   union {                                // ipv4地址
     uint32_t addr;                       // ip地址
-    uint8_t addr_bytes[IPV4_ADDR_SIZE];  // ip地址字节
+    uint8_t addr_bytes[IP_ADDR_SIZE];  // ip地址字节
   };
 
 } ipaddr_t;

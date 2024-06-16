@@ -33,9 +33,9 @@ typedef struct _arp_pkt_t {
   uint8_t proto_addr_size;                    // 协议地址长度
   uint16_t op_code;                           // 操作码
   uint8_t sender_hw_addr[ETHER_MAC_SIZE];     // 发送方硬件地址
-  uint8_t sender_proto_addr[IPV4_ADDR_SIZE];  // 发送方协议地址
+  uint8_t sender_proto_addr[IP_ADDR_SIZE];  // 发送方协议地址
   uint8_t target_hw_addr[ETHER_MAC_SIZE];     // 目的硬件地址
-  uint8_t target_proto_addr[IPV4_ADDR_SIZE];  // 目的协议地址
+  uint8_t target_proto_addr[IP_ADDR_SIZE];  // 目的协议地址
 } arp_pkt_t;
 
 #pragma pack()
@@ -56,7 +56,7 @@ typedef struct _arp_entry_t {
     NET_ARP_RESOLVED,  // 已获取响应
   } state;             // arp表项状态
 
-  uint8_t ipaddr[IPV4_ADDR_SIZE];  // ip地址(ipv4)
+  uint8_t ipaddr[IP_ADDR_SIZE];  // ip地址(ipv4)
   uint8_t hwaddr[ETHER_MAC_SIZE];  // 硬件地址(以太网mac地址)
 } arp_entry_t;
 

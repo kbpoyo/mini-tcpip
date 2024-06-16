@@ -17,6 +17,7 @@
 #include "net_sys.h"
 #include "netif.h"
 #include "timer.h"
+#include "ipv4.h"
 
 static void *msg_tbl[EXMSG_MSG_CNT];  // 消息队列缓冲区，存放消息指针
 static fixq_t msg_queue;              // 消息队列
@@ -139,8 +140,13 @@ static void exmsg_handle_netif_recv(exmsg_t *msg) {
         dbg_warning(DBG_EXMSG, "loss packet: link layer recv failed.");
         pktbuf_free(buf);  // 释放数据包
       }
-    } else {             // TODO: 暂时没有其它协议层的处理
-      pktbuf_free(buf);  // 释放数据包
+    } else {
+      // 该接口无链路层处理函数(loop接口)，直接将数据包交给ipv4层处理
+      err = ipv4_recv(netif, buf);
+      if (err != NET_ERR_OK) {
+        dbg_warning(DBG_EXMSG, "loss packet: ipv4 recv failed.");
+        pktbuf_free(buf);  // 释放数据包
+      }
     }
   }
 }

@@ -34,7 +34,7 @@ static net_timer_t cache_timer;    // arp缓存表定时器
 static void arp_entry_display(arp_entry_t *entry) {
   ipaddr_t ipaddr;
   ipaddr.type = IPADDR_V4;
-  plat_memcpy(ipaddr.addr_bytes, entry->ipaddr, IPV4_ADDR_SIZE);
+  plat_memcpy(ipaddr.addr_bytes, entry->ipaddr, IP_ADDR_SIZE);
   netif_dum_ip("ip: ", &ipaddr);
   netif_dum_hwaddr("\tmac: ", entry->hwaddr, ETHER_MAC_SIZE);
 
@@ -90,13 +90,13 @@ static void arp_pkt_display(arp_pkt_t *arp_pkt) {
   ipaddr_t ipaddr;
   ipaddr.type = IPADDR_V4;
 
-  plat_memcpy(ipaddr.addr_bytes, arp_pkt->sender_proto_addr, IPV4_ADDR_SIZE);
+  plat_memcpy(ipaddr.addr_bytes, arp_pkt->sender_proto_addr, IP_ADDR_SIZE);
   netif_dum_ip("\tsender ip: ", &ipaddr);
   netif_dum_hwaddr("\tsender mac: ", arp_pkt->sender_hw_addr, ETHER_MAC_SIZE);
 
   plat_printf("\n");
 
-  plat_memcpy(ipaddr.addr_bytes, arp_pkt->target_proto_addr, IPV4_ADDR_SIZE);
+  plat_memcpy(ipaddr.addr_bytes, arp_pkt->target_proto_addr, IP_ADDR_SIZE);
   netif_dum_ip("\ttarget ip: ", &ipaddr);
   netif_dum_hwaddr("\ttarget mac: ", arp_pkt->target_hw_addr, ETHER_MAC_SIZE);
 
@@ -263,7 +263,7 @@ arp_entry_t *arp_entry_find(const uint8_t *ipaddr_bytes) {
   nlist_for_each(node, &cache_entry_list) {
     entry = nlist_entry(node, arp_entry_t, node);
 
-    if (plat_memcmp(entry->ipaddr, ipaddr_bytes, IPV4_ADDR_SIZE) == 0) {
+    if (plat_memcmp(entry->ipaddr, ipaddr_bytes, IP_ADDR_SIZE) == 0) {
       // 若表项不在链表头，则将其移动到链表头，以便下次快速查找
       if (&entry->node != nlist_first(&cache_entry_list)) {
         nlist_remove(&cache_entry_list, &entry->node);
@@ -288,7 +288,7 @@ arp_entry_t *arp_entry_find(const uint8_t *ipaddr_bytes) {
 static void arp_entry_set(arp_entry_t *entry, const uint8_t *ipaddr_bytes,
                           const uint8_t *hwaddr_bytes, netif_t *netif,
                           int state) {
-  plat_memcpy(entry->ipaddr, ipaddr_bytes, IPV4_ADDR_SIZE);
+  plat_memcpy(entry->ipaddr, ipaddr_bytes, IP_ADDR_SIZE);
   plat_memcpy(entry->hwaddr, hwaddr_bytes, ETHER_MAC_SIZE);
   entry->netif = netif;
   entry->state = state;
@@ -434,13 +434,13 @@ net_err_t arp_make_request(netif_t *netif, const uint8_t *dest_ipaddr_bytes) {
   arp_pkt->hw_type = net_htons(ARP_HW_ETHER);
   arp_pkt->proto_type = net_htons(NET_PROTOCOL_IPV4);
   arp_pkt->hw_addr_size = ETHER_MAC_SIZE;
-  arp_pkt->proto_addr_size = IPV4_ADDR_SIZE;
+  arp_pkt->proto_addr_size = IP_ADDR_SIZE;
   arp_pkt->op_code = net_htons(ARP_OP_REQUEST);
   plat_memcpy(arp_pkt->sender_hw_addr, netif->hwaddr.addr, ETHER_MAC_SIZE);
   plat_memcpy(arp_pkt->sender_proto_addr, netif->ipaddr.addr_bytes,
-              IPV4_ADDR_SIZE);
+              IP_ADDR_SIZE);
   plat_memset(arp_pkt->target_hw_addr, 0, ETHER_MAC_SIZE);
-  plat_memcpy(arp_pkt->target_proto_addr, dest_ipaddr_bytes, IPV4_ADDR_SIZE);
+  plat_memcpy(arp_pkt->target_proto_addr, dest_ipaddr_bytes, IP_ADDR_SIZE);
 
   arp_pkt_display(arp_pkt);
 
@@ -471,10 +471,10 @@ net_err_t arp_make_reply(netif_t *netif, pktbuf_t *buf) {
   arp_pkt->op_code = net_htons(ARP_OP_REPLY);
   plat_memcpy(arp_pkt->target_hw_addr, arp_pkt->sender_hw_addr, ETHER_MAC_SIZE);
   plat_memcpy(arp_pkt->target_proto_addr, arp_pkt->sender_proto_addr,
-              IPV4_ADDR_SIZE);
+              IP_ADDR_SIZE);
   plat_memcpy(arp_pkt->sender_hw_addr, netif->hwaddr.addr, ETHER_MAC_SIZE);
   plat_memcpy(arp_pkt->sender_proto_addr, netif->ipaddr.addr_bytes,
-              IPV4_ADDR_SIZE);
+              IP_ADDR_SIZE);
 
   arp_pkt_display(arp_pkt);
 
@@ -502,10 +502,10 @@ static net_err_t arp_make_conflict(netif_t *netif, pktbuf_t *buf) {
 
   // 将目标mac地址和目标ip地址设置为0，以通告所有设备，发生了ip地址冲突，且当前ip地址已被本机使用
   plat_memset(arp_pkt->target_hw_addr, 0, ETHER_MAC_SIZE);
-  plat_memset(arp_pkt->target_proto_addr, 0, IPV4_ADDR_SIZE);
+  plat_memset(arp_pkt->target_proto_addr, 0, IP_ADDR_SIZE);
   plat_memcpy(arp_pkt->sender_hw_addr, netif->hwaddr.addr, ETHER_MAC_SIZE);
   plat_memcpy(arp_pkt->sender_proto_addr, netif->ipaddr.addr_bytes,
-              IPV4_ADDR_SIZE);
+              IP_ADDR_SIZE);
 
   arp_pkt_display(arp_pkt);
 
@@ -544,15 +544,15 @@ net_err_t arp_make_probe(netif_t *netif) {
   arp_pkt->hw_type = net_htons(ARP_HW_ETHER);
   arp_pkt->proto_type = net_htons(NET_PROTOCOL_IPV4);
   arp_pkt->hw_addr_size = ETHER_MAC_SIZE;
-  arp_pkt->proto_addr_size = IPV4_ADDR_SIZE;
+  arp_pkt->proto_addr_size = IP_ADDR_SIZE;
   arp_pkt->op_code = net_htons(ARP_OP_REQUEST);  // 探测包的类型为请求包
 
   // 将发送方的ip地址和接收方的mac地址设置为0，以产生一个arp探测包
   plat_memcpy(arp_pkt->sender_hw_addr, netif->hwaddr.addr, ETHER_MAC_SIZE);
-  plat_memset(arp_pkt->sender_proto_addr, 0, IPV4_ADDR_SIZE);
+  plat_memset(arp_pkt->sender_proto_addr, 0, IP_ADDR_SIZE);
   plat_memset(arp_pkt->target_hw_addr, 0, ETHER_MAC_SIZE);
   plat_memcpy(arp_pkt->target_proto_addr, netif->ipaddr.addr_bytes,
-              IPV4_ADDR_SIZE);
+              IP_ADDR_SIZE);
 
   arp_pkt_display(arp_pkt);
 
@@ -606,7 +606,7 @@ static net_err_t arp_pkt_check(arp_pkt_t *arp_pkt, uint16_t size,
   if ((arp_pkt->hw_type != net_htons(ARP_HW_ETHER)) ||
       (arp_pkt->hw_addr_size != ETHER_MAC_SIZE) ||
       (arp_pkt->proto_type != net_htons(NET_PROTOCOL_IPV4) ||
-       (arp_pkt->proto_addr_size != IPV4_ADDR_SIZE))) {
+       (arp_pkt->proto_addr_size != IP_ADDR_SIZE))) {
     dbg_warning(DBG_ARP, "arp pkt check warning: arp pkt field error.");
     return NET_ERR_PROTO;
   }
@@ -629,7 +629,7 @@ static net_err_t arp_pkt_check(arp_pkt_t *arp_pkt, uint16_t size,
  * @return net_err_t
  */
 net_err_t arp_recv(netif_t *netif, pktbuf_t *buf) {
-  dbg_info(DBG_ARP, "recv an arp pkt...");
+  dbg_info(DBG_ARP, "recv arp packet...");
 
   pktbuf_check_buf(buf);
   net_err_t err = NET_ERR_OK;
@@ -637,7 +637,7 @@ net_err_t arp_recv(netif_t *netif, pktbuf_t *buf) {
   // 设置buf头部在内存上的连续性
   err = pktbuf_set_cont(buf, sizeof(arp_pkt_t));
   if (err != NET_ERR_OK) {
-    dbg_error(DBG_ARP, "arp recv error: set buf cont failed.");
+    dbg_error(DBG_ARP, "recv arp packet error: set buf cont failed.");
     return err;
   }
 
@@ -647,7 +647,7 @@ net_err_t arp_recv(netif_t *netif, pktbuf_t *buf) {
   // 检测arp数据包是否合法
   err = arp_pkt_check(arp_pkt, pktbuf_total_size(buf), netif);
   if (err != NET_ERR_OK) {
-    dbg_warning(DBG_ARP, "arp recv error: arp pkt check failed.");
+    dbg_warning(DBG_ARP, "recv arp packet error: arp pkt check failed.");
     return err;
   }
 
@@ -658,7 +658,7 @@ net_err_t arp_recv(netif_t *netif, pktbuf_t *buf) {
   ipaddr_from_bytes(&ipaddr, arp_pkt->sender_proto_addr);
   if (ipaddr_is_equal(&ipaddr, &netif->ipaddr)) {
     dbg_warning(DBG_ARP,
-                "arp recv warning: send ipaddr is same as local ipaddr.");
+                "recv arp packet warning: send ipaddr is same as local ipaddr.");
     // 根据当前网卡的状态，决定是否发送arp冲突包
     if (netif->state == NETIF_STATE_ACVTIVE) {  // 网卡已激活, 发送arp冲突包
       return arp_make_conflict(netif, buf);  //!!! 数据包传递
@@ -674,32 +674,32 @@ net_err_t arp_recv(netif_t *netif, pktbuf_t *buf) {
                       &netif->ipaddr)) {  // 是发给本机的, 进行数据包处理
     switch (net_ntohs(arp_pkt->op_code)) {
       case ARP_OP_REQUEST: {  // arp请求包
-        dbg_info(DBG_ARP, "recv an arp request pkt...");
+        dbg_info(DBG_ARP, "recv arp request pkt...");
         // 直接从请求包中获取目的ip地址对应的mac地址
         err = arp_entry_insert(netif, arp_pkt->sender_proto_addr,
                                arp_pkt->sender_hw_addr, 1);
         if (err != NET_ERR_OK) {
           dbg_warning(DBG_ARP,
-                      "arp recv warning: insert arp cache entry failed.");
+                      "recv arp packet warning: insert arp cache entry failed.");
         }
 
         return arp_make_reply(netif, buf);  //!!! 传递数据包
       } break;
       case ARP_OP_REPLY: {  // arp响应包
-        dbg_info(DBG_ARP, "recv an arp reply pkt...");
+        dbg_info(DBG_ARP, "recv arp reply pkt...");
 
         // 将arp缓存表项插入到cache_entry_list中
         err = arp_entry_insert(netif, arp_pkt->sender_proto_addr,
                                arp_pkt->sender_hw_addr, 1);
         if (err != NET_ERR_OK) {
           dbg_warning(DBG_ARP,
-                      "arp recv warning: insert arp cache entry failed.");
+                      "recv arp packet warning: insert arp cache entry failed.");
           return err;
         }
       }
     }
   } else {  // 不是发给本机的，可尝试缓存对方主机的ip地址和mac地址
-    dbg_warning(DBG_ARP, "arp recv warning: arp pkt not for me.");
+    dbg_warning(DBG_ARP, "recv arp packet warning: arp pkt not for me.");
     arp_entry_insert(netif, arp_pkt->sender_proto_addr, arp_pkt->sender_hw_addr,
                      0);
   }
@@ -707,6 +707,7 @@ net_err_t arp_recv(netif_t *netif, pktbuf_t *buf) {
   // 当前数据包已处理完毕
   pktbuf_free(buf);  //!!! 释放数据包
 
+  dbg_info(DBG_ARP, "recv arp packet ok.");
   return NET_ERR_OK;
 }
 

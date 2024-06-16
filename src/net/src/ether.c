@@ -17,6 +17,7 @@
 #include "pktbuf.h"
 #include "protocol.h"
 #include "tools.h"
+#include "ipv4.h"
 
 #if DBG_DISP_ENABLED(DBG_ETHER)
 
@@ -128,7 +129,7 @@ static void ether_close(netif_t *netif) {
  * @return net_err_t
  */
 static net_err_t ether_recv(netif_t *netif, pktbuf_t *buf) {
-  dbg_info(DBG_ETHER, "link layer ether recving....");
+  dbg_info(DBG_ETHER, "recv ether packet....");
 
   net_err_t err = NET_ERR_OK;
 
@@ -137,7 +138,7 @@ static net_err_t ether_recv(netif_t *netif, pktbuf_t *buf) {
   ether_pkt_t *pkt = (ether_pkt_t *)pktbuf_data_ptr(buf);
 
   if ((err = ether_pkt_check(pkt, pktbuf_total_size(buf))) != NET_ERR_OK) {
-    dbg_error(DBG_ETHER, "link layer ether recv failed.");
+    dbg_error(DBG_ETHER, "recv ether packet error: check failed.");
     return err;
   }
 
@@ -152,22 +153,26 @@ static net_err_t ether_recv(netif_t *netif, pktbuf_t *buf) {
       Net_Err_Check(err);
       err = arp_recv(netif, buf);
       if (err != NET_ERR_OK) {
-        dbg_warning(DBG_ETHER,
-                    "link layer ether recv warning: arp recv failed.");
+        dbg_warning(DBG_ETHER, "recv ether packet warning: arp recv failed.");
         return err;
       }
     } break;
     case NET_PROTOCOL_IPV4: {
       // IPv4协议
-      // err = netif_recvq_put(netif, buf, -1);
+      err = pktbuf_header_remove(buf, sizeof(ether_hdr_t));  // 移除以太网帧头部
+      Net_Err_Check(err);
+      err = ipv4_recv((const netif_t *)netif, buf);
+      if (err != NET_ERR_OK) {
+        dbg_warning(DBG_ETHER, "recv ether packet warning: ipv4 recv failed.");
+        return err;
+      }
     } break;
     default:
-      dbg_warning(DBG_ETHER,
-                  "link layer ether recv warning: unknown protocol.");
+      dbg_warning(DBG_ETHER, "recv ether warning: unknown protocol.");
       break;
   }
 
-  dbg_info(DBG_ETHER, "link layer ether recv ok.");
+  dbg_info(DBG_ETHER, "recv ether packet ok.");
 
   return NET_ERR_OK;
 }
@@ -188,7 +193,8 @@ static net_err_t ether_send(netif_t *netif, const ipaddr_t *ipdest,
                           buf);  //!!! 数据包传递
   }
 
-  if (ipaddr_is_local_broadcast(ipdest) || ipaddr_is_direct_broadcast(ipdest, &netif->netmask)) {
+  if (ipaddr_is_local_broadcast(ipdest) ||
+      ipaddr_is_direct_broadcast(ipdest, &netif->netmask)) {
     // 目的IP地址为广播地址
     return ether_raw_send(netif, NET_PROTOCOL_IPV4, ether_broadcast_addr(),
                           buf);  //!!! 数据包传递
