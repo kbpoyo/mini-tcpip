@@ -37,24 +37,34 @@ net_err_t ipv4_module_init(void) {
  */
 static net_err_t ipv4_pkt_check(ipv4_pkt_t *ipv4_pkt, uint16_t pkt_size,
                                 const netif_t *netif) {
-  // 检查ipv4版本号
-  if (ipv4_pkt->hdr.version != IPV4_VERSION) {
-    dbg_warning(DBG_IPV4, "ipv4 version error.");
-    return NET_ERR_IPV4;
-  }
+    // 检查ipv4版本号
+    if (ipv4_pkt->hdr.version != IPV4_VERSION) {
+      dbg_warning(DBG_IPV4, "ipv4 version error.");
+      return NET_ERR_IPV4;
+    }
 
-  // 检查ipv4头部长度
+    // 检查ipv4头部长度
   int hdr_size = ipv4_hdr_size(ipv4_pkt);
-  if (hdr_size < sizeof(ipv4_hdr_t)) {
-    dbg_warning(DBG_IPV4, "ipv4 header size error.");
-    return NET_ERR_IPV4;
-  }
+    if (hdr_size < sizeof(ipv4_hdr_t)) {
+      dbg_warning(DBG_IPV4, "ipv4 header size error.");
+      return NET_ERR_IPV4;
+    }
 
-  // 检查ipv4数据包总长度
-  int total_size = ipv4_pkt->hdr.total_len;
-  if (total_size < hdr_size || total_size > pkt_size) {
-    dbg_warning(DBG_IPV4, "ipv4 total size error.");
-    return NET_ERR_IPV4;
+    // 检查ipv4数据包总长度
+    int total_size = net_ntohs(ipv4_pkt->hdr.total_len);
+    if (total_size < hdr_size || total_size > pkt_size) {
+      dbg_warning(DBG_IPV4, "ipv4 total size error.");
+      return NET_ERR_IPV4;
+    }
+
+  // 检查头部校验和
+  if (ipv4_pkt->hdr.hdr_chksum) {
+    //* 进行校验和计算时，ip头部要保持原有字节序
+    uint16_t chksum = tools_checksum16(&ipv4_pkt->hdr, hdr_size, 0, 1);
+    if (chksum != 0) {
+      dbg_warning(DBG_IPV4, "ipv4 header checksum error.");
+      return NET_ERR_IPV4;
+    }
   }
 
   return NET_ERR_OK;
@@ -97,9 +107,6 @@ net_err_t ipv4_recv(const netif_t *netif, pktbuf_t *buf) {
     return NET_ERR_IPV4;
   }
 
-  // 将ipv4数据包头部从网络字节序转换为主机字节序
-  ipv4_hdr_ntoh(&ipv4_pkt->hdr);
-
   // 检查ipv4数据包
   err = ipv4_pkt_check(ipv4_pkt, pktbuf_total_size(buf), netif);
   if (err != NET_ERR_OK) {
@@ -107,14 +114,15 @@ net_err_t ipv4_recv(const netif_t *netif, pktbuf_t *buf) {
     return err;
   }
 
+  // 将ipv4数据包头部从网络字节序转换为主机字节序
+  ipv4_hdr_ntoh(&ipv4_pkt->hdr);
+
   // 调整数据包大小，移除尾部的填充字节
   err = pktbuf_resize(buf, ipv4_pkt->hdr.total_len);
   if (err != NET_ERR_OK) {
     dbg_warning(DBG_IPV4, "recv ipv4 packet warning: resize failed.");
     return err;
   }
-
- 
 
   //!!! 释放数据包
   pktbuf_free(buf);
