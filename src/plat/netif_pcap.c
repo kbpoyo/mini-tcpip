@@ -42,7 +42,7 @@ void recv_thread(void *arg) {
     // 从数据包池中分配一个数据包
     pktbuf_t *pktbuf = pktbuf_alloc(pkthdr->len);  //!!! 分配数据包
     if (pktbuf == (pktbuf_t *)0) {  // 失败，丢弃从pcap设备接收到的数据包
-      dbg_warning(DBG_NETIF, "packet loss: pktbuf == NULL!");
+      dbg_warning(DBG_NETIF, "packet loss: no memory for pktbuf!");
       continue;
     }
 
@@ -81,8 +81,8 @@ void send_thread(void *arg) {
 
   // 发送网络数据包
   while (1) {
-    pktbuf_t *buf =
-        netif_sendq_get(netif, 0);  // 阻塞方式获取发送队列中的数据包
+    // 阻塞方式获取发送队列中的数据包
+    pktbuf_t *buf = netif_sendq_get(netif, 0); //!!! 获取数据包
     if (buf == (pktbuf_t *)0) {
       continue;
     }
@@ -118,7 +118,7 @@ static net_err_t netif_pcap_open(netif_t *netif, void *data) {
   pcap_t *pcap = pcap_device_open(pcap_data->ip, pcap_data->hwaddr);
   if (pcap == (pcap_t *)0) {
     dbg_error(DBG_NETIF, "pcap open failed! netif name: %s", netif->name);
-    return NET_ERR_DEV;
+    return NET_ERR_PCAP;
   }
 
   // 设置网络接口类型为以太网接口
@@ -163,7 +163,7 @@ static void netif_pcap_close(netif_t *netif) {
 static net_err_t netif_pcap_send(netif_t *netif) { return NET_ERR_OK; }
 
 /**
- * @brief 环回接口的操作方法
+ * @brief PCAP接口的操作方法
  *
  */
 const netif_ops_t netif_pcap_ops = {

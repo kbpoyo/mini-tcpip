@@ -59,6 +59,16 @@ net_err_t net_timer_module_init(void) {
   return NET_ERR_OK;
 }
 
+/**
+ * @brief 按照定时时长插入定时器链表，且在插入后，
+ * 每个定时器的定时时长为当前定时器及之前的定时器的curr_ticks之和。
+ * 
+ * (timer_A, 10s) -> (timer_B, 20s) -> (timer_C, 0s) -> (timer_D, 30s)
+ * 
+ * timer_A定时时长为10s, timer_B和timer_C定时时长为30s, timer_D定时时长为60s
+ * 
+ * @param timer 
+ */
 static void insert_timer(net_timer_t *timer) {
   nlist_node_t *node = (nlist_node_t *)0;
   net_timer_t *curr_timer = (net_timer_t *)0;
@@ -94,12 +104,12 @@ static void insert_timer(net_timer_t *timer) {
 /**
  * @brief 添加一个定时器
  *
- * @param timer
- * @param name
- * @param handle
- * @param arg
- * @param ms
- * @param flags
+ * @param timer 定时器对象
+ * @param name 定时器名称
+ * @param handle 定时器回调函数
+ * @param arg 回调函数参数
+ * @param ms 定时时长
+ * @param flags 定时器标志
  * @return net_err_t
  */
 net_err_t net_timer_add(net_timer_t *timer, const char *name,

@@ -15,8 +15,10 @@ typedef enum _net_err_t {
   NET_ERR_EXIST = -10,
   NET_ERR_PROTO = -11,
   NET_ERR_NOSUPPORT = -12,
-  NET_ERR_CONFLICT = -13,
-  NET_ERR_IPV4 = -14,
+  NET_ERR_PCAP = -13,
+  NET_ERR_ETHER = -14,
+  NET_ERR_ARP = -15,
+  NET_ERR_IPV4 = -16,
 } net_err_t;
 
 

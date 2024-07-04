@@ -52,7 +52,7 @@ typedef struct _arp_entry_t {
 
   enum {
     NET_ARP_FREE,      // 空闲
-    NET_ARP_WAITING,   // 等待响II
+    NET_ARP_WAITING,   // 等待响
     NET_ARP_RESOLVED,  // 已获取响应
   } state;             // arp表项状态
 

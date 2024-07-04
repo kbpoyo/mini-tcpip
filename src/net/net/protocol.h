@@ -13,13 +13,20 @@
 #define PROTOCOL_H
 /**
  * @brief 协议类型的枚举
- * 
+ *
  */
 typedef enum _protocol_type_t {
-  NET_PROTOCOL_NONE = 0,       // 无协议
+  NET_PROTOCOL_NONE = 0,  // 无协议
+  // 用于网络层和链路层(以太网)的多路复用协议
   NET_PROTOCOL_ARP = 0x0806,   // ARP协议
-  NET_PROTOCOL_IPV4 = 0x0800,    // IP协议
+  NET_PROTOCOL_IPV4 = 0x0800,  // IP协议
   NET_PROTOCOL_IPV6 = 0x86DD,  // IPV6协议
+
+  // 用于传输层和网络层(ip)的多路复用协议
+  NET_PROTOCOL_ICMPv4 = 0x01,  // ICMPv4协议
+  NET_PROTOCOL_UDP = 0x11,     // UDP协议
+  NET_PROTOCOL_TCP = 0x06,     // TCP协议
+
 } protocol_type_t;
 
 #endif  // PROTOCOL_H

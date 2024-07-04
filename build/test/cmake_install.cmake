@@ -1,4 +1,4 @@
-# Install script for directory: F:/code/c++code/mini-tcpip/test
+# Install script for directory: C:/Users/kbpoyo/Desktop/mini-tcpip/test
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,6 +34,6 @@ endif()
 
 # Set default install directory permissions.
 if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "F:/software/work_space/Toolbox _APP/CLion Nova/bin/mingw/bin/objdump.exe")
+  set(CMAKE_OBJDUMP "F:/software/work/CLion/bin/mingw/bin/objdump.exe")
 endif()
 

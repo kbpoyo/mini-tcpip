@@ -75,21 +75,21 @@ void ipaddr_copy(ipaddr_t *dest, const ipaddr_t *src) {
 
 /**
  * @brief 获取默认的空ip地址(0.0.0.0)
- * 
- * @return ipaddr_t* 
+ *
+ * @return ipaddr_t*
  */
 ipaddr_t *ipaddr_get_any(void) {
-    static const ipaddr_t ipaddr_any = {.type = IPADDR_V4, .addr = 0};
+  static const ipaddr_t ipaddr_any = {.type = IPADDR_V4, .addr = 0};
 
-    return (ipaddr_t *)&ipaddr_any;
+  return (ipaddr_t *)&ipaddr_any;
 }
 
 /**
  * @brief 判断ip1和ip2是否相等
- * 
- * @param ip1 
- * @param ip2 
- * @return int 
+ *
+ * @param ip1
+ * @param ip2
+ * @return int
  */
 int ipaddr_is_equal(const ipaddr_t *ip1, const ipaddr_t *ip2) {
   return ip1->addr == ip2->addr;
@@ -97,9 +97,9 @@ int ipaddr_is_equal(const ipaddr_t *ip1, const ipaddr_t *ip2) {
 
 /**
  * @brief 将字节数组转换为ip地址结构
- * 
- * @param dest 
- * @param src 
+ *
+ * @param dest
+ * @param src
  */
 void ipaddr_from_bytes(ipaddr_t *dest, const uint8_t *src) {
   if (dest == (ipaddr_t *)0 || src == (uint8_t *)0) {
@@ -112,9 +112,9 @@ void ipaddr_from_bytes(ipaddr_t *dest, const uint8_t *src) {
 
 /**
  * @brief 将ip地址结构转换为字节数组
- * 
- * @param src 
- * @param dest 
+ *
+ * @param src
+ * @param dest
  */
 void ipaddr_to_bytes(const ipaddr_t *src, uint8_t *dest) {
   if (src == (ipaddr_t *)0 || dest == (uint8_t *)0) {
@@ -124,4 +124,29 @@ void ipaddr_to_bytes(const ipaddr_t *src, uint8_t *dest) {
   *(uint32_t *)dest = src->addr;
 }
 
+int ipaddr_is_match(const ipaddr_t *dest_ipaddr, const ipaddr_t *local_ipaddr,
+                    const ipaddr_t *netmask) {
+  if (ipaddr_is_equal(dest_ipaddr, local_ipaddr)) {
+    // 目的地址与本机地址精准匹配
+    return 1;
+  }
 
+  if (ipaddr_is_local_broadcast(dest_ipaddr)) {
+    // 该目的地址为全网段广播地址，可以和任意本机ip匹配
+    return 1;
+  }
+
+  if (ipaddr_is_direct_broadcast(dest_ipaddr,
+                                 netmask)) {  // 目的地址为一个子网的广播地址
+    // 获取ip地址所属网络号
+    ipaddr_t dest_netnum = ipaddr_get_netnum(dest_ipaddr, netmask);
+    ipaddr_t local_netnum = ipaddr_get_netnum(local_ipaddr, netmask);
+
+    if (ipaddr_is_equal(&dest_netnum, &local_netnum)) {
+      // 目的地址与本地ip地址属于同一网段，且为该网段的广播地址，可以与本机任意ip地址匹配
+      return 1;
+    } 
+  }
+
+  return 0;
+}

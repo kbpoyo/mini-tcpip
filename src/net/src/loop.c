@@ -48,16 +48,16 @@ static void loop_close(netif_t *netif) {
  */
 static net_err_t loop_send(netif_t *netif) {
     // 从发送队列中获取数据包
-    pktbuf_t *buf = netif_sendq_get(netif, -1);
+    pktbuf_t *buf = netif_sendq_get(netif, -1); //!!! 获取数据包
     if (buf == (pktbuf_t *)0) {
         dbg_info(DBG_LOOP, "no data to send.");
         return NET_ERR_OK;
     }
 
     // 将数据包放入接收队列
-    net_err_t err = netif_recvq_put(netif, buf, -1);
+    net_err_t err = netif_recvq_put(netif, buf, -1);    //!!! 数据包传递
     if (err != NET_ERR_OK) {    //  如果放入失败,则释放数据包
-        pktbuf_free(buf);
+        pktbuf_free(buf); //!!! 释放数据包
         return err;
     }
 

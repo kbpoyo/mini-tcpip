@@ -1,4 +1,4 @@
-# Install script for directory: F:/code/c++code/mini-tcpip
+# Install script for directory: C:/Users/kbpoyo/Desktop/mini-tcpip
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,12 +34,12 @@ endif()
 
 # Set default install directory permissions.
 if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "F:/software/work_space/Toolbox _APP/CLion Nova/bin/mingw/bin/objdump.exe")
+  set(CMAKE_OBJDUMP "F:/software/work/CLion/bin/mingw/bin/objdump.exe")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("F:/code/c++code/mini-tcpip/build/test/cmake_install.cmake")
+  include("C:/Users/kbpoyo/Desktop/mini-tcpip/build/test/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "F:/code/c++code/mini-tcpip/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/kbpoyo/Desktop/mini-tcpip/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

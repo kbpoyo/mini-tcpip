@@ -39,9 +39,9 @@ int ipaddr_is_equal(const ipaddr_t *ip1, const ipaddr_t *ip2);
 
 void ipaddr_from_bytes(ipaddr_t *dest, const uint8_t *src);
 void ipaddr_to_bytes(const ipaddr_t *src, uint8_t *dest);
-
+int ipaddr_is_match(const ipaddr_t *dest_ipaddr, const ipaddr_t *local_ipaddr, const ipaddr_t *netmask);
 /**
- * @brief 判断是否为本地广播地址(255.255.255.255)
+ * @brief 判断是否为本地广播地址(255.255.255.255)(全网段进行广播)
  *
  * @param ipaddr
  * @return int
@@ -65,9 +65,25 @@ static inline ipaddr_t ipaddr_get_host(const ipaddr_t *ipaddr,
   return host;
 }
 
+
+/**
+ * @brief 获取ip地址所对应的网络号 
+ * 
+ * @param ipaddr 
+ * @param mask 
+ * @return ipaddr_t 
+ */
+static inline ipaddr_t ipaddr_get_netnum(const ipaddr_t *ipaddr, const ipaddr_t *mask) {
+  ipaddr_t netnum;
+  netnum.type = IPADDR_V4;
+  netnum.addr = ipaddr ? (ipaddr->addr & mask->addr) : 0;
+
+  return netnum;
+}
+
 /**
  * @brief  判断是否为定向广播地址(ip & ~mask = 0xffffffff & ~mask)
- * 定向广播地址及当前网段的广播地址
+ * 定向广播地址及某一子网的广播地址
  * @param ipaddr
  * @return int
  */

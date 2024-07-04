@@ -12,7 +12,7 @@
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "F:/software/work_space/Toolbox _APP/CLion Nova/bin/gdb/win/x64/bin/gdb.exe",
+            "miDebuggerPath": "F:/software/work/CLion/bin/gdb/win/x64/bin/gdb.exe",
             "setupCommands": [
                 {
                     "description": "为 gdb 启用整齐打印",

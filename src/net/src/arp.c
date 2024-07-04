@@ -2,6 +2,10 @@
  * @file arp.c
  * @author kbpoyo (kbpoyo@qq.com)
  * @brief arp协议模块
+ * arp缓存表采取LRU算法, 每次访问一个表项时，都将其移动到链表头，
+ * 在空间不够需要释放一个表项时，从链表尾部释放，
+ * 这样不仅可以防止最近被访问的表项被释放，还可以在下一次对其进行快速查找
+ *
  * @version 0.1
  * @date 2024-06-10
  *
@@ -142,7 +146,6 @@ static void arp_entry_free(arp_entry_t *entry) {
   mblock_free(&cache_tbl_mblock, entry);
 }
 
-
 /**
  * @brief arp缓存表定时器回调函数，用于扫描并处理arp缓存表项超时
  *
@@ -224,9 +227,11 @@ static net_err_t arp_cache_init(void) {
   return NET_ERR_OK;
 }
 
-
 /**
  * @brief 分配一个arp缓存表项
+ *
+ * @param force 若内存块已满，是否强制释放一个，以便分配新的内存块(1:
+ * 强制释放,0: 不强制释放)
  *
  * @return arp_entry_t*
  */
@@ -265,6 +270,8 @@ arp_entry_t *arp_entry_find(const uint8_t *ipaddr_bytes) {
 
     if (plat_memcmp(entry->ipaddr, ipaddr_bytes, IP_ADDR_SIZE) == 0) {
       // 若表项不在链表头，则将其移动到链表头，以便下次快速查找
+      // 若缓存表已满，且需要强制释放一个时，采取从链表尾部释放的策略
+      // 所以每次访问一个表项时，都将其移动到链表头，还可以防止表项被释放
       if (&entry->node != nlist_first(&cache_entry_list)) {
         nlist_remove(&cache_entry_list, &entry->node);
         nlist_insert_first(&cache_entry_list, &entry->node);
@@ -366,7 +373,7 @@ static net_err_t arp_entry_insert(netif_t *netif, const uint8_t *ipaddr_bytes,
     if (!entry) {  // 分配失败
       dbg_warning(DBG_ARP,
                   "arp entry insert waring: alloc arp cache entry failed.");
-      return NET_ERR_MEM;
+      return NET_ERR_ARP;
     }
     // 设置表项
     arp_entry_set(entry, ipaddr_bytes, hwaddr, netif, NET_ARP_RESOLVED);
@@ -657,15 +664,16 @@ net_err_t arp_recv(netif_t *netif, pktbuf_t *buf) {
   ipaddr_t ipaddr;
   ipaddr_from_bytes(&ipaddr, arp_pkt->sender_proto_addr);
   if (ipaddr_is_equal(&ipaddr, &netif->ipaddr)) {
-    dbg_warning(DBG_ARP,
-                "recv arp packet warning: send ipaddr is same as local ipaddr.");
+    dbg_warning(
+        DBG_ARP,
+        "recv arp packet warning: send ipaddr is same as local ipaddr.");
     // 根据当前网卡的状态，决定是否发送arp冲突包
     if (netif->state == NETIF_STATE_ACVTIVE) {  // 网卡已激活, 发送arp冲突包
       return arp_make_conflict(netif, buf);  //!!! 数据包传递
     } else {  // 网卡未激活，设置网卡状态为ip地址冲突
       netif_set_ipconflict(netif);
     }
-    return NET_ERR_CONFLICT;
+    return NET_ERR_ARP;
   }
 
   // 检测arp数据包是否是发给本机的
@@ -679,8 +687,9 @@ net_err_t arp_recv(netif_t *netif, pktbuf_t *buf) {
         err = arp_entry_insert(netif, arp_pkt->sender_proto_addr,
                                arp_pkt->sender_hw_addr, 1);
         if (err != NET_ERR_OK) {
-          dbg_warning(DBG_ARP,
-                      "recv arp packet warning: insert arp cache entry failed.");
+          dbg_warning(
+              DBG_ARP,
+              "recv arp packet warning: insert arp cache entry failed.");
         }
 
         return arp_make_reply(netif, buf);  //!!! 传递数据包
@@ -692,11 +701,12 @@ net_err_t arp_recv(netif_t *netif, pktbuf_t *buf) {
         err = arp_entry_insert(netif, arp_pkt->sender_proto_addr,
                                arp_pkt->sender_hw_addr, 1);
         if (err != NET_ERR_OK) {
-          dbg_warning(DBG_ARP,
-                      "recv arp packet warning: insert arp cache entry failed.");
+          dbg_warning(
+              DBG_ARP,
+              "recv arp packet warning: insert arp cache entry failed.");
           return err;
         }
-      }
+      } break;
     }
   } else {  // 不是发给本机的，可尝试缓存对方主机的ip地址和mac地址
     dbg_warning(DBG_ARP, "recv arp packet warning: arp pkt not for me.");
@@ -741,14 +751,14 @@ net_err_t arp_send(netif_t *netif, const uint8_t *dest_ipaddr_bytes,
       return NET_ERR_OK;
     } else {
       dbg_warning(DBG_ARP, "arp send warning: loss buf, arp cache full.");
-      return NET_ERR_FULL;
+      return NET_ERR_ARP;
     }
   } else {
     // 该表项不存在，分配一个新的表项
     entry = arp_entry_alloc(1);
     if (!entry) {
       dbg_error(DBG_ARP, "arp send error: alloc arp cache entry failed.");
-      return NET_ERR_MEM;
+      return NET_ERR_ARP;
     }
 
     // 设置表项
@@ -770,11 +780,10 @@ net_err_t arp_send(netif_t *netif, const uint8_t *dest_ipaddr_bytes,
   return NET_ERR_OK;
 }
 
-
 /**
  * @brief 清空网络接口对应的arp缓存表
- * 
- * @param netif 
+ *
+ * @param netif
  */
 void arp_clear(netif_t *netif) {
   nlist_node_t *node, *next;

@@ -13,11 +13,11 @@
 
 #include "arp.h"
 #include "dbg.h"
+#include "ipv4.h"
 #include "netif.h"
 #include "pktbuf.h"
 #include "protocol.h"
 #include "tools.h"
-#include "ipv4.h"
 
 #if DBG_DISP_ENABLED(DBG_ETHER)
 
@@ -76,16 +76,17 @@ static void display_ether_pkt(char *msg, ether_pkt_t *pkt, int total_size) {
 static net_err_t ether_pkt_check(ether_pkt_t *pkt, int total_size) {
   if (total_size > sizeof(ether_hdr_t) + ETHER_MTU) {  // 以太网帧大小超过最大值
     dbg_warning(DBG_ETHER, "ether pkt size is too large.");
-    return NET_ERR_SIZE;
+    return NET_ERR_ETHER;
   }
 
   //! 以太网帧最小值应该为 MAC包头(14B) + 最小负载(46B) = 60B
+  //! (不包括硬件自动填充的FCS校验码)
   //! 但是PCAP库会自动将有效载荷中的填充字节去掉，所以导致接收到的以太网帧的有效载荷
   //! 可能小于46B，所以这里只判断以太网帧的大小是否小于MAC包头的大小，
   //! 不对有效载荷大小进行判断
   if (total_size < sizeof(ether_hdr_t)) {  // 以太网帧大小小于最小值
     dbg_warning(DBG_ETHER, "ether pkt size less than ether header size.");
-    return NET_ERR_SIZE;
+    return NET_ERR_ETHER;
   }
   return NET_ERR_OK;
 }
@@ -104,10 +105,10 @@ static net_err_t ether_open(netif_t *netif) {
     // TODO:
     // 该线程只负责读取state状态，且只有一个线程在写入，可能会有数据竞争，但这里依靠sleep就大概率不会出现问题
     if (netif->state == NETIF_STATE_IPCONFLICT) {
-      return NET_ERR_CONFLICT;
+      return NET_ERR_ETHER;
     }
   }
-  // 发送免费ARP请求
+  // 发送免费ARP请求, 通知其他设备该ip地址已被使用。
   return arp_make_gratuitous(netif);
 }
 
@@ -151,7 +152,7 @@ static net_err_t ether_recv(netif_t *netif, pktbuf_t *buf) {
       // ARP协议
       err = pktbuf_header_remove(buf, sizeof(ether_hdr_t));  // 移除以太网帧头部
       Net_Err_Check(err);
-      err = arp_recv(netif, buf);
+      err = arp_recv(netif, buf); //!!! 数据包传递
       if (err != NET_ERR_OK) {
         dbg_warning(DBG_ETHER, "recv ether packet warning: arp recv failed.");
         return err;
@@ -161,15 +162,16 @@ static net_err_t ether_recv(netif_t *netif, pktbuf_t *buf) {
       // IPv4协议
       err = pktbuf_header_remove(buf, sizeof(ether_hdr_t));  // 移除以太网帧头部
       Net_Err_Check(err);
-      err = ipv4_recv((const netif_t *)netif, buf);
+      err = ipv4_recv((const netif_t *)netif, buf); //!!! 数据包传递
       if (err != NET_ERR_OK) {
         dbg_warning(DBG_ETHER, "recv ether packet warning: ipv4 recv failed.");
         return err;
       }
     } break;
-    default:
+    default: {
       dbg_warning(DBG_ETHER, "recv ether warning: unknown protocol.");
-      break;
+      return NET_ERR_ETHER;
+    } break;
   }
 
   dbg_info(DBG_ETHER, "recv ether packet ok.");
@@ -219,6 +221,8 @@ net_err_t ether_module_init(void) {
   dbg_info(DBG_ETHER, "init ether....");
 
   // 将以太网协议层回调接口注册到网络接口模块的链路层回调接口中
+  // 通过这种方式，使以太网协议层与网络接口模块进行了解耦
+  // 并且避免了全局变量的使用
   net_err_t err = netif_layer_register(&ether_ops);
   if (err != NET_ERR_OK) {
     dbg_error(DBG_ETHER, "register ether failed.");
@@ -231,8 +235,8 @@ net_err_t ether_module_init(void) {
 /**
  * @brief 获取以太网广播地址
  * 广播：FF-FF-FF-FF-FF-FF
- * 多播(组播)
- * 单播
+ * 多播(组播): //TODO
+ * 单播: //TODO
  *
  *
  * @return const uint8_t*
@@ -292,9 +296,10 @@ net_err_t ether_raw_send(netif_t *netif, protocol_type_t protocol,
     // 将数据包放入发送队列
     err = netif_sendq_put(netif, buf, -1);
     if (err != NET_ERR_OK) {
-      dbg_warning(DBG_ETHER, "send ether pkt failed.");
+      dbg_warning(DBG_ETHER, "put ether pkt into send queue failed.");
       return err;
     }
-    return netif->ops->send(netif);  // 通过网卡发送数据包
+    // 通过网卡发送数据包，若网卡有自己的发送线程，此函数不需要执行其他操作，会立即返回
+    return netif->ops->send(netif);
   }
 }

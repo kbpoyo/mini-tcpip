@@ -12,10 +12,10 @@ LINK_DIRECTORIES(
 
 
 #使用visual studio 时定义该宏，以消除不安全函数警告
-add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+# add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
 #使用GCC时，Enable GCC debug
-# add_compile_options(-g)
+add_compile_options(-g)
 # add_compile_options(-Wall)
 
 

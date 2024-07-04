@@ -140,12 +140,12 @@ netif_t *netif_open(const char *dev_name, const netif_ops_t *ops,
   }
 
   // 初始化网络接口对象
+  plat_strncpy(netif->name, dev_name, NETIF_NAME_SIZE);  // 设置接口名称
+  netif->name[NETIF_NAME_SIZE - 1] = '\0';  // 设置字符串结束符, 确保内存安全
+
   ipaddr_set_any(&(netif->ipaddr));   // 初始化ip
   ipaddr_set_any(&(netif->netmask));  // 初始化子网掩码
   ipaddr_set_any(&(netif->gateway));  // 初始化网关地址
-
-  plat_strncpy(netif->name, dev_name, NETIF_NAME_SIZE);  // 设置接口名称
-  netif->name[NETIF_NAME_SIZE - 1] = '\0';  // 设置字符串结束符, 确保内存安全
 
   plat_memset(&(netif->hwaddr), 0, sizeof(netif_hwaddr_t));  // 清空硬件地址
   netif->type = NETIF_TYPE_NONE;  // 接口在打开时不知道类型, 先设置为无类型
@@ -458,7 +458,7 @@ net_err_t netif_send(netif_t *netif, ipaddr_t *ipaddr, pktbuf_t *buf) {
                   netif->name);
     }
 
-  } else {
+  } else {  // 接口没有链路层处理，直接发送数据包
     // 将数据包放到发送队列中
     err = netif_sendq_put(netif, buf, -1);  //!!! 数据包传递
     if (err != NET_ERR_OK) {

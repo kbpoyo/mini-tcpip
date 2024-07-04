@@ -20,7 +20,7 @@
 
 #define ETHER_MAC_SIZE 6  // mac地址长度
 #define ETHER_MTU 1500   // 以太网最大传输单元
-#define ETHER_DATA_MIN  46  // 以太网最小数据长度
+#define ETHER_DATA_MIN  46  // 以太网最小传输单元
 
 #pragma pack(1)
 
