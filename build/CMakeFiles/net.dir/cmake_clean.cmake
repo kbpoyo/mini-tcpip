@@ -15,6 +15,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/net.dir/src/net/src/exmsg.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/fixq.c.obj"
   "CMakeFiles/net.dir/src/net/src/fixq.c.obj.d"
+  "CMakeFiles/net.dir/src/net/src/icmpv4.c.obj"
+  "CMakeFiles/net.dir/src/net/src/icmpv4.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/ipaddr.c.obj"
   "CMakeFiles/net.dir/src/net/src/ipaddr.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/ipv4.c.obj"

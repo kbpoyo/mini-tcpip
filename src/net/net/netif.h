@@ -110,11 +110,12 @@ net_err_t netif_set_addr(netif_t *netif, const ipaddr_t *ip,
                          const ipaddr_t *mask, const ipaddr_t *gateway);
 net_err_t netif_set_hwaddr(netif_t *netif, const uint8_t *hwaddr, uint32_t len);
 void netif_set_default(netif_t *netif);
+netif_t *netif_get_default(void);
 net_err_t netif_recvq_put(netif_t *netif, pktbuf_t *buf, int tmo);
 pktbuf_t *netif_recvq_get(netif_t *netif, int tmo);
 net_err_t netif_sendq_put(netif_t *netif, pktbuf_t *buf, int tmo);
 pktbuf_t *netif_sendq_get(netif_t *netif, int tmo);
-net_err_t netif_send(netif_t *netif, ipaddr_t *ipaddr, pktbuf_t *buf);
+net_err_t netif_send(netif_t *netif, const ipaddr_t *ipaddr, pktbuf_t *buf);
 
 net_err_t netif_set_acticve(netif_t *netif);
 net_err_t netif_set_inactive(netif_t *netif);

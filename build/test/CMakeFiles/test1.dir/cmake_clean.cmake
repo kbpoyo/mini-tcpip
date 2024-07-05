@@ -13,6 +13,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/test1.dir/__/src/net/src/exmsg.c.obj.d"
   "CMakeFiles/test1.dir/__/src/net/src/fixq.c.obj"
   "CMakeFiles/test1.dir/__/src/net/src/fixq.c.obj.d"
+  "CMakeFiles/test1.dir/__/src/net/src/icmpv4.c.obj"
+  "CMakeFiles/test1.dir/__/src/net/src/icmpv4.c.obj.d"
   "CMakeFiles/test1.dir/__/src/net/src/ipaddr.c.obj"
   "CMakeFiles/test1.dir/__/src/net/src/ipaddr.c.obj.d"
   "CMakeFiles/test1.dir/__/src/net/src/ipv4.c.obj"

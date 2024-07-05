@@ -258,4 +258,6 @@ CMakeFiles/net.dir/src/app/main.c.obj: \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/pktbuf.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/plat/sys_plat.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/timer.h \
- C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tools.h
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tools.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/ipv4.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/netif.h

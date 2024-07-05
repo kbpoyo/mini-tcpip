@@ -10,6 +10,7 @@
 #include "sys_plat.h"
 #include "timer.h"
 #include "tools.h"
+#include "ipv4.h"
 
 pcap_data_t pcap_data = {
     // 需要打开的网络接口的ip地址和硬件地址
@@ -44,15 +45,16 @@ net_err_t netdev_init(void) {
   pktbuf_t *buf = pktbuf_alloc(32);
   pktbuf_fill(buf, 0x53, 32);
 
-  ipaddr_t dest;
+  ipaddr_t dest, src;
   ipaddr_from_str(&dest, "192.168.74.3");
-  netif_send(netif, &dest, buf);
+  ipaddr_from_str(&src, "192.168.74.2");
+  ipv4_send(0, &dest, &src, buf);
 
 
   buf = pktbuf_alloc(32);
   pktbuf_fill(buf, 0xA5, 32);
   ipaddr_from_str(&dest, "192.168.74.255");
-  netif_send(netif, &dest, buf);
+  ipv4_send(0, &dest, &src, buf);
 
   return NET_ERR_OK;
 }

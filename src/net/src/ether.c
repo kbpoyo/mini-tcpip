@@ -146,7 +146,7 @@ static net_err_t ether_recv(netif_t *netif, pktbuf_t *buf) {
   // 打印以太网帧
   display_ether_pkt("ether recv", pkt, pktbuf_total_size(buf));
 
-  // 判断协议类型
+  // 根据上层协议类型进行链路层的多路分解
   switch (net_ntohs(pkt->hdr.protocol_type)) {
     case NET_PROTOCOL_ARP: {
       // ARP协议

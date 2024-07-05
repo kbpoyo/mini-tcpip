@@ -37,6 +37,7 @@
 #define DBG_TIMER DBG_LEVEL_ERROR
 #define DBG_ARP DBG_LEVEL_WARN
 #define DBG_IPV4 DBG_LEVEL_INFO
+#define DBG_ICMPV4 DBG_LEVEL_INFO
 
 // 消息队列相关配置
 #define EXMSG_MSG_CNT 10                  // 消息队列大小
@@ -62,5 +63,8 @@
 #define ARP_ENTRY_WAITING_TMO (3 * ARP_CACHE_TMO)  // 待解析的arp缓存表项的超时时间(s)
 #define ARP_ENTRY_RESOLVED_TMO (5 * ARP_CACHE_TMO)  // 已解析的arp缓存表项的超时时间(s)
 #define ARP_ENTRY_RETRY_CNT 5  // arp缓存表项允许的重复请求次数
+
+// IPv4模块相关配置
+#define NET_IPV4_DEFAULT_TTL 64  // ipv4数据包默认生存跳数
 
 #endif  // NET_CFG_H

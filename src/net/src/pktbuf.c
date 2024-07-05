@@ -10,7 +10,7 @@
  */
 
 #include "pktbuf.h"
-
+#include "tools.h"
 #include "dbg.h"
 #include "mblock.h"
 
@@ -50,7 +50,7 @@ static inline void pktbuf_update_pos(pktbuf_t *buf) {
  * @param buf
  * @return int
  */
-static inline int pktbuf_currblk_remain_size(pktbuf_t *buf) {
+static inline int pktbuf_currblk_remain_size(const pktbuf_t *buf) {
   pktblk_t *blk = buf->curr_blk;
   if (blk == (pktblk_t *)0) {
     return 0;
@@ -890,3 +890,44 @@ pktbuf_t *pktbuf_inc_ref(pktbuf_t *buf) {
 
   return buf;
 }
+
+/**
+ * @brief 计算数据包从当前访问位置buf.pos开始的size个字节的校验和
+ * 
+ * @param buf 
+ * @param size
+ * @param pre_sum 
+ * @param is_take_back 
+ * @return uint16_t 
+ */
+ uint16_t pktbuf_checksum16(pktbuf_t *buf, uint16_t size, uint32_t pre_sum, int is_take_back) {
+  pktbuf_check_buf(buf);
+
+  // 获取数据包当前待访问的数据大小
+  int remain_size = pktbuf_remain_size(buf);
+  if (size < 0 || size > remain_size) {
+    dbg_error(DBG_PKTBUF, "size too small or too big.");
+    return 0;
+  }
+
+  // 计算校验和
+  uint32_t sum = pre_sum;
+  while (size > 0) {
+    // 获取当前数据块的剩余空间
+    int blk_remain_size = pktbuf_currblk_remain_size(buf);
+    int curr_size = size > blk_remain_size ? blk_remain_size : size;
+
+    // 计算当前数据块中待访问数据的校验和
+    sum = tools_checksum16(buf->curr_pos, curr_size, sum, 0);
+
+    // 更新数据包的访问位置
+    pktbuf_pos_move_forward(buf, curr_size);
+
+    // 更新剩余待计算数据大小
+    size -= curr_size;
+  }
+
+  //根据is_take_back的值，判断是否取反
+  return is_take_back ? (uint16_t)~sum : (uint16_t)sum;
+
+ }

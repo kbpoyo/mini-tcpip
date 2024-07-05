@@ -94,6 +94,7 @@ typedef struct _ipv4_pkt_t {
 net_err_t ipv4_module_init(void);
 
 net_err_t ipv4_recv(const netif_t *netif, pktbuf_t *buf);
+net_err_t ipv4_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr, const ipaddr_t *src_ipaddr, pktbuf_t *buf);
 
 /**
  * @brief 获取数据包头部大小
@@ -101,8 +102,18 @@ net_err_t ipv4_recv(const netif_t *netif, pktbuf_t *buf);
  * @param ipv4_pkt
  * @return int
  */
-static inline int ipv4_hdr_size(ipv4_pkt_t *ipv4_pkt) {
+static inline int ipv4_hdr_size(const ipv4_pkt_t *ipv4_pkt) {
   return (ipv4_pkt->hdr.ihl * 4);
+}
+
+/**
+ * @brief 设置ipv4头部的ihl字段
+ * 
+ * @param ipv4_pkt 
+ * @param size 
+ */
+static inline void ipv4_set_hdr_size(ipv4_pkt_t *ipv4_pkt, int size) {
+  ipv4_pkt->hdr.ihl = size / 4;
 }
 
 #endif  // IPV4_H

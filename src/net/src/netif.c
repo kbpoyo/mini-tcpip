@@ -354,6 +354,7 @@ net_err_t netif_set_inactive(netif_t *netif) {
  * @param netif
  */
 void netif_set_default(netif_t *netif) { netif_default = netif; }
+netif_t *netif_get_default(void) { return netif_default; }
 
 /**
  * @brief 向接网络接口的接收队列中放入数据包
@@ -446,7 +447,7 @@ pktbuf_t *netif_sendq_get(netif_t *netif, int tmo) {
  * @param buf 数据包
  * @return net_err_t
  */
-net_err_t netif_send(netif_t *netif, ipaddr_t *ipaddr, pktbuf_t *buf) {
+net_err_t netif_send(netif_t *netif, const ipaddr_t *ipaddr, pktbuf_t *buf) {
   pktbuf_check_buf(buf);  // 检查数据包的有效性
 
   net_err_t err = NET_ERR_OK;
