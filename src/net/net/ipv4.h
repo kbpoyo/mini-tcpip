@@ -102,7 +102,7 @@ net_err_t ipv4_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr, const ip
  * @param ipv4_pkt
  * @return int
  */
-static inline int ipv4_hdr_size(const ipv4_pkt_t *ipv4_pkt) {
+static inline int ipv4_get_hdr_size(const ipv4_pkt_t *ipv4_pkt) {
   return (ipv4_pkt->hdr.ihl * 4);
 }
 

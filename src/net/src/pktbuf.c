@@ -402,6 +402,8 @@ net_err_t pktbuf_header_remove(pktbuf_t *buf, int size) {
   // 获取数据包的第一个数据块
   pktblk_t *block = pktbuf_blk_first(buf);
 
+  // 从第一个数据块开始移除数据
+  int remove_size = size;
   while (size && block) {
     pktblk_t *next_blk = pktbuf_blk_next(block);
 
@@ -420,6 +422,12 @@ net_err_t pktbuf_header_remove(pktbuf_t *buf, int size) {
     size -= curr_size;                     // 更新待移除数据大小
 
     block = next_blk;
+  }
+
+  // 判断数据包访问位置是否需要更新，若当前访问位置在移除的数据块中，则更新访问位置
+  buf->pos -= remove_size;
+  if (buf->pos < 0) {
+    pktbuf_acc_reset(buf);
   }
 
   display_check_buf(buf);  // 检查数据包是否正确

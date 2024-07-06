@@ -20,22 +20,37 @@
 #if DBG_DISP_ENABLED(DBG_IPV4)
 
 /**
- * @brief 打印arp数据包
+ * @brief 打印ipv4数据包
  *
- * @param arp_pkt
+ * @param ipv4_pkt
  */
-static void ipv4_pkt_display(const ipv4_pkt_t *pkt) {
+static void ipv4_pkt_display(const ipv4_pkt_t *ipv4_pkt) {
   plat_printf("---------------- ipv4 packet ----------------\n");
 
   // 打印ipv4头部信息
-  const ipv4_hdr_t *hdr = &pkt->hdr;
+  const ipv4_hdr_t *hdr = &ipv4_pkt->hdr;
   plat_printf("\tversion: %d\n", hdr->version);
-  plat_printf("\thead len: %d\n", ipv4_hdr_size(pkt));
-  plat_printf("\ttotal len: %d\n", hdr->total_len);
-  plat_printf("\tid: %d\n", hdr->id);
+  plat_printf("\thead len: %d\n", ipv4_get_hdr_size(ipv4_pkt));
+  plat_printf("\ttotal len: %d\n", net_ntohs(hdr->total_len));
+  plat_printf("\tid: %d\n", net_ntohs(hdr->id));
   plat_printf("\ttime to life: %d\n", hdr->ttl);
-  plat_printf("\ttranspart protocol: %d\n", hdr->tran_proto);
-  plat_printf("\theadr checksum: %d\n", hdr->hdr_chksum);
+  char *tran_proto = 0;
+  switch (hdr->tran_proto) {
+    case NET_PROTOCOL_ICMPv4:
+      tran_proto = "icmpv4";
+      break;
+    case NET_PROTOCOL_UDP:
+      tran_proto = "udp";
+      break;
+    case NET_PROTOCOL_TCP:
+      tran_proto = "tcp";
+      break;
+    default:
+      tran_proto = "unknown";
+      break;
+  }
+  plat_printf("\ttranspart protocol: (%d) %s\n", hdr->tran_proto, tran_proto);
+  plat_printf("\theadr checksum: 0x%04x\n", hdr->hdr_chksum);
   ipaddr_t ipaddr;
   ipaddr_from_bytes(&ipaddr, hdr->src_ip);
   netif_dum_ip("\tsrc ip: ", &ipaddr);
@@ -47,7 +62,7 @@ static void ipv4_pkt_display(const ipv4_pkt_t *pkt) {
 
 #else
 
-#define ipv4_pkt_display(arp_pkt)
+#define ipv4_pkt_display(ipv4_pkt)
 #endif
 
 static inline int ipv4_get_id(void) {
@@ -75,8 +90,7 @@ net_err_t ipv4_module_init(void) {
  * @param netif
  * @return net_err_t
  */
-static net_err_t ipv4_pkt_check(ipv4_pkt_t *ipv4_pkt, uint16_t pkt_size,
-                                const netif_t *netif) {
+static net_err_t ipv4_pkt_check(ipv4_pkt_t *ipv4_pkt, uint16_t pkt_size) {
   // 检查ipv4版本号
   if (ipv4_pkt->hdr.version != IPV4_VERSION) {
     dbg_warning(DBG_IPV4, "ipv4 version error.");
@@ -84,7 +98,7 @@ static net_err_t ipv4_pkt_check(ipv4_pkt_t *ipv4_pkt, uint16_t pkt_size,
   }
 
   // 检查ipv4头部长度
-  int hdr_size = ipv4_hdr_size(ipv4_pkt);
+  int hdr_size = ipv4_get_hdr_size(ipv4_pkt);
   if (hdr_size < sizeof(ipv4_hdr_t)) {
     dbg_warning(DBG_IPV4, "ipv4 header size error.");
     return NET_ERR_IPV4;
@@ -155,6 +169,7 @@ static net_err_t ipv4_handle_normal(const netif_t *netif, pktbuf_t *buf) {
       err = icmpv4_recv(&netif->ipaddr, &src_ipaddr, buf);  //!!! 数据包传递
       if (err != NET_ERR_OK) {
         dbg_warning(DBG_IPV4, "icmpv4 recv failed.");
+        return err;
       }
     } break;
 
@@ -171,7 +186,7 @@ static net_err_t ipv4_handle_normal(const netif_t *netif, pktbuf_t *buf) {
     } break;
   }
 
-  return NET_ERR_IPV4;
+  return NET_ERR_OK;
 }
 
 /**
@@ -201,11 +216,13 @@ net_err_t ipv4_recv(const netif_t *netif, pktbuf_t *buf) {
   }
 
   // 检查ipv4数据包
-  err = ipv4_pkt_check(ipv4_pkt, pktbuf_total_size(buf), netif);
+  err = ipv4_pkt_check(ipv4_pkt, pktbuf_total_size(buf));
   if (err != NET_ERR_OK) {
     dbg_warning(DBG_IPV4, "check failed.");
     return err;
   }
+  // 打印ipv4数据包头部信息
+  ipv4_pkt_display(ipv4_pkt);
 
   // 将ipv4数据包头部从网络字节序转换为主机字节序
   ipv4_hdr_ntoh(&ipv4_pkt->hdr);
@@ -226,9 +243,6 @@ net_err_t ipv4_recv(const netif_t *netif, pktbuf_t *buf) {
     dbg_warning(DBG_IPV4, "resize failed.");
     return err;
   }
-
-  // 打印ipv4数据包头部信息
-  ipv4_pkt_display(ipv4_pkt);
 
   // 使用ipv4_normal_recv()函数处理数据包
   ipv4_handle_normal(netif, buf);  //!!! 数据包传递
@@ -275,15 +289,15 @@ net_err_t ipv4_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
   ipaddr_to_bytes(src_ipaddr, pkt->hdr.src_ip);
   ipaddr_to_bytes(dest_ipaddr, pkt->hdr.dest_ip);
 
-  // 打印ipv4数据包头部信息
-  ipv4_pkt_display(pkt);
-
   // 将头部转换为网络字节序
   ipv4_hdr_hton(&pkt->hdr);
 
   // 计算头部校验和
   pktbuf_acc_reset(buf);  // 重置buf访问位置，从头部开始计算校验和
-  pkt->hdr.hdr_chksum = pktbuf_checksum16(buf, ipv4_hdr_size(pkt), 0, 1);
+  pkt->hdr.hdr_chksum = pktbuf_checksum16(buf, ipv4_get_hdr_size(pkt), 0, 1);
+
+  // 打印ipv4数据包头部信息
+  ipv4_pkt_display(pkt);
 
   // 通过网络接口发送数据包
   err = netif_send(netif_get_default(), dest_ipaddr, buf);  //!!! 数据包传递

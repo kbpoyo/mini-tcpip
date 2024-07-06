@@ -48,13 +48,13 @@ net_err_t netdev_init(void) {
   ipaddr_t dest, src;
   ipaddr_from_str(&dest, "192.168.74.3");
   ipaddr_from_str(&src, "192.168.74.2");
-  ipv4_send(0, &dest, &src, buf);
+  // ipv4_send(0, &dest, &src, buf);
 
 
   buf = pktbuf_alloc(32);
   pktbuf_fill(buf, 0xA5, 32);
   ipaddr_from_str(&dest, "192.168.74.255");
-  ipv4_send(0, &dest, &src, buf);
+  // ipv4_send(0, &dest, &src, buf);
 
   return NET_ERR_OK;
 }

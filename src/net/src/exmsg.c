@@ -13,11 +13,11 @@
 
 #include "dbg.h"
 #include "fixq.h"
+#include "ipv4.h"
 #include "mblock.h"
 #include "net_sys.h"
 #include "netif.h"
 #include "timer.h"
-#include "ipv4.h"
 
 static void *msg_tbl[EXMSG_MSG_CNT];  // 消息队列缓冲区，存放消息指针
 static fixq_t msg_queue;              // 消息队列
@@ -129,9 +129,10 @@ static void exmsg_handle_netif_recv(exmsg_t *msg) {
   // 从网络接口接收数据包
   pktbuf_t *buf = (pktbuf_t *)0;
   while ((buf = netif_recvq_get(netif, -1))) {  // 以非阻塞方式获取数据包
-
     dbg_info(DBG_EXMSG, "%s: received packet.", netif->name);
 
+    // 重置数据包的访问位置
+    pktbuf_acc_reset(buf);
     // 处理数据包
     if (netif->link_layer) {
       err =

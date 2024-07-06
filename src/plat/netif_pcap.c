@@ -54,6 +54,7 @@ void recv_thread(void *arg) {
       continue;
     }
 
+
     // 数据包拷贝成功，以非阻塞的方式将数据包放入接收队列
     err = netif_recvq_put(netif, pktbuf, -1);  //!!! 数据包转交
     if (err != NET_ERR_OK) {
