@@ -173,8 +173,14 @@ static net_err_t ipv4_handle_normal(const netif_t *netif, pktbuf_t *buf) {
       }
     } break;
 
-    case NET_PROTOCOL_UDP: {
+    case NET_PROTOCOL_UDP: {  // TODO: 测试ICMP不可达报文
       dbg_info(DBG_IPV4, "recv UDP packet.");
+      ipaddr_t src_ipaddr;
+      ipv4_hdr_hton(&pkt->hdr);  // 将头部转换为网络字节序
+      ipaddr_from_bytes(&src_ipaddr, pkt->hdr.src_ip);
+      icmpv4_make_unreach(&src_ipaddr, &netif->ipaddr, ICMPv4_CODE_UNREACH_PORT,
+                          buf);
+      return NET_ERR_IPV4;
     } break;
 
     case NET_PROTOCOL_TCP: {

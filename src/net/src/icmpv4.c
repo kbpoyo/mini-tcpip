@@ -6,10 +6,7 @@
  * @date 2024-07-05
  *
  * 对icmpv4协议数据包进行接收和发送处理
- * 注：
- *      1.网络上的路由器只工作在网络层，不会处理icmpv4数据包
- *        所以不需要对icmpv4数据包进行网络字节序的转换。
- * 
+ *
  * @copyright Copyright (c) 2024
  *
  */
@@ -126,7 +123,7 @@ static net_err_t icmpv4_send(const ipaddr_t *dest_ipaddr,
  * @param icmpv4_pktbuf
  * @return net_err_t
  */
-static net_err_t icmpv4_echo_reply(const ipaddr_t *dest_ipaddr,
+static net_err_t icmpv4_make_echo_reply(const ipaddr_t *dest_ipaddr,
                                    const ipaddr_t *src_ipaddr,
                                    pktbuf_t *icmpv4_pktbuf) {
   // 获取icmpv4数据包
@@ -187,7 +184,7 @@ net_err_t icmpv4_recv(const ipaddr_t *dest_ipaddr, const ipaddr_t *src_ipaddr,
   switch (icmpv4_pkt->hdr.type) {
     case ICMPv4_TYPE_ECHO_REQUEST: {
       // 处理icmpv4请求报文, 直接发送icmpv4应答报文即可
-      return icmpv4_echo_reply(src_ipaddr, dest_ipaddr, buf);  //!!! 数据包传递
+      return icmpv4_make_echo_reply(src_ipaddr, dest_ipaddr, buf);  //!!! 数据包传递
     } break;
 
     case ICMPv4_TYPE_ECHO_REPLY: {
@@ -198,6 +195,74 @@ net_err_t icmpv4_recv(const ipaddr_t *dest_ipaddr, const ipaddr_t *src_ipaddr,
       dbg_warning(DBG_ICMPV4, "unknown icmpv4 pkt type.");
       pktbuf_free(buf);
     } break;
+  }
+
+  return NET_ERR_OK;
+}
+
+/**
+ * @brief 发送一个icmpv4不可达报文 
+ * 数据格式：
+ *  0      7 8   15 16                  32
+ *  ———————————————————————————————————— ——————> ipv4_pkt
+ *  |       20Byte IPv4 Header         |
+ *  ———————————————————————————————————— ——————> icmp_pkt
+ *  | type | code |     checksum       |
+ *  ————————————————————————————————————
+ *  |          unused (4Byte)          |
+ *  ———————————————————————————————————— ——————> 原始ip数据报
+ *  | 不超过548Byte的原始ipv4数据报内容  |
+ *  ————————————————————————————————————
+ * (新生成的ipv4数据报大小需要不大于576字节)
+ *
+ * @param dest_ipaddr 目的主机ip地址
+ * @param src_ipaddr 本地主机ip地址
+ * @param unreach_code 根据code值不同，表示不可达的类型
+ * @param buf 导致发送不可达报文的ipv4数据包
+ * @return net_err_t
+ */
+net_err_t icmpv4_make_unreach(const ipaddr_t *dest_ipaddr,
+                              const ipaddr_t *src_ipaddr, uint8_t unreach_code,
+                              pktbuf_t *ipv4_buf) {
+  dbg_info(DBG_ICMPV4, "send an icmpv4 unreach packet....");
+  net_err_t err = NET_ERR_OK;
+
+  // 计算需要从原始数据包了拷贝的字节数
+  // 待拷贝字节数 copy_size = 不可达报文最大大小 - ipv4头部大小 - icmpv4头部大小
+  int copy_size =
+      ICMPv4_UNREACH_PKT_MAX_SIZE - sizeof(ipv4_hdr_t) - sizeof(icmpv4_hdr_t);
+  int buf_size = pktbuf_total_size(ipv4_buf);
+  copy_size = copy_size > buf_size ? buf_size : copy_size;
+
+  // 构造icmp报文
+  pktbuf_t *icmp_buf =
+      pktbuf_alloc(sizeof(icmpv4_hdr_t) + copy_size);  //!!! 分配数据包
+  if (!icmp_buf) {
+    dbg_error(DBG_ICMPV4, "alloc buf failed!");
+    return NET_ERR_ICMPv4;
+  }
+  icmpv4_hdr_t *icmp_hdr = (icmpv4_hdr_t *)pktbuf_data_ptr(icmp_buf);
+  icmp_hdr->type = ICMPv4_TYPE_UNREACH;
+  icmp_hdr->code = unreach_code;
+  icmp_hdr->chksum = 0;   // 校验和先置0，后续再计算
+  icmp_hdr->reserve = 0;  // 未使用该字段，置0即可
+
+  // 将原始的ip数据报的copy_size个字节拷贝到icmp不可达报文中作为负载
+  pktbuf_acc_reset(ipv4_buf);  // 重置ipv4_buf的访问位置，从头开始拷贝
+  pktbuf_seek(icmp_buf, sizeof(icmpv4_hdr_t));  // 将内容拷贝到icmp_buf的负载区
+  err = pktbuf_copy(icmp_buf, ipv4_buf, copy_size);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_ICMPV4, "copy original datagram failed!");
+    pktbuf_free(icmp_buf);  //!!! 数据包释放
+    return err;
+  }
+
+  // 发送icmp不可达报文
+  err = icmpv4_send(dest_ipaddr, src_ipaddr, icmp_buf);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_ICMPV4, "send icmp packet failed!");
+    pktbuf_free(icmp_buf); //!!! 释放数据包
+    return err;
   }
 
   return NET_ERR_OK;

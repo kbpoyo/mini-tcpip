@@ -16,6 +16,7 @@
 
 #include "dbg.h"
 #include "ipaddr.h"
+#include "ipv4.h"
 #include "mblock.h"
 #include "net_cfg.h"
 #include "net_err.h"
@@ -797,4 +798,29 @@ void arp_clear(netif_t *netif) {
       arp_entry_free(entry);
     }
   }
+}
+
+/**
+ * @brief 根据ipv4数据包(包含以太网头部)来更新arp缓存表
+ *
+ * @param netif
+ * @param buf
+ */
+void arp_update_from_ipv4_pkt(netif_t *netif, pktbuf_t *buf) {
+  // 确保以太网头部和ipv4头部都在数据包的连续内存中
+  net_err_t err =
+      pktbuf_set_cont(buf, sizeof(ether_hdr_t) + sizeof(ipv4_hdr_t));
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_ARP, "set buf cont failed.");
+    return;
+  }
+
+  // 获取以太网头部
+  ether_hdr_t *ether_hdr = (ether_hdr_t *)pktbuf_data_ptr(buf);
+
+  // 获取ipv4头部
+  ipv4_hdr_t *ipv4_hdr = (ipv4_hdr_t *)(ether_hdr + 1);
+
+  // 直接更新arp缓存表,若ip包不正确后续arp定时器处理函数会进行清理
+  arp_entry_insert(netif, ipv4_hdr->src_ip, ether_hdr->src_mac, 0);
 }

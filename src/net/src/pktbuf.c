@@ -800,7 +800,7 @@ net_err_t pktbuf_seek(pktbuf_t *buf, int offset) {
 }
 
 /**
- * @brief 从src数据包当前访问位置开始复制size个字节到dest数据包中
+ * @brief 从src数据包当前访问位置开始复制size个字节到dest数据包中(从dest当前访问位置开始)
  *
  * @param dest
  * @param src

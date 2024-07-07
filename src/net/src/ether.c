@@ -35,8 +35,8 @@ static void display_ether_pkt(char *msg, ether_pkt_t *pkt, int total_size) {
       "------------------------------ %s -----------------------------\n", msg);
   plat_printf("len: %d bytes", total_size);
 
-  netif_dum_hwaddr("\tdest: ", hdr->dest, ETHER_MAC_SIZE);
-  netif_dum_hwaddr("\tsrc: ", hdr->src, ETHER_MAC_SIZE);
+  netif_dum_hwaddr("\tdest: ", hdr->dest_mac, ETHER_MAC_SIZE);
+  netif_dum_hwaddr("\tsrc: ", hdr->src_mac, ETHER_MAC_SIZE);
 
   uint16_t protocol_type = net_ntohs(hdr->protocol_type);
   plat_printf(
@@ -138,6 +138,7 @@ static net_err_t ether_recv(netif_t *netif, pktbuf_t *buf) {
   pktbuf_set_cont(buf, sizeof(ether_hdr_t));  // 确保帧头部在内存上的连续性
   ether_pkt_t *pkt = (ether_pkt_t *)pktbuf_data_ptr(buf);
 
+  // 检查以太网帧的正确性
   if ((err = ether_pkt_check(pkt, pktbuf_total_size(buf))) != NET_ERR_OK) {
     dbg_error(DBG_ETHER, "recv ether packet error: check failed.");
     return err;
@@ -148,21 +149,24 @@ static net_err_t ether_recv(netif_t *netif, pktbuf_t *buf) {
 
   // 根据上层协议类型进行链路层的多路分解
   switch (net_ntohs(pkt->hdr.protocol_type)) {
-    case NET_PROTOCOL_ARP: {
-      // ARP协议
-      err = pktbuf_header_remove(buf, sizeof(ether_hdr_t));  // 移除以太网帧头部
+    case NET_PROTOCOL_ARP: {  // ARP协议
+
+      // 移除以太网帧头部
+      err = pktbuf_header_remove(buf, sizeof(ether_hdr_t));
       Net_Err_Check(err);
-      err = arp_recv(netif, buf); //!!! 数据包传递
+      err = arp_recv(netif, buf);  //!!! 数据包传递
       if (err != NET_ERR_OK) {
         dbg_warning(DBG_ETHER, "recv ether packet warning: arp recv failed.");
         return err;
       }
     } break;
-    case NET_PROTOCOL_IPV4: {
-      // IPv4协议
-      err = pktbuf_header_remove(buf, sizeof(ether_hdr_t));  // 移除以太网帧头部
+    case NET_PROTOCOL_IPV4: {  // IPv4协议
+      // 尝试更新ARP缓存表
+      // arp_update_from_ipv4_pkt(netif, buf);
+      // 移除以太网帧头部
+      err = pktbuf_header_remove(buf, sizeof(ether_hdr_t));
       Net_Err_Check(err);
-      err = ipv4_recv((const netif_t *)netif, buf); //!!! 数据包传递
+      err = ipv4_recv((const netif_t *)netif, buf);  //!!! 数据包传递
       if (err != NET_ERR_OK) {
         dbg_warning(DBG_ETHER, "recv ether packet warning: ipv4 recv failed.");
         return err;
@@ -283,13 +287,14 @@ net_err_t ether_raw_send(netif_t *netif, protocol_type_t protocol,
 
   // 填写以太网包头信息
   ether_pkt_t *pkt = (ether_pkt_t *)pktbuf_data_ptr(buf);
-  plat_memcpy(pkt->hdr.dest, dest_mac_addr, ETHER_MAC_SIZE);  // 目的mac地址
-  plat_memcpy(pkt->hdr.src, netif->hwaddr.addr, ETHER_MAC_SIZE);  // 源mac地址
+  plat_memcpy(pkt->hdr.dest_mac, dest_mac_addr, ETHER_MAC_SIZE);  // 目的mac地址
+  plat_memcpy(pkt->hdr.src_mac, netif->hwaddr.addr,
+              ETHER_MAC_SIZE);                   // 源mac地址
   pkt->hdr.protocol_type = net_htons(protocol);  // 帧协议类型
 
   display_ether_pkt("ehter send pkt: ", pkt, pktbuf_total_size(buf));
 
-  if (plat_memcmp(netif->hwaddr.addr, pkt->hdr.dest, ETHER_MAC_SIZE) == 0) {
+  if (plat_memcmp(netif->hwaddr.addr, pkt->hdr.dest_mac, ETHER_MAC_SIZE) == 0) {
     // 目的mac地址与本地mac地址相同，直接放入接收队列
     return netif_recvq_put(netif, buf, -1);
   } else {
