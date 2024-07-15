@@ -27,13 +27,13 @@
 /**
  * 小端:     |  ihl  |version|
  *          |7 6 5 4|3 2 1 0| (uint8_t)
- * 
+ *
  *          | ecn |diff_service|
  *          | 7 6 |5 4 3 2 1 0 | (uint8_t)
  *
  * 大端:     |version|  ihl  |
  *          |7 6 5 4|3 2 1 0| (uint8_t)
- * 
+ *
  *          |diff_service| ecn |
  *          |7 6 5 4 3 2 | 1 0 | (uint8_t)
  */
@@ -71,11 +71,29 @@ typedef struct _ipv4_hdr_t {
 
   uint16_t total_len;  // ip数据包总长度
 
-  uint16_t id;                 // 标识
-  uint16_t flags_frag_offset;  // 标志和片偏移
+  uint16_t id;  // 标识
+  union {
+#if SYS_ENDIAN_LITTLE
+    struct {                      // 3位标志 + 13位片偏移
+      uint16_t frag_offset : 13;  // 片偏移
+      uint16_t frag_more : 1;         // 标志位(更多分片): 1表示还有分片，0表示最后一个分片
+      uint16_t frag_disable : 1;       // 标志位(禁止分片): 1表示禁止分片，0表示可以分片
+      uint16_t reserved : 1;          // 标志位(保留位): 必须为0 
+    };
+#else
+    struct {
+      uint16_t reserved : 1;         
+      uint16_t frag_more: 1;
+      uint16_t frag_disable : 1;
+      uint16_t frag_offset : 13;  // 片偏移
+    };
+#endif
 
-  uint8_t ttl;            // 生存跳数
-  uint8_t tran_proto;     // 传输层协议类型
+    uint16_t flags_frag_offset;  // 标志和片偏移
+  };
+
+  uint8_t ttl;          // 生存跳数
+  uint8_t tran_proto;   // 传输层协议类型
   uint16_t hdr_chksum;  // 头部校验和
 
   uint8_t src_ip[IPV4_ADDR_SIZE];  // 源ip地址
@@ -86,15 +104,25 @@ typedef struct _ipv4_hdr_t {
 // 定义ipv4数据包结构
 typedef struct _ipv4_pkt_t {
   ipv4_hdr_t hdr;   // ipv4头部
-  uint8_t data[0];  // 数据负载
+  uint8_t data[1];  // 数据负载
 } ipv4_pkt_t;
 
 #pragma pack()
 
+// 定义ip数据报分片记录结构
+typedef struct _ipv4_frag_t {
+  nlist_node_t node;  // 用于挂载到全局分片链表的节点
+  ipaddr_t src_ip;    // 发送方ip地址
+  uint16_t id;        // ip数据包标识
+  int tmo;          // 超时时间
+  nlist_t buf_list;   // 用于记录分片数据包的链表
+} ipv4_frag_t;
+
 net_err_t ipv4_module_init(void);
 
 net_err_t ipv4_recv(const netif_t *netif, pktbuf_t *buf);
-net_err_t ipv4_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr, const ipaddr_t *src_ipaddr, pktbuf_t *buf);
+net_err_t ipv4_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
+                    const ipaddr_t *src_ipaddr, pktbuf_t *buf);
 
 /**
  * @brief 获取数据包头部大小
@@ -108,9 +136,9 @@ static inline int ipv4_get_hdr_size(const ipv4_pkt_t *ipv4_pkt) {
 
 /**
  * @brief 设置ipv4头部的ihl字段
- * 
- * @param ipv4_pkt 
- * @param size 
+ *
+ * @param ipv4_pkt
+ * @param size
  */
 static inline void ipv4_set_hdr_size(ipv4_pkt_t *ipv4_pkt, int size) {
   ipv4_pkt->hdr.ihl = size / 4;

@@ -54,7 +54,7 @@ net_err_t mblock_init(mblock_t *mblock, void *mem_start, size_t blk_size,
  * @brief 从内存块管理结构中分配一个内存块
  *
  * @param mblock
- * @param ms 等待时间
+ * @param ms 等待时间( < 0 不等待，= 0 永久等待，> 0 等待ms毫秒)
  * @return void*
  */
 void *mblock_alloc(mblock_t *mblock, int ms) {

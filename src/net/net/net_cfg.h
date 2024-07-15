@@ -65,6 +65,7 @@
 #define ARP_ENTRY_RETRY_CNT 5  // arp缓存表项允许的重复请求次数
 
 // IPv4模块相关配置
-#define NET_IPV4_DEFAULT_TTL 64  // ipv4数据包默认生存跳数
+#define IPV4_DEFAULT_TTL 64  // ipv4数据包默认生存跳数
+#define IPV4_FRAG_ARR_SIZE 10  // ipv4分片缓存数组大小
 
 #endif  // NET_CFG_H
