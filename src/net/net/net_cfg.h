@@ -66,6 +66,7 @@
 
 // IPv4模块相关配置
 #define IPV4_DEFAULT_TTL 64  // ipv4数据包默认生存跳数
-#define IPV4_FRAG_ARR_SIZE 10  // ipv4分片缓存数组大小
+#define IPV4_FRAG_MAXCNT 10  // ipv4分片缓存数组大小
+#define IPV4_FRAG_BUF_MAXCNT 10  // 每个分片允许缓存的最大数据包数量
 
 #endif  // NET_CFG_H

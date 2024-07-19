@@ -547,8 +547,8 @@ net_err_t pktbuf_resize(pktbuf_t *buf, int to_size) {
  * @brief 合并两个数据包, 将src的数据块列表合并到dest的数据块列表中
  * 并将src数据包释放
  *
- * @param dest
- * @param src
+ * @param dest 合并后的目标数据包
+ * @param src 被合并的数据包，合并后将被释放
  * @return net_err_t
  */
 net_err_t pktbuf_join(pktbuf_t *dest, pktbuf_t *src) {
@@ -561,8 +561,7 @@ net_err_t pktbuf_join(pktbuf_t *dest, pktbuf_t *src) {
   dest->total_size += src->total_size;
 
   // 释放src数据包
-  pktbuf_free(src);
-
+  pktbuf_free(src); //!!! 释放数据包
 
   // 更新数据包的访问位置
   pktbuf_update_pos(dest);

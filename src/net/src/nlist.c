@@ -173,9 +173,13 @@ void nlist_insert_before(nlist_t *list, nlist_node_t *next,
  * @brief 合并两个链表, 合并成功后，behind链表将清空
  *
  * @param front 放在前面的链表, 合并后会被修改
- * @param behind 放在后面的链表
+ * @param behind 放在后面的链表, 合并后会被清空
  */
 void nlist_join(nlist_t *front, nlist_t *behind) {
+  if (front == (nlist_t *)0 || behind == (nlist_t *)0) {
+    return;
+  }
+
   // 如果behind为空，则直接返回
   if (behind->first == (nlist_node_t *)0) {
     return;

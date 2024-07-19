@@ -21,10 +21,41 @@
 #include "protocol.h"
 #include "tools.h"
 
-static ipv4_frag_t
-    ipv4_frag_arr[IPV4_FRAG_ARR_SIZE];  // ipv4分片数组(分片内存池)
-static mblock_t ipv4_frag_mblock;       // ipv4分片内存池管理对象
+static ipv4_frag_t ipv4_frag_arr[IPV4_FRAG_MAXCNT];  // ipv4分片数组(分片内存池)
+static mblock_t ipv4_frag_mblock;  // ipv4分片内存池管理对象
 static nlist_t ipv4_frag_list;  // ipv4分片链表，记录已分配的分片
+
+/**
+ * @brief 获取分片数据包的有效数据大小
+ *
+ * @param ipv4_pkt
+ * @return int
+ */
+static int ipv4_frag_data_size(const ipv4_pkt_t *ipv4_pkt) {
+  return ipv4_pkt->hdr.total_len - ipv4_get_hdr_size(ipv4_pkt);
+}
+
+/**
+ * @brief 获取分片数据包的有效内容在原始数据包中的起始地址(即分片的偏移量)
+ *
+ * @param ipv4_pkt
+ * @return int
+ */
+static int ipv4_frag_start(const ipv4_pkt_t *ipv4_pkt) {
+  return ipv4_pkt->hdr.frag_offset * 8;  // 以8字节为单位
+}
+
+/**
+ * @brief
+ * 获取分片数据包的有效内容在原始数据包中的结束地址(即分片偏移量加有效数据长度)
+ *
+ * @param ipv4_pkt
+ * @return int
+ */
+static int ipv4_frag_end(const ipv4_pkt_t *ipv4_pkt) {
+  // 结束地址 = 分片偏移量 + 分片有效数据长度
+  return ipv4_frag_start(ipv4_pkt) + ipv4_frag_data_size(ipv4_pkt);
+}
 
 #if DBG_DISP_ENABLED(DBG_IPV4)
 
@@ -72,6 +103,40 @@ static void ipv4_pkt_display(const ipv4_pkt_t *ipv4_pkt) {
   plat_printf("\n---------------------------------------------\n");
 }
 
+/**
+ * @brief 打印已使用的ipv4分片信息
+ *
+ */
+static void ipv4_frags_show(void) {
+  plat_printf("---------------- ipv4 frags ----------------\n");
+
+  nlist_node_t *frag_node = 0;
+  int frag_index = 0;
+
+  // 遍历分片链表
+  nlist_for_each(frag_node, &ipv4_frag_list) {
+    ipv4_frag_t *frag = nlist_entry(frag_node, ipv4_frag_t, node);
+    plat_printf("[%d]:\n", frag_index++);
+    netif_dum_ip("\tsrc ip: ", &frag->src_ip);
+    plat_printf("\n\tid: %d\n", frag->id);
+    plat_printf("\ttmo: %d\n", frag->tmo);
+    plat_printf("\tbuf cnt: %d\n", nlist_count(&frag->buf_list));
+
+    // 遍历分片对象的数据包链表
+    nlist_node_t *buf_node = 0;
+    int buf_index = 0;
+    plat_printf("\tbufs:\n");
+    nlist_for_each(buf_node, &frag->buf_list) {
+      pktbuf_t *buf = nlist_entry(buf_node, pktbuf_t, node);
+      ipv4_pkt_t *ipv4_pkt = pktbuf_data_ptr(buf);
+      plat_printf("\t\t%d:[%d-%d]-(%d)\n", buf_index++,
+                  ipv4_frag_start(ipv4_pkt), ipv4_frag_end(ipv4_pkt) - 1,
+                  ipv4_frag_data_size(ipv4_pkt));
+    }
+  }
+
+  plat_printf("--------------------------------------------\n");
+}
 #else
 
 #define ipv4_pkt_display(ipv4_pkt)
@@ -92,7 +157,7 @@ static net_err_t ipv4_frag_init(void) {
   // 该内存管理对象只用于ipv4模块，且ipv4模块只由工作线程一个线程访问，无需加锁
   net_err_t err =
       mblock_init(&ipv4_frag_mblock, ipv4_frag_arr, sizeof(ipv4_frag_t),
-                  IPV4_FRAG_ARR_SIZE, NLOCKER_NONE);
+                  IPV4_FRAG_MAXCNT, NLOCKER_NONE);
   if (err != NET_ERR_OK) {
     dbg_error(DBG_IPV4, "init ipv4 frag mblock failed.");
     return err;
@@ -303,6 +368,116 @@ static void ipv4_frag_add(ipv4_frag_t *frag, ipaddr_t *src_ip, uint16_t id) {
 }
 
 /**
+ * @brief 判断分片对象的数据包链表中是否已接收到所有的分片数据包
+ *
+ * @param frag
+ * @return int
+ */
+static int ipv4_frag_buf_is_all(ipv4_frag_t *frag) {
+  // 遍历分片数据包，判断已接收到的数据包是否连续
+  int offset = 0;
+  nlist_node_t *node = 0;
+  ipv4_pkt_t *curr_pkt = 0;
+  nlist_for_each(node, &frag->buf_list) {
+    curr_pkt = (ipv4_pkt_t *)pktbuf_data_ptr(nlist_entry(node, pktbuf_t, node));
+    int curr_offset = ipv4_frag_start(curr_pkt);
+    if (curr_offset != offset) {  // 分片数据包不连续
+                                  // 说明还有分片数据包未接收到
+      return 0;
+    }
+
+    offset += ipv4_frag_data_size(curr_pkt);
+  }
+
+  // 分片数据包连续，再根据最后一个分片数据包的标志位判断是否为最后一个分片
+  return curr_pkt ? !curr_pkt->hdr.frag_more : 0;
+}
+
+/**
+ * @brief 将分片对象的数据包链表中的数据包进行重组
+ *
+ * @param frag
+ * @return pktbuf_t*
+ */
+static pktbuf_t *ipv4_frag_buf_collect(ipv4_frag_t *frag) {
+  pktbuf_t *target_buf = 0;  // 重组后的数据包
+
+  // 遍历分片数据包链表，将数据包重组
+  nlist_node_t *node = 0;
+  while ((node = nlist_remove_first(&frag->buf_list))) {
+    pktblk_t *curr_buf = nlist_entry(node, pktbuf_t, node);  //!!! 获取数据包
+    ipv4_pkt_t *curr_pkt = pktbuf_data_ptr(curr_buf);
+    if (!target_buf) {
+      target_buf = curr_buf;
+      continue;
+    }
+
+    // 移除数据包的ipv4头部
+    net_err_t err = pktbuf_remove_head(curr_buf, ipv4_get_hdr_size(curr_pkt));
+    if (err != NET_ERR_OK) {
+      dbg_error(DBG_IPV4, "remove head failed.");
+      pktbuf_free(curr_buf);    //!!! 释放数据包
+      pktbuf_free(target_buf);  //!!! 释放数据包
+      return (pktbuf_t *)0;
+    }
+
+    // 将数据包的有效数据添加到重组后的数据包中
+    err = pktbuf_join(target_buf, curr_buf);  //!!! 数据包合并
+    if (err != NET_ERR_OK) {
+      dbg_error(DBG_IPV4, "join failed.");
+      pktbuf_free(curr_buf);    //!!! 释放数据包
+      pktbuf_free(target_buf);  //!!! 释放数据包
+      return (pktbuf_t *)0;
+    }
+  }
+
+  return target_buf;
+}
+
+/**
+ * @brief 将数据包添加到分片对象的数据包链表
+ *
+ * @param frag
+ * @param frag_buf
+ * @return net_err_t
+ */
+static net_err_t ipv4_frag_buf_add(ipv4_frag_t *frag, pktbuf_t *frag_buf) {
+  // 判断分片数据包链表是否已满
+  if (nlist_count(&frag->buf_list) >= IPV4_FRAG_BUF_MAXCNT) {
+    // 分片数据包链表已满,
+    // 直接丢弃已接收到的该分片对应的所有数据包(适用于资源有限的情况)
+    dbg_warning(DBG_IPV4, "frag buf list is full.");
+    ipv4_frag_free(frag);
+    return NET_ERR_IPV4;
+  }
+
+  // 获取该ipv4分片数据包的有效数据起始地址在原始数据包中的偏移量
+  int buf_start_offset = ipv4_frag_start(pktbuf_data_ptr(frag_buf));
+
+  // 按分片偏移量从小到大的顺序，将数据包添加到分片对象的数据包链表
+  nlist_node_t *node = 0;
+  nlist_for_each(node, &frag->buf_list) {
+    pktbuf_t *buf = nlist_entry(node, pktbuf_t, node);
+    ipv4_pkt_t *curr_pkt = pktbuf_data_ptr(buf);
+    int curr_start_offset = ipv4_frag_start(curr_pkt);
+    if (buf_start_offset == curr_start_offset) {
+      // 分片偏移量相同，分片冲突，直接丢弃该分片数据包
+      dbg_warning(DBG_IPV4, "frag offset[%d] conflict.", buf_start_offset);
+      return NET_ERR_OK;
+    } else if (buf_start_offset < curr_start_offset) {
+      // 当前数据包的偏移量大于新数据包的偏移量
+      // 将新数据包插入到当前数据包之前
+      nlist_insert_before(&frag->buf_list, node, &frag_buf->node);
+      return NET_ERR_OK;
+    }
+  }
+
+  // 数据包链表为空或者新数据包的起始地址偏移量最大，将新数据包添加到链表尾部
+  nlist_insert_last(&frag->buf_list, &frag_buf->node);
+  return NET_ERR_OK;
+}
+
+/**
  * @brief 根据发送方的ip地址和ip包的id字段，在ipv4分片链表中查找到对应的分片对象
  *
  * @param src_ip 发送方ip地址
@@ -349,6 +524,40 @@ static net_err_t ipv4_handle_frag(const netif_t *netif, pktbuf_t *buf) {
     // 将分片对象添加到分片链表
     ipv4_frag_add(frag, &src_ip, ipv4_pkt->hdr.id);
   }
+
+  // 将数据包添加到分片对象的数据包链表
+  err = ipv4_frag_buf_add(frag, buf);  //!!! 数据包转交
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_IPV4, "add frag buf failed.");
+    return err;
+  }
+
+  // 判断分片对象的数据包链表中是否已接收到所有的分片数据包
+  if (ipv4_frag_buf_is_all(frag)) {  // 接收到所有的分片数据包
+    pktbuf_t *target_buf = ipv4_frag_buf_collect(frag); //!!! 获取数据包
+    if (target_buf == (pktbuf_t *)0) {  // 重组数据包失败
+      dbg_error(DBG_IPV4, "collect failed.");
+      // 释放分片对象
+      ipv4_frag_free(frag);
+      // 传入的数据包已转交，无需通知上层处理失败，避免上层重复释放数据包
+      return NET_ERR_OK;
+    }
+
+    // 重组数据包成功，对重组后的数据包进行处理
+    err = ipv4_handle_normal(netif, target_buf);  //!!! 数据包传递
+    if (err != NET_ERR_OK) {
+      dbg_error(DBG_IPV4, "handle normal failed.");
+      pktbuf_free(target_buf);  //!!! 释放数据包
+      return NET_ERR_OK;
+    }
+
+    //TODO:
+
+    return NET_ERR_OK;
+  }
+
+  // 打印系统此时所有的分片信息
+  ipv4_frags_show();
 
   return NET_ERR_OK;
 }
