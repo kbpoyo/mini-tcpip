@@ -90,11 +90,13 @@ void send_thread(void *arg) {
 
     pktbuf_acc_reset(buf);
     int total_size = pktbuf_total_size(buf);  // 获取数据包的总长度
-    pktbuf_read(buf, send_buf, total_size);   // 读取数据包内容
+    // int read_size = total_size < NET_MAC_FRAME_MAX_SIZE ? total_size : NET_MAC_FRAME_MAX_SIZE;
+    int read_size = total_size;
+    pktbuf_read(buf, send_buf, read_size);   // 读取数据包内容
 
     pktbuf_free(buf);  //!!! 数据包发送成功，释放数据包
 
-    if (pcap_inject(pcap, send_buf, total_size) == -1) {  // 发送数据包
+    if (pcap_inject(pcap, send_buf, read_size) == -1) {  // 发送数据包
       dbg_warning(DBG_NETIF, "pcap send packet failed: %s", pcap_geterr(pcap));
       dbg_warning(DBG_NETIF, "packet size: %d", total_size);
     }

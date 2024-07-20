@@ -405,7 +405,7 @@ static pktbuf_t *ipv4_frag_buf_collect(ipv4_frag_t *frag) {
   // 遍历分片数据包链表，将数据包重组
   nlist_node_t *node = 0;
   while ((node = nlist_remove_first(&frag->buf_list))) {
-    pktblk_t *curr_buf = nlist_entry(node, pktbuf_t, node);  //!!! 获取数据包
+    pktbuf_t *curr_buf = nlist_entry(node, pktbuf_t, node);  //!!! 获取数据包
     ipv4_pkt_t *curr_pkt = pktbuf_data_ptr(curr_buf);
     if (!target_buf) {
       target_buf = curr_buf;
@@ -413,7 +413,7 @@ static pktbuf_t *ipv4_frag_buf_collect(ipv4_frag_t *frag) {
     }
 
     // 移除数据包的ipv4头部
-    net_err_t err = pktbuf_remove_head(curr_buf, ipv4_get_hdr_size(curr_pkt));
+    net_err_t err = pktbuf_header_remove(curr_buf, ipv4_get_hdr_size(curr_pkt));
     if (err != NET_ERR_OK) {
       dbg_error(DBG_IPV4, "remove head failed.");
       pktbuf_free(curr_buf);    //!!! 释放数据包
@@ -526,38 +526,33 @@ static net_err_t ipv4_handle_frag(const netif_t *netif, pktbuf_t *buf) {
   }
 
   // 将数据包添加到分片对象的数据包链表
-  err = ipv4_frag_buf_add(frag, buf);  //!!! 数据包转交
+  err = ipv4_frag_buf_add(
+      frag, buf);  //!!! 数据包转交, 数据包转交成功后，将不可向上层返回错误
   if (err != NET_ERR_OK) {
     dbg_error(DBG_IPV4, "add frag buf failed.");
     return err;
   }
 
-  // 判断分片对象的数据包链表中是否已接收到所有的分片数据包
-  if (ipv4_frag_buf_is_all(frag)) {  // 接收到所有的分片数据包
-    pktbuf_t *target_buf = ipv4_frag_buf_collect(frag); //!!! 获取数据包
-    if (target_buf == (pktbuf_t *)0) {  // 重组数据包失败
-      dbg_error(DBG_IPV4, "collect failed.");
-      // 释放分片对象
-      ipv4_frag_free(frag);
-      // 传入的数据包已转交，无需通知上层处理失败，避免上层重复释放数据包
-      return NET_ERR_OK;
-    }
-
-    // 重组数据包成功，对重组后的数据包进行处理
-    err = ipv4_handle_normal(netif, target_buf);  //!!! 数据包传递
-    if (err != NET_ERR_OK) {
-      dbg_error(DBG_IPV4, "handle normal failed.");
-      pktbuf_free(target_buf);  //!!! 释放数据包
-      return NET_ERR_OK;
-    }
-
-    //TODO:
-
-    return NET_ERR_OK;
-  }
-
   // 打印系统此时所有的分片信息
   ipv4_frags_show();
+
+  // 判断分片对象的数据包链表中是否已接收到所有的分片数据包
+  if (ipv4_frag_buf_is_all(frag)) {  // 接收到所有的分片数据包
+    pktbuf_t *target_buf = ipv4_frag_buf_collect(frag);  //!!! 获取数据包
+    if (target_buf) {  // 数据包重组成功
+      // 对重组后的数据包进行处理
+      err = ipv4_handle_normal(netif, target_buf);  //!!! 数据包传递
+      if (err != NET_ERR_OK) {
+        dbg_error(DBG_IPV4, "handle normal failed.");
+        pktbuf_free(target_buf);  //!!! 释放数据包
+      }
+    } else { // 数据包重组失败
+      dbg_error(DBG_IPV4, "collect failed.");
+    }
+
+    // 释放分片对象
+    ipv4_frag_free(frag);
+  }
 
   return NET_ERR_OK;
 }

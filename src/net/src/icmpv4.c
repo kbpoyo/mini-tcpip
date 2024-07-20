@@ -44,7 +44,7 @@ static void icmpv4_pkt_display(const icmpv4_pkt_t *icmpv4_pkt) {
   plat_printf("\tcode: %d\n", icmpv4_pkt->hdr.code);
   plat_printf("\tchecksum: 0x%04x\n", icmpv4_pkt->hdr.chksum);
 
-  plat_printf("\n---------------------------------------------\n");
+  plat_printf("---------------------------------------------\n");
 }
 
 #else
@@ -123,9 +123,9 @@ static net_err_t icmpv4_send(const ipaddr_t *dest_ipaddr,
  * @param icmpv4_pktbuf
  * @return net_err_t
  */
-static net_err_t icmpv4_make_echo_reply(const ipaddr_t *dest_ipaddr,
-                                   const ipaddr_t *src_ipaddr,
-                                   pktbuf_t *icmpv4_pktbuf) {
+static net_err_t  icmpv4_make_echo_reply(const ipaddr_t *dest_ipaddr,
+                                        const ipaddr_t *src_ipaddr,
+                                        pktbuf_t *icmpv4_pktbuf) {
   // 获取icmpv4数据包
   icmpv4_pkt_t *icmpv4_pkt = (icmpv4_pkt_t *)pktbuf_data_ptr(icmpv4_pktbuf);
 
@@ -152,19 +152,27 @@ net_err_t icmpv4_recv(const ipaddr_t *dest_ipaddr, const ipaddr_t *src_ipaddr,
   pktbuf_check_buf(buf);
   net_err_t err = NET_ERR_OK;
 
-  // 确保ipv4头部和icmpv4头部在内存上连续
-  ipv4_pkt_t *ipv4_pkt = (ipv4_pkt_t *)pktbuf_data_ptr(buf);
-  int ipv4_hdr_size = ipv4_get_hdr_size(ipv4_pkt);
-  err = pktbuf_set_cont(buf, ipv4_hdr_size + sizeof(icmpv4_hdr_t));
+  // // 确保ipv4头部和icmpv4头部在内存上连续
+  // ipv4_pkt_t *ipv4_pkt = (ipv4_pkt_t *)pktbuf_data_ptr(buf);
+  // int ipv4_hdr_size = ipv4_get_hdr_size(ipv4_pkt);
+  // err = pktbuf_set_cont(buf, ipv4_hdr_size + sizeof(icmpv4_hdr_t));
+  // if (err != NET_ERR_OK) {
+  //   dbg_error(DBG_ICMPV4, "pktbuf set cont failed.");
+  //   return err;
+  // }
+
+  // 再次获取ipv4数据包并移除ipv4头部
+  err = pktbuf_header_remove(
+      buf, ipv4_get_hdr_size((ipv4_pkt_t *)pktbuf_data_ptr(buf)));
   if (err != NET_ERR_OK) {
-    dbg_error(DBG_ICMPV4, "pktbuf set cont failed.");
+    dbg_error(DBG_ICMPV4, "pktbuf header remove failed.");
     return err;
   }
 
-  // 再次获取ipv4数据包并移除ipv4头部
-  err = pktbuf_header_remove(buf, ipv4_hdr_size);
+  // 确保icmpv4头部在内存上连续
+  err = pktbuf_set_cont(buf, sizeof(icmpv4_hdr_t));
   if (err != NET_ERR_OK) {
-    dbg_error(DBG_ICMPV4, "pktbuf header remove failed.");
+    dbg_error(DBG_ICMPV4, "pktbuf set cont failed.");
     return err;
   }
 
@@ -184,7 +192,8 @@ net_err_t icmpv4_recv(const ipaddr_t *dest_ipaddr, const ipaddr_t *src_ipaddr,
   switch (icmpv4_pkt->hdr.type) {
     case ICMPv4_TYPE_ECHO_REQUEST: {
       // 处理icmpv4请求报文, 直接发送icmpv4应答报文即可
-      return icmpv4_make_echo_reply(src_ipaddr, dest_ipaddr, buf);  //!!! 数据包传递
+      return icmpv4_make_echo_reply(src_ipaddr, dest_ipaddr,
+                                    buf);  //!!! 数据包传递
     } break;
 
     case ICMPv4_TYPE_ECHO_REPLY: {
@@ -201,7 +210,7 @@ net_err_t icmpv4_recv(const ipaddr_t *dest_ipaddr, const ipaddr_t *src_ipaddr,
 }
 
 /**
- * @brief 发送一个icmpv4不可达报文 
+ * @brief 发送一个icmpv4不可达报文
  * 数据格式：
  *  0      7 8   15 16                  32
  *  ———————————————————————————————————— ——————> ipv4_pkt
@@ -261,7 +270,7 @@ net_err_t icmpv4_make_unreach(const ipaddr_t *dest_ipaddr,
   err = icmpv4_send(dest_ipaddr, src_ipaddr, icmp_buf);
   if (err != NET_ERR_OK) {
     dbg_error(DBG_ICMPV4, "send icmp packet failed!");
-    pktbuf_free(icmp_buf); //!!! 释放数据包
+    pktbuf_free(icmp_buf);  //!!! 释放数据包
     return err;
   }
 
