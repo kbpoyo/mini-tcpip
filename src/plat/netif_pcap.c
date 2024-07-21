@@ -54,7 +54,6 @@ void recv_thread(void *arg) {
       continue;
     }
 
-
     // 数据包拷贝成功，以非阻塞的方式将数据包放入接收队列
     err = netif_recvq_put(netif, pktbuf, -1);  //!!! 数据包转交
     if (err != NET_ERR_OK) {
@@ -83,20 +82,24 @@ void send_thread(void *arg) {
   // 发送网络数据包
   while (1) {
     // 阻塞方式获取发送队列中的数据包
-    pktbuf_t *buf = netif_sendq_get(netif, 0); //!!! 获取数据包
+    pktbuf_t *buf = netif_sendq_get(netif, 0);  //!!! 获取数据包
     if (buf == (pktbuf_t *)0) {
       continue;
     }
 
-    pktbuf_acc_reset(buf);
     int total_size = pktbuf_total_size(buf);  // 获取数据包的总长度
-    // int read_size = total_size < NET_MAC_FRAME_MAX_SIZE ? total_size : NET_MAC_FRAME_MAX_SIZE;
-    int read_size = total_size;
-    pktbuf_read(buf, send_buf, read_size);   // 读取数据包内容
+    if (total_size > NET_MAC_FRAME_MAX_SIZE) {
+      dbg_warning(DBG_NETIF, "packet size is too large: %d", total_size);
+      pktbuf_free(buf);  //!!! 数据包发送失败，释放数据包
+      continue;
+    }
+
+    pktbuf_acc_reset(buf);
+    pktbuf_read(buf, send_buf, total_size);  // 读取数据包内容
 
     pktbuf_free(buf);  //!!! 数据包发送成功，释放数据包
 
-    if (pcap_inject(pcap, send_buf, read_size) == -1) {  // 发送数据包
+    if (pcap_inject(pcap, send_buf, total_size) == -1) {  // 发送数据包
       dbg_warning(DBG_NETIF, "pcap send packet failed: %s", pcap_geterr(pcap));
       dbg_warning(DBG_NETIF, "packet size: %d", total_size);
     }

@@ -46,7 +46,7 @@
 // 数据包相关配置
 #define PKTBUF_LOCKER_TYPE NLOCKER_THREAD  // 数据包模块锁类型
 #define PKTBUF_BLK_SIZE 128                // 数据包有效载荷大小
-#define PKTBUF_BLK_CNT 128                 // 数据块池中的数据块数量
+#define PKTBUF_BLK_CNT 1280                 // 数据块池中的数据块数量
 #define PKTBUF_BUF_CNT 128                 // 数据包池中的数据包数量
 
 // 网络接口相关配置

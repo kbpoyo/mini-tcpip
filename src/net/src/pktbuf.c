@@ -800,6 +800,7 @@ net_err_t pktbuf_seek(pktbuf_t *buf, int offset) {
 
 /**
  * @brief 从src数据包当前访问位置开始复制size个字节到dest数据包中(从dest当前访问位置开始)
+ * 该方法会修改buf的当前访问位置pos
  *
  * @param dest
  * @param src
@@ -901,10 +902,10 @@ pktbuf_t *pktbuf_inc_ref(pktbuf_t *buf) {
 /**
  * @brief 计算数据包从当前访问位置buf.pos开始的size个字节的校验和
  * 
- * @param buf 
- * @param size
- * @param pre_sum 
- * @param is_take_back 
+ * @param buf 参与计算校验和的数据起始地址
+ * @param size 参与计算校验和的数据字节数
+ * @param pre_sum 起始校验和
+ * @param is_take_back 是否对计算结果取反(1:取反 0:不取反)
  * @return uint16_t 
  */
  uint16_t pktbuf_checksum16(pktbuf_t *buf, uint16_t size, uint32_t pre_sum, int is_take_back) {

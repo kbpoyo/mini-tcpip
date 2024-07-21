@@ -78,7 +78,7 @@ typedef struct _ipv4_hdr_t {
       uint16_t frag_offset : 13;  // 片偏移
       uint16_t frag_more : 1;         // 标志位(更多分片): 1表示还有分片，0表示最后一个分片
       uint16_t frag_disable : 1;       // 标志位(禁止分片): 1表示禁止分片，0表示可以分片
-      uint16_t reserved : 1;          // 标志位(保留位): 必须为0 
+      uint16_t frag_reserved : 1;          // 标志位(保留位): 必须为0 
     };
 #else
     struct {

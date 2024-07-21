@@ -546,7 +546,7 @@ static net_err_t ipv4_handle_frag(const netif_t *netif, pktbuf_t *buf) {
         dbg_error(DBG_IPV4, "handle normal failed.");
         pktbuf_free(target_buf);  //!!! 释放数据包
       }
-    } else { // 数据包重组失败
+    } else {  // 数据包重组失败
       dbg_error(DBG_IPV4, "collect failed.");
     }
 
@@ -634,20 +634,139 @@ net_err_t ipv4_recv(const netif_t *netif, pktbuf_t *buf) {
 }
 
 /**
+ * @brief 对上层数据包进行分片处理，并包装成ipv4数据包发送
+ *
+ * @param tran_protocol 上层协议类型
+ * @param dest_ipaddr 目的ip地址
+ * @param src_ipaddr 源ip地址
+ * @param buf 上层数据包(不包含ipv4头部)
+ * @return net_err_t
+ */
+net_err_t ipv4_frag_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
+                         const ipaddr_t *src_ipaddr, pktbuf_t *buf) {
+  dbg_info(DBG_IPV4, "send an ipv4 frag packet....");
+  net_err_t err = NET_ERR_OK;
+
+  // 获取当前激活的网络接口
+  netif_t *netif_default = netif_get_default();
+
+  // 获取当前要发送的ipv4所有分片
+  int ipv4_id = ipv4_get_id();
+
+  // 对数据包进行分片处理
+  int offset = 0, total_size = pktbuf_total_size(buf);
+  pktbuf_acc_reset(buf);  // 重置待发送数据的访问位置
+  while (total_size > 0) {
+    // 计算当前分片的有效数据长度
+    int curr_size = total_size > netif_default->mtu
+                        ? (netif_default->mtu - sizeof(ipv4_hdr_t))
+                        : total_size;
+    // 为当前分片数据包分配内存, 大小 = 有效数据长度(curr_size) + ipv4头部大小
+    pktbuf_t *frag_buf =
+        pktbuf_alloc(curr_size + sizeof(ipv4_hdr_t));  //!!! 分配数据包
+    if (frag_buf == (pktbuf_t *)0) {
+      dbg_error(DBG_IPV4, "alloc frag buf failed.");
+      return NET_ERR_IPV4;
+    }
+
+    // 从待发送数据包里拷贝curr_size大小的数据到分片中
+    pktbuf_seek(frag_buf, sizeof(ipv4_hdr_t));
+    err = pktbuf_copy(frag_buf, buf, curr_size);
+    if (err != NET_ERR_OK) {
+      dbg_error(DBG_IPV4, "pktbuf copy failed.");
+      pktbuf_free(frag_buf);  // 释放数据包
+      return err;
+    }
+
+    // 设置数据包头部在内存上的连续性
+    err = pktbuf_set_cont(frag_buf, sizeof(ipv4_hdr_t));
+    if (err != NET_ERR_OK) {
+      dbg_error(DBG_IPV4, "set cont failed.");
+      pktbuf_free(frag_buf);  //!!! 释放数据包
+      return err;
+    }
+
+    // 设置分片的ipv4头部
+    ipv4_pkt_t *pkt = pktbuf_data_ptr(frag_buf);
+    pkt->hdr.version = IPV4_VERSION;
+    ipv4_set_hdr_size(pkt, sizeof(ipv4_hdr_t));
+    pkt->hdr.ecn = 0;
+    pkt->hdr.diff_service = 0;
+    pkt->hdr.total_len = pktbuf_total_size(frag_buf);
+    pkt->hdr.id = ipv4_id;
+    pkt->hdr.frag_offset = offset >> 3;  // 偏移量以8个字节为单位
+    pkt->hdr.frag_more =
+        total_size >
+        curr_size;  // 若当前分片的大小小于待发送的数据的总大小，则后续还有分片
+    pkt->hdr.frag_disable = 0;
+    pkt->hdr.frag_reserved = 0;
+    pkt->hdr.ttl = IPV4_DEFAULT_TTL;
+    pkt->hdr.tran_proto = tran_protocol;
+    pkt->hdr.hdr_chksum = 0;
+    ipaddr_to_bytes(src_ipaddr, pkt->hdr.src_ip);
+    ipaddr_to_bytes(dest_ipaddr, pkt->hdr.dest_ip);
+
+    // 打印ipv4数据包头部信息
+    ipv4_pkt_display(pkt);
+
+    // 将头部转换为网络字节序
+    ipv4_hdr_hton(&pkt->hdr);
+
+    // 计算头部校验和
+    pktbuf_acc_reset(frag_buf);  // 重置buf访问位置，从头部开始计算校验和
+    pkt->hdr.hdr_chksum =
+        pktbuf_checksum16(frag_buf, ipv4_get_hdr_size(pkt), 0, 1);
+
+    // 通过网络接口发送数据包
+    err = netif_send(netif_default, dest_ipaddr, frag_buf);  //!!! 数据包传递
+    if (err != NET_ERR_OK) {
+      dbg_error(DBG_IPV4, "netif send ip packet failed.");
+      pktbuf_free(frag_buf);  //!!! 释放数据包
+      return err;
+    }
+
+    // 更新待发送数据大小和分片偏移量
+    offset += curr_size;
+    total_size -= curr_size;
+  }
+
+  // 数据包处理完毕，释放数据包
+  pktbuf_free(buf);  //!!! 释放数据包
+
+  return NET_ERR_OK;
+}
+
+/**
  * @brief 将数据包封装成ipv4数据包，并发送
  *
- * @param tran_protocol
- * @param dest_ipaddr
- * @param src_ipaddr
- * @param buf
+ * @param tran_protocol 上层协议类型
+ * @param dest_ipaddr 目的ip地址
+ * @param src_ipaddr 源ip地址
+ * @param buf 上层数据包
  * @return net_err_t
  */
 net_err_t ipv4_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
                     const ipaddr_t *src_ipaddr, pktbuf_t *buf) {
   dbg_info(DBG_IPV4, "send an ipv4 packet....");
-
   net_err_t err = NET_ERR_OK;
 
+  // 判断数据包是否需要进行分片处理
+  netif_t *netif_default = netif_get_default();  // 获取当前激活的网络接口
+  int ipv4_total_size = pktbuf_total_size(buf) + sizeof(ipv4_hdr_t);
+  if (netif_default->mtu && ipv4_total_size > netif_default->mtu) {
+    // 数据包大小超过了网络接口链路层的最大传输单元
+    // 需要对数据包进行分片处理
+    err = ipv4_frag_send(tran_protocol, dest_ipaddr, src_ipaddr,
+                         buf);  //!!! 数据包传递
+    if (err != NET_ERR_OK) {
+      dbg_error(DBG_IPV4, "frag send failed.");
+      return err;
+    }
+
+    return NET_ERR_OK;
+  }
+
+  // 数据包不需要进行分片处理
   // 给数据包添加ipv4头部
   err = pktbuf_header_add(buf, sizeof(ipv4_hdr_t), PKTBUF_ADD_HEADER_CONT);
   if (err != NET_ERR_OK) {
@@ -662,7 +781,7 @@ net_err_t ipv4_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
   ipv4_set_hdr_size(pkt, sizeof(ipv4_hdr_t));
   pkt->hdr.ecn = 0;
   pkt->hdr.diff_service = 0;
-  pkt->hdr.total_len = pktbuf_total_size(buf);
+  pkt->hdr.total_len = ipv4_total_size;
   pkt->hdr.id = ipv4_get_id();
   pkt->hdr.flags_frag_offset = 0;
   pkt->hdr.ttl = IPV4_DEFAULT_TTL;
@@ -682,7 +801,7 @@ net_err_t ipv4_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
   pkt->hdr.hdr_chksum = pktbuf_checksum16(buf, ipv4_get_hdr_size(pkt), 0, 1);
 
   // 通过网络接口发送数据包
-  err = netif_send(netif_get_default(), dest_ipaddr, buf);  //!!! 数据包传递
+  err = netif_send(netif_default, dest_ipaddr, buf);  //!!! 数据包传递
   if (err != NET_ERR_OK) {
     dbg_error(DBG_IPV4, "netif send ip packet failed.");
   }
