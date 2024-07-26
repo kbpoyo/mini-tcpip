@@ -47,7 +47,7 @@ typedef struct _arp_entry_t {
   nlist_t buf_list;  // 数据包缓存链表
   netif_t *netif;    // 使用的网络接口
 
-  int tmo;    // 超时时间
+  int tmo;    // 有效周期数 = 超时时间(s) / 扫描周期所用时间(s)
   int retry;  // 重试次数
 
   enum {

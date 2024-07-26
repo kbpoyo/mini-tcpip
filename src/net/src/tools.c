@@ -54,14 +54,23 @@ net_err_t tools_module_init(void) {
  * @param data 数据起始地址
  * @param len 数据长度
  * @param pre_sum 起始校验和
+ * @param offset 当前已计算字节量
  * @param is_take_back 是否对校验和取反
  * @return uint16_t
  */
-uint16_t tools_checksum16(const void *data, uint16_t len, uint32_t pre_sum,
-                          int is_take_back) {
+uint16_t tools_checksum16(const void *data, uint16_t len,
+                          uint32_t pre_sum, int offset, int is_take_back) {
   const uint16_t *data_ptr = (const uint16_t *)data;
-
   uint32_t checksum = pre_sum;
+  // 当前已计算字节量为奇数，即当前起始地址(data)的第一个字节
+  // 应与上一段数据(计算pre_sum)的最后一个字节组成一个16位数据
+  if (offset & 0x1) { 
+    // 上一段数据的最后一个字节已加在pre_sum的低8位
+    // 当前数据的第一个字节应加在pre_sum的高8位
+    checksum += *(uint8_t *)data_ptr << 8;
+    data_ptr = (const uint16_t *)((const uint8_t *)data_ptr + 1);
+    len--;
+  }
 
   while (len > 1) {  // 每次读取两个字节即16位
     checksum += *(data_ptr++);
@@ -79,6 +88,6 @@ uint16_t tools_checksum16(const void *data, uint16_t len, uint32_t pre_sum,
     checksum = high + (checksum & 0xffff);
   }
 
-  //判断是否取反
+  // 判断是否取反
   return is_take_back ? (uint16_t)~checksum : (uint16_t)checksum;
 }

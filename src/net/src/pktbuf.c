@@ -390,7 +390,9 @@ net_err_t pktbuf_header_add(pktbuf_t *buf, int size, int is_cont) {
 }
 
 /**
- * @brief 从数据包头部移除size个字节的数据
+ * @brief 从数据包头部移除size个字节的数据, 
+ * 移除后将以新的起始位置为基准，更新当前访问位置偏移量pos，
+ * 若当前访问位置在移除的数据块中，则重置访问位置。
  *
  * @param buf
  * @param size
@@ -919,20 +921,24 @@ pktbuf_t *pktbuf_inc_ref(pktbuf_t *buf) {
   }
 
   // 计算校验和
-  uint32_t sum = pre_sum;
+  uint32_t sum = pre_sum; //已计算的校验和
+  int offset = 0; // 已计算的数据大小
   while (size > 0) {
     // 获取当前数据块的剩余空间
     int blk_remain_size = pktbuf_currblk_remain_size(buf);
     int curr_size = size > blk_remain_size ? blk_remain_size : size;
 
     // 计算当前数据块中待访问数据的校验和
-    sum = tools_checksum16(buf->curr_pos, curr_size, sum, 0);
+    sum = tools_checksum16(buf->curr_pos, curr_size, sum, offset, 0);
 
     // 更新数据包的访问位置
-    pktbuf_pos_move_forward(buf, curr_size);
+     pktbuf_pos_move_forward(buf, curr_size);
 
     // 更新剩余待计算数据大小
     size -= curr_size;
+
+    // 更新已计算数据大小
+    offset += curr_size;
   }
 
   //根据is_take_back的值，判断是否取反

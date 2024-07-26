@@ -114,7 +114,7 @@ typedef struct _ipv4_frag_t {
   nlist_node_t node;  // 用于挂载到全局分片链表的节点
   ipaddr_t src_ip;    // 发送方ip地址
   uint16_t id;        // ip数据包标识
-  int tmo;          // 超时时间
+  int tmo;          // 有效周期数 = 超时时间(s) / 扫描周期所用时间(s)
   nlist_t buf_list;   // 用于记录分片数据包的链表
 } ipv4_frag_t;
 

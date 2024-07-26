@@ -19,11 +19,13 @@
 #include "icmpv4.h"
 #include "mblock.h"
 #include "protocol.h"
+#include "timer.h"
 #include "tools.h"
 
 static ipv4_frag_t ipv4_frag_arr[IPV4_FRAG_MAXCNT];  // ipv4分片数组(分片内存池)
 static mblock_t ipv4_frag_mblock;  // ipv4分片内存池管理对象
 static nlist_t ipv4_frag_list;  // ipv4分片链表，记录已分配的分片
+static net_timer_t ipv4_frag_timer;  // ipv4分片超时定时器
 
 /**
  * @brief 获取分片数据包的有效数据大小
@@ -148,28 +150,6 @@ static inline int ipv4_get_id(void) {
 }
 
 /**
- * @brief 初始化ipv4分片内存管理对象
- *
- * @return net_err_t
- */
-static net_err_t ipv4_frag_init(void) {
-  // 初始化ipv4分片内存池管理对象
-  // 该内存管理对象只用于ipv4模块，且ipv4模块只由工作线程一个线程访问，无需加锁
-  net_err_t err =
-      mblock_init(&ipv4_frag_mblock, ipv4_frag_arr, sizeof(ipv4_frag_t),
-                  IPV4_FRAG_MAXCNT, NLOCKER_NONE);
-  if (err != NET_ERR_OK) {
-    dbg_error(DBG_IPV4, "init ipv4 frag mblock failed.");
-    return err;
-  }
-
-  // 初始化ipv4分片链表
-  nlist_init(&ipv4_frag_list);
-
-  return NET_ERR_OK;
-}
-
-/**
  * @brief 释放ipv4分片对象缓存的数据包
  *
  * @param frag
@@ -201,6 +181,8 @@ static ipv4_frag_t *ipv4_frag_alloc(void) {
   return frag;
 }
 
+
+
 /**
  * @brief 释放一个ipv4分片对象
  *
@@ -215,6 +197,59 @@ static void ipv4_frag_free(ipv4_frag_t *frag) {
 
   // 释放分片对象
   mblock_free(&ipv4_frag_mblock, frag);
+}
+
+/**
+ * @brief ipv4分片超时处理函数
+ *
+ * @param timer
+ * @param arg
+ */
+static void ipv4_frag_tmo(net_timer_t *timer, void *arg) {
+  nlist_node_t *curr_node = 0, *next_node = 0;
+
+  // 遍历分片链表
+  for (curr_node = nlist_first(&ipv4_frag_list); curr_node;
+       curr_node = next_node) {
+    next_node = nlist_node_next(curr_node);
+
+    ipv4_frag_t *frag = nlist_entry(curr_node, ipv4_frag_t, node);
+    if (--frag->tmo <= 0) {
+      // 分片超时，释放分片对象
+      ipv4_frag_free(frag);
+    }
+  }
+}
+
+/**
+ * @brief 初始化ipv4分片内存管理对象
+ *
+ * @return net_err_t
+ */
+static net_err_t ipv4_frag_init(void) {
+  // 初始化ipv4分片内存池管理对象
+  // 该内存管理对象只用于ipv4模块，且ipv4模块只由工作线程一个线程访问，无需加锁
+  net_err_t err =
+      mblock_init(&ipv4_frag_mblock, ipv4_frag_arr, sizeof(ipv4_frag_t),
+                  IPV4_FRAG_MAXCNT, NLOCKER_NONE);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_IPV4, "init ipv4 frag mblock failed.");
+    return err;
+  }
+
+  // 初始化ipv4分片链表
+  nlist_init(&ipv4_frag_list);
+
+  // 初始化ipv4分片超时定时器
+  err = net_timer_add(&ipv4_frag_timer, "ipv4 frag timer", ipv4_frag_tmo,
+                      &ipv4_frag_timer, IPV4_FRAG_SCAN_PERIOD * 1000,
+                      NET_TIMER_ACTIVE | NET_TIMER_RELOAD);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_IPV4, "init ipv4 frag timer failed.");
+    return err;
+  }
+
+  return NET_ERR_OK;
 }
 
 /**
@@ -268,7 +303,7 @@ static net_err_t ipv4_pkt_check(ipv4_pkt_t *ipv4_pkt, uint16_t pkt_size) {
   // 检查头部校验和
   if (ipv4_pkt->hdr.hdr_chksum) {
     //* 进行校验和计算时，ip头部要保持原有字节序
-    uint16_t chksum = tools_checksum16(&ipv4_pkt->hdr, hdr_size, 0, 1);
+    uint16_t chksum = tools_checksum16(&ipv4_pkt->hdr, hdr_size, 0, 0, 1);
     if (chksum != 0) {
       dbg_warning(DBG_IPV4, "ipv4 header checksum error.");
       return NET_ERR_IPV4;
@@ -359,7 +394,7 @@ static net_err_t ipv4_handle_normal(const netif_t *netif, pktbuf_t *buf) {
 static void ipv4_frag_add(ipv4_frag_t *frag, ipaddr_t *src_ip, uint16_t id) {
   // 初始化分片对象
   ipaddr_copy(&frag->src_ip, src_ip);
-  frag->tmo = 0;
+  frag->tmo = IPV4_FRAG_TMO / IPV4_FRAG_SCAN_PERIOD;
   frag->id = id;
   nlist_node_init(&frag->node);
   nlist_init(&frag->buf_list);
@@ -644,6 +679,8 @@ net_err_t ipv4_recv(const netif_t *netif, pktbuf_t *buf) {
  */
 net_err_t ipv4_frag_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
                          const ipaddr_t *src_ipaddr, pktbuf_t *buf) {
+  // TODO:
+  // 后续优化思路：在进行分片处理时，不进行内存的再分配与拷贝，而是直接在原数据包上进行分片处理
   dbg_info(DBG_IPV4, "send an ipv4 frag packet....");
   net_err_t err = NET_ERR_OK;
 
@@ -677,6 +714,10 @@ net_err_t ipv4_frag_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
       pktbuf_free(frag_buf);  // 释放数据包
       return err;
     }
+
+    // 移除待发送数据包的curr_size大小的数据
+    // 防止内存占用过大
+    pktbuf_header_remove(buf, curr_size);
 
     // 设置数据包头部在内存上的连续性
     err = pktbuf_set_cont(frag_buf, sizeof(ipv4_hdr_t));

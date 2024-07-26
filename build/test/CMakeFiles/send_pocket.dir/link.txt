@@ -1,3 +1,3 @@
-F:\software\work\CLion\bin\cmake\win\x64\bin\cmake.exe -E rm -f CMakeFiles\send_pocket.dir/objects.a
-F:\software\work\CLion\bin\mingw\bin\ar.exe qc CMakeFiles\send_pocket.dir/objects.a @CMakeFiles\send_pocket.dir\objects1.rsp
-F:\software\work\CLion\bin\mingw\bin\gcc.exe -g -Wl,--whole-archive CMakeFiles\send_pocket.dir/objects.a -Wl,--no-whole-archive -o send_pocket.exe -Wl,--out-implib,libsend_pocket.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\send_pocket.dir\linkLibs.rsp
+D:\software\work\CLion\bin\cmake\win\x64\bin\cmake.exe -E rm -f CMakeFiles\send_pocket.dir/objects.a
+D:\software\work\CLion\bin\mingw\bin\ar.exe qc CMakeFiles\send_pocket.dir/objects.a @CMakeFiles\send_pocket.dir\objects1.rsp
+D:\software\work\CLion\bin\mingw\bin\gcc.exe -g -Wl,--whole-archive CMakeFiles\send_pocket.dir/objects.a -Wl,--no-whole-archive -o send_pocket.exe -Wl,--out-implib,libsend_pocket.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\send_pocket.dir\linkLibs.rsp

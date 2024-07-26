@@ -46,7 +46,7 @@
 // 数据包相关配置
 #define PKTBUF_LOCKER_TYPE NLOCKER_THREAD  // 数据包模块锁类型
 #define PKTBUF_BLK_SIZE 128                // 数据包有效载荷大小
-#define PKTBUF_BLK_CNT 1280                 // 数据块池中的数据块数量
+#define PKTBUF_BLK_CNT 128                 // 数据块池中的数据块数量
 #define PKTBUF_BUF_CNT 128                 // 数据包池中的数据包数量
 
 // 网络接口相关配置
@@ -59,14 +59,16 @@
 // ARP模块相关配置
 #define ARP_CACHE_SIZE 50  // arp缓存表大小
 #define ARP_WAIT_PKT_MAXCNT 5  // arp缓存表对应的等待数据包的最大数量
-#define ARP_CACHE_TMO 1  // arp缓存表的扫描定时器的超时时间(s)
-#define ARP_ENTRY_WAITING_TMO (3 * ARP_CACHE_TMO)  // 待解析的arp缓存表项的超时时间(s)
-#define ARP_ENTRY_RESOLVED_TMO (5 * ARP_CACHE_TMO)  // 已解析的arp缓存表项的超时时间(s)
+#define ARP_CACHE_SCAN_PERIOD 1  // arp缓存表的扫描定时器的超时时间(s)
+#define ARP_ENTRY_WAITING_TMO (3 * ARP_CACHE_SCAN_PERIOD)  // 待解析的arp缓存表项的超时时间(s)
+#define ARP_ENTRY_RESOLVED_TMO (5 * ARP_CACHE_SCAN_PERIOD)  // 已解析的arp缓存表项的超时时间(s)
 #define ARP_ENTRY_RETRY_CNT 5  // arp缓存表项允许的重复请求次数
 
 // IPv4模块相关配置
 #define IPV4_DEFAULT_TTL 64  // ipv4数据包默认生存跳数
 #define IPV4_FRAG_MAXCNT 10  // ipv4分片缓存数组大小
 #define IPV4_FRAG_BUF_MAXCNT 10  // 每个分片允许缓存的最大数据包数量
+#define IPV4_FRAG_SCAN_PERIOD 1  // ipv4分片缓存表的扫描周期(s)
+#define IPV4_FRAG_TMO (10 * IPV4_FRAG_SCAN_PERIOD)  // ipv4分片缓存表项的超时时间(s)
 
 #endif  // NET_CFG_H

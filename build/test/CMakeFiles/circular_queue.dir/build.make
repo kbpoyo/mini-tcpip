@@ -43,10 +43,10 @@ cmake_force:
 SHELL = cmd.exe
 
 # The CMake executable.
-CMAKE_COMMAND = F:\software\work\CLion\bin\cmake\win\x64\bin\cmake.exe
+CMAKE_COMMAND = D:\software\work\CLion\bin\cmake\win\x64\bin\cmake.exe
 
 # The command to remove a file.
-RM = F:\software\work\CLion\bin\cmake\win\x64\bin\cmake.exe -E rm -f
+RM = D:\software\work\CLion\bin\cmake\win\x64\bin\cmake.exe -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -73,345 +73,345 @@ test/CMakeFiles/circular_queue.dir/circular_queue.c.obj: test/CMakeFiles/circula
 test/CMakeFiles/circular_queue.dir/circular_queue.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/test/circular_queue.c
 test/CMakeFiles/circular_queue.dir/circular_queue.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object test/CMakeFiles/circular_queue.dir/circular_queue.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/circular_queue.c.obj -MF CMakeFiles\circular_queue.dir\circular_queue.c.obj.d -o CMakeFiles\circular_queue.dir\circular_queue.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\test\circular_queue.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/circular_queue.c.obj -MF CMakeFiles\circular_queue.dir\circular_queue.c.obj.d -o CMakeFiles\circular_queue.dir\circular_queue.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\test\circular_queue.c
 
 test/CMakeFiles/circular_queue.dir/circular_queue.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/circular_queue.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\test\circular_queue.c > CMakeFiles\circular_queue.dir\circular_queue.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\test\circular_queue.c > CMakeFiles\circular_queue.dir\circular_queue.c.i
 
 test/CMakeFiles/circular_queue.dir/circular_queue.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/circular_queue.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\test\circular_queue.c -o CMakeFiles\circular_queue.dir\circular_queue.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\test\circular_queue.c -o CMakeFiles\circular_queue.dir\circular_queue.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_client.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_client.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_client.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/app/echo/tcp_echo_client.c
 test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_client.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_client.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_client.c.obj -MF CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_client.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_client.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\app\echo\tcp_echo_client.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_client.c.obj -MF CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_client.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_client.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\app\echo\tcp_echo_client.c
 
 test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_client.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_client.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\app\echo\tcp_echo_client.c > CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_client.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\app\echo\tcp_echo_client.c > CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_client.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_client.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_client.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\app\echo\tcp_echo_client.c -o CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_client.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\app\echo\tcp_echo_client.c -o CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_client.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_server.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_server.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_server.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/app/echo/tcp_echo_server.c
 test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_server.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_server.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_server.c.obj -MF CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_server.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_server.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\app\echo\tcp_echo_server.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_server.c.obj -MF CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_server.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_server.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\app\echo\tcp_echo_server.c
 
 test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_server.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_server.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\app\echo\tcp_echo_server.c > CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_server.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\app\echo\tcp_echo_server.c > CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_server.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_server.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/app/echo/tcp_echo_server.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\app\echo\tcp_echo_server.c -o CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_server.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\app\echo\tcp_echo_server.c -o CMakeFiles\circular_queue.dir\__\src\app\echo\tcp_echo_server.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/arp.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/arp.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/arp.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/arp.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/arp.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/arp.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/arp.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\arp.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\arp.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\arp.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/arp.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\arp.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\arp.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\arp.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/arp.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/arp.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\arp.c > CMakeFiles\circular_queue.dir\__\src\net\src\arp.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\arp.c > CMakeFiles\circular_queue.dir\__\src\net\src\arp.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/arp.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/arp.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\arp.c -o CMakeFiles\circular_queue.dir\__\src\net\src\arp.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\arp.c -o CMakeFiles\circular_queue.dir\__\src\net\src\arp.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/dbg.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/dbg.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/dbg.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/dbg.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/dbg.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/dbg.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/dbg.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\dbg.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\dbg.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\dbg.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/dbg.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\dbg.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\dbg.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\dbg.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/dbg.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/dbg.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\dbg.c > CMakeFiles\circular_queue.dir\__\src\net\src\dbg.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\dbg.c > CMakeFiles\circular_queue.dir\__\src\net\src\dbg.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/dbg.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/dbg.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\dbg.c -o CMakeFiles\circular_queue.dir\__\src\net\src\dbg.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\dbg.c -o CMakeFiles\circular_queue.dir\__\src\net\src\dbg.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ether.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ether.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ether.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/ether.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ether.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/ether.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/ether.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\ether.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\ether.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ether.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/ether.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\ether.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\ether.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ether.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ether.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/ether.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ether.c > CMakeFiles\circular_queue.dir\__\src\net\src\ether.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ether.c > CMakeFiles\circular_queue.dir\__\src\net\src\ether.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ether.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/ether.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ether.c -o CMakeFiles\circular_queue.dir\__\src\net\src\ether.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ether.c -o CMakeFiles\circular_queue.dir\__\src\net\src\ether.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/exmsg.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/exmsg.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/exmsg.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/exmsg.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/exmsg.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/exmsg.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/exmsg.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\exmsg.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\exmsg.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\exmsg.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/exmsg.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\exmsg.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\exmsg.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\exmsg.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/exmsg.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/exmsg.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\exmsg.c > CMakeFiles\circular_queue.dir\__\src\net\src\exmsg.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\exmsg.c > CMakeFiles\circular_queue.dir\__\src\net\src\exmsg.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/exmsg.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/exmsg.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\exmsg.c -o CMakeFiles\circular_queue.dir\__\src\net\src\exmsg.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\exmsg.c -o CMakeFiles\circular_queue.dir\__\src\net\src\exmsg.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/fixq.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\fixq.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\fixq.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\fixq.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\fixq.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\fixq.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\fixq.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\fixq.c > CMakeFiles\circular_queue.dir\__\src\net\src\fixq.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\fixq.c > CMakeFiles\circular_queue.dir\__\src\net\src\fixq.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/fixq.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\fixq.c -o CMakeFiles\circular_queue.dir\__\src\net\src\fixq.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\fixq.c -o CMakeFiles\circular_queue.dir\__\src\net\src\fixq.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/icmpv4.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/icmpv4.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/icmpv4.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/icmpv4.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/icmpv4.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/icmpv4.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/icmpv4.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\icmpv4.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\icmpv4.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\icmpv4.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/icmpv4.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\icmpv4.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\icmpv4.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\icmpv4.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/icmpv4.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/icmpv4.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\icmpv4.c > CMakeFiles\circular_queue.dir\__\src\net\src\icmpv4.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\icmpv4.c > CMakeFiles\circular_queue.dir\__\src\net\src\icmpv4.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/icmpv4.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/icmpv4.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\icmpv4.c -o CMakeFiles\circular_queue.dir\__\src\net\src\icmpv4.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\icmpv4.c -o CMakeFiles\circular_queue.dir\__\src\net\src\icmpv4.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ipaddr.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ipaddr.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ipaddr.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/ipaddr.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ipaddr.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/ipaddr.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/ipaddr.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\ipaddr.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\ipaddr.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ipaddr.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/ipaddr.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\ipaddr.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\ipaddr.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ipaddr.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ipaddr.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/ipaddr.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ipaddr.c > CMakeFiles\circular_queue.dir\__\src\net\src\ipaddr.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ipaddr.c > CMakeFiles\circular_queue.dir\__\src\net\src\ipaddr.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ipaddr.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/ipaddr.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ipaddr.c -o CMakeFiles\circular_queue.dir\__\src\net\src\ipaddr.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ipaddr.c -o CMakeFiles\circular_queue.dir\__\src\net\src\ipaddr.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ipv4.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ipv4.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ipv4.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/ipv4.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ipv4.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/ipv4.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/ipv4.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\ipv4.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\ipv4.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ipv4.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/ipv4.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\ipv4.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\ipv4.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ipv4.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ipv4.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/ipv4.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ipv4.c > CMakeFiles\circular_queue.dir\__\src\net\src\ipv4.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ipv4.c > CMakeFiles\circular_queue.dir\__\src\net\src\ipv4.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/ipv4.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/ipv4.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ipv4.c -o CMakeFiles\circular_queue.dir\__\src\net\src\ipv4.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\ipv4.c -o CMakeFiles\circular_queue.dir\__\src\net\src\ipv4.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/loop.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/loop.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/loop.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/loop.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/loop.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/loop.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/loop.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\loop.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\loop.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\loop.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/loop.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\loop.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\loop.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\loop.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/loop.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/loop.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\loop.c > CMakeFiles\circular_queue.dir\__\src\net\src\loop.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\loop.c > CMakeFiles\circular_queue.dir\__\src\net\src\loop.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/loop.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/loop.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\loop.c -o CMakeFiles\circular_queue.dir\__\src\net\src\loop.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\loop.c -o CMakeFiles\circular_queue.dir\__\src\net\src\loop.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/mblock.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/mblock.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/mblock.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/mblock.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/mblock.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/mblock.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/mblock.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\mblock.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\mblock.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\mblock.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/mblock.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\mblock.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\mblock.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\mblock.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/mblock.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/mblock.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\mblock.c > CMakeFiles\circular_queue.dir\__\src\net\src\mblock.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\mblock.c > CMakeFiles\circular_queue.dir\__\src\net\src\mblock.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/mblock.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/mblock.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\mblock.c -o CMakeFiles\circular_queue.dir\__\src\net\src\mblock.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\mblock.c -o CMakeFiles\circular_queue.dir\__\src\net\src\mblock.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/net.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/net.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/net.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/net.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/net.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/net.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/net.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\net.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\net.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\net.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/net.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\net.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\net.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\net.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/net.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/net.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\net.c > CMakeFiles\circular_queue.dir\__\src\net\src\net.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\net.c > CMakeFiles\circular_queue.dir\__\src\net\src\net.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/net.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/net.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\net.c -o CMakeFiles\circular_queue.dir\__\src\net\src\net.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\net.c -o CMakeFiles\circular_queue.dir\__\src\net\src\net.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/netif.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/netif.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/netif.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/netif.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/netif.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/netif.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/netif.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\netif.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\netif.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\netif.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/netif.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\netif.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\netif.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\netif.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/netif.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/netif.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\netif.c > CMakeFiles\circular_queue.dir\__\src\net\src\netif.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\netif.c > CMakeFiles\circular_queue.dir\__\src\net\src\netif.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/netif.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/netif.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\netif.c -o CMakeFiles\circular_queue.dir\__\src\net\src\netif.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\netif.c -o CMakeFiles\circular_queue.dir\__\src\net\src\netif.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/nlist.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/nlist.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/nlist.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/nlist.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/nlist.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/nlist.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/nlist.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\nlist.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\nlist.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\nlist.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/nlist.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\nlist.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\nlist.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\nlist.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/nlist.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/nlist.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\nlist.c > CMakeFiles\circular_queue.dir\__\src\net\src\nlist.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\nlist.c > CMakeFiles\circular_queue.dir\__\src\net\src\nlist.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/nlist.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/nlist.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\nlist.c -o CMakeFiles\circular_queue.dir\__\src\net\src\nlist.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\nlist.c -o CMakeFiles\circular_queue.dir\__\src\net\src\nlist.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/nlocker.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/nlocker.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/nlocker.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/nlocker.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/nlocker.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/nlocker.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/nlocker.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\nlocker.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\nlocker.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\nlocker.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/nlocker.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\nlocker.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\nlocker.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\nlocker.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/nlocker.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/nlocker.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\nlocker.c > CMakeFiles\circular_queue.dir\__\src\net\src\nlocker.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\nlocker.c > CMakeFiles\circular_queue.dir\__\src\net\src\nlocker.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/nlocker.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/nlocker.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\nlocker.c -o CMakeFiles\circular_queue.dir\__\src\net\src\nlocker.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\nlocker.c -o CMakeFiles\circular_queue.dir\__\src\net\src\nlocker.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/pktbuf.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/pktbuf.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/pktbuf.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/pktbuf.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/pktbuf.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/pktbuf.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/pktbuf.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\pktbuf.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\pktbuf.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\pktbuf.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/pktbuf.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\pktbuf.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\pktbuf.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\pktbuf.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/pktbuf.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/pktbuf.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\pktbuf.c > CMakeFiles\circular_queue.dir\__\src\net\src\pktbuf.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\pktbuf.c > CMakeFiles\circular_queue.dir\__\src\net\src\pktbuf.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/pktbuf.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/pktbuf.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\pktbuf.c -o CMakeFiles\circular_queue.dir\__\src\net\src\pktbuf.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\pktbuf.c -o CMakeFiles\circular_queue.dir\__\src\net\src\pktbuf.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/timer.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/timer.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/timer.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/timer.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/timer.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/timer.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/timer.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\timer.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\timer.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\timer.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/timer.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\timer.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\timer.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\timer.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/timer.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/timer.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\timer.c > CMakeFiles\circular_queue.dir\__\src\net\src\timer.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\timer.c > CMakeFiles\circular_queue.dir\__\src\net\src\timer.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/timer.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/timer.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\timer.c -o CMakeFiles\circular_queue.dir\__\src\net\src\timer.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\timer.c -o CMakeFiles\circular_queue.dir\__\src\net\src\timer.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/tools.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/net/src/tools.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/net/src/tools.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/tools.c
 test/CMakeFiles/circular_queue.dir/__/src/net/src/tools.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building C object test/CMakeFiles/circular_queue.dir/__/src/net/src/tools.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/tools.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\tools.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\tools.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\tools.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/net/src/tools.c.obj -MF CMakeFiles\circular_queue.dir\__\src\net\src\tools.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\net\src\tools.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\tools.c
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/tools.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/net/src/tools.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\tools.c > CMakeFiles\circular_queue.dir\__\src\net\src\tools.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\tools.c > CMakeFiles\circular_queue.dir\__\src\net\src\tools.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/net/src/tools.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/net/src/tools.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\tools.c -o CMakeFiles\circular_queue.dir\__\src\net\src\tools.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\tools.c -o CMakeFiles\circular_queue.dir\__\src\net\src\tools.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/plat/net_plat.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/plat/net_plat.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/plat/net_plat.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/plat/net_plat.c
 test/CMakeFiles/circular_queue.dir/__/src/plat/net_plat.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building C object test/CMakeFiles/circular_queue.dir/__/src/plat/net_plat.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/plat/net_plat.c.obj -MF CMakeFiles\circular_queue.dir\__\src\plat\net_plat.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\plat\net_plat.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\net_plat.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/plat/net_plat.c.obj -MF CMakeFiles\circular_queue.dir\__\src\plat\net_plat.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\plat\net_plat.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\net_plat.c
 
 test/CMakeFiles/circular_queue.dir/__/src/plat/net_plat.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/plat/net_plat.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\net_plat.c > CMakeFiles\circular_queue.dir\__\src\plat\net_plat.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\net_plat.c > CMakeFiles\circular_queue.dir\__\src\plat\net_plat.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/plat/net_plat.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/plat/net_plat.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\net_plat.c -o CMakeFiles\circular_queue.dir\__\src\plat\net_plat.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\net_plat.c -o CMakeFiles\circular_queue.dir\__\src\plat\net_plat.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/plat/netif_pcap.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/plat/netif_pcap.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/plat/netif_pcap.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/plat/netif_pcap.c
 test/CMakeFiles/circular_queue.dir/__/src/plat/netif_pcap.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building C object test/CMakeFiles/circular_queue.dir/__/src/plat/netif_pcap.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/plat/netif_pcap.c.obj -MF CMakeFiles\circular_queue.dir\__\src\plat\netif_pcap.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\plat\netif_pcap.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\netif_pcap.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/plat/netif_pcap.c.obj -MF CMakeFiles\circular_queue.dir\__\src\plat\netif_pcap.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\plat\netif_pcap.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\netif_pcap.c
 
 test/CMakeFiles/circular_queue.dir/__/src/plat/netif_pcap.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/plat/netif_pcap.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\netif_pcap.c > CMakeFiles\circular_queue.dir\__\src\plat\netif_pcap.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\netif_pcap.c > CMakeFiles\circular_queue.dir\__\src\plat\netif_pcap.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/plat/netif_pcap.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/plat/netif_pcap.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\netif_pcap.c -o CMakeFiles\circular_queue.dir\__\src\plat\netif_pcap.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\netif_pcap.c -o CMakeFiles\circular_queue.dir\__\src\plat\netif_pcap.c.s
 
 test/CMakeFiles/circular_queue.dir/__/src/plat/sys_plat.c.obj: test/CMakeFiles/circular_queue.dir/flags.make
 test/CMakeFiles/circular_queue.dir/__/src/plat/sys_plat.c.obj: test/CMakeFiles/circular_queue.dir/includes_C.rsp
 test/CMakeFiles/circular_queue.dir/__/src/plat/sys_plat.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/plat/sys_plat.c
 test/CMakeFiles/circular_queue.dir/__/src/plat/sys_plat.c.obj: test/CMakeFiles/circular_queue.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building C object test/CMakeFiles/circular_queue.dir/__/src/plat/sys_plat.c.obj"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/plat/sys_plat.c.obj -MF CMakeFiles\circular_queue.dir\__\src\plat\sys_plat.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\plat\sys_plat.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\sys_plat.c
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/circular_queue.dir/__/src/plat/sys_plat.c.obj -MF CMakeFiles\circular_queue.dir\__\src\plat\sys_plat.c.obj.d -o CMakeFiles\circular_queue.dir\__\src\plat\sys_plat.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\sys_plat.c
 
 test/CMakeFiles/circular_queue.dir/__/src/plat/sys_plat.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/circular_queue.dir/__/src/plat/sys_plat.c.i"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\sys_plat.c > CMakeFiles\circular_queue.dir\__\src\plat\sys_plat.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\sys_plat.c > CMakeFiles\circular_queue.dir\__\src\plat\sys_plat.c.i
 
 test/CMakeFiles/circular_queue.dir/__/src/plat/sys_plat.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/circular_queue.dir/__/src/plat/sys_plat.c.s"
-	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && F:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\sys_plat.c -o CMakeFiles\circular_queue.dir\__\src\plat\sys_plat.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\sys_plat.c -o CMakeFiles\circular_queue.dir\__\src\plat\sys_plat.c.s
 
 # Object files for target circular_queue
 circular_queue_OBJECTS = \

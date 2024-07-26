@@ -28,7 +28,9 @@
         "ether.h": "c",
         "fixq.h": "c",
         "arp.h": "c",
-        "ipv4.h": "c"
+        "ipv4.h": "c",
+        "timer.h": "c",
+        "net_err.h": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [

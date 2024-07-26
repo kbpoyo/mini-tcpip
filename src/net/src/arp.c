@@ -174,7 +174,7 @@ static void arp_cache_tmo(net_timer_t *timer, void *arg) {
         arp_entry_display(entry);
 
         // 重载表项的tmo和retry，并进入等待状态
-        entry->tmo = ARP_ENTRY_WAITING_TMO;
+        entry->tmo = ARP_ENTRY_WAITING_TMO / ARP_CACHE_SCAN_PERIOD;
         entry->retry = ARP_ENTRY_RETRY_CNT;
         entry->state = NET_ARP_WAITING;
 
@@ -187,7 +187,7 @@ static void arp_cache_tmo(net_timer_t *timer, void *arg) {
 
         if (entry->retry-- > 0) {  // 未达到最大重试次数，可再次发送arp请求包
           // 重载表项的tmo，并继续等待
-          entry->tmo = ARP_ENTRY_WAITING_TMO;
+          entry->tmo = ARP_ENTRY_WAITING_TMO / ARP_CACHE_SCAN_PERIOD;
 
           // 发送arp请求包
           arp_make_request(entry->netif, entry->ipaddr);
@@ -304,9 +304,9 @@ static void arp_entry_set(arp_entry_t *entry, const uint8_t *ipaddr_bytes,
 
   // 根据状态设置表项的超时时间
   if (state == NET_ARP_RESOLVED) {
-    entry->tmo = ARP_ENTRY_RESOLVED_TMO;
+    entry->tmo = ARP_ENTRY_RESOLVED_TMO / ARP_CACHE_SCAN_PERIOD;
   } else {
-    entry->tmo = ARP_ENTRY_WAITING_TMO;
+    entry->tmo = ARP_ENTRY_WAITING_TMO / ARP_CACHE_SCAN_PERIOD;
   }
 }
 
@@ -407,7 +407,7 @@ net_err_t arp_module_init(void) {
   // 初始化arp缓存表定时器
   err =
       net_timer_add(&cache_timer, "arp cache timer", arp_cache_tmo, (void *)0,
-                    ARP_CACHE_TMO * 1000, NET_TIMER_ACTIVE | NET_TIMER_RELOAD);
+                    ARP_CACHE_SCAN_PERIOD * 1000, NET_TIMER_ACTIVE | NET_TIMER_RELOAD);
   if (err != NET_ERR_OK) {
     dbg_error(DBG_ARP, "arp module init error: arp cache timer init failed.");
     return err;

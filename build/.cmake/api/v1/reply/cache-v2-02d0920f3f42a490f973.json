@@ -15,7 +15,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/addr2line.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/addr2line.exe"
 		},
 		{
 			"name" : "CMAKE_AR",
@@ -31,7 +31,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/ar.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/ar.exe"
 		},
 		{
 			"name" : "CMAKE_BUILD_TYPE",
@@ -119,7 +119,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "F:/software/work/CLion/bin/cmake/win/x64/bin/cmake.exe"
+			"value" : "D:/software/work/CLion/bin/cmake/win/x64/bin/cmake.exe"
 		},
 		{
 			"name" : "CMAKE_CPACK_COMMAND",
@@ -131,7 +131,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "F:/software/work/CLion/bin/cmake/win/x64/bin/cpack.exe"
+			"value" : "D:/software/work/CLion/bin/cmake/win/x64/bin/cpack.exe"
 		},
 		{
 			"name" : "CMAKE_CTEST_COMMAND",
@@ -143,7 +143,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "F:/software/work/CLion/bin/cmake/win/x64/bin/ctest.exe"
+			"value" : "D:/software/work/CLion/bin/cmake/win/x64/bin/ctest.exe"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER",
@@ -159,7 +159,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/g++.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/g++.exe"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER_AR",
@@ -175,7 +175,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/gcc-ar.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/gcc-ar.exe"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER_RANLIB",
@@ -191,7 +191,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/gcc-ranlib.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/gcc-ranlib.exe"
 		},
 		{
 			"name" : "CMAKE_CXX_FLAGS",
@@ -303,7 +303,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/gcc.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/gcc.exe"
 		},
 		{
 			"name" : "CMAKE_C_COMPILER_AR",
@@ -319,7 +319,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/gcc-ar.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/gcc-ar.exe"
 		},
 		{
 			"name" : "CMAKE_C_COMPILER_RANLIB",
@@ -335,7 +335,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/gcc-ranlib.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/gcc-ranlib.exe"
 		},
 		{
 			"name" : "CMAKE_C_FLAGS",
@@ -447,7 +447,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/dlltool.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/dlltool.exe"
 		},
 		{
 			"name" : "CMAKE_EXECUTABLE_FORMAT",
@@ -675,7 +675,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/ld.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/ld.exe"
 		},
 		{
 			"name" : "CMAKE_MAKE_PROGRAM",
@@ -691,7 +691,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/mingw32-make.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/mingw32-make.exe"
 		},
 		{
 			"name" : "CMAKE_MODULE_LINKER_FLAGS",
@@ -787,7 +787,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/nm.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/nm.exe"
 		},
 		{
 			"name" : "CMAKE_NUMBER_OF_MAKEFILES",
@@ -815,7 +815,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/objcopy.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/objcopy.exe"
 		},
 		{
 			"name" : "CMAKE_OBJDUMP",
@@ -831,7 +831,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/objdump.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/objdump.exe"
 		},
 		{
 			"name" : "CMAKE_PLATFORM_INFO_INITIALIZED",
@@ -895,7 +895,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/ranlib.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/ranlib.exe"
 		},
 		{
 			"name" : "CMAKE_RC_COMPILER",
@@ -911,7 +911,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/windres.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/windres.exe"
 		},
 		{
 			"name" : "CMAKE_RC_COMPILER_WORKS",
@@ -1019,7 +1019,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/readelf.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/readelf.exe"
 		},
 		{
 			"name" : "CMAKE_ROOT",
@@ -1031,7 +1031,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "F:/software/work/CLion/bin/cmake/win/x64/share/cmake-3.28"
+			"value" : "D:/software/work/CLion/bin/cmake/win/x64/share/cmake-3.28"
 		},
 		{
 			"name" : "CMAKE_SHARED_LINKER_FLAGS",
@@ -1239,7 +1239,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "F:/software/work/CLion/bin/mingw/bin/strip.exe"
+			"value" : "D:/software/work/CLion/bin/mingw/bin/strip.exe"
 		},
 		{
 			"name" : "CMAKE_TAPI",

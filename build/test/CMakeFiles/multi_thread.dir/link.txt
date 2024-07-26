@@ -1,3 +1,3 @@
-F:\software\work\CLion\bin\cmake\win\x64\bin\cmake.exe -E rm -f CMakeFiles\multi_thread.dir/objects.a
-F:\software\work\CLion\bin\mingw\bin\ar.exe qc CMakeFiles\multi_thread.dir/objects.a @CMakeFiles\multi_thread.dir\objects1.rsp
-F:\software\work\CLion\bin\mingw\bin\gcc.exe -g -Wl,--whole-archive CMakeFiles\multi_thread.dir/objects.a -Wl,--no-whole-archive -o multi_thread.exe -Wl,--out-implib,libmulti_thread.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\multi_thread.dir\linkLibs.rsp
+D:\software\work\CLion\bin\cmake\win\x64\bin\cmake.exe -E rm -f CMakeFiles\multi_thread.dir/objects.a
+D:\software\work\CLion\bin\mingw\bin\ar.exe qc CMakeFiles\multi_thread.dir/objects.a @CMakeFiles\multi_thread.dir\objects1.rsp
+D:\software\work\CLion\bin\mingw\bin\gcc.exe -g -Wl,--whole-archive CMakeFiles\multi_thread.dir/objects.a -Wl,--no-whole-archive -o multi_thread.exe -Wl,--out-implib,libmulti_thread.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\multi_thread.dir\linkLibs.rsp
