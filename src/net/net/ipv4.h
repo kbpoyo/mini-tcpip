@@ -98,7 +98,7 @@ typedef struct _ipv4_hdr_t {
 
   uint8_t src_ip[IPV4_ADDR_SIZE];  // 源ip地址
 
-  uint8_t dest_ip[IPV4_VERSION];  // 目的ip地址
+  uint8_t dest_ip[IPV4_ADDR_SIZE];  // 目的ip地址
 } ipv4_hdr_t;
 
 // 定义ipv4数据包结构

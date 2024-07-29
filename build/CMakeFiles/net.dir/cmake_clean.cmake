@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.obj.d"
   "CMakeFiles/net.dir/src/app/main.c.obj"
   "CMakeFiles/net.dir/src/app/main.c.obj.d"
+  "CMakeFiles/net.dir/src/app/ping/ping.c.obj"
+  "CMakeFiles/net.dir/src/app/ping/ping.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/arp.c.obj"
   "CMakeFiles/net.dir/src/net/src/arp.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/dbg.c.obj"

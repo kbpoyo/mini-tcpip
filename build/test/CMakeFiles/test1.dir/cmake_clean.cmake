@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_client.c.obj.d"
   "CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.obj"
   "CMakeFiles/test1.dir/__/src/app/echo/tcp_echo_server.c.obj.d"
+  "CMakeFiles/test1.dir/__/src/app/ping/ping.c.obj"
+  "CMakeFiles/test1.dir/__/src/app/ping/ping.c.obj.d"
   "CMakeFiles/test1.dir/__/src/net/src/arp.c.obj"
   "CMakeFiles/test1.dir/__/src/net/src/arp.c.obj.d"
   "CMakeFiles/test1.dir/__/src/net/src/dbg.c.obj"

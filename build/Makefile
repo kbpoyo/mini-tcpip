@@ -255,6 +255,19 @@ test_pktbuf/fast:
 	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/build
 .PHONY : test_pktbuf/fast
 
+#=============================================================================
+# Target rules for targets named test_ping
+
+# Build rule for target.
+test_ping: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test_ping
+.PHONY : test_ping
+
+# fast build rule for target.
+test_ping/fast:
+	$(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/build
+.PHONY : test_ping/fast
+
 src/app/echo/tcp_echo_client.obj: src/app/echo/tcp_echo_client.c.obj
 .PHONY : src/app/echo/tcp_echo_client.obj
 
@@ -326,6 +339,30 @@ src/app/main.s: src/app/main.c.s
 src/app/main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/main.c.s
 .PHONY : src/app/main.c.s
+
+src/app/ping/ping.obj: src/app/ping/ping.c.obj
+.PHONY : src/app/ping/ping.obj
+
+# target to build an object file
+src/app/ping/ping.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/ping/ping.c.obj
+.PHONY : src/app/ping/ping.c.obj
+
+src/app/ping/ping.i: src/app/ping/ping.c.i
+.PHONY : src/app/ping/ping.i
+
+# target to preprocess a source file
+src/app/ping/ping.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/ping/ping.c.i
+.PHONY : src/app/ping/ping.c.i
+
+src/app/ping/ping.s: src/app/ping/ping.c.s
+.PHONY : src/app/ping/ping.s
+
+# target to generate assembly for a file
+src/app/ping/ping.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/ping/ping.c.s
+.PHONY : src/app/ping/ping.c.s
 
 src/net/src/arp.obj: src/net/src/arp.c.obj
 .PHONY : src/net/src/arp.obj
@@ -823,6 +860,7 @@ help:
 	@echo ... send_pocket
 	@echo ... test1
 	@echo ... test_mblock
+	@echo ... test_ping
 	@echo ... test_pktbuf
 	@echo ... test_tcp_echo_client
 	@echo ... test_tcp_echo_server
@@ -835,6 +873,9 @@ help:
 	@echo ... src/app/main.obj
 	@echo ... src/app/main.i
 	@echo ... src/app/main.s
+	@echo ... src/app/ping/ping.obj
+	@echo ... src/app/ping/ping.i
+	@echo ... src/app/ping/ping.s
 	@echo ... src/net/src/arp.obj
 	@echo ... src/net/src/arp.i
 	@echo ... src/net/src/arp.s

@@ -251,6 +251,20 @@ test_pktbuf/fast:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/build
 .PHONY : test_pktbuf/fast
 
+# Convenience name for target.
+test/CMakeFiles/test_ping.dir/rule:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 test/CMakeFiles/test_ping.dir/rule
+.PHONY : test/CMakeFiles/test_ping.dir/rule
+
+# Convenience name for target.
+test_ping: test/CMakeFiles/test_ping.dir/rule
+.PHONY : test_ping
+
+# fast build rule for target.
+test_ping/fast:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/build
+.PHONY : test_ping/fast
+
 __/src/app/echo/tcp_echo_client.obj: __/src/app/echo/tcp_echo_client.c.obj
 .PHONY : __/src/app/echo/tcp_echo_client.obj
 
@@ -265,6 +279,7 @@ __/src/app/echo/tcp_echo_client.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/echo/tcp_echo_client.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/app/echo/tcp_echo_client.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/app/echo/tcp_echo_client.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/app/echo/tcp_echo_client.c.obj
 .PHONY : __/src/app/echo/tcp_echo_client.c.obj
 
 __/src/app/echo/tcp_echo_client.i: __/src/app/echo/tcp_echo_client.c.i
@@ -281,6 +296,7 @@ __/src/app/echo/tcp_echo_client.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/echo/tcp_echo_client.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/app/echo/tcp_echo_client.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/app/echo/tcp_echo_client.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/app/echo/tcp_echo_client.c.i
 .PHONY : __/src/app/echo/tcp_echo_client.c.i
 
 __/src/app/echo/tcp_echo_client.s: __/src/app/echo/tcp_echo_client.c.s
@@ -297,6 +313,7 @@ __/src/app/echo/tcp_echo_client.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/echo/tcp_echo_client.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/app/echo/tcp_echo_client.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/app/echo/tcp_echo_client.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/app/echo/tcp_echo_client.c.s
 .PHONY : __/src/app/echo/tcp_echo_client.c.s
 
 __/src/app/echo/tcp_echo_server.obj: __/src/app/echo/tcp_echo_server.c.obj
@@ -313,6 +330,7 @@ __/src/app/echo/tcp_echo_server.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/echo/tcp_echo_server.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/app/echo/tcp_echo_server.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/app/echo/tcp_echo_server.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/app/echo/tcp_echo_server.c.obj
 .PHONY : __/src/app/echo/tcp_echo_server.c.obj
 
 __/src/app/echo/tcp_echo_server.i: __/src/app/echo/tcp_echo_server.c.i
@@ -329,6 +347,7 @@ __/src/app/echo/tcp_echo_server.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/echo/tcp_echo_server.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/app/echo/tcp_echo_server.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/app/echo/tcp_echo_server.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/app/echo/tcp_echo_server.c.i
 .PHONY : __/src/app/echo/tcp_echo_server.c.i
 
 __/src/app/echo/tcp_echo_server.s: __/src/app/echo/tcp_echo_server.c.s
@@ -345,7 +364,59 @@ __/src/app/echo/tcp_echo_server.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/echo/tcp_echo_server.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/app/echo/tcp_echo_server.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/app/echo/tcp_echo_server.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/app/echo/tcp_echo_server.c.s
 .PHONY : __/src/app/echo/tcp_echo_server.c.s
+
+__/src/app/ping/ping.obj: __/src/app/ping/ping.c.obj
+.PHONY : __/src/app/ping/ping.obj
+
+# target to build an object file
+__/src/app/ping/ping.c.obj:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/app/ping/ping.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/app/ping/ping.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/app/ping/ping.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/app/ping/ping.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/app/ping/ping.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/app/ping/ping.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/ping/ping.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/app/ping/ping.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/app/ping/ping.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/app/ping/ping.c.obj
+.PHONY : __/src/app/ping/ping.c.obj
+
+__/src/app/ping/ping.i: __/src/app/ping/ping.c.i
+.PHONY : __/src/app/ping/ping.i
+
+# target to preprocess a source file
+__/src/app/ping/ping.c.i:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/app/ping/ping.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/app/ping/ping.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/app/ping/ping.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/app/ping/ping.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/app/ping/ping.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/app/ping/ping.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/ping/ping.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/app/ping/ping.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/app/ping/ping.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/app/ping/ping.c.i
+.PHONY : __/src/app/ping/ping.c.i
+
+__/src/app/ping/ping.s: __/src/app/ping/ping.c.s
+.PHONY : __/src/app/ping/ping.s
+
+# target to generate assembly for a file
+__/src/app/ping/ping.c.s:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/app/ping/ping.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/app/ping/ping.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/app/ping/ping.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/app/ping/ping.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/app/ping/ping.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/app/ping/ping.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/ping/ping.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/app/ping/ping.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/app/ping/ping.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/app/ping/ping.c.s
+.PHONY : __/src/app/ping/ping.c.s
 
 __/src/net/src/arp.obj: __/src/net/src/arp.c.obj
 .PHONY : __/src/net/src/arp.obj
@@ -361,6 +432,7 @@ __/src/net/src/arp.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/arp.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/arp.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/arp.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/arp.c.obj
 .PHONY : __/src/net/src/arp.c.obj
 
 __/src/net/src/arp.i: __/src/net/src/arp.c.i
@@ -377,6 +449,7 @@ __/src/net/src/arp.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/arp.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/arp.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/arp.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/arp.c.i
 .PHONY : __/src/net/src/arp.c.i
 
 __/src/net/src/arp.s: __/src/net/src/arp.c.s
@@ -393,6 +466,7 @@ __/src/net/src/arp.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/arp.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/arp.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/arp.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/arp.c.s
 .PHONY : __/src/net/src/arp.c.s
 
 __/src/net/src/dbg.obj: __/src/net/src/dbg.c.obj
@@ -409,6 +483,7 @@ __/src/net/src/dbg.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/dbg.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/dbg.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/dbg.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/dbg.c.obj
 .PHONY : __/src/net/src/dbg.c.obj
 
 __/src/net/src/dbg.i: __/src/net/src/dbg.c.i
@@ -425,6 +500,7 @@ __/src/net/src/dbg.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/dbg.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/dbg.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/dbg.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/dbg.c.i
 .PHONY : __/src/net/src/dbg.c.i
 
 __/src/net/src/dbg.s: __/src/net/src/dbg.c.s
@@ -441,6 +517,7 @@ __/src/net/src/dbg.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/dbg.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/dbg.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/dbg.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/dbg.c.s
 .PHONY : __/src/net/src/dbg.c.s
 
 __/src/net/src/ether.obj: __/src/net/src/ether.c.obj
@@ -457,6 +534,7 @@ __/src/net/src/ether.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/ether.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/ether.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/ether.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/ether.c.obj
 .PHONY : __/src/net/src/ether.c.obj
 
 __/src/net/src/ether.i: __/src/net/src/ether.c.i
@@ -473,6 +551,7 @@ __/src/net/src/ether.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/ether.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/ether.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/ether.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/ether.c.i
 .PHONY : __/src/net/src/ether.c.i
 
 __/src/net/src/ether.s: __/src/net/src/ether.c.s
@@ -489,6 +568,7 @@ __/src/net/src/ether.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/ether.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/ether.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/ether.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/ether.c.s
 .PHONY : __/src/net/src/ether.c.s
 
 __/src/net/src/exmsg.obj: __/src/net/src/exmsg.c.obj
@@ -505,6 +585,7 @@ __/src/net/src/exmsg.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/exmsg.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/exmsg.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/exmsg.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/exmsg.c.obj
 .PHONY : __/src/net/src/exmsg.c.obj
 
 __/src/net/src/exmsg.i: __/src/net/src/exmsg.c.i
@@ -521,6 +602,7 @@ __/src/net/src/exmsg.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/exmsg.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/exmsg.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/exmsg.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/exmsg.c.i
 .PHONY : __/src/net/src/exmsg.c.i
 
 __/src/net/src/exmsg.s: __/src/net/src/exmsg.c.s
@@ -537,6 +619,7 @@ __/src/net/src/exmsg.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/exmsg.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/exmsg.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/exmsg.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/exmsg.c.s
 .PHONY : __/src/net/src/exmsg.c.s
 
 __/src/net/src/fixq.obj: __/src/net/src/fixq.c.obj
@@ -553,6 +636,7 @@ __/src/net/src/fixq.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/fixq.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/fixq.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/fixq.c.obj
 .PHONY : __/src/net/src/fixq.c.obj
 
 __/src/net/src/fixq.i: __/src/net/src/fixq.c.i
@@ -569,6 +653,7 @@ __/src/net/src/fixq.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/fixq.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/fixq.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/fixq.c.i
 .PHONY : __/src/net/src/fixq.c.i
 
 __/src/net/src/fixq.s: __/src/net/src/fixq.c.s
@@ -585,6 +670,7 @@ __/src/net/src/fixq.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/fixq.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/fixq.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/fixq.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/fixq.c.s
 .PHONY : __/src/net/src/fixq.c.s
 
 __/src/net/src/icmpv4.obj: __/src/net/src/icmpv4.c.obj
@@ -601,6 +687,7 @@ __/src/net/src/icmpv4.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/icmpv4.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/icmpv4.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/icmpv4.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/icmpv4.c.obj
 .PHONY : __/src/net/src/icmpv4.c.obj
 
 __/src/net/src/icmpv4.i: __/src/net/src/icmpv4.c.i
@@ -617,6 +704,7 @@ __/src/net/src/icmpv4.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/icmpv4.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/icmpv4.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/icmpv4.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/icmpv4.c.i
 .PHONY : __/src/net/src/icmpv4.c.i
 
 __/src/net/src/icmpv4.s: __/src/net/src/icmpv4.c.s
@@ -633,6 +721,7 @@ __/src/net/src/icmpv4.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/icmpv4.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/icmpv4.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/icmpv4.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/icmpv4.c.s
 .PHONY : __/src/net/src/icmpv4.c.s
 
 __/src/net/src/ipaddr.obj: __/src/net/src/ipaddr.c.obj
@@ -649,6 +738,7 @@ __/src/net/src/ipaddr.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/ipaddr.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/ipaddr.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/ipaddr.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/ipaddr.c.obj
 .PHONY : __/src/net/src/ipaddr.c.obj
 
 __/src/net/src/ipaddr.i: __/src/net/src/ipaddr.c.i
@@ -665,6 +755,7 @@ __/src/net/src/ipaddr.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/ipaddr.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/ipaddr.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/ipaddr.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/ipaddr.c.i
 .PHONY : __/src/net/src/ipaddr.c.i
 
 __/src/net/src/ipaddr.s: __/src/net/src/ipaddr.c.s
@@ -681,6 +772,7 @@ __/src/net/src/ipaddr.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/ipaddr.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/ipaddr.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/ipaddr.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/ipaddr.c.s
 .PHONY : __/src/net/src/ipaddr.c.s
 
 __/src/net/src/ipv4.obj: __/src/net/src/ipv4.c.obj
@@ -697,6 +789,7 @@ __/src/net/src/ipv4.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/ipv4.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/ipv4.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/ipv4.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/ipv4.c.obj
 .PHONY : __/src/net/src/ipv4.c.obj
 
 __/src/net/src/ipv4.i: __/src/net/src/ipv4.c.i
@@ -713,6 +806,7 @@ __/src/net/src/ipv4.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/ipv4.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/ipv4.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/ipv4.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/ipv4.c.i
 .PHONY : __/src/net/src/ipv4.c.i
 
 __/src/net/src/ipv4.s: __/src/net/src/ipv4.c.s
@@ -729,6 +823,7 @@ __/src/net/src/ipv4.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/ipv4.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/ipv4.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/ipv4.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/ipv4.c.s
 .PHONY : __/src/net/src/ipv4.c.s
 
 __/src/net/src/loop.obj: __/src/net/src/loop.c.obj
@@ -745,6 +840,7 @@ __/src/net/src/loop.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/loop.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/loop.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/loop.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/loop.c.obj
 .PHONY : __/src/net/src/loop.c.obj
 
 __/src/net/src/loop.i: __/src/net/src/loop.c.i
@@ -761,6 +857,7 @@ __/src/net/src/loop.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/loop.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/loop.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/loop.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/loop.c.i
 .PHONY : __/src/net/src/loop.c.i
 
 __/src/net/src/loop.s: __/src/net/src/loop.c.s
@@ -777,6 +874,7 @@ __/src/net/src/loop.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/loop.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/loop.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/loop.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/loop.c.s
 .PHONY : __/src/net/src/loop.c.s
 
 __/src/net/src/mblock.obj: __/src/net/src/mblock.c.obj
@@ -793,6 +891,7 @@ __/src/net/src/mblock.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/mblock.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/mblock.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/mblock.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/mblock.c.obj
 .PHONY : __/src/net/src/mblock.c.obj
 
 __/src/net/src/mblock.i: __/src/net/src/mblock.c.i
@@ -809,6 +908,7 @@ __/src/net/src/mblock.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/mblock.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/mblock.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/mblock.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/mblock.c.i
 .PHONY : __/src/net/src/mblock.c.i
 
 __/src/net/src/mblock.s: __/src/net/src/mblock.c.s
@@ -825,6 +925,7 @@ __/src/net/src/mblock.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/mblock.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/mblock.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/mblock.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/mblock.c.s
 .PHONY : __/src/net/src/mblock.c.s
 
 __/src/net/src/net.obj: __/src/net/src/net.c.obj
@@ -841,6 +942,7 @@ __/src/net/src/net.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/net.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/net.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/net.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/net.c.obj
 .PHONY : __/src/net/src/net.c.obj
 
 __/src/net/src/net.i: __/src/net/src/net.c.i
@@ -857,6 +959,7 @@ __/src/net/src/net.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/net.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/net.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/net.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/net.c.i
 .PHONY : __/src/net/src/net.c.i
 
 __/src/net/src/net.s: __/src/net/src/net.c.s
@@ -873,6 +976,7 @@ __/src/net/src/net.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/net.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/net.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/net.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/net.c.s
 .PHONY : __/src/net/src/net.c.s
 
 __/src/net/src/netif.obj: __/src/net/src/netif.c.obj
@@ -889,6 +993,7 @@ __/src/net/src/netif.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/netif.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/netif.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/netif.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/netif.c.obj
 .PHONY : __/src/net/src/netif.c.obj
 
 __/src/net/src/netif.i: __/src/net/src/netif.c.i
@@ -905,6 +1010,7 @@ __/src/net/src/netif.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/netif.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/netif.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/netif.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/netif.c.i
 .PHONY : __/src/net/src/netif.c.i
 
 __/src/net/src/netif.s: __/src/net/src/netif.c.s
@@ -921,6 +1027,7 @@ __/src/net/src/netif.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/netif.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/netif.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/netif.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/netif.c.s
 .PHONY : __/src/net/src/netif.c.s
 
 __/src/net/src/nlist.obj: __/src/net/src/nlist.c.obj
@@ -937,6 +1044,7 @@ __/src/net/src/nlist.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/nlist.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/nlist.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/nlist.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/nlist.c.obj
 .PHONY : __/src/net/src/nlist.c.obj
 
 __/src/net/src/nlist.i: __/src/net/src/nlist.c.i
@@ -953,6 +1061,7 @@ __/src/net/src/nlist.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/nlist.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/nlist.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/nlist.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/nlist.c.i
 .PHONY : __/src/net/src/nlist.c.i
 
 __/src/net/src/nlist.s: __/src/net/src/nlist.c.s
@@ -969,6 +1078,7 @@ __/src/net/src/nlist.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/nlist.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/nlist.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/nlist.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/nlist.c.s
 .PHONY : __/src/net/src/nlist.c.s
 
 __/src/net/src/nlocker.obj: __/src/net/src/nlocker.c.obj
@@ -985,6 +1095,7 @@ __/src/net/src/nlocker.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/nlocker.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/nlocker.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/nlocker.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/nlocker.c.obj
 .PHONY : __/src/net/src/nlocker.c.obj
 
 __/src/net/src/nlocker.i: __/src/net/src/nlocker.c.i
@@ -1001,6 +1112,7 @@ __/src/net/src/nlocker.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/nlocker.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/nlocker.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/nlocker.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/nlocker.c.i
 .PHONY : __/src/net/src/nlocker.c.i
 
 __/src/net/src/nlocker.s: __/src/net/src/nlocker.c.s
@@ -1017,6 +1129,7 @@ __/src/net/src/nlocker.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/nlocker.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/nlocker.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/nlocker.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/nlocker.c.s
 .PHONY : __/src/net/src/nlocker.c.s
 
 __/src/net/src/pktbuf.obj: __/src/net/src/pktbuf.c.obj
@@ -1033,6 +1146,7 @@ __/src/net/src/pktbuf.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/pktbuf.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/pktbuf.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/pktbuf.c.obj
 .PHONY : __/src/net/src/pktbuf.c.obj
 
 __/src/net/src/pktbuf.i: __/src/net/src/pktbuf.c.i
@@ -1049,6 +1163,7 @@ __/src/net/src/pktbuf.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/pktbuf.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/pktbuf.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/pktbuf.c.i
 .PHONY : __/src/net/src/pktbuf.c.i
 
 __/src/net/src/pktbuf.s: __/src/net/src/pktbuf.c.s
@@ -1065,6 +1180,7 @@ __/src/net/src/pktbuf.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/pktbuf.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/pktbuf.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/pktbuf.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/pktbuf.c.s
 .PHONY : __/src/net/src/pktbuf.c.s
 
 __/src/net/src/timer.obj: __/src/net/src/timer.c.obj
@@ -1081,6 +1197,7 @@ __/src/net/src/timer.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/timer.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/timer.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/timer.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/timer.c.obj
 .PHONY : __/src/net/src/timer.c.obj
 
 __/src/net/src/timer.i: __/src/net/src/timer.c.i
@@ -1097,6 +1214,7 @@ __/src/net/src/timer.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/timer.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/timer.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/timer.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/timer.c.i
 .PHONY : __/src/net/src/timer.c.i
 
 __/src/net/src/timer.s: __/src/net/src/timer.c.s
@@ -1113,6 +1231,7 @@ __/src/net/src/timer.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/timer.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/timer.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/timer.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/timer.c.s
 .PHONY : __/src/net/src/timer.c.s
 
 __/src/net/src/tools.obj: __/src/net/src/tools.c.obj
@@ -1129,6 +1248,7 @@ __/src/net/src/tools.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/tools.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/tools.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/tools.c.obj
 .PHONY : __/src/net/src/tools.c.obj
 
 __/src/net/src/tools.i: __/src/net/src/tools.c.i
@@ -1145,6 +1265,7 @@ __/src/net/src/tools.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/tools.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/tools.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/tools.c.i
 .PHONY : __/src/net/src/tools.c.i
 
 __/src/net/src/tools.s: __/src/net/src/tools.c.s
@@ -1161,6 +1282,7 @@ __/src/net/src/tools.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/tools.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/tools.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/tools.c.s
 .PHONY : __/src/net/src/tools.c.s
 
 __/src/plat/net_plat.obj: __/src/plat/net_plat.c.obj
@@ -1177,6 +1299,7 @@ __/src/plat/net_plat.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/plat/net_plat.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/plat/net_plat.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/plat/net_plat.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/plat/net_plat.c.obj
 .PHONY : __/src/plat/net_plat.c.obj
 
 __/src/plat/net_plat.i: __/src/plat/net_plat.c.i
@@ -1193,6 +1316,7 @@ __/src/plat/net_plat.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/plat/net_plat.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/plat/net_plat.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/plat/net_plat.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/plat/net_plat.c.i
 .PHONY : __/src/plat/net_plat.c.i
 
 __/src/plat/net_plat.s: __/src/plat/net_plat.c.s
@@ -1209,6 +1333,7 @@ __/src/plat/net_plat.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/plat/net_plat.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/plat/net_plat.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/plat/net_plat.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/plat/net_plat.c.s
 .PHONY : __/src/plat/net_plat.c.s
 
 __/src/plat/netif_pcap.obj: __/src/plat/netif_pcap.c.obj
@@ -1225,6 +1350,7 @@ __/src/plat/netif_pcap.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/plat/netif_pcap.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/plat/netif_pcap.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/plat/netif_pcap.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/plat/netif_pcap.c.obj
 .PHONY : __/src/plat/netif_pcap.c.obj
 
 __/src/plat/netif_pcap.i: __/src/plat/netif_pcap.c.i
@@ -1241,6 +1367,7 @@ __/src/plat/netif_pcap.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/plat/netif_pcap.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/plat/netif_pcap.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/plat/netif_pcap.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/plat/netif_pcap.c.i
 .PHONY : __/src/plat/netif_pcap.c.i
 
 __/src/plat/netif_pcap.s: __/src/plat/netif_pcap.c.s
@@ -1257,6 +1384,7 @@ __/src/plat/netif_pcap.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/plat/netif_pcap.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/plat/netif_pcap.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/plat/netif_pcap.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/plat/netif_pcap.c.s
 .PHONY : __/src/plat/netif_pcap.c.s
 
 __/src/plat/sys_plat.obj: __/src/plat/sys_plat.c.obj
@@ -1273,6 +1401,7 @@ __/src/plat/sys_plat.c.obj:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/plat/sys_plat.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/plat/sys_plat.c.obj
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/plat/sys_plat.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/plat/sys_plat.c.obj
 .PHONY : __/src/plat/sys_plat.c.obj
 
 __/src/plat/sys_plat.i: __/src/plat/sys_plat.c.i
@@ -1289,6 +1418,7 @@ __/src/plat/sys_plat.c.i:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/plat/sys_plat.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/plat/sys_plat.c.i
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/plat/sys_plat.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/plat/sys_plat.c.i
 .PHONY : __/src/plat/sys_plat.c.i
 
 __/src/plat/sys_plat.s: __/src/plat/sys_plat.c.s
@@ -1305,6 +1435,7 @@ __/src/plat/sys_plat.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/plat/sys_plat.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/plat/sys_plat.c.s
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/plat/sys_plat.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/plat/sys_plat.c.s
 .PHONY : __/src/plat/sys_plat.c.s
 
 circular_queue.obj: circular_queue.c.obj
@@ -1451,6 +1582,30 @@ test_mblock.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/test_mblock.c.s
 .PHONY : test_mblock.c.s
 
+test_ping.obj: test_ping.c.obj
+.PHONY : test_ping.obj
+
+# target to build an object file
+test_ping.c.obj:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/test_ping.c.obj
+.PHONY : test_ping.c.obj
+
+test_ping.i: test_ping.c.i
+.PHONY : test_ping.i
+
+# target to preprocess a source file
+test_ping.c.i:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/test_ping.c.i
+.PHONY : test_ping.c.i
+
+test_ping.s: test_ping.c.s
+.PHONY : test_ping.s
+
+# target to generate assembly for a file
+test_ping.c.s:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/test_ping.c.s
+.PHONY : test_ping.c.s
+
 test_pktbuf.obj: test_pktbuf.c.obj
 .PHONY : test_pktbuf.obj
 
@@ -1538,6 +1693,7 @@ help:
 	@echo ... send_pocket
 	@echo ... test1
 	@echo ... test_mblock
+	@echo ... test_ping
 	@echo ... test_pktbuf
 	@echo ... test_tcp_echo_client
 	@echo ... test_tcp_echo_server
@@ -1547,6 +1703,9 @@ help:
 	@echo ... __/src/app/echo/tcp_echo_server.obj
 	@echo ... __/src/app/echo/tcp_echo_server.i
 	@echo ... __/src/app/echo/tcp_echo_server.s
+	@echo ... __/src/app/ping/ping.obj
+	@echo ... __/src/app/ping/ping.i
+	@echo ... __/src/app/ping/ping.s
 	@echo ... __/src/net/src/arp.obj
 	@echo ... __/src/net/src/arp.i
 	@echo ... __/src/net/src/arp.s
@@ -1625,6 +1784,9 @@ help:
 	@echo ... test_mblock.obj
 	@echo ... test_mblock.i
 	@echo ... test_mblock.s
+	@echo ... test_ping.obj
+	@echo ... test_ping.i
+	@echo ... test_ping.s
 	@echo ... test_pktbuf.obj
 	@echo ... test_pktbuf.i
 	@echo ... test_pktbuf.s
