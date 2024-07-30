@@ -11,6 +11,8 @@
 #include "timer.h"
 #include "tools.h"
 #include "ipv4.h"
+#include "ping/ping.h"
+#include "exmsg.h"
 
 pcap_data_t pcap_data = {
     // 需要打开的网络接口的ip地址和硬件地址
@@ -107,6 +109,11 @@ void basic_test(void) {
 
 #define DBG_TEST DBG_LEVEL_INFO
 
+net_err_t test_func(msg_func_t *msg) {
+  plat_printf("test hello world 0x%x\n", *(int *)msg->arg);
+  return NET_ERR_OK;
+}
+
 int main(void) {
   net_init();
 
@@ -115,7 +122,19 @@ int main(void) {
   netdev_init();
   basic_test();
 
+  int a = 0x12345678;
+  net_err_t err = exmsg_func_exec(test_func, &a);
+
+  //简单的命令行测试
+  char cmd[32], param[32];
+  ping_t ping;
   while (1) {
+    plat_printf(">>");
+    scanf("%s%s", cmd, param);
+    if (strcmp(cmd, "ping") == 0) {
+      ping_run(&ping, param, 1024, 4, 1000);
+    }
+
     sys_sleep(10);
   }
 

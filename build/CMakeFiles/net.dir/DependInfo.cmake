@@ -23,6 +23,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/loop.c" "CMakeFiles/net.dir/src/net/src/loop.c.obj" "gcc" "CMakeFiles/net.dir/src/net/src/loop.c.obj.d"
   "C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/mblock.c" "CMakeFiles/net.dir/src/net/src/mblock.c.obj" "gcc" "CMakeFiles/net.dir/src/net/src/mblock.c.obj.d"
   "C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/net.c" "CMakeFiles/net.dir/src/net/src/net.c.obj" "gcc" "CMakeFiles/net.dir/src/net/src/net.c.obj.d"
+  "C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/net_api.c" "CMakeFiles/net.dir/src/net/src/net_api.c.obj" "gcc" "CMakeFiles/net.dir/src/net/src/net_api.c.obj.d"
   "C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/netif.c" "CMakeFiles/net.dir/src/net/src/netif.c.obj" "gcc" "CMakeFiles/net.dir/src/net/src/netif.c.obj.d"
   "C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/nlist.c" "CMakeFiles/net.dir/src/net/src/nlist.c.obj" "gcc" "CMakeFiles/net.dir/src/net/src/nlist.c.obj.d"
   "C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/nlocker.c" "CMakeFiles/net.dir/src/net/src/nlocker.c.obj" "gcc" "CMakeFiles/net.dir/src/net/src/nlocker.c.obj.d"

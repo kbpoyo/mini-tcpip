@@ -15,6 +15,7 @@
 #include "fixq.h"
 #include "ipv4.h"
 #include "mblock.h"
+#include "net_plat.h"
 #include "net_sys.h"
 #include "netif.h"
 #include "timer.h"
@@ -25,33 +26,6 @@ static fixq_t msg_queue;              // 消息队列
 static exmsg_t msg_buffer[EXMSG_MSG_CNT];  // 消息结构缓冲区,存放自定义消息结构
 static mblock_t msg_mblock;  // 消息结构缓冲区内存块管理对象
 
-/**
- * @brief 初始化消息队列工作模块
- *
- * @return net_err_t
- */
-net_err_t exmsg_module_init(void) {
-  dbg_info(DBG_EXMSG, "init exmsg module....");
-
-  // 初始化使用的消息队列
-  net_err_t err =
-      fixq_init(&msg_queue, msg_tbl, EXMSG_MSG_CNT, EXMSG_LOCKER_TYPE);
-  if (err != NET_ERR_OK) {
-    dbg_error(DBG_EXMSG, "fixq init failed.");
-    return err;
-  }
-
-  // 初始化消息结构缓冲区内存块管理对象
-  err = mblock_init(&msg_mblock, msg_buffer, sizeof(exmsg_t), EXMSG_MSG_CNT,
-                    EXMSG_LOCKER_TYPE);
-  if (err != NET_ERR_OK) {
-    dbg_error(DBG_EXMSG, "mblock init failed.");
-    return err;
-  }
-
-  dbg_info(DBG_EXMSG, "init exmsg module ok.");
-  return NET_ERR_OK;
-}
 
 /**
  * @brief 分配一个消息结构
@@ -84,6 +58,81 @@ static void exmsg_free(exmsg_t *msg) {
 
   mblock_free(&msg_mblock, msg);
 }
+
+
+
+
+
+net_err_t exmsg_func_exec(exmsg_func_t func, void *arg) {
+  // 创建函数执行请求的内部消息对象
+  // 该消息对象需要在工作线程处理完成后，获取执行结果
+  // 所以不能由工作线程释放，直接由请求线程在当前栈空间中创建与释放
+  msg_func_t msg;
+  msg.func = func;
+  msg.arg = arg;
+  msg.error = NET_ERR_OK;
+  msg.sem = sys_sem_create(0);
+  if (msg.sem == SYS_SEM_INVALID) {
+    dbg_error(DBG_EXMSG, "msg func sem create failed.");
+    return NET_ERR_EXMSG;
+  }
+
+  // 将消息对象封装成消息结构
+  exmsg_t *exmsg = exmsg_alloc();
+  if (!exmsg) {
+    dbg_error(DBG_EXMSG, "msg func alloc failed.");
+    // 释放信号量
+    sys_sem_free(msg.sem);
+    return NET_ERR_EXMSG;
+  }
+  exmsg->type = EXMSG_FUNC_EXEC;
+  exmsg->msg_func = &msg;
+
+  // 以阻塞的模式，将消息结构发送到消息队列
+  net_err_t err = fixq_put(&msg_queue, exmsg, 0);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_EXMSG, "msg func send failed.");
+    // 释放信号量
+    sys_sem_free(msg.sem);
+    exmsg_free(exmsg);
+    return err;
+  }
+
+  // 等待工作线程执行完当前函数
+  sys_sem_wait(msg.sem, 0);
+
+
+  return msg.error;
+}
+
+/**
+ * @brief 初始化消息队列工作模块
+ *
+ * @return net_err_t
+ */
+net_err_t exmsg_module_init(void) {
+  dbg_info(DBG_EXMSG, "init exmsg module....");
+
+  // 初始化使用的消息队列
+  net_err_t err =
+      fixq_init(&msg_queue, msg_tbl, EXMSG_MSG_CNT, EXMSG_LOCKER_TYPE);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_EXMSG, "fixq init failed.");
+    return err;
+  }
+
+  // 初始化消息结构缓冲区内存块管理对象
+  err = mblock_init(&msg_mblock, msg_buffer, sizeof(exmsg_t), EXMSG_MSG_CNT,
+                    EXMSG_LOCKER_TYPE);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_EXMSG, "mblock init failed.");
+    return err;
+  }
+
+  dbg_info(DBG_EXMSG, "init exmsg module ok.");
+  return NET_ERR_OK;
+}
+
 
 /**
  * @brief 从网卡接收数据后，发送到消息队列
@@ -153,6 +202,25 @@ static void exmsg_handle_netif_recv(exmsg_t *msg) {
 }
 
 /**
+ * @brief func_exec消息处理函数
+ * 
+ * @param msg 
+ */
+static void exmsg_handle_func_exec(exmsg_t *msg) {
+  dbg_info(DBG_EXMSG, "begin call func: %p", msg->msg_func->func);
+  // 获取函数执行请求的内部消息对象
+  msg_func_t *msg_func = msg->msg_func;
+  // 执行函数
+  msg_func->error = msg_func->func(msg_func);
+
+  // 函数执行完毕，通知请求线程
+  sys_sem_notify(msg_func->sem);
+
+  dbg_info(DBG_EXMSG, "end call func: %p", msg->msg_func->func);
+
+}
+
+/**
  * @brief 消息队列模块的工作线程，用于处理消息事件和定时器事件
  *
  * @param arg
@@ -171,6 +239,9 @@ static void exmsg_work_thread(void *arg) {
       switch (msg->type) {      // 根据消息类型处理消息
         case EXMSG_NETIF_RECV:  // 网络接口接收到数据包
           exmsg_handle_netif_recv(msg);
+          break;
+        case EXMSG_FUNC_EXEC:  // 外部程序请求执行函数
+          exmsg_handle_func_exec(msg);
           break;
         default:
           dbg_warning(DBG_EXMSG, "unknown msg type.");

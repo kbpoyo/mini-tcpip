@@ -27,6 +27,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/recv_pocket.dir/__/src/net/src/mblock.c.obj.d"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/net.c.obj"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/net.c.obj.d"
+  "CMakeFiles/recv_pocket.dir/__/src/net/src/net_api.c.obj"
+  "CMakeFiles/recv_pocket.dir/__/src/net/src/net_api.c.obj.d"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/netif.c.obj"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/netif.c.obj.d"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/nlist.c.obj"

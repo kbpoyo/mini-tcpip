@@ -979,6 +979,57 @@ __/src/net/src/net.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/net.c.s
 .PHONY : __/src/net/src/net.c.s
 
+__/src/net/src/net_api.obj: __/src/net/src/net_api.c.obj
+.PHONY : __/src/net/src/net_api.obj
+
+# target to build an object file
+__/src/net/src/net_api.c.obj:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/net/src/net_api.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/net/src/net_api.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/net/src/net_api.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/net/src/net_api.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/net/src/net_api.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/net_api.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/net_api.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/net_api.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/net_api.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/net_api.c.obj
+.PHONY : __/src/net/src/net_api.c.obj
+
+__/src/net/src/net_api.i: __/src/net/src/net_api.c.i
+.PHONY : __/src/net/src/net_api.i
+
+# target to preprocess a source file
+__/src/net/src/net_api.c.i:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/net/src/net_api.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/net/src/net_api.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/net/src/net_api.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/net/src/net_api.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/net/src/net_api.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/net_api.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/net_api.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/net_api.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/net_api.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/net_api.c.i
+.PHONY : __/src/net/src/net_api.c.i
+
+__/src/net/src/net_api.s: __/src/net/src/net_api.c.s
+.PHONY : __/src/net/src/net_api.s
+
+# target to generate assembly for a file
+__/src/net/src/net_api.c.s:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/net/src/net_api.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/net/src/net_api.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/net/src/net_api.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/net/src/net_api.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/net/src/net_api.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/net_api.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/net_api.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/net_api.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/net_api.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/net_api.c.s
+.PHONY : __/src/net/src/net_api.c.s
+
 __/src/net/src/netif.obj: __/src/net/src/netif.c.obj
 .PHONY : __/src/net/src/netif.obj
 
@@ -1739,6 +1790,9 @@ help:
 	@echo ... __/src/net/src/net.obj
 	@echo ... __/src/net/src/net.i
 	@echo ... __/src/net/src/net.s
+	@echo ... __/src/net/src/net_api.obj
+	@echo ... __/src/net/src/net_api.i
+	@echo ... __/src/net/src/net_api.s
 	@echo ... __/src/net/src/netif.obj
 	@echo ... __/src/net/src/netif.i
 	@echo ... __/src/net/src/netif.s

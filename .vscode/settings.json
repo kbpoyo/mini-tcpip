@@ -30,7 +30,9 @@
         "arp.h": "c",
         "ipv4.h": "c",
         "timer.h": "c",
-        "net_err.h": "c"
+        "net_err.h": "c",
+        "socket.h": "c",
+        "ping.h": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [

@@ -13,7 +13,6 @@
 #define PING_H
 
 #include <stdint.h>
-#include <WinSock2.h>
 
 #include "sys_plat.h"
 

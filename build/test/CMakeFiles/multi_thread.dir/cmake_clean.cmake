@@ -27,6 +27,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/multi_thread.dir/__/src/net/src/mblock.c.obj.d"
   "CMakeFiles/multi_thread.dir/__/src/net/src/net.c.obj"
   "CMakeFiles/multi_thread.dir/__/src/net/src/net.c.obj.d"
+  "CMakeFiles/multi_thread.dir/__/src/net/src/net_api.c.obj"
+  "CMakeFiles/multi_thread.dir/__/src/net/src/net_api.c.obj.d"
   "CMakeFiles/multi_thread.dir/__/src/net/src/netif.c.obj"
   "CMakeFiles/multi_thread.dir/__/src/net/src/netif.c.obj.d"
   "CMakeFiles/multi_thread.dir/__/src/net/src/nlist.c.obj"

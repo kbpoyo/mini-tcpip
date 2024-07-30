@@ -1,4 +1,0 @@
-test_ping 6 0.0229891
-test_pktbuf 1 0.468019
-test_mblock 1 0.571098
----

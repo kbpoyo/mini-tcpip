@@ -12,8 +12,26 @@ test/CMakeFiles/test_ping.dir/test_ping.c.obj: \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h \
  D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stddef.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/stddef.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/winsock2.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/_mingw_unicode.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/plat/sys_plat.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/stdio.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/corecrt_stdio_config.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/_mingw_off_t.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/swprintf.inl \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/stdio_s.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/stdlib.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/corecrt_wstdlib.h \
+ D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/limits.h \
+ D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/syslimits.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/limits.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/stdlib_s.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/malloc.h \
+ D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/mm_malloc.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/errno.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/time.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sys/timeb.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/sys/timeb_s.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/_timeval.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/pthread_time.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/windows.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sdkddkver.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/excpt.h \
@@ -28,6 +46,7 @@ test/CMakeFiles/test_ping.dir/test_ping.c.obj: \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/concurrencysal.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/driverspecs.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/winnt.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/_mingw_unicode.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/ctype.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/apiset.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/psdk_inc/intrin-impl.h \
@@ -77,15 +96,6 @@ test/CMakeFiles/test_ping.dir/test_ping.c.obj: \
  D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/immintrin.h \
  D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/mmintrin.h \
  D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/xmmintrin.h \
- D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/mm_malloc.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/stdlib.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/corecrt_wstdlib.h \
- D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/limits.h \
- D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/syslimits.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/limits.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/stdlib_s.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/malloc.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/errno.h \
  D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/emmintrin.h \
  D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/pmmintrin.h \
  D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/tmmintrin.h \
@@ -199,68 +209,19 @@ test/CMakeFiles/test_ping.dir/test_ping.c.obj: \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/winnetwk.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/wnnc.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/virtdisk.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/cderr.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/dde.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/ddeml.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/dlgs.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/lzexpand.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/mmsystem.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/mmsyscom.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/mciapi.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/mmiscapi.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/mmiscapi2.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/playsoundapi.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/mmeapi.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/timeapi.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/joystickapi.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/nb30.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/rpc.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/rpcdce.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/rpcdcep.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/rpcnsi.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/rpcnterr.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/rpcasync.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/shellapi.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/winperf.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/winsock.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/wincrypt.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/bcrypt.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/ncrypt.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/dpapi.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/winefs.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/winscard.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/wtypes.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/rpcndr.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/rpcnsip.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/rpcsal.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/ole2.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/objbase.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/combaseapi.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/wtypesbase.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/unknwnbase.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/objidlbase.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/cguid.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/objidl.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/unknwn.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/urlmon.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/oleidl.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/servprov.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/msxml.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/oaidl.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/propidl.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/oleauto.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/winioctl.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/winsmcrd.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/winspool.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/prsht.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/commdlg.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/stralign.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/stralign_s.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/winsvc.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/mcx.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/imm.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/npcap/Include/pcap.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/npcap/Include/pcap/pcap.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/npcap/Include/pcap/funcattrs.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/npcap/Include/pcap/compiler-tests.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/npcap/Include/pcap/pcap-inttypes.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/inttypes.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/winsock2.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/psdk_inc/_ws1_undef.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/_timeval.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/_bsd_types.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/inaddr.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/psdk_inc/_socket_types.h \
@@ -270,23 +231,6 @@ test/CMakeFiles/test_ping.dir/test_ping.c.obj: \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/ws2def.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/psdk_inc/_wsa_errnos.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/qos.h \
- C:/Users/kbpoyo/Desktop/mini-tcpip/src/plat/sys_plat.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/stdio.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/corecrt_stdio_config.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/_mingw_off_t.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/swprintf.inl \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/stdio_s.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/time.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sys/timeb.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/sys/timeb_s.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/pthread_time.h \
- C:/Users/kbpoyo/Desktop/mini-tcpip/npcap/Include/pcap.h \
- C:/Users/kbpoyo/Desktop/mini-tcpip/npcap/Include/pcap/pcap.h \
- C:/Users/kbpoyo/Desktop/mini-tcpip/npcap/Include/pcap/funcattrs.h \
- C:/Users/kbpoyo/Desktop/mini-tcpip/npcap/Include/pcap/compiler-tests.h \
- C:/Users/kbpoyo/Desktop/mini-tcpip/npcap/Include/pcap/pcap-inttypes.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/inttypes.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/winsock2.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/io.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/npcap/Include/pcap/socket.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/ws2tcpip.h \

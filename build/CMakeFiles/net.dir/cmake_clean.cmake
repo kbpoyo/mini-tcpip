@@ -29,6 +29,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/net.dir/src/net/src/mblock.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/net.c.obj"
   "CMakeFiles/net.dir/src/net/src/net.c.obj.d"
+  "CMakeFiles/net.dir/src/net/src/net_api.c.obj"
+  "CMakeFiles/net.dir/src/net/src/net_api.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/netif.c.obj"
   "CMakeFiles/net.dir/src/net/src/netif.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/nlist.c.obj"

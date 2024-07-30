@@ -628,6 +628,30 @@ src/net/src/net.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/net.c.s
 .PHONY : src/net/src/net.c.s
 
+src/net/src/net_api.obj: src/net/src/net_api.c.obj
+.PHONY : src/net/src/net_api.obj
+
+# target to build an object file
+src/net/src/net_api.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/net_api.c.obj
+.PHONY : src/net/src/net_api.c.obj
+
+src/net/src/net_api.i: src/net/src/net_api.c.i
+.PHONY : src/net/src/net_api.i
+
+# target to preprocess a source file
+src/net/src/net_api.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/net_api.c.i
+.PHONY : src/net/src/net_api.c.i
+
+src/net/src/net_api.s: src/net/src/net_api.c.s
+.PHONY : src/net/src/net_api.s
+
+# target to generate assembly for a file
+src/net/src/net_api.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/net_api.c.s
+.PHONY : src/net/src/net_api.c.s
+
 src/net/src/netif.obj: src/net/src/netif.c.obj
 .PHONY : src/net/src/netif.obj
 
@@ -909,6 +933,9 @@ help:
 	@echo ... src/net/src/net.obj
 	@echo ... src/net/src/net.i
 	@echo ... src/net/src/net.s
+	@echo ... src/net/src/net_api.obj
+	@echo ... src/net/src/net_api.i
+	@echo ... src/net/src/net_api.s
 	@echo ... src/net/src/netif.obj
 	@echo ... src/net/src/netif.i
 	@echo ... src/net/src/netif.s
