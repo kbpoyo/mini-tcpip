@@ -123,7 +123,6 @@ int main(void) {
   basic_test();
 
   int a = 0x12345678;
-  net_err_t err = exmsg_func_exec(test_func, &a);
 
   //简单的命令行测试
   char cmd[32], param[32];

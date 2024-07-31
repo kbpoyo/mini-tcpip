@@ -142,6 +142,7 @@ static void ipv4_frags_show(void) {
 #else
 
 #define ipv4_pkt_display(ipv4_pkt)
+#define ipv4_frags_show()
 #endif
 
 static inline int ipv4_get_id(void) {

@@ -748,6 +748,54 @@ src/net/src/pktbuf.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/pktbuf.c.s
 .PHONY : src/net/src/pktbuf.c.s
 
+src/net/src/sock.obj: src/net/src/sock.c.obj
+.PHONY : src/net/src/sock.obj
+
+# target to build an object file
+src/net/src/sock.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/sock.c.obj
+.PHONY : src/net/src/sock.c.obj
+
+src/net/src/sock.i: src/net/src/sock.c.i
+.PHONY : src/net/src/sock.i
+
+# target to preprocess a source file
+src/net/src/sock.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/sock.c.i
+.PHONY : src/net/src/sock.c.i
+
+src/net/src/sock.s: src/net/src/sock.c.s
+.PHONY : src/net/src/sock.s
+
+# target to generate assembly for a file
+src/net/src/sock.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/sock.c.s
+.PHONY : src/net/src/sock.c.s
+
+src/net/src/socket.obj: src/net/src/socket.c.obj
+.PHONY : src/net/src/socket.obj
+
+# target to build an object file
+src/net/src/socket.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/socket.c.obj
+.PHONY : src/net/src/socket.c.obj
+
+src/net/src/socket.i: src/net/src/socket.c.i
+.PHONY : src/net/src/socket.i
+
+# target to preprocess a source file
+src/net/src/socket.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/socket.c.i
+.PHONY : src/net/src/socket.c.i
+
+src/net/src/socket.s: src/net/src/socket.c.s
+.PHONY : src/net/src/socket.s
+
+# target to generate assembly for a file
+src/net/src/socket.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/socket.c.s
+.PHONY : src/net/src/socket.c.s
+
 src/net/src/timer.obj: src/net/src/timer.c.obj
 .PHONY : src/net/src/timer.obj
 
@@ -948,6 +996,12 @@ help:
 	@echo ... src/net/src/pktbuf.obj
 	@echo ... src/net/src/pktbuf.i
 	@echo ... src/net/src/pktbuf.s
+	@echo ... src/net/src/sock.obj
+	@echo ... src/net/src/sock.i
+	@echo ... src/net/src/sock.s
+	@echo ... src/net/src/socket.obj
+	@echo ... src/net/src/socket.i
+	@echo ... src/net/src/socket.s
 	@echo ... src/net/src/timer.obj
 	@echo ... src/net/src/timer.i
 	@echo ... src/net/src/timer.s

@@ -1,6 +1,8 @@
 test/CMakeFiles/recv_pocket.dir/__/src/app/ping/ping.c.obj: \
  C:\Users\kbpoyo\Desktop\mini-tcpip\src\app\ping\ping.c \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/time.h \
+ C:\Users\kbpoyo\Desktop\mini-tcpip\src\app\ping\ping.h \
+ D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stdint.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/stdint.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/crtdefs.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/corecrt.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/_mingw.h \
@@ -8,13 +10,6 @@ test/CMakeFiles/recv_pocket.dir/__/src/app/ping/ping.c.obj: \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/_mingw_secapi.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/vadefs.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sys/timeb.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/sys/timeb_s.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/_timeval.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/pthread_time.h \
- C:\Users\kbpoyo\Desktop\mini-tcpip\src\app\ping\ping.h \
- D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stdint.h \
- D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/stdint.h \
  D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stddef.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/stddef.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/plat/sys_plat.h \
@@ -32,6 +27,11 @@ test/CMakeFiles/recv_pocket.dir/__/src/app/ping/ping.c.obj: \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/malloc.h \
  D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/mm_malloc.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/errno.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/time.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sys/timeb.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/sys/timeb_s.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/_timeval.h \
+ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/pthread_time.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/windows.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sdkddkver.h \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/excpt.h \

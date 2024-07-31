@@ -27,6 +27,8 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/nlist.c" "test/CMakeFiles/send_pocket.dir/__/src/net/src/nlist.c.obj" "gcc" "test/CMakeFiles/send_pocket.dir/__/src/net/src/nlist.c.obj.d"
   "C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/nlocker.c" "test/CMakeFiles/send_pocket.dir/__/src/net/src/nlocker.c.obj" "gcc" "test/CMakeFiles/send_pocket.dir/__/src/net/src/nlocker.c.obj.d"
   "C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/pktbuf.c" "test/CMakeFiles/send_pocket.dir/__/src/net/src/pktbuf.c.obj" "gcc" "test/CMakeFiles/send_pocket.dir/__/src/net/src/pktbuf.c.obj.d"
+  "C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/sock.c" "test/CMakeFiles/send_pocket.dir/__/src/net/src/sock.c.obj" "gcc" "test/CMakeFiles/send_pocket.dir/__/src/net/src/sock.c.obj.d"
+  "C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/socket.c" "test/CMakeFiles/send_pocket.dir/__/src/net/src/socket.c.obj" "gcc" "test/CMakeFiles/send_pocket.dir/__/src/net/src/socket.c.obj.d"
   "C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/timer.c" "test/CMakeFiles/send_pocket.dir/__/src/net/src/timer.c.obj" "gcc" "test/CMakeFiles/send_pocket.dir/__/src/net/src/timer.c.obj.d"
   "C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/tools.c" "test/CMakeFiles/send_pocket.dir/__/src/net/src/tools.c.obj" "gcc" "test/CMakeFiles/send_pocket.dir/__/src/net/src/tools.c.obj.d"
   "C:/Users/kbpoyo/Desktop/mini-tcpip/src/plat/net_plat.c" "test/CMakeFiles/send_pocket.dir/__/src/plat/net_plat.c.obj" "gcc" "test/CMakeFiles/send_pocket.dir/__/src/plat/net_plat.c.obj.d"

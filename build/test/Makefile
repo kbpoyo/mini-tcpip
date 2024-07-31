@@ -1234,6 +1234,108 @@ __/src/net/src/pktbuf.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/pktbuf.c.s
 .PHONY : __/src/net/src/pktbuf.c.s
 
+__/src/net/src/sock.obj: __/src/net/src/sock.c.obj
+.PHONY : __/src/net/src/sock.obj
+
+# target to build an object file
+__/src/net/src/sock.c.obj:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/net/src/sock.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/net/src/sock.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/net/src/sock.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/net/src/sock.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/net/src/sock.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/sock.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/sock.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/sock.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/sock.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/sock.c.obj
+.PHONY : __/src/net/src/sock.c.obj
+
+__/src/net/src/sock.i: __/src/net/src/sock.c.i
+.PHONY : __/src/net/src/sock.i
+
+# target to preprocess a source file
+__/src/net/src/sock.c.i:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/net/src/sock.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/net/src/sock.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/net/src/sock.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/net/src/sock.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/net/src/sock.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/sock.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/sock.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/sock.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/sock.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/sock.c.i
+.PHONY : __/src/net/src/sock.c.i
+
+__/src/net/src/sock.s: __/src/net/src/sock.c.s
+.PHONY : __/src/net/src/sock.s
+
+# target to generate assembly for a file
+__/src/net/src/sock.c.s:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/net/src/sock.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/net/src/sock.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/net/src/sock.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/net/src/sock.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/net/src/sock.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/sock.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/sock.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/sock.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/sock.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/sock.c.s
+.PHONY : __/src/net/src/sock.c.s
+
+__/src/net/src/socket.obj: __/src/net/src/socket.c.obj
+.PHONY : __/src/net/src/socket.obj
+
+# target to build an object file
+__/src/net/src/socket.c.obj:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/net/src/socket.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/net/src/socket.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/net/src/socket.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/net/src/socket.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/net/src/socket.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/socket.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/socket.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/socket.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/socket.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/socket.c.obj
+.PHONY : __/src/net/src/socket.c.obj
+
+__/src/net/src/socket.i: __/src/net/src/socket.c.i
+.PHONY : __/src/net/src/socket.i
+
+# target to preprocess a source file
+__/src/net/src/socket.c.i:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/net/src/socket.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/net/src/socket.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/net/src/socket.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/net/src/socket.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/net/src/socket.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/socket.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/socket.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/socket.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/socket.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/socket.c.i
+.PHONY : __/src/net/src/socket.c.i
+
+__/src/net/src/socket.s: __/src/net/src/socket.c.s
+.PHONY : __/src/net/src/socket.s
+
+# target to generate assembly for a file
+__/src/net/src/socket.c.s:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/net/src/socket.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/net/src/socket.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/net/src/socket.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/net/src/socket.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/net/src/socket.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/socket.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/net/src/socket.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/net/src/socket.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/net/src/socket.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/net/src/socket.c.s
+.PHONY : __/src/net/src/socket.c.s
+
 __/src/net/src/timer.obj: __/src/net/src/timer.c.obj
 .PHONY : __/src/net/src/timer.obj
 
@@ -1805,6 +1907,12 @@ help:
 	@echo ... __/src/net/src/pktbuf.obj
 	@echo ... __/src/net/src/pktbuf.i
 	@echo ... __/src/net/src/pktbuf.s
+	@echo ... __/src/net/src/sock.obj
+	@echo ... __/src/net/src/sock.i
+	@echo ... __/src/net/src/sock.s
+	@echo ... __/src/net/src/socket.obj
+	@echo ... __/src/net/src/socket.i
+	@echo ... __/src/net/src/socket.s
 	@echo ... __/src/net/src/timer.obj
 	@echo ... __/src/net/src/timer.i
 	@echo ... __/src/net/src/timer.s
