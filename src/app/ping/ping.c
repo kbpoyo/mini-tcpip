@@ -77,8 +77,8 @@ void ping_run(ping_t *ping, const char *dest_ip, int data_size,
 #if 0
   struct timeval tmo = {tmo / 1000, (tmo % 1000) * 1000};
 #endif
-  setsockopt(raw_socket, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tmo,
-             sizeof(tmo));
+  // setsockopt(raw_socket, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tmo,
+            //  sizeof(tmo));
 
   // 初始化远端socket地址信息
   struct sockaddr_in dest_addr;
@@ -118,7 +118,7 @@ void ping_run(ping_t *ping, const char *dest_ip, int data_size,
 #if 1
     int size = sendto(raw_socket, (const char *)&ping->req,
                       sizeof(icmp_hdr_t) + fill_size, 0,
-                      (struct sockaddr *)&dest_addr, sizeof(dest_addr));
+                      (const struct sockaddr *)&dest_addr, sizeof(dest_addr));
 #else
     int size = send(raw_socket, (const char *)&ping->req,
                     sizeof(icmp_hdr_t) + fill_size, 0);

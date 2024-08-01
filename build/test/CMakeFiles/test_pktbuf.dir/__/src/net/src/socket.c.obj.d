@@ -255,4 +255,5 @@ test/CMakeFiles/test_pktbuf.dir/__/src/net/src/socket.c.obj: \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/dbg.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/exmsg.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/sock.h \
- C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/exmsg.h
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/exmsg.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/socket.h

@@ -383,11 +383,26 @@ test/CMakeFiles/multi_thread.dir/__/src/net/src/sock.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/multi_thread.dir/__/src/net/src/sock.c.s"
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\sock.c -o CMakeFiles\multi_thread.dir\__\src\net\src\sock.c.s
 
+test/CMakeFiles/multi_thread.dir/__/src/net/src/sock_raw.c.obj: test/CMakeFiles/multi_thread.dir/flags.make
+test/CMakeFiles/multi_thread.dir/__/src/net/src/sock_raw.c.obj: test/CMakeFiles/multi_thread.dir/includes_C.rsp
+test/CMakeFiles/multi_thread.dir/__/src/net/src/sock_raw.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/sock_raw.c
+test/CMakeFiles/multi_thread.dir/__/src/net/src/sock_raw.c.obj: test/CMakeFiles/multi_thread.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building C object test/CMakeFiles/multi_thread.dir/__/src/net/src/sock_raw.c.obj"
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/multi_thread.dir/__/src/net/src/sock_raw.c.obj -MF CMakeFiles\multi_thread.dir\__\src\net\src\sock_raw.c.obj.d -o CMakeFiles\multi_thread.dir\__\src\net\src\sock_raw.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\sock_raw.c
+
+test/CMakeFiles/multi_thread.dir/__/src/net/src/sock_raw.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/multi_thread.dir/__/src/net/src/sock_raw.c.i"
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\sock_raw.c > CMakeFiles\multi_thread.dir\__\src\net\src\sock_raw.c.i
+
+test/CMakeFiles/multi_thread.dir/__/src/net/src/sock_raw.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/multi_thread.dir/__/src/net/src/sock_raw.c.s"
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\sock_raw.c -o CMakeFiles\multi_thread.dir\__\src\net\src\sock_raw.c.s
+
 test/CMakeFiles/multi_thread.dir/__/src/net/src/socket.c.obj: test/CMakeFiles/multi_thread.dir/flags.make
 test/CMakeFiles/multi_thread.dir/__/src/net/src/socket.c.obj: test/CMakeFiles/multi_thread.dir/includes_C.rsp
 test/CMakeFiles/multi_thread.dir/__/src/net/src/socket.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/socket.c
 test/CMakeFiles/multi_thread.dir/__/src/net/src/socket.c.obj: test/CMakeFiles/multi_thread.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building C object test/CMakeFiles/multi_thread.dir/__/src/net/src/socket.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building C object test/CMakeFiles/multi_thread.dir/__/src/net/src/socket.c.obj"
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/multi_thread.dir/__/src/net/src/socket.c.obj -MF CMakeFiles\multi_thread.dir\__\src\net\src\socket.c.obj.d -o CMakeFiles\multi_thread.dir\__\src\net\src\socket.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\socket.c
 
 test/CMakeFiles/multi_thread.dir/__/src/net/src/socket.c.i: cmake_force
@@ -402,7 +417,7 @@ test/CMakeFiles/multi_thread.dir/__/src/net/src/timer.c.obj: test/CMakeFiles/mul
 test/CMakeFiles/multi_thread.dir/__/src/net/src/timer.c.obj: test/CMakeFiles/multi_thread.dir/includes_C.rsp
 test/CMakeFiles/multi_thread.dir/__/src/net/src/timer.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/timer.c
 test/CMakeFiles/multi_thread.dir/__/src/net/src/timer.c.obj: test/CMakeFiles/multi_thread.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building C object test/CMakeFiles/multi_thread.dir/__/src/net/src/timer.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building C object test/CMakeFiles/multi_thread.dir/__/src/net/src/timer.c.obj"
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/multi_thread.dir/__/src/net/src/timer.c.obj -MF CMakeFiles\multi_thread.dir\__\src\net\src\timer.c.obj.d -o CMakeFiles\multi_thread.dir\__\src\net\src\timer.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\timer.c
 
 test/CMakeFiles/multi_thread.dir/__/src/net/src/timer.c.i: cmake_force
@@ -417,7 +432,7 @@ test/CMakeFiles/multi_thread.dir/__/src/net/src/tools.c.obj: test/CMakeFiles/mul
 test/CMakeFiles/multi_thread.dir/__/src/net/src/tools.c.obj: test/CMakeFiles/multi_thread.dir/includes_C.rsp
 test/CMakeFiles/multi_thread.dir/__/src/net/src/tools.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/tools.c
 test/CMakeFiles/multi_thread.dir/__/src/net/src/tools.c.obj: test/CMakeFiles/multi_thread.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building C object test/CMakeFiles/multi_thread.dir/__/src/net/src/tools.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building C object test/CMakeFiles/multi_thread.dir/__/src/net/src/tools.c.obj"
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/multi_thread.dir/__/src/net/src/tools.c.obj -MF CMakeFiles\multi_thread.dir\__\src\net\src\tools.c.obj.d -o CMakeFiles\multi_thread.dir\__\src\net\src\tools.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\net\src\tools.c
 
 test/CMakeFiles/multi_thread.dir/__/src/net/src/tools.c.i: cmake_force
@@ -432,7 +447,7 @@ test/CMakeFiles/multi_thread.dir/__/src/plat/net_plat.c.obj: test/CMakeFiles/mul
 test/CMakeFiles/multi_thread.dir/__/src/plat/net_plat.c.obj: test/CMakeFiles/multi_thread.dir/includes_C.rsp
 test/CMakeFiles/multi_thread.dir/__/src/plat/net_plat.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/plat/net_plat.c
 test/CMakeFiles/multi_thread.dir/__/src/plat/net_plat.c.obj: test/CMakeFiles/multi_thread.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building C object test/CMakeFiles/multi_thread.dir/__/src/plat/net_plat.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building C object test/CMakeFiles/multi_thread.dir/__/src/plat/net_plat.c.obj"
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/multi_thread.dir/__/src/plat/net_plat.c.obj -MF CMakeFiles\multi_thread.dir\__\src\plat\net_plat.c.obj.d -o CMakeFiles\multi_thread.dir\__\src\plat\net_plat.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\net_plat.c
 
 test/CMakeFiles/multi_thread.dir/__/src/plat/net_plat.c.i: cmake_force
@@ -447,7 +462,7 @@ test/CMakeFiles/multi_thread.dir/__/src/plat/netif_pcap.c.obj: test/CMakeFiles/m
 test/CMakeFiles/multi_thread.dir/__/src/plat/netif_pcap.c.obj: test/CMakeFiles/multi_thread.dir/includes_C.rsp
 test/CMakeFiles/multi_thread.dir/__/src/plat/netif_pcap.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/plat/netif_pcap.c
 test/CMakeFiles/multi_thread.dir/__/src/plat/netif_pcap.c.obj: test/CMakeFiles/multi_thread.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building C object test/CMakeFiles/multi_thread.dir/__/src/plat/netif_pcap.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building C object test/CMakeFiles/multi_thread.dir/__/src/plat/netif_pcap.c.obj"
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/multi_thread.dir/__/src/plat/netif_pcap.c.obj -MF CMakeFiles\multi_thread.dir\__\src\plat\netif_pcap.c.obj.d -o CMakeFiles\multi_thread.dir\__\src\plat\netif_pcap.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\netif_pcap.c
 
 test/CMakeFiles/multi_thread.dir/__/src/plat/netif_pcap.c.i: cmake_force
@@ -462,7 +477,7 @@ test/CMakeFiles/multi_thread.dir/__/src/plat/sys_plat.c.obj: test/CMakeFiles/mul
 test/CMakeFiles/multi_thread.dir/__/src/plat/sys_plat.c.obj: test/CMakeFiles/multi_thread.dir/includes_C.rsp
 test/CMakeFiles/multi_thread.dir/__/src/plat/sys_plat.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/plat/sys_plat.c
 test/CMakeFiles/multi_thread.dir/__/src/plat/sys_plat.c.obj: test/CMakeFiles/multi_thread.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building C object test/CMakeFiles/multi_thread.dir/__/src/plat/sys_plat.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building C object test/CMakeFiles/multi_thread.dir/__/src/plat/sys_plat.c.obj"
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && D:\software\work\CLion\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT test/CMakeFiles/multi_thread.dir/__/src/plat/sys_plat.c.obj -MF CMakeFiles\multi_thread.dir\__\src\plat\sys_plat.c.obj.d -o CMakeFiles\multi_thread.dir\__\src\plat\sys_plat.c.obj -c C:\Users\kbpoyo\Desktop\mini-tcpip\src\plat\sys_plat.c
 
 test/CMakeFiles/multi_thread.dir/__/src/plat/sys_plat.c.i: cmake_force
@@ -496,6 +511,7 @@ multi_thread_OBJECTS = \
 "CMakeFiles/multi_thread.dir/__/src/net/src/nlocker.c.obj" \
 "CMakeFiles/multi_thread.dir/__/src/net/src/pktbuf.c.obj" \
 "CMakeFiles/multi_thread.dir/__/src/net/src/sock.c.obj" \
+"CMakeFiles/multi_thread.dir/__/src/net/src/sock_raw.c.obj" \
 "CMakeFiles/multi_thread.dir/__/src/net/src/socket.c.obj" \
 "CMakeFiles/multi_thread.dir/__/src/net/src/timer.c.obj" \
 "CMakeFiles/multi_thread.dir/__/src/net/src/tools.c.obj" \
@@ -527,6 +543,7 @@ test/multi_thread.exe: test/CMakeFiles/multi_thread.dir/__/src/net/src/nlist.c.o
 test/multi_thread.exe: test/CMakeFiles/multi_thread.dir/__/src/net/src/nlocker.c.obj
 test/multi_thread.exe: test/CMakeFiles/multi_thread.dir/__/src/net/src/pktbuf.c.obj
 test/multi_thread.exe: test/CMakeFiles/multi_thread.dir/__/src/net/src/sock.c.obj
+test/multi_thread.exe: test/CMakeFiles/multi_thread.dir/__/src/net/src/sock_raw.c.obj
 test/multi_thread.exe: test/CMakeFiles/multi_thread.dir/__/src/net/src/socket.c.obj
 test/multi_thread.exe: test/CMakeFiles/multi_thread.dir/__/src/net/src/timer.c.obj
 test/multi_thread.exe: test/CMakeFiles/multi_thread.dir/__/src/net/src/tools.c.obj
@@ -537,7 +554,7 @@ test/multi_thread.exe: test/CMakeFiles/multi_thread.dir/build.make
 test/multi_thread.exe: test/CMakeFiles/multi_thread.dir/linkLibs.rsp
 test/multi_thread.exe: test/CMakeFiles/multi_thread.dir/objects1.rsp
 test/multi_thread.exe: test/CMakeFiles/multi_thread.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Linking C executable multi_thread.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\kbpoyo\Desktop\mini-tcpip\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Linking C executable multi_thread.exe"
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build\test && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\multi_thread.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

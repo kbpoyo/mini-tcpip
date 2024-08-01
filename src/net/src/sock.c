@@ -11,19 +11,30 @@
 
 #include "sock.h"
 
+#include "mblock.h"
 #include "net_plat.h"
+#include "sock_raw.h"
 
-#define SOCKET_MAX_CNT 10
+// 定义协议栈可用的socket对象最大数量
+#define SOCKET_MAX_CNT (SOCKRAW_MAX_CNT)
+
 static net_socket_t socket_tbl[SOCKET_MAX_CNT];  // socket对象表
+static mblock_t socket_mblock;  // socket对象内存块管理对象
+static nlist_t socket_list;     // 挂载已分配的socket对象链表
 
 /**
  * @brief 初始化socket模块资源
  *
  * @return net_err_t
  */
-net_err_t socket_module_init(void) {
-  // 初始化socket对象表
-  plat_memset(socket_tbl, 0, sizeof(socket_tbl));
+net_err_t sock_module_init(void) {
+  // 初始化socket对象内存块管理对象
+  // 只由工作线程访问，不需要加锁
+  mblock_init(&socket_mblock, socket_tbl, sizeof(net_socket_t), SOCKET_MAX_CNT,
+              NLOCKER_NONE);
+
+  // 初始化socket对象挂载链表
+  nlist_init(&socket_list);
 
   return NET_ERR_OK;
 }
@@ -60,15 +71,22 @@ static net_socket_t *socket_by_index(int index) {
 static net_socket_t *socket_alloc(void) {
   net_socket_t *socket = (net_socket_t *)0;
 
-  // 遍历socket对象表，找到一个空闲状态的socket对象
-  for (int i = 0; i < SOCKET_MAX_CNT; i++) {
-    net_socket_t *curr = socket_tbl + i;
-    if (curr->state == SOCKET_STATE_FREE) {
-      // 设置为已使用状态
-      curr->state = SOCKET_STATE_USED;
-      socket = curr;
-      break;
-    }
+  // // 遍历socket对象表，找到一个空闲状态的socket对象
+  // for (int i = 0; i < SOCKET_MAX_CNT; i++) {
+  //   net_socket_t *curr = socket_tbl + i;
+  //   if (curr->state == SOCKET_STATE_FREE) {
+  //     // 设置为已使用状态
+  //     curr->state = SOCKET_STATE_USED;
+  //     socket = curr;
+  //     break;
+  //   }
+  // }
+
+  // 从socket对象内存块管理对象中分配一个socket对象
+  socket = (net_socket_t *)mblock_alloc(&socket_mblock, -1);
+  if (socket) {
+    // 设置为已使用状态
+    socket->state = SOCKET_STATE_USED;
   }
 
   return socket;
@@ -82,30 +100,87 @@ static net_socket_t *socket_alloc(void) {
 static void socket_free(net_socket_t *socket) {
   // 设置为空闲状态
   socket->state = SOCKET_STATE_FREE;
+
+  // 从socket对象链表中移除
+  nlist_remove(&socket_list, &socket->node);
+
+  // 释放socket对象内存块
+  mblock_free(&socket_mblock, socket);
 }
 
 /**
- * @brief 创建socket对象
+ * @brief 外部应用请求创建socket对象
  *
- * @param arg
+ * @param msg 消息类型：函数执行请求
  * @return net_err_t
  */
 net_err_t sock_req_creat(msg_func_t *msg) {
+  // 定义一个sock方法分配结构表，实现基础socket的静态多态效果
+  static const struct sock_type_t {
+    int default_family;
+    int default_protocol;
+    sock_t *(*create)(int family, int protocol);
+  } sock_type_tbl[] = {
+      [SOCK_RAW] = {.default_protocol = IPPROTO_ICMP, .create = sockraw_create},
+  };
+
   // 获取socket创建请求参数
   sock_req_t *sock_req = (sock_req_t *)msg->arg;
+  sock_create_t *create = &sock_req->create;
 
-  // 分配一个socket对象
+  // 获取指定类型的socket对象方法
+  if (create->type < 0 ||
+      create->type >= (sizeof(sock_type_tbl) / sizeof(sock_type_tbl[0]))) {
+    dbg_error(DBG_SOCKET, "invalid socket type.");
+    return NET_ERR_SOCKET;
+  }
+  const struct sock_type_t *sock_type = &sock_type_tbl[create->type];
+
+  // 若没有指定上层协议，则使用默认协议
+  create->protocol =
+      create->protocol ? create->protocol : sock_type->default_protocol;
+
+  // 分配一个socket对象, 用于封装即将打开的内部sock对象
   net_socket_t *socket = socket_alloc();
   if (!socket) {
     dbg_error(DBG_SOCKET, "no free socket object.");
     return NET_ERR_SOCKET;
   }
+  // 将socket对象挂载到socket对象链表
+  nlist_insert_last(&socket_list, &socket->node);
+
+  // 调用指定类型的sock对象创建方法, 创建sock对象
+  sock_t *sock = sock_type->create(create->family, create->protocol);
+  if (!sock) {  // 创建失败
+    dbg_error(DBG_SOCKET, "create socket failed.");
+    socket_free(socket);  // 释放socket对象
+    return NET_ERR_SOCKET;
+  }
+
+  // 将sock对象记录到外部socket对象
+  socket->sock = sock;
 
   // 使用sock_req记录socket对象的文件描述符
   sock_req->sock_fd = socket_get_index(socket);
 
   return NET_ERR_OK;
 }
+
+/**
+ * @brief 外部应用请求发送数据
+ * 
+ * @param msg 
+ * @return net_err_t 
+ */
+net_err_t sock_req_sendto(msg_func_t *msg) {
+  // 获取socket发送请求参数
+  sock_req_t *sock_req = (sock_req_t *)msg->arg;
+  sock_io_t *io = &sock_req->io;
+
+  io->ret_len += 1;  // 模拟发送数据
+  return NET_ERR_OK;
+}
+
 
 /**
  * @brief 初始化基础socket对象(sock)

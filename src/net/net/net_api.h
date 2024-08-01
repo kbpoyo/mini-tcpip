@@ -44,8 +44,13 @@ const char *net_inet_ntop(int family, const void *addrptr, char *strptr, size_t 
 // socket相关接口
 #undef sockaddr_in
 #define sockaddr_in net_sockaddr_in
+#undef sockaddr
+#define sockaddr net_sockaddr
 #undef socket
 #define socket(family, type, protocol) net_socket(family, type, protocol)
+#undef sendto
+#define sendto(sock, buf, buf_len, flags, dest, dest_len) \
+  net_sendto(sock, buf, buf_len, flags, dest, dest_len)
 
 
 

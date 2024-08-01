@@ -772,6 +772,30 @@ src/net/src/sock.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/sock.c.s
 .PHONY : src/net/src/sock.c.s
 
+src/net/src/sock_raw.obj: src/net/src/sock_raw.c.obj
+.PHONY : src/net/src/sock_raw.obj
+
+# target to build an object file
+src/net/src/sock_raw.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/sock_raw.c.obj
+.PHONY : src/net/src/sock_raw.c.obj
+
+src/net/src/sock_raw.i: src/net/src/sock_raw.c.i
+.PHONY : src/net/src/sock_raw.i
+
+# target to preprocess a source file
+src/net/src/sock_raw.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/sock_raw.c.i
+.PHONY : src/net/src/sock_raw.c.i
+
+src/net/src/sock_raw.s: src/net/src/sock_raw.c.s
+.PHONY : src/net/src/sock_raw.s
+
+# target to generate assembly for a file
+src/net/src/sock_raw.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/sock_raw.c.s
+.PHONY : src/net/src/sock_raw.c.s
+
 src/net/src/socket.obj: src/net/src/socket.c.obj
 .PHONY : src/net/src/socket.obj
 
@@ -999,6 +1023,9 @@ help:
 	@echo ... src/net/src/sock.obj
 	@echo ... src/net/src/sock.i
 	@echo ... src/net/src/sock.s
+	@echo ... src/net/src/sock_raw.obj
+	@echo ... src/net/src/sock_raw.i
+	@echo ... src/net/src/sock_raw.s
 	@echo ... src/net/src/socket.obj
 	@echo ... src/net/src/socket.i
 	@echo ... src/net/src/socket.s

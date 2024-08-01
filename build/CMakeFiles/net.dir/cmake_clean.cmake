@@ -41,6 +41,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/net.dir/src/net/src/pktbuf.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/sock.c.obj"
   "CMakeFiles/net.dir/src/net/src/sock.c.obj.d"
+  "CMakeFiles/net.dir/src/net/src/sock_raw.c.obj"
+  "CMakeFiles/net.dir/src/net/src/sock_raw.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/socket.c.obj"
   "CMakeFiles/net.dir/src/net/src/socket.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/timer.c.obj"

@@ -39,6 +39,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/send_pocket.dir/__/src/net/src/pktbuf.c.obj.d"
   "CMakeFiles/send_pocket.dir/__/src/net/src/sock.c.obj"
   "CMakeFiles/send_pocket.dir/__/src/net/src/sock.c.obj.d"
+  "CMakeFiles/send_pocket.dir/__/src/net/src/sock_raw.c.obj"
+  "CMakeFiles/send_pocket.dir/__/src/net/src/sock_raw.c.obj.d"
   "CMakeFiles/send_pocket.dir/__/src/net/src/socket.c.obj"
   "CMakeFiles/send_pocket.dir/__/src/net/src/socket.c.obj.d"
   "CMakeFiles/send_pocket.dir/__/src/net/src/timer.c.obj"

@@ -16,10 +16,7 @@
 #include "ipaddr.h"
 #include "net_err.h"
 #include "nlist.h"
-
-// 定义socket地址长度类型
-typedef int net_socklen_t;
-
+#include "socket.h"
 
 struct net_sockaddr;
 struct _sock_t;
@@ -65,12 +62,15 @@ typedef struct _sock_t {
   const sock_ops_t *ops;  // socket操作接口
 } sock_t;
 
-// 定义socket结构，描述端对端的连接或通信信息
+// 定义外部socket结构，对内部sock_t结构的封装
 typedef struct _net_socket {
+  nlist_node_t node;  // 用于挂载到socket对象链表的节点
   enum {
     SOCKET_STATE_FREE = 0,  // 空闲
     SOCKET_STATE_USED,
   } state;
+
+  sock_t *sock;  // 内部socket对象
 
 } net_socket_t;
 
@@ -81,18 +81,30 @@ typedef struct _sock_create_t {
   int protocol;
 } sock_create_t;
 
+// socket发送和接收请求(sendto和recvfrom)的参数结构
+typedef struct _sock_io_t {
+  const void *buf;
+  size_t buf_len;
+  int flags;
+  struct net_sockaddr *sockaddr;
+  net_socklen_t sockaddr_len;
+  ssize_t ret_len;
+} sock_io_t, sock_sendto_t, sock_recvfrom_t;
+
 // 用于封装外部线程请求工作线程执行socket相关操作时传递的参数
 typedef struct _sock_req_t {
   int sock_fd;  // socket文件描述符
   union {
     sock_create_t create;  // 创建socket请求的参数
+    sock_io_t io;
   };
 
 } sock_req_t;
 
-net_err_t socket_module_init(void);
+net_err_t sock_module_init(void);
+net_err_t sock_init(sock_t *sock, int family, int protocol, sock_ops_t *ops);
+
 net_err_t sock_req_creat(msg_func_t *msg);
-net_err_t sock_init(sock_t *sock, int family, int protocol,
-                    sock_ops_t *ops);
+net_err_t sock_req_sendto(msg_func_t *msg);
 
 #endif  // SOCK_H

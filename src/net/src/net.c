@@ -14,6 +14,8 @@
 #include "tools.h"
 #include "ipv4.h"
 #include "icmpv4.h"
+#include "sock.h"
+#include "sock_raw.h"
 
 net_err_t net_init(void) {
   net_plat_init();
@@ -47,6 +49,12 @@ net_err_t net_init(void) {
 
   // 初始化icmpv4协议模块
   icmpv4_module_init();
+
+  // 初始化内部socket模块
+  sock_module_init();
+
+  // 初始化内部原始socket模块(sock_raw)
+  sockraw_module_init();
 
 
   return NET_ERR_OK;

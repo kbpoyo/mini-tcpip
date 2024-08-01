@@ -32,6 +32,9 @@
 #undef IPPROTO_IP  // ip协议
 #define IPPROTO_IP 0
 
+// 定义socket地址长度类型
+typedef int net_socklen_t;
+
 // 定义网络(ip)地址结构
 struct net_in_addr {
   union {
@@ -49,13 +52,14 @@ struct net_in_addr {
 };
 
 // 通用的, 兼容linux系统socket的地址结构
-struct net_sockaddr {  // 结构内存大小与net_sockaddr_in相同
-  uint8_t sin_len;
-  uint8_t sin_family;
-  uint8_t sin_data[14];
+// 描述端对端的基础连接信息
+struct net_sockaddr {  // 结构内存大小与net_sockaddr_in相同(兼容)
+  uint8_t sa_len;
+  uint8_t sa_family;
+  uint8_t sa_data[14];
 };
 
-// 定义socket地址结构，描述端对端的基础连接信息
+// 只适用于IPV4(AF_INET)的socket地址结构，
 struct net_sockaddr_in {  // 结构内存大小与net_sockaddr相同
   uint8_t sin_len;
   uint8_t sin_family;           // 网络层协议簇
@@ -65,5 +69,6 @@ struct net_sockaddr_in {  // 结构内存大小与net_sockaddr相同
 };
 
 int net_socket(int family, int type, int protocol);
+ssize_t net_sendto(int socket, const void *buf, size_t buf_len, int flags, const struct net_sockaddr *dest, net_socklen_t dest_len);
 
 #endif  // SOCKET_H

@@ -252,4 +252,9 @@ CMakeFiles/net.dir/src/net/src/sock.c.obj: \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/ipaddr.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/nlist.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/pktbuf.h \
- C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/dbg.h
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/dbg.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/socket.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/ipv4.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/mblock.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/sock_raw.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/sock.h

@@ -39,6 +39,7 @@
 #define DBG_IPV4 DBG_LEVEL_ERROR
 #define DBG_ICMPV4 DBG_LEVEL_ERROR
 #define DBG_SOCKET DBG_LEVEL_INFO
+#define DBG_SOCKRAW DBG_LEVEL_INFO
 
 // 消息队列相关配置
 #define EXMSG_MSG_CNT 10                  // 消息队列大小
@@ -71,5 +72,9 @@
 #define IPV4_FRAG_BUF_MAXCNT 10  // 每个分片允许缓存的最大数据包数量
 #define IPV4_FRAG_SCAN_PERIOD 1  // ipv4分片缓存表的扫描周期(s)
 #define IPV4_FRAG_TMO (10 * IPV4_FRAG_SCAN_PERIOD)  // ipv4分片缓存表项的超时时间(s)
+
+
+// 原始socket模块(sock_raw)相关配置
+#define SOCKRAW_MAX_CNT 10  // 原始socket对象表大小
 
 #endif  // NET_CFG_H

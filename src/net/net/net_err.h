@@ -22,6 +22,7 @@ typedef enum _net_err_t {
   NET_ERR_ICMPv4 = -17,
   NET_ERR_EXMSG = -18,
   NET_ERR_SOCKET = -19,
+  NET_ERR_SOCKRAW = -20,
 } net_err_t;
 
 
