@@ -33,7 +33,8 @@
         "net_err.h": "c",
         "socket.h": "c",
         "ping.h": "c",
-        "sock.h": "c"
+        "sock.h": "c",
+        "internet": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [

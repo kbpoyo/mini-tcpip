@@ -368,9 +368,10 @@ static net_err_t ipv4_handle_normal(const netif_t *netif, pktbuf_t *buf) {
       ipaddr_t src_ipaddr;
       ipv4_hdr_hton(&pkt->hdr);  // 将头部转换为网络字节序
       ipaddr_from_bytes(&src_ipaddr, pkt->hdr.src_ip);
-      icmpv4_make_unreach(&src_ipaddr, &netif->ipaddr, ICMPv4_CODE_UNREACH_PORT,
+      
+      return icmpv4_make_unreach(&src_ipaddr, &netif->ipaddr, ICMPv4_CODE_UNREACH_PORT,
                           buf);
-      return NET_ERR_IPV4;
+      
     } break;
 
     case NET_PROTOCOL_TCP: {
@@ -846,6 +847,7 @@ net_err_t ipv4_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
   err = netif_send(netif_default, dest_ipaddr, buf);  //!!! 数据包传递
   if (err != NET_ERR_OK) {
     dbg_error(DBG_IPV4, "netif send ip packet failed.");
+    return err;
   }
 
   return NET_ERR_OK;

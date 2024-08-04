@@ -296,15 +296,16 @@ net_err_t ether_raw_send(netif_t *netif, protocol_type_t protocol,
 
   if (plat_memcmp(netif->hwaddr.addr, pkt->hdr.dest_mac, ETHER_MAC_SIZE) == 0) {
     // 目的mac地址与本地mac地址相同，直接放入接收队列
-    return netif_recvq_put(netif, buf, -1);
+    return netif_recvq_put(netif, buf, -1);  //!!! 数据包转交
   } else {
     // 将数据包放入发送队列
-    err = netif_sendq_put(netif, buf, -1);
+    err = netif_sendq_put(netif, buf, -1);  //!!! 数据包转交
     if (err != NET_ERR_OK) {
       dbg_warning(DBG_ETHER, "put ether pkt into send queue failed.");
       return err;
     }
     // 通过网卡发送数据包，若网卡有自己的发送线程，此函数不需要执行其他操作，会立即返回
-    return netif->ops->send(netif);
+    netif->ops->send(netif);
+    return NET_ERR_OK;  //数据包已成功转发，返回成功即可
   }
 }

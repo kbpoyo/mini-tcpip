@@ -256,5 +256,8 @@ test/CMakeFiles/test_ping.dir/__/src/net/src/sock_raw.c.obj: \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/dbg.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/socket.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/ipv4.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/ipv4.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/mblock.h \
- C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/net_cfg.h
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/net_cfg.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/pktbuf.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/socket.h

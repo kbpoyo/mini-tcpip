@@ -28,9 +28,9 @@
 #undef SOCK_RAW  // 原始套接字
 #define SOCK_RAW 0
 
-// 定义协议类型
-#undef IPPROTO_IP  // ip协议
-#define IPPROTO_IP 0
+// 定义协议类型(传输层协议 或 icmp协议)
+#undef IPPROTO_ICMP  // icmp协议
+#define IPPROTO_ICMP 1
 
 // 定义socket地址长度类型
 typedef int net_socklen_t;
@@ -69,6 +69,9 @@ struct net_sockaddr_in {  // 结构内存大小与net_sockaddr相同
 };
 
 int net_socket(int family, int type, int protocol);
-ssize_t net_sendto(int socket, const void *buf, size_t buf_len, int flags, const struct net_sockaddr *dest, net_socklen_t dest_len);
+ssize_t net_sendto(int socket, const void *buf, size_t buf_len, int flags,
+                   const struct net_sockaddr *dest, net_socklen_t dest_len);
+ssize_t net_recvfrom(int socket, void *buf, size_t buf_len, int flags,
+                     struct net_sockaddr *src, net_socklen_t *src_len);
 
 #endif  // SOCKET_H

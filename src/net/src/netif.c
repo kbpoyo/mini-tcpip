@@ -24,10 +24,11 @@
 static const link_layer_t *link_layers[NETIF_TYPE_CNT];
 
 // 网络接口状态字符串
-static const char *netif_state_str[] = {[NETIF_STATE_OPENED] = "opened",
-                                        [NETIF_STATE_ACVTIVE] = "active",
-                                        [NETIF_STATE_CLOSED] = "closed",
-                                        [NETIF_STATE_IPCONFLICT] = "ipconflict"};
+static const char *netif_state_str[] = {
+    [NETIF_STATE_OPENED] = "opened",
+    [NETIF_STATE_ACVTIVE] = "active",
+    [NETIF_STATE_CLOSED] = "closed",
+    [NETIF_STATE_IPCONFLICT] = "ipconflict"};
 // 网络接口类型字符串
 static const char *netif_type_str[] = {[NETIF_TYPE_NONE] = "none",
                                        [NETIF_TYPE_LOOP] = "loop",
@@ -301,7 +302,7 @@ net_err_t netif_set_acticve(netif_t *netif) {
   }
 
   // 激活成功，设置网络接口状态为激活
-  netif->state = NETIF_STATE_ACVTIVE;  
+  netif->state = NETIF_STATE_ACVTIVE;
 
   display_netif_list();
   return NET_ERR_OK;
@@ -365,7 +366,7 @@ netif_t *netif_get_default(void) { return netif_default; }
  * @return net_err_t
  */
 net_err_t netif_recvq_put(netif_t *netif, pktbuf_t *buf, int tmo) {
-  net_err_t err = fixq_put(&(netif->recv_fixq), (void *)buf, tmo);
+  net_err_t err = fixq_put(&(netif->recv_fixq), (void *)buf, tmo); //!!! 数据包转交
   if (err < 0) {
     dbg_warning(DBG_NETIF, "netif %s pktbuf put error: recv queue is full.",
                 netif->name);
@@ -375,9 +376,10 @@ net_err_t netif_recvq_put(netif_t *netif, pktbuf_t *buf, int tmo) {
   // 测试用, 通知工作线程有数据到达
   // 发送到消息队列(网卡管理线程与数据包处理线程)中
   err = exmsg_netif_recv(netif);
-  if (err != NET_ERR_OK) {
+  if (err != NET_ERR_OK) { 
+    //TODO: 数据包已转交，但消息通知失败，该数据包可能一直在接收队列中，导致内存泄漏，需要进一步处理
+    // 且不能直接返回错误，否则会导致上层调用者释放一个在接收队列中的数据包
     dbg_warning(DBG_NETIF, "exmsg netif recv failed.");
-    return err;
   }
 
   return NET_ERR_OK;
@@ -461,7 +463,7 @@ net_err_t netif_send(netif_t *netif, const ipaddr_t *ipaddr, pktbuf_t *buf) {
 
   } else {  // 接口没有链路层处理，直接发送数据包
     // 将数据包放到发送队列中
-    err = netif_sendq_put(netif, buf, -1);  //!!! 数据包传递
+    err = netif_sendq_put(netif, buf, -1);  //!!! 数据包转交
     if (err != NET_ERR_OK) {
       dbg_warning(DBG_NETIF,
                   "netif %s send buf error: put buf into send_queue failed.",
@@ -469,7 +471,7 @@ net_err_t netif_send(netif_t *netif, const ipaddr_t *ipaddr, pktbuf_t *buf) {
     }
 
     // 数据包处理完毕，调用网络接口特定的操作方法发送数据包
-    err = netif->ops->send(netif);
+    netif->ops->send(netif);  //数据包已转交，该方法无论成功与否，都只需要返回NET_ERR_OK
   }
 
   return err;

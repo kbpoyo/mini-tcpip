@@ -51,6 +51,9 @@ const char *net_inet_ntop(int family, const void *addrptr, char *strptr, size_t 
 #undef sendto
 #define sendto(sock, buf, buf_len, flags, dest, dest_len) \
   net_sendto(sock, buf, buf_len, flags, dest, dest_len)
+#undef recvfrom
+#define recvfrom(sock, buf, buf_len, flags, src, src_len) \
+  net_recvfrom(sock, buf, buf_len, flags, src, src_len)
 
 
 

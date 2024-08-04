@@ -123,7 +123,7 @@ static net_err_t icmpv4_send(const ipaddr_t *dest_ipaddr,
  * @param icmpv4_pktbuf
  * @return net_err_t
  */
-static net_err_t  icmpv4_make_echo_reply(const ipaddr_t *dest_ipaddr,
+static net_err_t icmpv4_make_echo_reply(const ipaddr_t *dest_ipaddr,
                                         const ipaddr_t *src_ipaddr,
                                         pktbuf_t *icmpv4_pktbuf) {
   // 获取icmpv4数据包
@@ -197,12 +197,14 @@ net_err_t icmpv4_recv(const ipaddr_t *dest_ipaddr, const ipaddr_t *src_ipaddr,
     } break;
 
     case ICMPv4_TYPE_ECHO_REPLY: {
+      dbg_warning(DBG_ICMPV4, "icmpv4 echo reply packet.");
+      pktbuf_free(buf);  //!!! 释放数据包
     } break;
 
     default: {
       // TODO: icmp控制报文类型较多，以后再添加其他类型的处理, 此处仅释放数据包
       dbg_warning(DBG_ICMPV4, "unknown icmpv4 pkt type.");
-      pktbuf_free(buf);
+      pktbuf_free(buf); //!!! 释放数据包
     } break;
   }
 

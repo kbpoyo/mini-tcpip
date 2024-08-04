@@ -150,3 +150,13 @@ int ipaddr_is_match(const ipaddr_t *dest_ipaddr, const ipaddr_t *local_ipaddr,
 
   return 0;
 }
+
+/**
+ * @brief 判断ip地址是否为空地址
+ * 
+ * @param ipaddr 
+ * @return int 
+ */
+int ipaddr_is_any(ipaddr_t *ipaddr) {
+  return ipaddr->addr == 0;
+}

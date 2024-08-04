@@ -23,6 +23,81 @@ static mblock_t socket_mblock;  // socket对象内存块管理对象
 static nlist_t socket_list;     // 挂载已分配的socket对象链表
 
 /**
+ * @brief 初始化socket等待事件对象
+ *
+ * @param wait 等待事件对象
+ * @return net_err_t
+ */
+net_err_t sock_wait_init(sock_wait_t *wait) {
+  wait->wait_event_cnt = 0;
+  wait->error = NET_ERR_OK;
+  wait->sem = sys_sem_create(0);
+
+  return wait->sem == SYS_SEM_INVALID ? NET_ERR_SOCKET : NET_ERR_OK;
+}
+
+/**
+ * @brief 销毁socket等待事件对象
+ *
+ * @param wait
+ */
+void sock_wait_destroy(sock_wait_t *wait) {
+  if (wait) {
+    if (wait->sem != SYS_SEM_INVALID) {
+      sys_sem_free(wait->sem);
+      wait->sem = SYS_SEM_INVALID;
+    }
+  }
+}
+/**
+ * @brief 为方法请求对象添加一个wait对象
+ *
+ * @param wait
+ * @param req
+ * @param tmo
+ * @return net_err_t
+ */
+net_err_t sock_wait_add(sock_wait_t *wait, int tmo, struct _sock_req_t *req) {
+  // 增加等待事件数
+  wait->wait_event_cnt++;
+  // 方法请求对象记录wait对象和对应的超时时间
+  req->wait = wait;
+  req->wait_tmo = tmo;
+
+  return NET_ERR_OK;
+}
+
+/**
+ * @brief 外部线程通过wait对象进行事件等待
+ *
+ * @param wait
+ * @param tmo
+ * @return net_err_t
+ */
+net_err_t sock_wait_enter(sock_wait_t *wait, int tmo) {
+  if (sys_sem_wait(wait->sem, tmo) < 0) {  // 等待获取信号量
+    return NET_ERR_TIMEOUT;
+  }
+  // 等待成功，返回错误码
+  return wait->error;
+}
+
+/**
+ * @brief 内部工作线程在完成事件后，检查wait对象上是否有线程等待，若有则将其唤醒
+ * 并传递线程完成情况即错误码
+ *
+ * @param wait
+ * @param error
+ */
+void sock_wait_leave(sock_wait_t *wait, net_err_t error) {
+  if (wait->wait_event_cnt > 0) {
+    wait->wait_event_cnt--;
+    sys_sem_notify(wait->sem);
+    wait->error = error;
+  }
+}
+
+/**
  * @brief 初始化socket模块资源
  *
  * @return net_err_t
@@ -168,19 +243,73 @@ net_err_t sock_req_creat(msg_func_t *msg) {
 
 /**
  * @brief 外部应用请求发送数据
- * 
- * @param msg 
- * @return net_err_t 
+ *
+ * @param msg
+ * @return net_err_t
  */
 net_err_t sock_req_sendto(msg_func_t *msg) {
   // 获取socket发送请求参数
   sock_req_t *sock_req = (sock_req_t *)msg->arg;
   sock_io_t *io = &sock_req->io;
 
-  io->ret_len += 1;  // 模拟发送数据
-  return NET_ERR_OK;
+  // 获取封装socket对象
+  net_socket_t *socket = socket_by_index(sock_req->sock_fd);
+  if (!socket) {
+    dbg_error(DBG_SOCKET, "invalid socket fd.");
+    return NET_ERR_SOCKET;
+  }
+
+  // 获取socket基类对象
+  sock_t *sock = socket->sock;
+
+  // 调用socket对象的发送方法，进行静态多态调用
+  if (!sock->ops->sendto) {
+    dbg_error(DBG_SOCKET, "socket sendto not supported.");
+    return NET_ERR_SOCKET;
+  }
+  return socket->sock->ops->sendto(socket->sock, io->buf, io->buf_len,
+                                   io->flags, io->sockaddr, io->sockaddr_len,
+                                   &io->ret_len);
 }
 
+/**
+ * @brief 外部应用请求接收数据
+ *
+ * @param msg
+ * @return net_err_t
+ */
+net_err_t sock_req_recvfrom(msg_func_t *msg) {
+  // 获取socket发送请求参数
+  sock_req_t *sock_req = (sock_req_t *)msg->arg;
+  sock_io_t *io = &sock_req->io;
+
+  // 获取封装socket对象
+  net_socket_t *socket = socket_by_index(sock_req->sock_fd);
+  if (!socket) {
+    dbg_error(DBG_SOCKET, "invalid socket fd.");
+    return NET_ERR_SOCKET;
+  }
+
+  // 获取socket基类对象
+  sock_t *sock = socket->sock;
+
+  // 调用socket对象的recvfrom方法，完成静态多态调用
+  if (!sock->ops->recvfrom) {
+    dbg_error(DBG_SOCKET, "socket recvfrom not supported.");
+    return NET_ERR_SOCKET;
+  }
+  net_err_t err = socket->sock->ops->recvfrom(
+      socket->sock, io->buf, io->buf_len, io->flags, io->sockaddr,
+      &io->sockaddr_len, &io->ret_len);
+
+  if (err = NET_ERR_NEEDWAIT) {
+    // 该方法调用需要等待执行结果
+    if (sock->recv_wait) {
+      // 为方法请求对象添加一个wait对象
+      sock_wait_add(sock->recv_wait, sock->recv_tmo, sock_req);
+    }
+  }
+}
 
 /**
  * @brief 初始化基础socket对象(sock)
@@ -192,7 +321,8 @@ net_err_t sock_req_sendto(msg_func_t *msg) {
  * @param ops 基础socket操作接口
  * @return net_err_t
  */
-net_err_t sock_init(sock_t *sock, int family, int protocol, sock_ops_t *ops) {
+net_err_t sock_init(sock_t *sock, int family, int protocol,
+                    const sock_ops_t *ops) {
   // 连接的网络层和传输层的协议信息
   sock->family = family;
   sock->protocol = protocol;
@@ -208,6 +338,11 @@ net_err_t sock_init(sock_t *sock, int family, int protocol, sock_ops_t *ops) {
   sock->err_code = NET_ERR_OK;
   sock->recv_tmo = 0;
   sock->send_tmo = 0;
+
+  // 设置wait对象
+  sock->recv_wait = (sock_wait_t *)0;
+  sock->send_wait = (sock_wait_t *)0;
+  sock->conn_wait = (sock_wait_t *)0;
 
   // 初始化socket对象的挂载节点
   nlist_node_init(&sock->node);

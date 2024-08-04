@@ -695,7 +695,7 @@ static void pktbuf_pos_move_forward(pktbuf_t *buf, int size) {
  * @param size 待写入数据的大小
  * @return net_err_t
  */
-net_err_t pktbuf_write(pktbuf_t *buf, uint8_t *src, int size) {
+net_err_t pktbuf_write(pktbuf_t *buf, const uint8_t *src, int size) {
   pktbuf_check_buf(buf);
 
   if (src == (uint8_t *)0 || size < 0) {

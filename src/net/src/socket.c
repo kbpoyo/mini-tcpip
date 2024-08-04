@@ -15,7 +15,7 @@
 #include "sock.h"
 
 /**
- * @brief 打开一个socket对象
+ * @brief 外部接口，打开一个socket对象
  *
  * @param family
  * @param type
@@ -42,17 +42,17 @@ int net_socket(int family, int type, int protocol) {
 }
 
 /**
- * @brief 向指定socket地址发送数据
- * 
- * @param sock 
- * @param buf 
- * @param buf_len 
- * @param flags 
- * @param dest 
- * @param dest_len 
- * @return ssize_t 
+ * @brief 外部接口，向指定socket地址发送数据
+ *
+ * @param sock
+ * @param buf
+ * @param buf_len
+ * @param flags
+ * @param dest
+ * @param dest_len
+ * @return ssize_t
  */
-ssize_t net_sendto(int sock, const void *buf, size_t buf_len, int flags,
+ssize_t net_sendto(int socket, const void *buf, size_t buf_len, int flags,
                    const struct net_sockaddr *dest, net_socklen_t dest_len) {
   // 进行参数检查
   if (!buf || !buf_len || !dest || dest_len != sizeof(struct net_sockaddr)) {
@@ -65,11 +65,11 @@ ssize_t net_sendto(int sock, const void *buf, size_t buf_len, int flags,
   }
   // 封装socket发送请求参数
   sock_req_t sock_req;
-  sock_req.sock_fd = sock;
-  sock_req.io.buf = buf;
+  sock_req.sock_fd = socket;
+  sock_req.io.buf = (void *)buf;
   sock_req.io.buf_len = buf_len;
   sock_req.io.flags = flags;
-  sock_req.io.sockaddr = (struct net_sockaddr*)dest;
+  sock_req.io.sockaddr = (struct net_sockaddr *)dest;
   sock_req.io.sockaddr_len = dest_len;
   sock_req.io.ret_len = 0;
 
@@ -88,4 +88,49 @@ ssize_t net_sendto(int sock, const void *buf, size_t buf_len, int flags,
 
   // 返回实际发送的数据量(字节量)
   return sock_req.io.ret_len;
+}
+
+/**
+ * @brief 外部接口，从指定socket对象接收数据，并记录发送方socket地址
+ *
+ * @param socket
+ * @param buf
+ * @param buf_len
+ * @param flags
+ * @param src
+ * @param src_len
+ * @return ssize_t
+ */
+ssize_t net_recvfrom(int socket, void *buf, size_t buf_len, int flags,
+                     struct net_sockaddr *src, net_socklen_t *src_len) {
+  // 进行参数检查
+  if (!buf || !buf_len || !src || !src_len) {
+    dbg_error(DBG_SOCKET, "recvfrom param error.\n");
+    return -1;
+  }
+
+  // 封装socket接收请求参数
+  sock_req_t sock_req;
+  sock_req.wait = (sock_wait_t *)0; //wait对象，用来等待内部工作线程的接收结果
+  sock_req.wait_tmo = 0;
+  sock_req.sock_fd = socket;
+  sock_req.io.buf = buf;
+  sock_req.io.buf_len = buf_len;
+  sock_req.io.flags = flags;
+  sock_req.io.sockaddr = src;
+  sock_req.io.sockaddr_len = 0;
+  sock_req.io.ret_len = 0;
+
+  // 调用消息队列工作线程执行socket接收请求
+  net_err_t err = exmsg_func_exec(sock_req_recvfrom, &sock_req);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_SOCKET, "recvfrom failed.\n");
+    return -1;
+  }
+
+  // 记录发送方socket地址大小
+  *src_len = sock_req.io.sockaddr_len;
+
+  // 返回实际接收的数据量(字节量)， 若返回-1表示接收失败
+  return sock_req.io.ret_len > 0 ? sock_req.io.ret_len : -1;
 }
