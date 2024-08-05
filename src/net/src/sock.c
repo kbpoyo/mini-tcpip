@@ -98,6 +98,25 @@ void sock_wait_leave(sock_wait_t *wait, net_err_t error) {
 }
 
 /**
+ * @brief 根据等待事件的类型，唤醒等待在基类sock的wait对象上的线程
+ * 
+ * @param sock 
+ * @param wait_type 
+ * @param err 
+ */
+void sock_wakeup(sock_t *sock, int wait_type, int err) {
+  if (wait_type & SOCK_WAIT_CONN) {
+    sock_wait_leave(sock->conn_wait, err);
+  }
+  if (wait_type & SOCK_WAIT_READ) {
+    sock_wait_leave(sock->recv_wait, err);
+  }
+  if (wait_type & SOCK_WAIT_WRITE) {
+    sock_wait_leave(sock->send_wait, err);
+  }
+}
+
+/**
  * @brief 初始化socket模块资源
  *
  * @return net_err_t
@@ -267,9 +286,20 @@ net_err_t sock_req_sendto(msg_func_t *msg) {
     dbg_error(DBG_SOCKET, "socket sendto not supported.");
     return NET_ERR_SOCKET;
   }
-  return socket->sock->ops->sendto(socket->sock, io->buf, io->buf_len,
-                                   io->flags, io->sockaddr, io->sockaddr_len,
-                                   &io->ret_len);
+  net_err_t err =
+      socket->sock->ops->sendto(socket->sock, io->buf, io->buf_len, io->flags,
+                                io->sockaddr, io->sockaddr_len, &io->ret_len);
+  if (err == NET_ERR_NEEDWAIT) {  // 通知外部线程等待执行结果
+    if (sock->send_wait) {
+      // 为方法请求对象添加一个wait对象, 使用该wait对象阻塞外部线程
+      sock_wait_add(sock->send_wait, sock->send_tmo, sock_req);
+    } else {
+      dbg_error(DBG_SOCKET, "socket don't have send wait obj.");
+      return NET_ERR_SOCKET;
+    }
+  }
+
+  return err;
 }
 
 /**
@@ -302,13 +332,17 @@ net_err_t sock_req_recvfrom(msg_func_t *msg) {
       socket->sock, io->buf, io->buf_len, io->flags, io->sockaddr,
       &io->sockaddr_len, &io->ret_len);
 
-  if (err = NET_ERR_NEEDWAIT) {
-    // 该方法调用需要等待执行结果
+  if (err == NET_ERR_NEEDWAIT) {  // 通知外部线程等待执行结果
     if (sock->recv_wait) {
-      // 为方法请求对象添加一个wait对象
+      // 为方法请求对象添加一个wait对象, 使用该wait对象阻塞外部线程
       sock_wait_add(sock->recv_wait, sock->recv_tmo, sock_req);
+    } else {
+      dbg_error(DBG_SOCKET, "socket don't have recv wait obj.");
+      return NET_ERR_SOCKET;
     }
   }
+
+  return err;
 }
 
 /**
@@ -348,4 +382,35 @@ net_err_t sock_init(sock_t *sock, int family, int protocol,
   nlist_node_init(&sock->node);
 
   return NET_ERR_OK;
+}
+
+/**
+ * @brief 销毁一个已初始化的基类socket对象，以释放资源
+ *
+ * @param sock
+ */
+void sock_destroy(sock_t *sock) {
+  // 销毁socket对象的wait对象
+  if (sock->recv_wait) {
+    sock_wait_destroy(sock->recv_wait);
+    sock->recv_wait = (sock_wait_t *)0;
+  }
+  if (sock->send_wait) {
+    sock_wait_destroy(sock->send_wait);
+    sock->send_wait = (sock_wait_t *)0;
+  }
+  if (sock->conn_wait) {
+    sock_wait_destroy(sock->conn_wait);
+    sock->conn_wait = (sock_wait_t *)0;
+  }
+}
+
+/**
+ * @brief 内部接口, 设置socket选项
+ * 
+ * @param msg 
+ * @return net_err_t 
+ */
+net_err_t sock_req_setopt(msg_func_t *msg) {
+
 }

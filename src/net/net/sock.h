@@ -76,12 +76,12 @@ typedef struct _sock_t {
   int family;    // 网络层地址族(AF_INET, AF_INET6):(IPv4, IPv6)
   int protocol;  // 传输层协议(udp,tcp)或icmp协议
 
-  int err_code;  // socket错误码
-  int recv_tmo;  // 接收超时时间
-  int send_tmo;  // 发送超时时间
-  sock_wait_t *recv_wait; //接收等待时的wait对象
-  sock_wait_t *send_wait; //发送等待时的wait对象
-  sock_wait_t *conn_wait; //连接等待时的wait对象
+  int err_code;            // socket错误码
+  int recv_tmo;            // 接收超时时间
+  int send_tmo;            // 发送超时时间
+  sock_wait_t *recv_wait;  // 接收等待时的wait对象
+  sock_wait_t *send_wait;  // 发送等待时的wait对象
+  sock_wait_t *conn_wait;  // 连接等待时的wait对象
 
   const sock_ops_t *ops;  // socket操作接口
 } sock_t;
@@ -89,6 +89,7 @@ typedef struct _sock_t {
 
 net_err_t sock_init(sock_t *sock, int family, int protocol,
                     const sock_ops_t *ops);
+void sock_destroy(sock_t *sock);
 
 // 定义外部socket结构，对内部sock_t结构的封装
 typedef struct _net_socket {
@@ -124,18 +125,26 @@ typedef struct _sock_io_t {
 net_err_t sock_req_sendto(msg_func_t *msg);
 net_err_t sock_req_recvfrom(msg_func_t *msg);
 
+// socket选项设置请求(setsockopt)的参数结构
+typedef struct _sock_opt_t{
+  int level;
+  int optname;
+  const char *optval;
+  int optlen;
+} sock_opt_t;
+net_err_t sock_req_setopt(msg_func_t *msg);
+
 // 用于封装外部线程请求工作线程执行socket相关操作时传递的参数
 typedef struct _sock_req_t {
-
-
-  int sock_fd;  // socket文件描述符
+  int sock_fd;        // socket文件描述符
   int wait_tmo;       // 等待超时时间
   sock_wait_t *wait;  // socket等待事件
   union {
     sock_create_t create;  // 创建socket请求的参数
     sock_io_t io;
+    sock_opt_t opt;
   };
-  
+
 } sock_req_t;
 
 net_err_t sock_module_init(void);

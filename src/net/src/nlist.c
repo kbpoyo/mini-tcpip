@@ -42,8 +42,9 @@ void nlist_insert_first(nlist_t *list, nlist_node_t *node) {
  * 不检查node是否在结点中
  */
 nlist_node_t *nlist_remove(nlist_t *list, nlist_node_t *remove_node) {
-  if (list == (nlist_t *)0 || remove_node == (nlist_node_t *)0)
+  if (list == (nlist_t *)0 || remove_node == (nlist_node_t *)0) {
     return (nlist_node_t *)0;
+  }
 
   // 如果是头，头往前移
   if (remove_node == list->first) {
@@ -60,7 +61,7 @@ nlist_node_t *nlist_remove(nlist_t *list, nlist_node_t *remove_node) {
     remove_node->pre->next = remove_node->next;
   }
 
-  // 如果有后，则调整后往前的
+  // 如果有后，则调整后的前驱
   if (remove_node->next) {
     remove_node->next->pre = remove_node->pre;
   }

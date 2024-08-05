@@ -56,6 +56,14 @@ static sockraw_t *sockraw_alloc(void) {
   return sockraw;
 }
 
+static void *sockraw_free(sockraw_t *sockraw) {
+  // 将sockraw对象从挂载链表中移除
+  nlist_remove(&sockraw_list, &sockraw->sock_base.node);
+
+  // 将sockraw对象内存块释放
+  mblock_free(&sockraw_mblock, sockraw);
+}
+
 /**
  * @brief 内部接口，向目的socket地址发送数据
  *
@@ -154,17 +162,27 @@ sock_t *sockraw_create(int family, int protocol) {
     dbg_error(DBG_SOCKRAW, "no memory for raw socket.");
     return (sock_t *)0;
   }
-
-  // 初始化该原始socket内部的基础socket对象
-  net_err_t err =
-      sock_init(&sockraw->sock_base, family, protocol, &sockraw_ops);
-  if (err != NET_ERR_OK) {
-    dbg_error(DBG_SOCKRAW, "sock init failed.");
-    return (sock_t *)0;
-  }
-
-  // 将初始化后的sockraw对象挂载到记录链表中
+  // 将分配成功的sockraw对象挂载到记录链表中
   nlist_insert_last(&sockraw_list, &sockraw->sock_base.node);
 
+  // 初始化该sockraw对象的基类socket对象
+  if (sock_init(&sockraw->sock_base, family, protocol, &sockraw_ops) !=
+      NET_ERR_OK) {
+    dbg_error(DBG_SOCKRAW, "sock init failed.");
+    goto create_failed;
+  }
+
+  // 使用基类sock记录raw sock的wait对象, 并初始化
+  sockraw->sock_base.recv_wait = &sockraw->recv_wait;
+  if (sock_wait_init(sockraw->sock_base.recv_wait) != NET_ERR_OK) {
+    dbg_error(DBG_SOCKRAW, "sock wait init failed.");
+    goto create_failed;
+  }
+
   return (sock_t *)sockraw;  // sock_base为一个成员，起始地址相同，可直接转换
+
+create_failed:
+  sock_destroy(&sockraw->sock_base);
+  sockraw_free(sockraw);
+  return (sock_t *)0;
 }

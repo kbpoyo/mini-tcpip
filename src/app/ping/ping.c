@@ -73,12 +73,11 @@ void ping_run(ping_t *ping, const char *dest_ip, int data_size,
   }
 
   // 设置socket属性
-  int tmo = 3000;  // 超时时间3s
-#if 0
-  struct timeval tmo = {tmo / 1000, (tmo % 1000) * 1000};
-#endif
-  // setsockopt(raw_socket, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tmo,
-            //  sizeof(tmo));
+  int tmo_ms = 3000;  // 超时时间3s
+
+  struct timeval tmo = {tmo_ms / 1000, (tmo_ms % 1000) * 1000};
+  setsockopt(raw_socket, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tmo,
+             sizeof(tmo));
 
   // 初始化远端socket地址信息
   struct sockaddr_in dest_addr;

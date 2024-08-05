@@ -46,6 +46,8 @@ const char *net_inet_ntop(int family, const void *addrptr, char *strptr, size_t 
 #define sockaddr_in net_sockaddr_in
 #undef sockaddr
 #define sockaddr net_sockaddr
+#undef timeval
+#define timeval net_timeval
 #undef socket
 #define socket(family, type, protocol) net_socket(family, type, protocol)
 #undef sendto
@@ -54,10 +56,9 @@ const char *net_inet_ntop(int family, const void *addrptr, char *strptr, size_t 
 #undef recvfrom
 #define recvfrom(sock, buf, buf_len, flags, src, src_len) \
   net_recvfrom(sock, buf, buf_len, flags, src, src_len)
-
-
-
-
+#undef setsockopt
+#define setsockopt(sock, level, optname, optval, optlen) \
+  net_setsockopt(sock, level, optname, optval, optlen)
 
 
 
