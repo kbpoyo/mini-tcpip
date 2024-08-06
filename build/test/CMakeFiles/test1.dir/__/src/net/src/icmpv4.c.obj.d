@@ -254,4 +254,9 @@ test/CMakeFiles/test1.dir/__/src/net/src/icmpv4.c.obj: \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/mstcpip.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/npcap/Include/pcap/bpf.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/npcap/Include/pcap/dlt.h \
- C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/protocol.h
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/protocol.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/sock_raw.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/sock.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/exmsg.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/socket.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/ipv4.h

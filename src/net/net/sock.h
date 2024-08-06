@@ -57,12 +57,17 @@ typedef struct _sock_ops_t {
 
   // 设置socket选项
   net_err_t (*setopt)(struct _sock_t *sock, int level, int optname,
-                      const char *optval);
+                      const char *optval, int optlen);
 
   // 销毁socket对象
   void (*destroy)(struct _sock_t *sock);
 
 } sock_ops_t;
+// 基类已实现了的通用接口，派生类可重写或直接继承
+
+int sock_setopt(struct _sock_t *sock, int level, int optname, const char *optval,
+                int optlen);
+
 
 // 定义基础socket结构, 描述端与端应用程序通信的基本信息
 typedef struct _sock_t {

@@ -99,10 +99,10 @@ void sock_wait_leave(sock_wait_t *wait, net_err_t error) {
 
 /**
  * @brief 根据等待事件的类型，唤醒等待在基类sock的wait对象上的线程
- * 
- * @param sock 
- * @param wait_type 
- * @param err 
+ *
+ * @param sock
+ * @param wait_type
+ * @param err
  */
 void sock_wakeup(sock_t *sock, int wait_type, int err) {
   if (wait_type & SOCK_WAIT_CONN) {
@@ -346,6 +346,36 @@ net_err_t sock_req_recvfrom(msg_func_t *msg) {
 }
 
 /**
+ * @brief 外部应用请求设置socket选项
+ *
+ * @param msg
+ * @return net_err_t
+ */
+net_err_t sock_req_setopt(msg_func_t *msg) {
+  // 获取socket选项设置请求参数
+  sock_req_t *sock_req = (sock_req_t *)msg->arg;
+  sock_opt_t *opt = &sock_req->opt;
+
+  // 获取封装的socket对象
+  net_socket_t *socket = socket_by_index(sock_req->sock_fd);
+  if (!socket) {
+    dbg_error(DBG_SOCKET, "invalid socket fd.");
+    return NET_ERR_SOCKET;
+  }
+
+  // 获取socket基类对象
+  sock_t *sock = socket->sock;
+
+  // 调用socket对象的setsockopt方法，完成静态多态调用
+  if (!sock->ops->setopt) {
+    dbg_error(DBG_SOCKET, "socket setsockopt not supported.");
+    return NET_ERR_SOCKET;
+  }
+  return sock->ops->setopt(sock, opt->level, opt->optname, opt->optval,
+                           opt->optlen);
+}
+
+/**
  * @brief 初始化基础socket对象(sock)
  *
  * @param sock 基础socket对象
@@ -405,12 +435,56 @@ void sock_destroy(sock_t *sock) {
   }
 }
 
-/**
- * @brief 内部接口, 设置socket选项
- * 
- * @param msg 
- * @return net_err_t 
- */
-net_err_t sock_req_setopt(msg_func_t *msg) {
+/***********************************************************************************************************
+ * @brief
+ * 基类sock的通用接口实现，后续派生类可直接继承方法，不用再独立实现。
+ *
+ ***********************************************************************************************************
 
+
+ /**
+ * @brief 基类sock的setsockopt方法实现，后续派生类可直接继承该方法,
+ * 不用再独立实现。
+ *
+ * @param sock
+ * @param level
+ * @param optname
+ * @param optval
+ * @param optlen
+ * @return int
+ */
+net_err_t sock_setopt(sock_t *sock, int level, int optname, const char *optval,
+                      int optlen) {
+  if (level != SOL_SOCKET) {
+    dbg_error(DBG_SOCKET, "invalid socket option level.\n");
+    return NET_ERR_SOCKET;
+  }
+
+  // 根据选项类型进行处理
+  switch (optname) {
+    case SO_RCVTIMEO: {
+      if (optlen != sizeof(struct net_timeval)) {  // 选项参数类型大小不匹配
+        dbg_error(DBG_SOCKET, "invalid socket option value.\n");
+        return NET_ERR_SOCKET;
+      }
+      struct net_timeval *tmo = (struct net_timeval *)optval;
+      sock->recv_tmo = tmo->tv_sec * 1000 + tmo->tv_usec / 1000;
+    } break;
+
+    case SO_SNDTIMEO: {
+      if (optlen != sizeof(struct net_timeval)) {  // 选项参数类型大小不匹配
+        dbg_error(DBG_SOCKET, "invalid socket option value.\n");
+        return NET_ERR_SOCKET;
+      }
+      struct net_timeval *tmo = (struct net_timeval *)optval;
+      sock->send_tmo = tmo->tv_sec * 1000 + tmo->tv_usec / 1000;
+    } break;
+
+    default: {
+      dbg_error(DBG_SOCKET, "invalid socket option name.\n");
+      return NET_ERR_SOCKET;
+    } break;
+  }
+
+  return NET_ERR_OK;
 }

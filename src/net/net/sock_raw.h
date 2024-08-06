@@ -26,5 +26,6 @@ typedef struct _sockraw_t {
 net_err_t sockraw_module_init(void);
 
 sock_t *sockraw_create(int family, int protocol);
+net_err_t sockraw_recv_pktbuf(pktbuf_t *raw_ip_buf);
 
 #endif

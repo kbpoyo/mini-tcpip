@@ -17,6 +17,7 @@
 #include "ipv4.h"
 #include "net_err.h"
 #include "protocol.h"
+#include "sock_raw.h"
 
 #if DBG_DISP_ENABLED(DBG_ICMPV4)
 
@@ -67,21 +68,27 @@ net_err_t icmpv4_module_init(void) {
 /**
  * @brief 检查icmpv4数据包是否合法
  *
- * @param icmpv4_pktbuf
+ * @param ip_buf 封装了icmpv4数据包的ipv4数据包
  * @return net_err_t
  */
-static net_err_t icmpv4_pkt_check(pktbuf_t *icmpv4_pktbuf) {
-  // 获取icmpv4数据包大小
-  uint32_t pkt_size = pktbuf_total_size(icmpv4_pktbuf);
+static net_err_t icmpv4_pkt_check(pktbuf_t *ip_buf) {
+  // 获取ip数据包的头部长度
+  int ip_hdr_size = ipv4_get_hdr_size((ipv4_pkt_t *)pktbuf_data_ptr(ip_buf));
+
+  // 获取icmpv4数据包长度
+  int icmpv4_pkt_size = pktbuf_total_size(ip_buf) - ip_hdr_size;
 
   // 检查icmpv4数据包长度是否合法
-  if (pkt_size < sizeof(icmpv4_hdr_t)) {
+  if (icmpv4_pkt_size < sizeof(icmpv4_hdr_t)) {
     dbg_warning(DBG_ICMPV4, "icmpv4 pkt size error.");
     return NET_ERR_ICMPv4;
   }
 
+  // 将ip_buf的访问位置偏移到icmpv4头部起始位置，以便计算校验和
+  pktbuf_seek(ip_buf, ip_hdr_size);
+
   // 检查icmpv4包的校验和(包含整个icmpv4数据包)
-  uint16_t chksum = pktbuf_checksum16(icmpv4_pktbuf, pkt_size, 0, 1);
+  uint16_t chksum = pktbuf_checksum16(ip_buf, icmpv4_pkt_size, 0, 1);
   if (chksum != 0) {
     dbg_warning(DBG_ICMPV4, "icmpv4 pkt checksum error.");
     return NET_ERR_ICMPv4;
@@ -148,63 +155,53 @@ static net_err_t icmpv4_make_echo_reply(const ipaddr_t *dest_ipaddr,
 net_err_t icmpv4_recv(const ipaddr_t *dest_ipaddr, const ipaddr_t *src_ipaddr,
                       pktbuf_t *buf) {
   dbg_info(DBG_ICMPV4, "recv icmpv4 packet....");
-
   pktbuf_check_buf(buf);
-  net_err_t err = NET_ERR_OK;
-
-  // // 确保ipv4头部和icmpv4头部在内存上连续
-  // ipv4_pkt_t *ipv4_pkt = (ipv4_pkt_t *)pktbuf_data_ptr(buf);
-  // int ipv4_hdr_size = ipv4_get_hdr_size(ipv4_pkt);
-  // err = pktbuf_set_cont(buf, ipv4_hdr_size + sizeof(icmpv4_hdr_t));
-  // if (err != NET_ERR_OK) {
-  //   dbg_error(DBG_ICMPV4, "pktbuf set cont failed.");
-  //   return err;
-  // }
-
-  // 再次获取ipv4数据包并移除ipv4头部
-  err = pktbuf_header_remove(
-      buf, ipv4_get_hdr_size((ipv4_pkt_t *)pktbuf_data_ptr(buf)));
-  if (err != NET_ERR_OK) {
-    dbg_error(DBG_ICMPV4, "pktbuf header remove failed.");
-    return err;
-  }
-
-  // 确保icmpv4头部在内存上连续
-  err = pktbuf_set_cont(buf, sizeof(icmpv4_hdr_t));
-  if (err != NET_ERR_OK) {
-    dbg_error(DBG_ICMPV4, "pktbuf set cont failed.");
-    return err;
-  }
 
   // 检查icmpv4数据包是否合法
-  err = icmpv4_pkt_check(buf);
+  net_err_t err = icmpv4_pkt_check(buf);
   if (err != NET_ERR_OK) {
     dbg_warning(DBG_ICMPV4, "icmpv4 pkt check failed.");
     return err;
   }
 
+  // 获取ipv4数据包头部大小
+  int ip_hdr_size = ipv4_get_hdr_size((ipv4_pkt_t *)pktbuf_data_ptr(buf));
+
   // 获取icmpv4数据包
-  icmpv4_pkt_t *icmpv4_pkt = (icmpv4_pkt_t *)pktbuf_data_ptr(buf);
+  icmpv4_pkt_t *icmpv4_pkt =
+      (icmpv4_pkt_t *)(pktbuf_data_ptr(buf) + ip_hdr_size);
   // 打印icmpv4数据包
   icmpv4_pkt_display(icmpv4_pkt);
 
   // 根据icmpv4数据包类型进行处理
   switch (icmpv4_pkt->hdr.type) {
     case ICMPv4_TYPE_ECHO_REQUEST: {
+      // 移除ipv4头部
+      err = pktbuf_header_remove(buf, ip_hdr_size);
+      if (err != NET_ERR_OK) {
+        dbg_error(DBG_ICMPV4, "pktbuf header remove failed.");
+        return err;
+      }
+
+      // 设置icmpv4数据包头部在内存上的连续性
+      err = pktbuf_set_cont(buf, sizeof(icmpv4_hdr_t));
+      if (err != NET_ERR_OK) {
+        dbg_error(DBG_ICMPV4, "pktbuf set cont failed.");
+        return err;
+      }
+
       // 处理icmpv4请求报文, 直接发送icmpv4应答报文即可
       return icmpv4_make_echo_reply(src_ipaddr, dest_ipaddr,
                                     buf);  //!!! 数据包传递
     } break;
-
-    case ICMPv4_TYPE_ECHO_REPLY: {
-      dbg_warning(DBG_ICMPV4, "icmpv4 echo reply packet.");
-      pktbuf_free(buf);  //!!! 释放数据包
-    } break;
-
     default: {
-      // TODO: icmp控制报文类型较多，以后再添加其他类型的处理, 此处仅释放数据包
       dbg_warning(DBG_ICMPV4, "unknown icmpv4 pkt type.");
-      pktbuf_free(buf); //!!! 释放数据包
+      // 其余类型的icmpv4数据包(包含ipv4头部)直接递交给原始socket模块处理
+      err = sockraw_recv_pktbuf(buf);  //!!! 数据包传递
+      if (err != NET_ERR_OK) {
+        dbg_error(DBG_ICMPV4, "sockraw recv pktbuf failed.");
+        return err;
+      }
     } break;
   }
 

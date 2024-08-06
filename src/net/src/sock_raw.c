@@ -56,6 +56,12 @@ static sockraw_t *sockraw_alloc(void) {
   return sockraw;
 }
 
+/**
+ * @brief 释放一个原始socket对象
+ *
+ * @param sockraw
+ * @return void*
+ */
 static void *sockraw_free(sockraw_t *sockraw) {
   // 将sockraw对象从挂载链表中移除
   nlist_remove(&sockraw_list, &sockraw->sock_base.node);
@@ -144,7 +150,7 @@ net_err_t sockraw_recvfrom(struct _sock_t *sock, void *buf, size_t buf_len,
 }
 
 /**
- * @brief 创建一个原始socket对象
+ * @brief 内部接口，创建一个原始socket对象
  *
  * @param family  协议族
  * @param protocol 上层协议
@@ -152,8 +158,9 @@ net_err_t sockraw_recvfrom(struct _sock_t *sock, void *buf, size_t buf_len,
  */
 sock_t *sockraw_create(int family, int protocol) {
   static const sock_ops_t sockraw_ops = {
-      .sendto = sockraw_sendto,
-      .recvfrom = sockraw_recvfrom,
+      .sendto = sockraw_sendto,      // 独立实现接口
+      .recvfrom = sockraw_recvfrom,  // 独立实现接口
+      .setopt = sock_setopt,         // 继承基类的实现
   };
 
   // 分配一个原始socket对象
@@ -162,15 +169,10 @@ sock_t *sockraw_create(int family, int protocol) {
     dbg_error(DBG_SOCKRAW, "no memory for raw socket.");
     return (sock_t *)0;
   }
-  // 将分配成功的sockraw对象挂载到记录链表中
-  nlist_insert_last(&sockraw_list, &sockraw->sock_base.node);
-
   // 初始化该sockraw对象的基类socket对象
-  if (sock_init(&sockraw->sock_base, family, protocol, &sockraw_ops) !=
-      NET_ERR_OK) {
-    dbg_error(DBG_SOCKRAW, "sock init failed.");
-    goto create_failed;
-  }
+  sock_init(&sockraw->sock_base, family, protocol, &sockraw_ops);
+  // 将初始化成功的基类sock对象挂载到sockraw的记录链表中
+  nlist_insert_last(&sockraw_list, &sockraw->sock_base.node);
 
   // 使用基类sock记录raw sock的wait对象, 并初始化
   sockraw->sock_base.recv_wait = &sockraw->recv_wait;
@@ -185,4 +187,74 @@ create_failed:
   sock_destroy(&sockraw->sock_base);
   sockraw_free(sockraw);
   return (sock_t *)0;
+}
+
+/**
+ * @brief 根据目的ip地址、源ip地址和上层协议类型，
+ * 在sockraw_list(当前系统正在使用的sockraw对象的记录链表)中查找对应的原始socket对象。
+ *
+ * @param dest_ip
+ * @param src_ip
+ * @param protocol
+ * @return sockraw_t*
+ */
+static sockraw_t *sockraw_find(ipaddr_t *dest_ip, ipaddr_t *src_ip,
+                               int protocol) {
+  sockraw_t *sockraw = (sockraw_t *)0;
+  nlist_node_t *node = (nlist_node_t *)0;
+
+  nlist_for_each(node, &sockraw_list) {
+    // 获取sockraw对象
+    sockraw = nlist_entry(node, sockraw_t, sock_base.node);
+
+    // 检查协议类型是否一致
+    if (sockraw->sock_base.protocol &&
+        sockraw->sock_base.protocol != protocol) {
+      continue;
+    }
+
+    // 检查目的ip地址是否为sock记录的本地ip地址(ip地址若为空则默认匹配)
+    if (!ipaddr_is_any(&sockraw->sock_base.local_ip) &&
+        !ipaddr_is_equal(&sockraw->sock_base.local_ip, dest_ip)) {
+      continue;
+    }
+
+    // 检查源ip地址是否为sock记录的远端ip地址
+    if (!ipaddr_is_any(&sockraw->sock_base.remote_ip) &&
+        !ipaddr_is_equal(&sockraw->sock_base.remote_ip, src_ip)) {
+      continue;
+    }
+
+    // 返回找到的sockraw对象
+    return sockraw;
+  }
+
+  return (sockraw_t *)0;
+}
+
+/**
+ * @brief
+ * 由工作线程调用，从网络层接收一个原始的ip数据包(即没有传输层协议头的数据包)，
+ * 可以处理的数据包类型有：IP, ICMP
+ *
+ * @param raw_buf
+ * @return net_err_t
+ */
+net_err_t sockraw_recv_pktbuf(pktbuf_t *raw_ip_buf) {
+  // 获取ipv4数据包的头部
+  ipv4_hdr_t *ipv4_hdr = (ipv4_hdr_t *)pktbuf_data_ptr(raw_ip_buf);
+
+  // 获取目的ip地址和源ip地址
+  ipaddr_t dest_ip, src_ip;
+  ipaddr_from_bytes(&dest_ip, ipv4_hdr->dest_ip);
+  ipaddr_from_bytes(&src_ip, ipv4_hdr->src_ip);
+
+  // 根据通信两端的ip地址信息和上层协议信息，查找对应的原始socket对象
+  sockraw_t *sockraw = sockraw_find(&dest_ip, &src_ip, ipv4_hdr->tran_proto);
+  if (!sockraw) {
+    dbg_error(DBG_SOCKRAW, "no raw socket found.");
+    return NET_ERR_SOCKRAW;
+  }
+
+  return NET_ERR_OK;
 }

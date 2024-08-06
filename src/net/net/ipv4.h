@@ -93,7 +93,7 @@ typedef struct _ipv4_hdr_t {
   };
 
   uint8_t ttl;          // 生存跳数
-  uint8_t tran_proto;   // 传输层协议类型
+  uint8_t tran_proto;   // 传输层(udp, tcp)协议类型或icmp协议类型
   uint16_t hdr_chksum;  // 头部校验和
 
   uint8_t src_ip[IPV4_ADDR_SIZE];  // 源ip地址

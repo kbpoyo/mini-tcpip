@@ -171,43 +171,28 @@ ssize_t net_recvfrom(int socket, void *buf, size_t buf_len, int flags,
  */
 int net_setsockopt(int socket, int level, int optname, const char *optval,
                    int optlen) {
-
-                     // 进行参数检查
+  // 进行参数检查
   if (!optval || !optlen) {
     dbg_error(DBG_SOCKET, "setsockopt param error.\n");
     return -1;
   }
 
-  while (1) {
-    // 封装socket接收请求参数
-    sock_req_t sock_req;
-    sock_req.wait =
-        (sock_wait_t *)0;  // wait对象，用来等待内部工作线程的接收结果
-    sock_req.wait_tmo = 0;
-    sock_req.sock_fd = socket;
-    sock_req.opt.level = level;
-    sock_req.opt.optname = optname;
-    sock_req.opt.optval = optval;
-    sock_req.opt.optlen = optlen;
+  // 封装socket接收请求参数
+  sock_req_t sock_req;
+  sock_req.wait = (sock_wait_t *)0;  // wait对象，用来等待内部工作线程的接收结果
+  sock_req.wait_tmo = 0;
+  sock_req.sock_fd = socket;
+  sock_req.opt.level = level;
+  sock_req.opt.optname = optname;
+  sock_req.opt.optval = optval;
+  sock_req.opt.optlen = optlen;
 
-    // 调用消息队列工作线程执行socket接收请求
-    net_err_t err = exmsg_func_exec(sock_req_setopt, &sock_req);
-    switch (err) {
-      case NET_ERR_OK: {  // 还有数据未发送，更新缓冲区位置和大小信息
-       
-        return err;
-      } break;
-      case NET_ERR_NEEDWAIT: {  // 需要等待内部工作线程执行完毕
-        if (sock_wait_enter(sock_req.wait, sock_req.wait_tmo) != NET_ERR_OK) {
-          dbg_error(DBG_SOCKET, "socket wait error.");
-          return -1;
-        }
-      } break;
-      default: {  // 发生其他错误
-        dbg_error(DBG_SOCKET, "recvfrom failed.\n");
-        return -1;
-      }
-    }
+  // 调用消息队列工作线程执行socket接收请求
+  net_err_t err = exmsg_func_exec(sock_req_setopt, &sock_req);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_SOCKET, "setsockopt failed.\n");
+    return -1;
   }
+
   return 0;
 }

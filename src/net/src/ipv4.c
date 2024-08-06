@@ -19,6 +19,7 @@
 #include "icmpv4.h"
 #include "mblock.h"
 #include "protocol.h"
+#include "sock_raw.h"
 #include "timer.h"
 #include "tools.h"
 
@@ -181,8 +182,6 @@ static ipv4_frag_t *ipv4_frag_alloc(void) {
 
   return frag;
 }
-
-
 
 /**
  * @brief 释放一个ipv4分片对象
@@ -368,18 +367,32 @@ static net_err_t ipv4_handle_normal(const netif_t *netif, pktbuf_t *buf) {
       ipaddr_t src_ipaddr;
       ipv4_hdr_hton(&pkt->hdr);  // 将头部转换为网络字节序
       ipaddr_from_bytes(&src_ipaddr, pkt->hdr.src_ip);
-      
-      return icmpv4_make_unreach(&src_ipaddr, &netif->ipaddr, ICMPv4_CODE_UNREACH_PORT,
-                          buf);
-      
+
+      return icmpv4_make_unreach(&src_ipaddr, &netif->ipaddr,
+                                 ICMPv4_CODE_UNREACH_PORT, buf);
+
     } break;
 
     case NET_PROTOCOL_TCP: {
       dbg_info(DBG_IPV4, "recv TCP packet.");
+      ipaddr_t src_ipaddr;
+      ipv4_hdr_hton(&pkt->hdr);  // 将头部转换为网络字节序
+      ipaddr_from_bytes(&src_ipaddr, pkt->hdr.src_ip);
+
+      return icmpv4_make_unreach(&src_ipaddr, &netif->ipaddr,
+                                 ICMPv4_CODE_UNREACH_PORT, buf);
     } break;
 
     default: {
       dbg_warning(DBG_IPV4, "unknown transport layer protocol!");
+      // 未知的上层协议，直接将ip数据包递交给原始socket模块处理
+      // 可通过原始socket模块来进行自定义传输层协议的处理
+      net_err_t err = sockraw_recv_pktbuf(buf);  //!!! 数据包传递
+      if (err != NET_ERR_OK) {
+        dbg_warning(DBG_IPV4, "sockraw recv failed.");
+        return err;
+      }
+
     } break;
   }
 
