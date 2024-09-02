@@ -36,14 +36,14 @@ net_err_t fixq_init(fixq_t *q, void **buf, int size,
     return err;
   }
 
-  // 初始化接get信号量
+  // 初始化get信号量(队列中可获取的资源数量)
   q->get_sem = sys_sem_create(0);
   if (q->get_sem == SYS_SEM_INVALID) {
     dbg_error(DBG_FIXQ, "get_sem init failed.");
     goto init_failed;
   }
 
-  // 初始化put信号量
+  // 初始化put信号量(队列中可放入的空槽位数量)
   q->put_sem = sys_sem_create(size);
   if (q->put_sem == SYS_SEM_INVALID) {
     dbg_error(DBG_FIXQ, "put_sem init failed.");
@@ -93,7 +93,7 @@ net_err_t fixq_put(fixq_t *q, void *msg, int tmo_ms) {
   q->cnt++;
   nlocker_unlock(&q->locker);
 
-  // 通知接收线程
+  // 已放入一个资源，增加get信号量值
   sys_sem_notify(q->get_sem);
 
   return NET_ERR_OK;
@@ -127,7 +127,7 @@ void *fixq_get(fixq_t *q, int tmo_ms) {
   q->cnt--;
   nlocker_unlock(&q->locker);
 
-  // 通知发送线程
+  // 已拿走一个资源，空槽数增加，增加put信号量值
   sys_sem_notify(q->put_sem);
 
   return msg;

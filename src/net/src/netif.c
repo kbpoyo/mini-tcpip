@@ -366,7 +366,8 @@ netif_t *netif_get_default(void) { return netif_default; }
  * @return net_err_t
  */
 net_err_t netif_recvq_put(netif_t *netif, pktbuf_t *buf, int tmo) {
-  net_err_t err = fixq_put(&(netif->recv_fixq), (void *)buf, tmo); //!!! 数据包转交
+  net_err_t err =
+      fixq_put(&(netif->recv_fixq), (void *)buf, tmo);  //!!! 数据包转交
   if (err < 0) {
     dbg_warning(DBG_NETIF, "netif %s pktbuf put error: recv queue is full.",
                 netif->name);
@@ -376,9 +377,10 @@ net_err_t netif_recvq_put(netif_t *netif, pktbuf_t *buf, int tmo) {
   // 测试用, 通知工作线程有数据到达
   // 发送到消息队列(网卡管理线程与数据包处理线程)中
   err = exmsg_netif_recv(netif);
-  if (err != NET_ERR_OK) { 
-    //TODO: 数据包已转交，但消息通知失败，该数据包可能一直在接收队列中，导致内存泄漏，需要进一步处理
-    // 且不能直接返回错误，否则会导致上层调用者释放一个在接收队列中的数据包
+  if (err != NET_ERR_OK) {
+    // TODO:
+    // 数据包已转交，但消息通知失败，该数据包可能一直在接收队列中，导致内存泄漏，需要进一步处理
+    //  且不能直接返回错误，否则会导致上层调用者释放一个在接收队列中的数据包
     dbg_warning(DBG_NETIF, "exmsg netif recv failed.");
   }
 
@@ -459,6 +461,7 @@ net_err_t netif_send(netif_t *netif, const ipaddr_t *ipaddr, pktbuf_t *buf) {
     if (err != NET_ERR_OK) {
       dbg_warning(DBG_NETIF, "netif %s send buf error: link layer send failed.",
                   netif->name);
+      return err;
     }
 
   } else {  // 接口没有链路层处理，直接发送数据包
@@ -468,11 +471,12 @@ net_err_t netif_send(netif_t *netif, const ipaddr_t *ipaddr, pktbuf_t *buf) {
       dbg_warning(DBG_NETIF,
                   "netif %s send buf error: put buf into send_queue failed.",
                   netif->name);
+      return err;
     }
 
     // 数据包处理完毕，调用网络接口特定的操作方法发送数据包
-    netif->ops->send(netif);  //数据包已转交，该方法无论成功与否，都只需要返回NET_ERR_OK
+    netif->ops->send(netif);
+    // 数据包已转交，该方法无论成功与否，都只需要返回NET_ERR_OK
   }
-
-  return err;
+  return NET_ERR_OK;
 }

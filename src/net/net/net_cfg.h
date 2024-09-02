@@ -59,7 +59,7 @@
 #define NETIF_MAX_CNT 10       // 网络接口最大数量
 
 // ARP模块相关配置
-#define ARP_CACHE_SIZE 50  // arp缓存表大小
+#define ARP_CACHE_TBL_CNT 50  // arp缓存表大小
 #define ARP_WAIT_PKT_MAXCNT 5  // arp缓存表对应的等待数据包的最大数量
 #define ARP_CACHE_SCAN_PERIOD 1  // arp缓存表的扫描定时器的超时时间(s)
 #define ARP_ENTRY_WAITING_TMO (3 * ARP_CACHE_SCAN_PERIOD)  // 待解析的arp缓存表项的超时时间(s)

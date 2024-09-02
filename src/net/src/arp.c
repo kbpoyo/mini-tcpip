@@ -24,7 +24,7 @@
 #include "timer.h"
 #include "tools.h"
 
-static arp_entry_t cache_tbl[ARP_CACHE_SIZE];  // arp缓存表
+static arp_entry_t cache_tbl[ARP_CACHE_TBL_CNT];  // arp缓存表
 static mblock_t cache_tbl_mblock;  // arp缓存表内存块管理对象
 static nlist_t cache_entry_list;   // 管理已分配的arp缓存表
 static net_timer_t cache_timer;    // arp缓存表定时器
@@ -222,7 +222,7 @@ static net_err_t arp_cache_init(void) {
   // 初始化arp缓存表内存块管理对象
   // 只由arp模块使用，并且只由一个工作线程管理，不需要锁保护
   err = mblock_init(&cache_tbl_mblock, cache_tbl, sizeof(arp_entry_t),
-                    ARP_CACHE_SIZE, NLOCKER_NONE);
+                    ARP_CACHE_TBL_CNT, NLOCKER_NONE);
   Net_Err_Check(err);
 
   return NET_ERR_OK;
