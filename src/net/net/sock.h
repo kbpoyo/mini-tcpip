@@ -33,13 +33,15 @@ typedef struct _sock_wait_t {
   net_err_t error;     // 错误码
   int wait_event_cnt;  // 等待事件数
 } sock_wait_t;
-// socket等待事件方法
+
+// socket_wait_t相关方法
 
 net_err_t sock_wait_init(sock_wait_t *wait);
 void sock_wait_destroy(sock_wait_t *wait);
 net_err_t sock_wait_add(sock_wait_t *wait, int tmo, struct _sock_req_t *req);
 net_err_t sock_wait_enter(sock_wait_t *wait, int tmo);
 void sock_wait_leave(sock_wait_t *wait, net_err_t error);
+void sock_wakeup(struct _sock_t *sock, int wait_type, int err);
 
 // 抽象基础socket的操作接口
 typedef struct _sock_ops_t {
@@ -48,7 +50,7 @@ typedef struct _sock_ops_t {
   net_err_t (*sendto)(struct _sock_t *sock, const void *buf, size_t buf_len,
                       int flags, const struct net_sockaddr *dest,
                       net_socklen_t dest_len,
-                      ssize_t *ret_send_len);  // 发送数据
+                      ssize_t *ret_send_len);  
 
   // 从目标socket地址接收信息
   net_err_t (*recvfrom)(struct _sock_t *sock, void *buf, size_t buf_len,
@@ -63,6 +65,7 @@ typedef struct _sock_ops_t {
   void (*destroy)(struct _sock_t *sock);
 
 } sock_ops_t;
+
 // 基类已实现了的通用接口，派生类可重写或直接继承
 
 int sock_setopt(struct _sock_t *sock, int level, int optname, const char *optval,
@@ -84,9 +87,9 @@ typedef struct _sock_t {
   int err_code;            // socket错误码
   int recv_tmo;            // 接收超时时间
   int send_tmo;            // 发送超时时间
-  sock_wait_t *recv_wait;  // 接收等待时的wait对象
-  sock_wait_t *send_wait;  // 发送等待时的wait对象
-  sock_wait_t *conn_wait;  // 连接等待时的wait对象
+  sock_wait_t *recv_wait;  // 处理接收等待事件的wait对象
+  sock_wait_t *send_wait;  // 处理发送等待事件的wait对象
+  sock_wait_t *conn_wait;  // 处理连接等待事件的wait对象
 
   const sock_ops_t *ops;  // socket操作接口
 } sock_t;
@@ -94,7 +97,7 @@ typedef struct _sock_t {
 
 net_err_t sock_init(sock_t *sock, int family, int protocol,
                     const sock_ops_t *ops);
-void sock_destroy(sock_t *sock);
+void sock_uninit(sock_t *sock);
 
 // 定义外部socket结构，对内部sock_t结构的封装
 typedef struct _net_socket {
@@ -116,6 +119,7 @@ typedef struct _sock_create_t {
 } sock_create_t;
 
 net_err_t sock_req_creat(msg_func_t *msg);
+net_err_t sock_req_close(msg_func_t *msg);
 
 // socket发送和接收请求(sendto和recvfrom)的参数结构
 typedef struct _sock_io_t {

@@ -15,11 +15,13 @@
 #include "ether.h"
 #include "exmsg.h"
 #include "fixq.h"
+#include "ipaddr.h"
 #include "mblock.h"
 #include "nlist.h"
 #include "nlocker.h"
 #include "pktbuf.h"
 #include "protocol.h"
+#include "route.h"
 
 static const link_layer_t *link_layers[NETIF_TYPE_CNT];
 
@@ -282,12 +284,7 @@ net_err_t netif_set_acticve(netif_t *netif) {
   if (netif->state != NETIF_STATE_OPENED) {
     dbg_error(DBG_NETIF, "netif %s set active error: it not opened.\n",
               netif->name);
-    return NET_ERR_STATE;
-  }
-
-  // 若默认网络接口为空，则将当前激活的网络接口设置为默认网络接口(不能将环回接口设置为默认接口)
-  if (netif_default == (netif_t *)0 && netif->type != NETIF_TYPE_LOOP) {
-    netif_set_default(netif);
+    return NET_ERR_NETIF;
   }
 
   // 若当前网络接口拥有链路层回调接口，则调用链路层回调接口的open方法以便进行链路层相关的初始化
@@ -301,8 +298,22 @@ net_err_t netif_set_acticve(netif_t *netif) {
     }
   }
 
+  // 为该接口添加路由表项
+  ipaddr_t ip =
+      ipaddr_get_netnum(&netif->ipaddr, &netif->netmask);  // 获取接口所在子网号
+  route_add(&ip, &(netif->netmask), ipaddr_get_any(),
+            netif);  // 添加路由表项, 由该接口将发送到该子网的数据包转发到链路上
+  ipaddr_from_str(&ip, "255.255.255.255");
+  route_add(&netif->ipaddr, &ip, ipaddr_get_any(),
+            netif);  // 添加路由表项, 由该接口处理送到自己的数据包
+
   // 激活成功，设置网络接口状态为激活
   netif->state = NETIF_STATE_ACVTIVE;
+
+  // 若默认网络接口为空，则将当前激活的网络接口设置为默认网络接口(不能将环回接口设置为默认接口)
+  if (netif_default == (netif_t *)0 && netif->type != NETIF_TYPE_LOOP) {
+    netif_set_default(netif);
+  }
 
   display_netif_list();
   return NET_ERR_OK;
@@ -318,32 +329,41 @@ net_err_t netif_set_inactive(netif_t *netif) {
   if (netif->state != NETIF_STATE_ACVTIVE) {
     dbg_error(DBG_NETIF, "netif %s set inactive error: it not active.\n",
               netif->name);
-    return NET_ERR_STATE;
+    return NET_ERR_NETIF;
   }
 
   void *pkt = 0;
   // 释放接收队列中的数据包
-  while ((pkt = fixq_get(&(netif->recv_fixq), -1)) != (void *)0) {
-    pktbuf_free(pkt);
+  while ((pkt = fixq_get(&(netif->recv_fixq), -1)) !=
+         (void *)0) {              //!!! 获取数据包
+    pktbuf_free((pktbuf_t *)pkt);  //!!! 释放数据包
   }
 
   // 释放发送队列中的数据包
-  while ((pkt = fixq_get(&(netif->send_fixq), -1)) != (void *)0) {
-    pktbuf_free(pkt);
+  while ((pkt = fixq_get(&(netif->send_fixq), -1)) !=
+         (void *)0) {              //!!! 获取数据包
+    pktbuf_free((pktbuf_t *)pkt);  //!!! 释放数据包
   }
 
-  // 若该网络接口为默认网络接口，则将默认网络接口置为空
+  // 若该网络接口为默认网络接口，则将默认网络接口置为空, 并删除默认路由表项
   if (netif == netif_default) {
     netif_default = (netif_t *)0;
+    route_remove(ipaddr_get_any(), ipaddr_get_any());
   }
-
-  // 设置网络接口状态为打开
-  netif->state = NETIF_STATE_OPENED;
 
   // 若当前网络接口拥有链路层回调接口，则调用链路层回调接口的close方法以便进行链路层相关的清理
   if (netif->link_layer) {
     netif->link_layer->close(netif);
   }
+
+  // 从路由表中删除该接口的路由表项
+  ipaddr_t ip = ipaddr_get_netnum(&netif->ipaddr, &netif->netmask);
+  route_remove(&ip, &(netif->netmask));
+  ipaddr_from_str(&ip, "255.255.255.255");
+  route_remove(&netif->ipaddr, &ip);
+
+  // 设置网络接口状态为打开
+  netif->state = NETIF_STATE_OPENED;
 
   display_netif_list();
   return NET_ERR_OK;
@@ -354,7 +374,18 @@ net_err_t netif_set_inactive(netif_t *netif) {
  *
  * @param netif
  */
-void netif_set_default(netif_t *netif) { netif_default = netif; }
+void netif_set_default(netif_t *netif) {
+  if (!ipaddr_is_any(&netif->gateway)) {
+    if (netif_default) {  // 若已经存在默认网络接口, 删除当前默认路由表项
+      route_remove(ipaddr_get_any(), ipaddr_get_any());
+    }
+
+    // 设置默认网络接口，并将其当作默认路由表项添加到路由表中
+    netif_default = netif;
+    route_add(ipaddr_get_any(), ipaddr_get_any(), &netif->gateway,
+              netif);  // 下一跳地址为该接口所在子网的网关地址
+  }
+}
 netif_t *netif_get_default(void) { return netif_default; }
 
 /**

@@ -82,13 +82,13 @@ ssize_t net_sendto(int socket, const void *buf, size_t buf_len, int flags,
     net_err_t err = exmsg_func_exec(sock_req_sendto, &sock_req);
 
     switch (err) {
-      case NET_ERR_OK: {  // 还有数据未发送，更新缓冲区位置和大小信息
+      case NET_ERR_OK: {  // 发送成功，更新缓冲区位置和大小信息
         sock_req.io.buf = (uint8_t *)buf + sock_req.io.ret_len;
         sock_req.io.buf_len = (size_t)(buf_len - sock_req.io.ret_len);
       } break;
       case NET_ERR_NEEDWAIT: {  // 需要等待内部工作线程执行完毕
         if (sock_wait_enter(sock_req.wait, sock_req.wait_tmo) != NET_ERR_OK) {
-          dbg_error(DBG_SOCKET, "socket wait error.");
+          dbg_error(DBG_SOCKET, "socket send wait time out.");
           return sock_req.io.ret_len;
         }
       } break;
@@ -156,6 +156,32 @@ ssize_t net_recvfrom(int socket, void *buf, size_t buf_len, int flags,
         return -1;
       }
     }
+  }
+}
+
+int net_close(int socket) {
+  // 封装socket关闭请求参数
+  sock_req_t sock_req;
+  sock_req.wait = (sock_wait_t *)0;
+  sock_req.wait_tmo = 0;
+  sock_req.sock_fd = socket;
+
+  // 调用消息队列工作线程执行socket关闭请求
+  net_err_t err = exmsg_func_exec(sock_req_close, &sock_req);
+  switch (err) {
+    case NET_ERR_OK: {  // 关闭成功
+      return 0;
+    } break;
+    case NET_ERR_NEEDWAIT: {  // 需要等待内部工作线程执行完毕(TCP协议需要等待对端关闭)
+      if (sock_wait_enter(sock_req.wait, sock_req.wait_tmo) != NET_ERR_OK) {
+        dbg_error(DBG_SOCKET, "socket close wait time out.");
+        return -1;
+      }
+    } break;
+    default: {  // 发生其他错误
+      dbg_error(DBG_SOCKET, "socket close failed.\n");
+      return -1;
+    } break;
   }
 }
 

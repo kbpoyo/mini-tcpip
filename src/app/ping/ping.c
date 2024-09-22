@@ -73,7 +73,7 @@ void ping_run(ping_t *ping, const char *dest_ip, int data_size,
   }
 
   // 设置socket属性
-  int tmo_ms = 3000;  // 超时时间3s
+  int tmo_ms = 0;  // 超时时间3s
 
   struct timeval tmo = {tmo_ms / 1000, (tmo_ms % 1000) * 1000};
   setsockopt(raw_socket, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tmo,
@@ -186,5 +186,5 @@ void ping_run(ping_t *ping, const char *dest_ip, int data_size,
   }
 
   // 关闭WinSock
-  closesocket(raw_socket);
+  close(raw_socket);
 }

@@ -19,7 +19,8 @@
 typedef struct _sockraw_t {
   sock_t sock_base;  // 基础socket结构
 
-  sock_wait_t recv_wait;
+  nlist_t recv_buf_list;  // 接收的数据包缓存链表
+  sock_wait_t recv_wait;  // 用于处理raw socket的接收等待事件
 
 } sockraw_t;
 

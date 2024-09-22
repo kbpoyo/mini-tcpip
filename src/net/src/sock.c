@@ -16,7 +16,7 @@
 #include "sock_raw.h"
 
 // 定义协议栈可用的socket对象最大数量
-#define SOCKET_MAX_CNT (SOCKRAW_MAX_CNT)
+#define SOCKET_MAX_CNT (SOCKRAW_MAXCNT)
 
 static net_socket_t socket_tbl[SOCKET_MAX_CNT];  // socket对象表
 static mblock_t socket_mblock;  // socket对象内存块管理对象
@@ -50,7 +50,7 @@ void sock_wait_destroy(sock_wait_t *wait) {
   }
 }
 /**
- * @brief 为方法请求对象添加一个wait对象
+ * @brief 为方法请求对象添加一个wait事件
  *
  * @param wait
  * @param req
@@ -165,17 +165,6 @@ static net_socket_t *socket_by_index(int index) {
 static net_socket_t *socket_alloc(void) {
   net_socket_t *socket = (net_socket_t *)0;
 
-  // // 遍历socket对象表，找到一个空闲状态的socket对象
-  // for (int i = 0; i < SOCKET_MAX_CNT; i++) {
-  //   net_socket_t *curr = socket_tbl + i;
-  //   if (curr->state == SOCKET_STATE_FREE) {
-  //     // 设置为已使用状态
-  //     curr->state = SOCKET_STATE_USED;
-  //     socket = curr;
-  //     break;
-  //   }
-  // }
-
   // 从socket对象内存块管理对象中分配一个socket对象
   socket = (net_socket_t *)mblock_alloc(&socket_mblock, -1);
   if (socket) {
@@ -222,7 +211,7 @@ net_err_t sock_req_creat(msg_func_t *msg) {
   sock_req_t *sock_req = (sock_req_t *)msg->arg;
   sock_create_t *create = &sock_req->create;
 
-  // 获取指定类型的socket对象方法
+  // 根据指定类型获取socket对象方法的创建方法
   if (create->type < 0 ||
       create->type >= (sizeof(sock_type_tbl) / sizeof(sock_type_tbl[0]))) {
     dbg_error(DBG_SOCKET, "invalid socket type.");
@@ -313,7 +302,7 @@ net_err_t sock_req_recvfrom(msg_func_t *msg) {
   sock_req_t *sock_req = (sock_req_t *)msg->arg;
   sock_io_t *io = &sock_req->io;
 
-  // 获取封装socket对象
+  // 获取socket对象
   net_socket_t *socket = socket_by_index(sock_req->sock_fd);
   if (!socket) {
     dbg_error(DBG_SOCKET, "invalid socket fd.");
@@ -415,11 +404,11 @@ net_err_t sock_init(sock_t *sock, int family, int protocol,
 }
 
 /**
- * @brief 销毁一个已初始化的基类socket对象，以释放资源
+ * @brief 销毁一个已初始化的基类socket对象，以释放其持有的资源
  *
  * @param sock
  */
-void sock_destroy(sock_t *sock) {
+void sock_uninit(sock_t *sock) {
   // 销毁socket对象的wait对象
   if (sock->recv_wait) {
     sock_wait_destroy(sock->recv_wait);
@@ -433,6 +422,44 @@ void sock_destroy(sock_t *sock) {
     sock_wait_destroy(sock->conn_wait);
     sock->conn_wait = (sock_wait_t *)0;
   }
+}
+
+/**
+ * @brief 关闭一个socket对象
+ * 
+ * @param msg 
+ * @return net_err_t 
+ */
+net_err_t sock_req_close(msg_func_t *msg) {
+  // 获取socket关闭请求参数
+  sock_req_t *sock_req = (sock_req_t *)msg->arg;
+
+  // 获取socket对象
+  net_socket_t *socket = socket_by_index(sock_req->sock_fd);
+  if (!socket) {
+    dbg_error(DBG_SOCKET, "invalid socket fd.");
+    return NET_ERR_SOCKET;
+  }
+
+  // 获取socket基类对象
+  sock_t *sock = socket->sock;
+
+  // 调用socket对象的destroy方法，完成静态多态调用
+  if (!sock->ops->close) {
+    dbg_error(DBG_SOCKET, "socket destroy not supported.");
+    return NET_ERR_SOCKET;
+  }
+  net_err_t err = sock->ops->close(sock);
+  // TODO: 暂时不处理NET_ERR_NEEDWAIT错误
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_SOCKET, "socket close failed.\n");
+    return err;
+  }
+
+  // 释放socket对象
+  socket_free(socket);
+
+  return NET_ERR_OK;
 }
 
 /***********************************************************************************************************
@@ -455,14 +482,15 @@ void sock_destroy(sock_t *sock) {
  */
 net_err_t sock_setopt(sock_t *sock, int level, int optname, const char *optval,
                       int optlen) {
-  if (level != SOL_SOCKET) {
+  // 判断选项级别是设置在哪一层
+  if (level != SOL_SOCKET) {// TODO: 暂时只支持在socket层设置选项
     dbg_error(DBG_SOCKET, "invalid socket option level.\n");
     return NET_ERR_SOCKET;
   }
 
   // 根据选项类型进行处理
   switch (optname) {
-    case SO_RCVTIMEO: {
+    case SO_RCVTIMEO: { // 设置接收超时时间
       if (optlen != sizeof(struct net_timeval)) {  // 选项参数类型大小不匹配
         dbg_error(DBG_SOCKET, "invalid socket option value.\n");
         return NET_ERR_SOCKET;
@@ -471,7 +499,7 @@ net_err_t sock_setopt(sock_t *sock, int level, int optname, const char *optval,
       sock->recv_tmo = tmo->tv_sec * 1000 + tmo->tv_usec / 1000;
     } break;
 
-    case SO_SNDTIMEO: {
+    case SO_SNDTIMEO: { // 设置发送超时时间
       if (optlen != sizeof(struct net_timeval)) {  // 选项参数类型大小不匹配
         dbg_error(DBG_SOCKET, "invalid socket option value.\n");
         return NET_ERR_SOCKET;

@@ -748,6 +748,30 @@ src/net/src/pktbuf.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/pktbuf.c.s
 .PHONY : src/net/src/pktbuf.c.s
 
+src/net/src/route.obj: src/net/src/route.c.obj
+.PHONY : src/net/src/route.obj
+
+# target to build an object file
+src/net/src/route.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/route.c.obj
+.PHONY : src/net/src/route.c.obj
+
+src/net/src/route.i: src/net/src/route.c.i
+.PHONY : src/net/src/route.i
+
+# target to preprocess a source file
+src/net/src/route.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/route.c.i
+.PHONY : src/net/src/route.c.i
+
+src/net/src/route.s: src/net/src/route.c.s
+.PHONY : src/net/src/route.s
+
+# target to generate assembly for a file
+src/net/src/route.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/route.c.s
+.PHONY : src/net/src/route.c.s
+
 src/net/src/sock.obj: src/net/src/sock.c.obj
 .PHONY : src/net/src/sock.obj
 
@@ -1020,6 +1044,9 @@ help:
 	@echo ... src/net/src/pktbuf.obj
 	@echo ... src/net/src/pktbuf.i
 	@echo ... src/net/src/pktbuf.s
+	@echo ... src/net/src/route.obj
+	@echo ... src/net/src/route.i
+	@echo ... src/net/src/route.s
 	@echo ... src/net/src/sock.obj
 	@echo ... src/net/src/sock.i
 	@echo ... src/net/src/sock.s

@@ -33,7 +33,7 @@
 #define IPPROTO_ICMP 1
 
 // 定义socket选项设置相关宏
-#undef SOL_SOCKET  // 选项设置level：通用socket选项
+#undef SOL_SOCKET  // 选项设置与哪一层(level)相关：通用socket选项(socket层)
 #define SOL_SOCKET 0
 #undef SO_RCVTIMEO  // 选项设置类型： 接收超时
 #define SO_RCVTIMEO 1
@@ -49,7 +49,7 @@ struct net_timeval {
   long tv_usec;  // 微秒
 };
 
-// 定义网络(ip)地址结构
+// 定义网络层(ip)地址结构
 struct net_in_addr {
   union {
     struct {
@@ -87,6 +87,7 @@ ssize_t net_sendto(int socket, const void *buf, size_t buf_len, int flags,
                    const struct net_sockaddr *dest, net_socklen_t dest_len);
 ssize_t net_recvfrom(int socket, void *buf, size_t buf_len, int flags,
                      struct net_sockaddr *src, net_socklen_t *src_len);
+int net_close(int socket);
 int net_setsockopt(int socket, int level, int optname, const char *optval,
                    int optlen);
 

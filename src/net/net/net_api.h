@@ -56,6 +56,8 @@ const char *net_inet_ntop(int family, const void *addrptr, char *strptr, size_t 
 #undef recvfrom
 #define recvfrom(sock, buf, buf_len, flags, src, src_len) \
   net_recvfrom(sock, buf, buf_len, flags, src, src_len)
+#undef close
+#define close(sock) net_close(sock)
 #undef setsockopt
 #define setsockopt(sock, level, optname, optval, optlen) \
   net_setsockopt(sock, level, optname, optval, optlen)

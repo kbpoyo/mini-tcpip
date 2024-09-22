@@ -88,7 +88,7 @@ net_err_t exmsg_func_exec(exmsg_func_t func, void *arg) {
   exmsg->type = EXMSG_FUNC_EXEC;
   exmsg->msg_func = &msg;
 
-  // 以阻塞的模式，将消息结构发送到消息队列
+  // 有可能有多个线程同时向消息队列中放入消息，所以以阻塞的方式，将消息结构放入消息队列
   net_err_t err = fixq_put(&msg_queue, exmsg, 0);
   if (err != NET_ERR_OK) {
     dbg_error(DBG_EXMSG, "msg func send failed.");

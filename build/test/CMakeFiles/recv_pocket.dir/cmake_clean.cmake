@@ -37,6 +37,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/recv_pocket.dir/__/src/net/src/nlocker.c.obj.d"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/pktbuf.c.obj"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/pktbuf.c.obj.d"
+  "CMakeFiles/recv_pocket.dir/__/src/net/src/route.c.obj"
+  "CMakeFiles/recv_pocket.dir/__/src/net/src/route.c.obj.d"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/sock.c.obj"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/sock.c.obj.d"
   "CMakeFiles/recv_pocket.dir/__/src/net/src/sock_raw.c.obj"

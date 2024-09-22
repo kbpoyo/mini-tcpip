@@ -22,11 +22,13 @@
 #include "sock_raw.h"
 #include "timer.h"
 #include "tools.h"
+#include "route.h"
 
 static ipv4_frag_t ipv4_frag_arr[IPV4_FRAG_MAXCNT];  // ipv4分片数组(分片内存池)
 static mblock_t ipv4_frag_mblock;  // ipv4分片内存池管理对象
 static nlist_t ipv4_frag_list;  // ipv4分片链表，记录已分配的分片
 static net_timer_t ipv4_frag_timer;  // ipv4分片超时定时器
+
 
 /**
  * @brief 获取分片数据包的有效数据大小
@@ -264,6 +266,13 @@ net_err_t ipv4_module_init(void) {
   net_err_t err = ipv4_frag_init();
   if (err != NET_ERR_OK) {
     dbg_error(DBG_IPV4, "init ipv4 frag failed.");
+    return err;
+  }
+
+  // 初始化路由表
+  err = route_init();
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_IPV4, "init route table failed.");
     return err;
   }
 

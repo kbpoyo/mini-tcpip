@@ -17,9 +17,32 @@
 #include "pktbuf.h"
 #include "socket.h"
 
-static sockraw_t sockraw_tbl[SOCKRAW_MAX_CNT];  // 原始socket对象表
+static sockraw_t sockraw_tbl[SOCKRAW_MAXCNT];  // 原始socket对象表
 static mblock_t sockraw_mblock;  // 原始socket对象内存块管理对象
 static nlist_t sockraw_list;     // 挂载已分配的原始socket对象链表
+
+#if DBG_DISP_ENABLED(DBG_SOCKRAW)
+
+static void sockraw_disp_list(void) {
+  nlist_node_t *node = (nlist_node_t *)0;
+  sock_t *sock = (sock_t *)0;
+  int index = 0;
+
+  plat_printf("---------------raw socket list:---------------\n");
+  nlist_for_each(node, &sockraw_list) {
+    sock = nlist_entry(node, sock_t, node);
+    plat_printf("[%d]:", index++);
+    netif_dum_ip(" local ip: ", &sock->local_ip);
+    netif_dum_ip(" remote ip: ", &sock->remote_ip);
+    plat_printf("\n");
+  }
+}
+
+#else
+
+#define sockraw_disp_list()
+
+#endif
 
 /**
  * @brief 初始化原始socket模块资源
@@ -31,7 +54,7 @@ net_err_t sockraw_module_init(void) {
 
   // 初始化原始socket对象内存块管理对象
   // 只由工作线程访问，不需要加锁
-  mblock_init(&sockraw_mblock, sockraw_tbl, sizeof(sockraw_t), SOCKRAW_MAX_CNT,
+  mblock_init(&sockraw_mblock, sockraw_tbl, sizeof(sockraw_t), SOCKRAW_MAXCNT,
               NLOCKER_NONE);
 
   // 初始化原始socket对象挂载链表
@@ -99,6 +122,7 @@ net_err_t sockraw_sendto(struct _sock_t *sock, const void *buf, size_t buf_len,
     return NET_ERR_SOCKRAW;
   }
 
+  // TODO: 若分配的数据包缓冲区大小不足，将数据分多次发送
   // 为待发送数据分配一个数据包缓冲区
   pktbuf_t *pktbuf = pktbuf_alloc(buf_len);  //!!! 分配数据包
   if (!pktbuf) {
@@ -144,9 +168,65 @@ net_err_t sockraw_sendto(struct _sock_t *sock, const void *buf, size_t buf_len,
 net_err_t sockraw_recvfrom(struct _sock_t *sock, void *buf, size_t buf_len,
                            int flags, struct net_sockaddr *src,
                            net_socklen_t *src_len, ssize_t *ret_recv_len) {
-  *src_len = 16;
-  *ret_recv_len += buf_len;
-  return NET_ERR_NEEDWAIT;
+  // 将基类sock对象转换为sockraw对象
+  sockraw_t *sockraw = (sockraw_t *)sock;
+
+  // 从sock对象的接收缓冲区链表中获取一个数据包
+  nlist_node_t *node = nlist_remove_first(&sockraw->recv_buf_list);
+  if (!node) {  // 接收缓冲区链表为空, 通知调用者等待
+    return NET_ERR_NEEDWAIT;
+  }
+  pktbuf_t *pktbuf = nlist_entry(node, pktbuf_t, node);  //!!! 获取数据包
+
+  // 获取数据包的ipv4头部, 并解析源ip地址信息到socket地址对象中
+  ipv4_hdr_t *ipv4_hdr = (ipv4_hdr_t *)pktbuf_data_ptr(pktbuf);
+  struct net_sockaddr_in *src_addr = (struct net_sockaddr_in *)src;
+  src_addr->sin_family = AF_INET;  // 只支持IPv4
+  src_addr->sin_port = 0;
+  src_addr->sin_addr.s_addr = *(uint32_t *)ipv4_hdr->src_ip;
+
+  // 将数据包的数据部分拷贝到接收缓冲区
+  pktbuf_acc_reset(pktbuf);
+  int data_len = pktbuf_total_size(pktbuf);
+  int copy_len = data_len > buf_len ? buf_len : data_len;
+  net_err_t err = pktbuf_read(pktbuf, buf, copy_len);
+  pktbuf_free(pktbuf);  //!!! 释放数据包
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_SOCKRAW, "pktbuf read failed.");
+    return err;
+  }
+
+  // 返回接收到的数据大小和源socket地址大小
+  *src_len = sizeof(struct net_sockaddr_in);
+  *ret_recv_len = copy_len;
+  return NET_ERR_OK;
+}
+
+/**
+ * @brief 释放一个原始socket对象
+ *
+ * @param sock
+ * @return net_err_t
+ */
+static net_err_t sockraw_close(sock_t *sock) {
+  // 将sock对象转换为sockraw对象
+  sockraw_t *sockraw = (sockraw_t *)sock;
+
+  // 释放sock对象的接收缓冲区链表
+  nlist_node_t *node = (nlist_node_t *)0;
+  while ((node = nlist_remove_first(&sockraw->recv_buf_list))) {
+    pktbuf_t *pktbuf = nlist_entry(node, pktbuf_t, node); //!!! 获取数据包
+    pktbuf_free(pktbuf);  //!!! 释放数据包
+  }
+
+  // 销毁基类sock对象持有的资源，并释放原始sock对象
+  sock_uninit(sock);
+  sockraw_free(sockraw);
+
+  // 显示sockraw对象列表
+  sockraw_disp_list();
+
+  return NET_ERR_OK;
 }
 
 /**
@@ -161,6 +241,7 @@ sock_t *sockraw_create(int family, int protocol) {
       .sendto = sockraw_sendto,      // 独立实现接口
       .recvfrom = sockraw_recvfrom,  // 独立实现接口
       .setopt = sock_setopt,         // 继承基类的实现
+      .close = sockraw_close,        // 独立实现接口
   };
 
   // 分配一个原始socket对象
@@ -173,6 +254,8 @@ sock_t *sockraw_create(int family, int protocol) {
   sock_init(&sockraw->sock_base, family, protocol, &sockraw_ops);
   // 将初始化成功的基类sock对象挂载到sockraw的记录链表中
   nlist_insert_last(&sockraw_list, &sockraw->sock_base.node);
+  // 显示sockraw对象列表
+  sockraw_disp_list();
 
   // 使用基类sock记录raw sock的wait对象, 并初始化
   sockraw->sock_base.recv_wait = &sockraw->recv_wait;
@@ -181,10 +264,13 @@ sock_t *sockraw_create(int family, int protocol) {
     goto create_failed;
   }
 
-  return (sock_t *)sockraw;  // sock_base为一个成员，起始地址相同，可直接转换
+  // 初始化sockraw的数据包接收缓存链表
+  nlist_init(&sockraw->recv_buf_list);
+
+  return (sock_t *)sockraw;  // sock_base为第一个成员，起始地址相同，可直接转换
 
 create_failed:
-  sock_destroy(&sockraw->sock_base);
+  sock_uninit(&sockraw->sock_base);
   sockraw_free(sockraw);
   return (sock_t *)0;
 }
@@ -234,7 +320,7 @@ static sockraw_t *sockraw_find(ipaddr_t *dest_ip, ipaddr_t *src_ip,
 
 /**
  * @brief
- * 由工作线程调用，从网络层接收一个原始的ip数据包(即没有传输层协议头的数据包)，
+ * 由工作线程调用，从网络层接收一个原始的ip数据包，
  * 可以处理的数据包类型有：IP, ICMP
  *
  * @param raw_buf
@@ -254,6 +340,19 @@ net_err_t sockraw_recv_pktbuf(pktbuf_t *raw_ip_buf) {
   if (!sockraw) {
     dbg_error(DBG_SOCKRAW, "no raw socket found.");
     return NET_ERR_SOCKRAW;
+  }
+
+  // 将接收到的数据包缓冲区添加到sockraw对象的接收缓冲区链表
+  if (nlist_count(&sockraw->recv_buf_list) <
+      SOCKRAW_RECV_MAXCNT) {  // 接收缓冲区链表未满
+    nlist_insert_last(&sockraw->recv_buf_list,
+                      &raw_ip_buf->node);  //!!! 数据包转交
+
+    // 已缓存数据包，唤醒等待接收数据的线程
+    sock_wakeup(&sockraw->sock_base, SOCK_WAIT_READ, NET_ERR_OK);
+  } else {                    // 接收缓冲区链表已满
+    pktbuf_free(raw_ip_buf);  //!!! 释放数据包
+    dbg_warning(DBG_SOCKRAW, "recv buf list is full.");
   }
 
   return NET_ERR_OK;

@@ -156,10 +156,16 @@ static void netif_dum_ip(const char *msg, const ipaddr_t *ipaddr) {
   if (msg) {
     plat_printf("%s", msg);
   }
+  static char ipstr[16] = {0};
+  
 
   if (ipaddr) {
-    plat_printf("%d.%d.%d.%d", ipaddr->addr_bytes[0], ipaddr->addr_bytes[1],
-                ipaddr->addr_bytes[2], ipaddr->addr_bytes[3]);
+    plat_sprintf(ipstr, "%d.%d.%d.%d", ipaddr->addr_bytes[0],
+                 ipaddr->addr_bytes[1], ipaddr->addr_bytes[2],
+                 ipaddr->addr_bytes[3]);
+    int ipstr_len = plat_strlen(ipstr);
+    plat_memset(ipstr + ipstr_len, ' ', sizeof(ipstr) - 1 - ipstr_len);
+    plat_printf("%s", ipstr);
   }
 }
 

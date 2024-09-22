@@ -4,18 +4,18 @@
 #include "dbg.h"
 #include "ether.h"
 #include "exmsg.h"
+#include "icmpv4.h"
+#include "ipv4.h"
 #include "loop.h"
 #include "net_err.h"
 #include "net_plat.h"
 #include "net_sys.h"
 #include "netif.h"
 #include "pktbuf.h"
-#include "timer.h"
-#include "tools.h"
-#include "ipv4.h"
-#include "icmpv4.h"
 #include "sock.h"
 #include "sock_raw.h"
+#include "timer.h"
+#include "tools.h"
 
 net_err_t net_init(void) {
   net_plat_init();
@@ -35,9 +35,6 @@ net_err_t net_init(void) {
   // 初始化网络接口模块
   netif_module_init();
 
-  // 初始化环回接口模块
-  loop_module_init();
-
   // 初始化以太网协议层
   ether_module_init();
 
@@ -56,6 +53,8 @@ net_err_t net_init(void) {
   // 初始化内部原始socket模块(sock_raw)
   sockraw_module_init();
 
+  // 初始化环回接口模块
+  loop_module_init();
 
   return NET_ERR_OK;
 }

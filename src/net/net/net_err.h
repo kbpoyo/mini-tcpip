@@ -17,13 +17,15 @@ typedef enum _net_err_t {
   NET_ERR_PROTO = -11,
   NET_ERR_NOSUPPORT = -12,
   NET_ERR_PCAP = -13,
-  NET_ERR_ETHER = -14,
-  NET_ERR_ARP = -15,
-  NET_ERR_IPV4 = -16,
-  NET_ERR_ICMPv4 = -17,
-  NET_ERR_EXMSG = -18,
-  NET_ERR_SOCKET = -19,
-  NET_ERR_SOCKRAW = -20,
+  NET_ERR_NETIF = -14,
+  NET_ERR_ETHER = -15,
+  NET_ERR_ARP = -16,
+  NET_ERR_IPV4 = -17,
+  NET_ERR_ICMPv4 = -18,
+  NET_ERR_EXMSG = -19,
+  NET_ERR_SOCKET = -20,
+  NET_ERR_SOCKRAW = -21,
+  NET_ERR_ROUTE = -22,
 } net_err_t;
 
 
