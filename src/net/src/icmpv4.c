@@ -12,12 +12,12 @@
  */
 
 #include "icmpv4.h"
-
 #include "dbg.h"
 #include "ipv4.h"
 #include "net_err.h"
 #include "protocol.h"
 #include "sock_raw.h"
+
 
 #if DBG_DISP_ENABLED(DBG_ICMPV4)
 

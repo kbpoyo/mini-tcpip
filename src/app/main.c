@@ -13,6 +13,8 @@
 #include "ipv4.h"
 #include "ping/ping.h"
 #include "exmsg.h"
+#include "echo/udp_echo_client.h"
+#include "echo/udp_echo_server.h"
 
 pcap_data_t pcap_data = {
     // 需要打开的网络接口的ip地址和硬件地址
@@ -31,8 +33,7 @@ net_err_t netdev_init(void) {
 
   // 设置接口的ip地址和子网掩码
   ipaddr_t ip, mask, gw;
-  ipaddr_from_str(&ip, "192.168.74.2");
-  // ipaddr_from_str(&ip, netdev0_ip);
+  ipaddr_from_str(&ip, netdev0_ip);
   ipaddr_from_str(&mask, netdev0_mask);
   ipaddr_from_str(&gw, netdev0_gw);
   netif_set_addr(netif, &ip, &mask, &gw);
@@ -44,19 +45,6 @@ net_err_t netdev_init(void) {
     return err;
   }
 
-  pktbuf_t *buf = pktbuf_alloc(32);
-  pktbuf_fill(buf, 0x53, 32);
-
-  ipaddr_t dest, src;
-  ipaddr_from_str(&dest, "192.168.74.3");
-  ipaddr_from_str(&src, "192.168.74.2");
-  // ipv4_send(0, &dest, &src, buf);
-
-
-  buf = pktbuf_alloc(32);
-  pktbuf_fill(buf, 0xA5, 32);
-  ipaddr_from_str(&dest, "192.168.74.255");
-  // ipv4_send(0, &dest, &src, buf);
 
   return NET_ERR_OK;
 }
@@ -103,8 +91,17 @@ void timer_test() {
   // net_timer_check_tmo(6000);
 }
 
+
+void udp_echo_test() {
+
+  // udp_echo_server_start(1000);
+  
+  udp_echo_client_start("192.168.3.159", 1000);
+}
 void basic_test(void) {
   // timer_test();
+
+  udp_echo_test();
 }
 
 #define DBG_TEST DBG_LEVEL_INFO
@@ -128,11 +125,11 @@ int main(void) {
   char cmd[32], param[32];
   ping_t ping;
   while (1) {
-    plat_printf(">>");
-    scanf("%s%s", cmd, param);
-    if (strcmp(cmd, "ping") == 0) {
-      ping_run(&ping, param, 1024, 4, 1000);
-    }
+    // plat_printf(">>");
+    // scanf("%s%s", cmd, param);
+    // if (strcmp(cmd, "ping") == 0) {
+    //   ping_run(&ping, param, 1024, 4, 1000);
+    // }
 
     sys_sleep(10);
   }

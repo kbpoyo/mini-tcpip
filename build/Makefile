@@ -316,6 +316,54 @@ src/app/echo/tcp_echo_server.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/echo/tcp_echo_server.c.s
 .PHONY : src/app/echo/tcp_echo_server.c.s
 
+src/app/echo/udp_echo_client.obj: src/app/echo/udp_echo_client.c.obj
+.PHONY : src/app/echo/udp_echo_client.obj
+
+# target to build an object file
+src/app/echo/udp_echo_client.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/echo/udp_echo_client.c.obj
+.PHONY : src/app/echo/udp_echo_client.c.obj
+
+src/app/echo/udp_echo_client.i: src/app/echo/udp_echo_client.c.i
+.PHONY : src/app/echo/udp_echo_client.i
+
+# target to preprocess a source file
+src/app/echo/udp_echo_client.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/echo/udp_echo_client.c.i
+.PHONY : src/app/echo/udp_echo_client.c.i
+
+src/app/echo/udp_echo_client.s: src/app/echo/udp_echo_client.c.s
+.PHONY : src/app/echo/udp_echo_client.s
+
+# target to generate assembly for a file
+src/app/echo/udp_echo_client.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/echo/udp_echo_client.c.s
+.PHONY : src/app/echo/udp_echo_client.c.s
+
+src/app/echo/udp_echo_server.obj: src/app/echo/udp_echo_server.c.obj
+.PHONY : src/app/echo/udp_echo_server.obj
+
+# target to build an object file
+src/app/echo/udp_echo_server.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/echo/udp_echo_server.c.obj
+.PHONY : src/app/echo/udp_echo_server.c.obj
+
+src/app/echo/udp_echo_server.i: src/app/echo/udp_echo_server.c.i
+.PHONY : src/app/echo/udp_echo_server.i
+
+# target to preprocess a source file
+src/app/echo/udp_echo_server.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/echo/udp_echo_server.c.i
+.PHONY : src/app/echo/udp_echo_server.c.i
+
+src/app/echo/udp_echo_server.s: src/app/echo/udp_echo_server.c.s
+.PHONY : src/app/echo/udp_echo_server.s
+
+# target to generate assembly for a file
+src/app/echo/udp_echo_server.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/echo/udp_echo_server.c.s
+.PHONY : src/app/echo/udp_echo_server.c.s
+
 src/app/main.obj: src/app/main.c.obj
 .PHONY : src/app/main.obj
 
@@ -892,6 +940,30 @@ src/net/src/tools.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tools.c.s
 .PHONY : src/net/src/tools.c.s
 
+src/net/src/udp.obj: src/net/src/udp.c.obj
+.PHONY : src/net/src/udp.obj
+
+# target to build an object file
+src/net/src/udp.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/udp.c.obj
+.PHONY : src/net/src/udp.c.obj
+
+src/net/src/udp.i: src/net/src/udp.c.i
+.PHONY : src/net/src/udp.i
+
+# target to preprocess a source file
+src/net/src/udp.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/udp.c.i
+.PHONY : src/net/src/udp.c.i
+
+src/net/src/udp.s: src/net/src/udp.c.s
+.PHONY : src/net/src/udp.s
+
+# target to generate assembly for a file
+src/net/src/udp.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/udp.c.s
+.PHONY : src/net/src/udp.c.s
+
 src/plat/net_plat.obj: src/plat/net_plat.c.obj
 .PHONY : src/plat/net_plat.obj
 
@@ -990,6 +1062,12 @@ help:
 	@echo ... src/app/echo/tcp_echo_server.obj
 	@echo ... src/app/echo/tcp_echo_server.i
 	@echo ... src/app/echo/tcp_echo_server.s
+	@echo ... src/app/echo/udp_echo_client.obj
+	@echo ... src/app/echo/udp_echo_client.i
+	@echo ... src/app/echo/udp_echo_client.s
+	@echo ... src/app/echo/udp_echo_server.obj
+	@echo ... src/app/echo/udp_echo_server.i
+	@echo ... src/app/echo/udp_echo_server.s
 	@echo ... src/app/main.obj
 	@echo ... src/app/main.i
 	@echo ... src/app/main.s
@@ -1062,6 +1140,9 @@ help:
 	@echo ... src/net/src/tools.obj
 	@echo ... src/net/src/tools.i
 	@echo ... src/net/src/tools.s
+	@echo ... src/net/src/udp.obj
+	@echo ... src/net/src/udp.i
+	@echo ... src/net/src/udp.s
 	@echo ... src/plat/net_plat.obj
 	@echo ... src/plat/net_plat.i
 	@echo ... src/plat/net_plat.s

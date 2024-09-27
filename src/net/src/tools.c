@@ -58,13 +58,13 @@ net_err_t tools_module_init(void) {
  * @param is_take_back 是否对校验和取反
  * @return uint16_t
  */
-uint16_t tools_checksum16(const void *data, uint16_t len,
-                          uint32_t pre_sum, int offset, int is_take_back) {
+uint16_t tools_checksum16(const void *data, uint16_t len, uint32_t pre_sum,
+                          int offset, int is_take_back) {
   const uint16_t *data_ptr = (const uint16_t *)data;
   uint32_t checksum = pre_sum;
   // 当前已计算字节量为奇数，即当前起始地址(data)的第一个字节
   // 应与上一段数据(计算pre_sum)的最后一个字节组成一个16位数据
-  if (offset & 0x1) { 
+  if (offset & 0x1) {
     // 上一段数据的最后一个字节已加在pre_sum的低8位
     // 当前数据的第一个字节应加在pre_sum的高8位
     checksum += *(uint8_t *)data_ptr << 8;
@@ -90,4 +90,54 @@ uint16_t tools_checksum16(const void *data, uint16_t len,
 
   // 判断是否取反
   return is_take_back ? (uint16_t)~checksum : (uint16_t)checksum;
+}
+
+/**
+ * @brief 计算伪首部校验和
+ * 
+ * 伪头部格式:
+ * —————————————————
+ * 目的ip地址(4字节)
+ * —————————————————
+ * 源ip地址(4字节)
+ * —————————————————
+ * 0填充字段(1字节) | 协议字段(1字节) | 数据包总长度(2字节)
+ * —————————————————
+ * 
+ *
+ * @param buf 数据包
+ * @param dest_ip 目的ip地址
+ * @param src_ip 源ip地址
+ * @param proto 协议类型
+ * @return uint16_t
+ */
+uint16_t tools_checksum16_pseudo_head(pktbuf_t *buf, const ipaddr_t *dest_ip,
+                                      const ipaddr_t *src_ip, uint8_t proto) {
+  // 伪头部的0填充字段和协议字段
+  uint8_t zero_proto[2] = {0, proto};
+
+  // 将目的ip地址算入校验和
+  int offset = 0;
+  uint32_t sum =
+      tools_checksum16(dest_ip->addr_bytes, IP_ADDR_SIZE, 0, offset, 0);
+  offset += IP_ADDR_SIZE;
+
+  // 将源ip地址算入校验和
+  sum = tools_checksum16(src_ip->addr_bytes, IP_ADDR_SIZE, sum, offset, 0);
+  offset += IP_ADDR_SIZE;
+
+  // 将0填充字段和协议字段算入校验和
+  sum = tools_checksum16(zero_proto, 2, sum, offset, 0);
+  offset += 2;
+
+  // 将数据包总长度转换到网络字节序并算入校验和
+  uint16_t total_len = net_htons(pktbuf_total_size(buf));
+  sum = tools_checksum16(&total_len, 2, sum, offset, 0);
+  offset += 2;
+
+  // 重置buf访问位置，从头部开始计算校验和(将伪首部计算的校验和加入到校验和中)
+  pktbuf_acc_reset(buf);
+  sum = pktbuf_checksum16(buf, pktbuf_total_size(buf), sum, 1);
+
+  return (uint16_t)sum;
 }

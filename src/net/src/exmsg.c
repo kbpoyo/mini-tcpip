@@ -175,9 +175,9 @@ static void exmsg_handle_netif_recv(exmsg_t *msg) {
   // 获取网络接口
   netif_t *netif = msg->msg_netif.netif;
 
-  // 从网络接口接收数据包
+  // 以非阻塞的方式从网络接口接收数据包
   pktbuf_t *buf = (pktbuf_t *)0;
-  while ((buf = netif_recvq_get(netif, -1))) {  // 以非阻塞方式获取数据包
+  while ((buf = netif_recvq_get(netif, -1))) {  //!!! 取数据包
     dbg_info(DBG_EXMSG, "%s: received packet.", netif->name);
 
     // 重置数据包的访问位置
@@ -188,14 +188,14 @@ static void exmsg_handle_netif_recv(exmsg_t *msg) {
           netif->link_layer->recv(netif, buf);  // 交给链路层处理接收到的数据包
       if (err != NET_ERR_OK) {
         dbg_warning(DBG_EXMSG, "loss packet: link layer recv failed.");
-        pktbuf_free(buf);  // 释放数据包
+        pktbuf_free(buf);  //!!! 释放数据包
       }
     } else {
       // 该接口无链路层处理函数(loop接口)，直接将数据包交给ipv4层处理
       err = ipv4_recv(netif, buf);
       if (err != NET_ERR_OK) {
         dbg_warning(DBG_EXMSG, "loss packet: ipv4 recv failed.");
-        pktbuf_free(buf);  // 释放数据包
+        pktbuf_free(buf);  //!!! 释放数据包
       }
     }
   }

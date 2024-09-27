@@ -34,7 +34,10 @@
         "socket.h": "c",
         "ping.h": "c",
         "sock.h": "c",
-        "internet": "c"
+        "internet": "c",
+        "udp_echo_client.h": "c",
+        "udp_echo_server.h": "c",
+        "net_api.h": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [

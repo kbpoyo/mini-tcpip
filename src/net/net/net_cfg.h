@@ -27,7 +27,7 @@
 #define DBG_INIT DBG_LEVEL_INFO
 #define DBG_MBLOCK DBG_LEVEL_ERROR
 #define DBG_FIXQ DBG_LEVEL_ERROR
-#define DBG_EXMSG DBG_LEVEL_INFO
+#define DBG_EXMSG DBG_LEVEL_ERROR
 #define DBG_PKTBUF DBG_LEVEL_WARN
 #define DBG_NETIF DBG_LEVEL_WARN
 #define DBG_LOOP DBG_LEVEL_WARN
@@ -35,12 +35,13 @@
 #define DBG_ETHER DBG_LEVEL_ERROR
 #define DBG_TOOLS DBG_LEVEL_WARN
 #define DBG_TIMER DBG_LEVEL_ERROR
-#define DBG_ARP DBG_LEVEL_WARN
+#define DBG_ARP DBG_LEVEL_ERROR
 #define DBG_IPV4 DBG_LEVEL_ERROR
 #define DBG_ICMPV4 DBG_LEVEL_ERROR
 #define DBG_ROUTE DBG_LEVEL_INFO
 #define DBG_SOCKET DBG_LEVEL_INFO
 #define DBG_SOCKRAW DBG_LEVEL_INFO
+#define DBG_UDP DBG_LEVEL_INFO
 
 // 消息队列相关配置
 #define EXMSG_MSG_CNT 10                  // 消息队列大小
@@ -83,5 +84,9 @@
 // 原始socket模块(sock_raw)相关配置
 #define SOCKRAW_MAXCNT 10        // 原始socket对象表大小
 #define SOCKRAW_RECV_MAXCNT 128  // 接收缓冲区链表最大长度
+
+// udp模块相关配置
+#define UDP_MAXCNT 10  // udp socket对象表大小
+#define UDP_RECV_MAXCNT 128  // udp接收缓冲区链表最大长度
 
 #endif  // NET_CFG_H

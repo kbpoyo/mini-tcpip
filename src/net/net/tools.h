@@ -15,6 +15,8 @@
 #include <stdint.h>
 #include "net_cfg.h"
 #include "net_err.h"
+#include "pktbuf.h"
+#include "ipaddr.h"
 
 /**
  * @brief u16类型数据字节序转换
@@ -57,6 +59,11 @@ static inline uint32_t swap_u32(uint32_t val) {
 
 net_err_t tools_module_init(void);
 
+
 uint16_t tools_checksum16(const void *data, uint16_t len, uint32_t pre_sum, int offset, int is_take_back);
+
+uint16_t tools_checksum16_pseudo_head(pktbuf_t *buf, const ipaddr_t *dest_ip,
+                                       const ipaddr_t *src_ip, uint8_t proto);
+
 
 #endif  // TOOLS_H

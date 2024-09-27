@@ -14,6 +14,7 @@
 #include "mblock.h"
 #include "net_plat.h"
 #include "sock_raw.h"
+#include "udp.h"
 
 // 定义协议栈可用的socket对象最大数量
 #define SOCKET_MAX_CNT (SOCKRAW_MAXCNT)
@@ -205,6 +206,7 @@ net_err_t sock_req_creat(msg_func_t *msg) {
     sock_t *(*create)(int family, int protocol);
   } sock_type_tbl[] = {
       [SOCK_RAW] = {.default_protocol = IPPROTO_ICMP, .create = sockraw_create},
+      [SOCK_DGRAM] = {.default_protocol = IPPROTO_UDP, .create = udp_create},
   };
 
   // 获取socket创建请求参数
@@ -223,24 +225,21 @@ net_err_t sock_req_creat(msg_func_t *msg) {
   create->protocol =
       create->protocol ? create->protocol : sock_type->default_protocol;
 
-  // 分配一个socket对象, 用于封装即将打开的内部sock对象
+  // 分配一个socket对象, 用于封装即将打开的内部sock对象, 并挂载到socket对象链表
   net_socket_t *socket = socket_alloc();
   if (!socket) {
     dbg_error(DBG_SOCKET, "no free socket object.");
     return NET_ERR_SOCKET;
   }
-  // 将socket对象挂载到socket对象链表
   nlist_insert_last(&socket_list, &socket->node);
 
-  // 调用指定类型的sock对象创建方法, 创建sock对象
+  // 调用指定类型的sock对象创建方法, 创建sock对象, 并记录到socket对象
   sock_t *sock = sock_type->create(create->family, create->protocol);
   if (!sock) {  // 创建失败
     dbg_error(DBG_SOCKET, "create socket failed.");
     socket_free(socket);  // 释放socket对象
     return NET_ERR_SOCKET;
   }
-
-  // 将sock对象记录到外部socket对象
   socket->sock = sock;
 
   // 使用sock_req记录socket对象的文件描述符
@@ -260,14 +259,12 @@ net_err_t sock_req_sendto(msg_func_t *msg) {
   sock_req_t *sock_req = (sock_req_t *)msg->arg;
   sock_io_t *io = &sock_req->io;
 
-  // 获取封装socket对象
+  // 获取封装socket对象, 并获取其基类对象
   net_socket_t *socket = socket_by_index(sock_req->sock_fd);
   if (!socket) {
     dbg_error(DBG_SOCKET, "invalid socket fd.");
     return NET_ERR_SOCKET;
   }
-
-  // 获取socket基类对象
   sock_t *sock = socket->sock;
 
   // 调用socket对象的发送方法，进行静态多态调用
@@ -426,9 +423,9 @@ void sock_uninit(sock_t *sock) {
 
 /**
  * @brief 关闭一个socket对象
- * 
- * @param msg 
- * @return net_err_t 
+ *
+ * @param msg
+ * @return net_err_t
  */
 net_err_t sock_req_close(msg_func_t *msg) {
   // 获取socket关闭请求参数
@@ -483,14 +480,14 @@ net_err_t sock_req_close(msg_func_t *msg) {
 net_err_t sock_setopt(sock_t *sock, int level, int optname, const char *optval,
                       int optlen) {
   // 判断选项级别是设置在哪一层
-  if (level != SOL_SOCKET) {// TODO: 暂时只支持在socket层设置选项
+  if (level != SOL_SOCKET) {  // TODO: 暂时只支持在socket层设置选项
     dbg_error(DBG_SOCKET, "invalid socket option level.\n");
     return NET_ERR_SOCKET;
   }
 
   // 根据选项类型进行处理
   switch (optname) {
-    case SO_RCVTIMEO: { // 设置接收超时时间
+    case SO_RCVTIMEO: {                            // 设置接收超时时间
       if (optlen != sizeof(struct net_timeval)) {  // 选项参数类型大小不匹配
         dbg_error(DBG_SOCKET, "invalid socket option value.\n");
         return NET_ERR_SOCKET;
@@ -499,7 +496,7 @@ net_err_t sock_setopt(sock_t *sock, int level, int optname, const char *optval,
       sock->recv_tmo = tmo->tv_sec * 1000 + tmo->tv_usec / 1000;
     } break;
 
-    case SO_SNDTIMEO: { // 设置发送超时时间
+    case SO_SNDTIMEO: {                            // 设置发送超时时间
       if (optlen != sizeof(struct net_timeval)) {  // 选项参数类型大小不匹配
         dbg_error(DBG_SOCKET, "invalid socket option value.\n");
         return NET_ERR_SOCKET;

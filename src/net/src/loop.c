@@ -86,7 +86,7 @@ net_err_t loop_module_init(void) {
     // 打开一个环回网络接口
     netif_t *netif = netif_open("loop", &loop_ops, (void *)0);
     if (netif == (netif_t *)0) {
-        dbg_error(DBG_LOOP, "no memory for loop netif.\n");
+        dbg_error(DBG_LOOP, "netif loop open failed.\n");
         return NET_ERR_MEM;
     }
 

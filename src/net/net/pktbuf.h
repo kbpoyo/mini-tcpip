@@ -40,10 +40,16 @@ typedef struct _pktblk_t {
 /**
  * @brief 定义数据包结构
  * 数据包的生命周期为：
- *  1. 函数Fun1通过pktbuf_alloc()分配一个数据包buf, 或通过一个缓存的buf_list中取出一个buf (Fun1对buf负责)
- *  2. 若Fun1需要传递buf给Fun2，且Fun2函数执行成功，则由Fun2负责调用pktbuf_free()释放buf  (fun2对buf负责)
- *  3. 若Fun1需要传递buf给Fun2，且Fun2函数执行失败，则由Fun1负责调用pktbuf_free()释放buf (fun1对buf负责)
- *  4. Fun1到Fun2的传播链路中的其它函数，不需要调用pktbuf_free()释放buf (链式传递的其它函数不对buf负责)
+ *  1. 函数Fun1通过pktbuf_alloc()分配一个数据包buf,
+ * 或通过一个缓存的buf_list中取出一个buf (Fun1对buf负责)
+ *  2.
+ * 若Fun1需要传递buf给Fun2，且Fun2函数执行成功，则由Fun2负责调用pktbuf_free()释放buf
+ * (fun2对buf负责)
+ *  3.
+ * 若Fun1需要传递buf给Fun2，且Fun2函数执行失败，则由Fun1负责调用pktbuf_free()释放buf
+ * (fun1对buf负责)
+ *  4. Fun1到Fun2的传播链路中的其它函数，不需要调用pktbuf_free()释放buf
+ * (链式传递的其它函数不对buf负责)
  */
 typedef struct _pktbuf_t {
   nlist_node_t node;  // 数据包链表结点
@@ -126,7 +132,6 @@ static inline int pktbuf_remain_size(const pktbuf_t *buf) {
   return buf->total_size - buf->pos;
 }
 
-
 net_err_t pktbuf_module_init(void);
 pktbuf_t *pktbuf_alloc(int size);
 void pktbuf_free(pktbuf_t *buf);
@@ -144,12 +149,14 @@ net_err_t pktbuf_read(pktbuf_t *buf, uint8_t *dest, int size);
 net_err_t pktbuf_seek(pktbuf_t *buf, int offset);
 net_err_t pktbuf_copy(pktbuf_t *dest, pktbuf_t *src, int size);
 net_err_t pktbuf_fill(pktbuf_t *buf, uint8_t data, int size);
-pktbuf_t* pktbuf_inc_ref(pktbuf_t *buf);
- 
- uint16_t pktbuf_checksum16(pktbuf_t *buf, uint16_t size, uint32_t pre_sum, int is_take_back);
+pktbuf_t *pktbuf_inc_ref(pktbuf_t *buf);
 
 
-// 外部函数在传递pktbuf_t指针时，使用PKTBUF_ARG宏, 每一个拥有pktbuf_t指针的函数在完成后，都需要对pktbuf进行释放
+uint16_t pktbuf_checksum16(pktbuf_t *buf, uint16_t size, uint32_t pre_sum,
+                           int is_take_back);
+
+// 外部函数在传递pktbuf_t指针时，使用PKTBUF_ARG宏,
+// 每一个拥有pktbuf_t指针的函数在完成后，都需要对pktbuf进行释放
 #define PKTBUF_ARG(buf) pktbuf_inc_ref(buf)
 
 #endif  // PKTBUF_H

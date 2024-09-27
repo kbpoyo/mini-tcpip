@@ -14,5 +14,9 @@ test/CMakeFiles/test_mblock.dir/__/src/net/src/tools.c.obj: \
  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/stddef.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/net_cfg.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/net_err.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/pktbuf.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/dbg.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/nlist.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/ipaddr.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/dbg.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/net_cfg.h

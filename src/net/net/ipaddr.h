@@ -23,15 +23,15 @@ typedef struct _ipaddr_t {
     IPADDR_V4 = 0,  // ipv4地址
   } type;           // ip地址类型
 
-  union {                                // ipv4地址
-    uint32_t addr;                       // ip地址
+  union {                              // ipv4地址
+    uint32_t addr;                     // ip地址
     uint8_t addr_bytes[IP_ADDR_SIZE];  // ip地址字节
   };
 
 } ipaddr_t;
 
 void ipaddr_set_any(ipaddr_t *ipaddr);
-int ipaddr_is_any(ipaddr_t *ipaddr);
+int ipaddr_is_any(const ipaddr_t *ipaddr);
 
 net_err_t ipaddr_from_str(ipaddr_t *dest, const char *src);
 void ipaddr_copy(ipaddr_t *dest, const ipaddr_t *src);
@@ -40,7 +40,8 @@ int ipaddr_is_equal(const ipaddr_t *ip1, const ipaddr_t *ip2);
 
 void ipaddr_from_bytes(ipaddr_t *dest, const uint8_t *src);
 void ipaddr_to_bytes(const ipaddr_t *src, uint8_t *dest);
-int ipaddr_is_match(const ipaddr_t *dest_ipaddr, const ipaddr_t *local_ipaddr, const ipaddr_t *netmask);
+int ipaddr_is_match(const ipaddr_t *dest_ipaddr, const ipaddr_t *local_ipaddr,
+                    const ipaddr_t *netmask);
 /**
  * @brief 判断是否为本地广播地址(255.255.255.255)(全网段进行广播)
  *
@@ -66,15 +67,15 @@ static inline ipaddr_t ipaddr_get_host(const ipaddr_t *ipaddr,
   return host;
 }
 
-
 /**
- * @brief 获取ip地址所对应的网络号 
- * 
- * @param ipaddr 
- * @param mask 
- * @return ipaddr_t 
+ * @brief 获取ip地址所对应的网络号
+ *
+ * @param ipaddr
+ * @param mask
+ * @return ipaddr_t
  */
-static inline ipaddr_t ipaddr_get_netnum(const ipaddr_t *ipaddr, const ipaddr_t *mask) {
+static inline ipaddr_t ipaddr_get_netnum(const ipaddr_t *ipaddr,
+                                         const ipaddr_t *mask) {
   ipaddr_t netnum;
   netnum.type = IPADDR_V4;
   netnum.addr = ipaddr ? (ipaddr->addr & mask->addr) : 0;
@@ -97,12 +98,29 @@ static inline int ipaddr_is_direct_broadcast(const ipaddr_t *ipaddr,
 
 /**
  * @brief 获取ip地址的字节数组
- * 
- * @param ipaddr 
- * @return const uint8_t* 
+ *
+ * @param ipaddr
+ * @return const uint8_t*
  */
 static inline const uint8_t *ipaddr_get_bytes(const ipaddr_t *ipaddr) {
   return ipaddr ? ipaddr->addr_bytes : (uint8_t *)0;
+}
+
+/**
+ * @brief 返回ip地址的有效位数(为1的位数)
+ *
+ * @param ipaddr
+ * @return const uint8_t
+ */
+static inline const uint8_t ipaddr_valid_digits(const ipaddr_t *ipaddr) {
+  int cnt = 0;
+  uint32_t addr = ipaddr->addr;
+  while (addr) {
+    if (addr & 0x80000000) {
+      cnt++;
+    }
+    addr <<= 1;
+  }
 }
 
 #endif  // IPADDR_H

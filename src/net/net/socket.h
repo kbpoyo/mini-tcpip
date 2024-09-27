@@ -27,10 +27,14 @@
 // 定义socket类型
 #undef SOCK_RAW  // 原始套接字
 #define SOCK_RAW 0
+#undef SOCK_DGRAM  // 数据报套接字
+#define SOCK_DGRAM 1
 
 // 定义协议类型(传输层协议 或 icmp协议)
 #undef IPPROTO_ICMP  // icmp协议
 #define IPPROTO_ICMP 1
+#undef IPPROTO_UDP  // udp协议
+#define IPPROTO_UDP 17
 
 // 定义socket选项设置相关宏
 #undef SOL_SOCKET  // 选项设置与哪一层(level)相关：通用socket选项(socket层)

@@ -22,9 +22,12 @@ typedef struct _route_entry_t {
                  //(若在同一子网内，则当前子网为目的子网，目标地址在当前链路上)
                  //(若不在同一子网内，则下一跳地址为网关地址)
   netif_t *netif;  // 发送数据的网络接口
+
+  uint8_t mask_len;  // 子网掩码长度(1的位数)
 } route_entry_t;
 
 net_err_t route_init(void);
 net_err_t route_add(ipaddr_t *dest_net, ipaddr_t *mask, ipaddr_t *next_hop,
                     netif_t *netif);
 void route_remove(ipaddr_t *dest_net, ipaddr_t *mask);
+route_entry_t *route_find(const ipaddr_t *dest_ip);

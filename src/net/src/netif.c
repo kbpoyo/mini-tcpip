@@ -145,11 +145,9 @@ netif_t *netif_open(const char *dev_name, const netif_ops_t *ops,
   // 初始化网络接口对象
   plat_strncpy(netif->name, dev_name, NETIF_NAME_SIZE);  // 设置接口名称
   netif->name[NETIF_NAME_SIZE - 1] = '\0';  // 设置字符串结束符, 确保内存安全
-
   ipaddr_set_any(&(netif->ipaddr));   // 初始化ip
   ipaddr_set_any(&(netif->netmask));  // 初始化子网掩码
   ipaddr_set_any(&(netif->gateway));  // 初始化网关地址
-
   plat_memset(&(netif->hwaddr), 0, sizeof(netif_hwaddr_t));  // 清空硬件地址
   netif->type = NETIF_TYPE_NONE;  // 接口在打开时不知道类型, 先设置为无类型
   netif->mtu = 0;                 // 最大传输单元，暂时设置为0
@@ -157,6 +155,7 @@ netif_t *netif_open(const char *dev_name, const netif_ops_t *ops,
   // 初始化节点, 用于挂载到已使用网络接口的链表(netif_list)中
   nlist_node_init(&(netif->node));
 
+  // 初始化接收和发送缓冲队列
   net_err_t err =
       fixq_init(&(netif->recv_fixq), netif->recv_buf, NETIF_RECV_BUFSIZE,
                 NLOCKER_THREAD);  // 初始化接收缓冲队列
@@ -173,29 +172,31 @@ netif_t *netif_open(const char *dev_name, const netif_ops_t *ops,
     goto init_failed;
   }
 
-  netif->ops = ops;            // 设置接口操作方法
-  netif->ops_data = ops_data;  // 设置接口操作数据
-  err = ops->open(netif, ops_data);  // 使用特定操作方法对接口进行进一步的初始化
+  // 使用特定操作方法对接口进行进一步的初始化
+  netif->ops = ops;                  // 设置接口操作方法
+  netif->ops_data = ops_data;        // 设置接口操作数据
+  err = ops->open(netif, ops_data);  // 打开之后可能会开启收发线程工作
+                                     // 所以需要确保接收和发送队列已经初始化
   if (err != NET_ERR_OK) {
     dbg_error(DBG_NETIF, "netif %s open failed.", dev_name);
     fixq_destroy(&(netif->recv_fixq));  // 销毁接收缓冲队列
     fixq_destroy(&(netif->send_fixq));  // 销毁发送缓冲队列
     goto init_failed;
   }
-  netif->state = NETIF_STATE_OPENED;  // 打开成功，设置接口状态为打开
 
-  netif->link_layer = link_layers[netif->type];  // 设置链路层回调接口
-  if (!(netif->link_layer) &&
-      netif->type !=
-          NETIF_TYPE_LOOP) {  // 若未注册链路层回调接口(环回接口不需要进行链路层处理)
+  // 设置链路层回调接口
+  netif->link_layer = link_layers[netif->type]; // 在调用特定操作方法之后网络接口的类型已经确定
+  if (!(netif->link_layer) && netif->type != NETIF_TYPE_LOOP) {
+    // 若未注册链路层回调接口(环回接口不需要进行链路层处理)
     dbg_error(DBG_NETIF, "no link layer for netif %s.", dev_name);
-    fixq_destroy(&(netif->recv_fixq));  // 销毁接收缓冲队列
-    fixq_destroy(&(netif->send_fixq));  // 销毁发送缓冲队列
     goto init_failed;
   }
 
-  nlist_insert_last(&netif_list,
-                    &(netif->node));  // 将接口挂载到已使用网络接口链表中
+  // 将接口挂载到已使用网络接口链表中
+  nlist_insert_last(&netif_list, &(netif->node));
+
+  // 打开成功，设置接口状态为打开
+  netif->state = NETIF_STATE_OPENED;
 
   return netif;
 

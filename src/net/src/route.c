@@ -102,6 +102,7 @@ net_err_t route_add(ipaddr_t *dest_net, ipaddr_t *mask, ipaddr_t *next_hop,
   ipaddr_copy(&rt_entry->mask, mask);
   ipaddr_copy(&rt_entry->next_hop, next_hop);
   rt_entry->netif = netif;
+  rt_entry->mask_len = ipaddr_valid_digits(mask);
 
   // 将路由表表项添加到全局路由表链表中
   nlist_insert_last(&route_list, &rt_entry->node);
@@ -130,4 +131,31 @@ void route_remove(ipaddr_t *dest_net, ipaddr_t *mask) {
       return;
     }
   }
+}
+
+/**
+ * @brief 查找一个路由表表项
+ *
+ * @param dest_ip 目的ip地址
+ * @return route_entry_t*
+ */
+route_entry_t *route_find(const ipaddr_t *dest_ip) {
+    // 记录最长匹配的路由表表项
+    route_entry_t *longest_match = (route_entry_t *)0;
+
+    // 遍历全局路由表链表
+    nlist_node_t *node = (nlist_node_t *)0;
+    nlist_for_each(node, &route_list) {
+        route_entry_t *rt_entry = nlist_entry(node, route_entry_t, node);
+        // 检查目的ip地址是否在路由表表项的目的子网中
+       ipaddr_t dest_net = ipaddr_get_netnum(dest_ip, &rt_entry->mask); // 获取目的ip地址的网络号
+        if (ipaddr_is_equal(&dest_net, &rt_entry->dest_net)) { // ip的目的子网与路由表项匹配
+            if (!longest_match || rt_entry->mask_len > longest_match->mask_len) { 
+                // 更新最长匹配的路由表表项
+                longest_match = rt_entry; 
+            }
+        }
+    }
+
+    return longest_match;
 }

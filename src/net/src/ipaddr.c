@@ -157,6 +157,6 @@ int ipaddr_is_match(const ipaddr_t *dest_ipaddr, const ipaddr_t *local_ipaddr,
  * @param ipaddr 
  * @return int 
  */
-int ipaddr_is_any(ipaddr_t *ipaddr) {
+int ipaddr_is_any(const ipaddr_t *ipaddr) {
   return ipaddr->addr == 0;
 }

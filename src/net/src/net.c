@@ -16,6 +16,7 @@
 #include "sock_raw.h"
 #include "timer.h"
 #include "tools.h"
+#include "udp.h"
 
 net_err_t net_init(void) {
   net_plat_init();
@@ -52,6 +53,9 @@ net_err_t net_init(void) {
 
   // 初始化内部原始socket模块(sock_raw)
   sockraw_module_init();
+
+  // 初始化udp传输协议模块
+  udp_module_init();
 
   // 初始化环回接口模块
   loop_module_init();

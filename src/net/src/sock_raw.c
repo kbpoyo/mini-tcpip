@@ -139,8 +139,7 @@ net_err_t sockraw_sendto(struct _sock_t *sock, const void *buf, size_t buf_len,
   }
 
   // 将数据包交给ipv4协议层发送
-  err = ipv4_send(sock->protocol, &remote_ip, &(netif_get_default())->ipaddr,
-                  pktbuf);
+  err = ipv4_send(sock->protocol, &remote_ip, &sock->local_ip, pktbuf);
   if (err != NET_ERR_OK) {
     dbg_error(DBG_SOCKRAW, "ipv4 send failed.");
     pktbuf_free(pktbuf);  //!!! 释放数据包
@@ -215,8 +214,8 @@ static net_err_t sockraw_close(sock_t *sock) {
   // 释放sock对象的接收缓冲区链表
   nlist_node_t *node = (nlist_node_t *)0;
   while ((node = nlist_remove_first(&sockraw->recv_buf_list))) {
-    pktbuf_t *pktbuf = nlist_entry(node, pktbuf_t, node); //!!! 获取数据包
-    pktbuf_free(pktbuf);  //!!! 释放数据包
+    pktbuf_t *pktbuf = nlist_entry(node, pktbuf_t, node);  //!!! 获取数据包
+    pktbuf_free(pktbuf);                                   //!!! 释放数据包
   }
 
   // 销毁基类sock对象持有的资源，并释放原始sock对象
@@ -335,6 +334,7 @@ net_err_t sockraw_recv_pktbuf(pktbuf_t *raw_ip_buf) {
   ipaddr_from_bytes(&dest_ip, ipv4_hdr->dest_ip);
   ipaddr_from_bytes(&src_ip, ipv4_hdr->src_ip);
 
+  //TODO: 后续会将数据包交给所有匹配的raw socket对象，而不是只交给一个
   // 根据通信两端的ip地址信息和上层协议信息，查找对应的原始socket对象
   sockraw_t *sockraw = sockraw_find(&dest_ip, &src_ip, ipv4_hdr->tran_proto);
   if (!sockraw) {

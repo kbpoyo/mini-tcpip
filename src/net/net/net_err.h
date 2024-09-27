@@ -26,6 +26,7 @@ typedef enum _net_err_t {
   NET_ERR_SOCKET = -20,
   NET_ERR_SOCKRAW = -21,
   NET_ERR_ROUTE = -22,
+  NET_ERR_UDP = -23,
 } net_err_t;
 
 

@@ -19,16 +19,16 @@
 #include "icmpv4.h"
 #include "mblock.h"
 #include "protocol.h"
+#include "route.h"
 #include "sock_raw.h"
 #include "timer.h"
 #include "tools.h"
-#include "route.h"
+
 
 static ipv4_frag_t ipv4_frag_arr[IPV4_FRAG_MAXCNT];  // ipv4分片数组(分片内存池)
 static mblock_t ipv4_frag_mblock;  // ipv4分片内存池管理对象
 static nlist_t ipv4_frag_list;  // ipv4分片链表，记录已分配的分片
 static net_timer_t ipv4_frag_timer;  // ipv4分片超时定时器
-
 
 /**
  * @brief 获取分片数据包的有效数据大小
@@ -699,17 +699,17 @@ net_err_t ipv4_recv(const netif_t *netif, pktbuf_t *buf) {
  * @param dest_ipaddr 目的ip地址
  * @param src_ipaddr 源ip地址
  * @param buf 上层数据包(不包含ipv4头部)
+ * @param netif 发送数据包的网络接口
+ * @param next_hop 下一跳地址
  * @return net_err_t
  */
 net_err_t ipv4_frag_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
-                         const ipaddr_t *src_ipaddr, pktbuf_t *buf) {
+                         const ipaddr_t *src_ipaddr, pktbuf_t *buf,
+                         netif_t *netif, const ipaddr_t *next_hop) {
   // TODO:
   // 后续优化思路：在进行分片处理时，不进行内存的再分配与拷贝，而是直接在原数据包上进行分片处理
   dbg_info(DBG_IPV4, "send an ipv4 frag packet....");
   net_err_t err = NET_ERR_OK;
-
-  // 获取当前激活的网络接口
-  netif_t *netif_default = netif_get_default();
 
   // 获取当前要发送的ipv4所有分片
   int ipv4_id = ipv4_get_id();
@@ -719,9 +719,8 @@ net_err_t ipv4_frag_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
   pktbuf_acc_reset(buf);  // 重置待发送数据的访问位置
   while (total_size > 0) {
     // 计算当前分片的有效数据长度
-    int curr_size = total_size > netif_default->mtu
-                        ? (netif_default->mtu - sizeof(ipv4_hdr_t))
-                        : total_size;
+    int curr_size = total_size > netif->mtu ? (netif->mtu - sizeof(ipv4_hdr_t))
+                                            : total_size;
     // 为当前分片数据包分配内存, 大小 = 有效数据长度(curr_size) + ipv4头部大小
     pktbuf_t *frag_buf =
         pktbuf_alloc(curr_size + sizeof(ipv4_hdr_t));  //!!! 分配数据包
@@ -739,8 +738,7 @@ net_err_t ipv4_frag_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
       return err;
     }
 
-    // 移除待发送数据包的curr_size大小的数据
-    // 防止内存占用过大
+    // 移除待发送数据包的curr_size大小的数据,防止内存占用过大
     pktbuf_header_remove(buf, curr_size);
 
     // 设置数据包头部在内存上的连续性
@@ -768,7 +766,12 @@ net_err_t ipv4_frag_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
     pkt->hdr.ttl = IPV4_DEFAULT_TTL;
     pkt->hdr.tran_proto = tran_protocol;
     pkt->hdr.hdr_chksum = 0;
-    ipaddr_to_bytes(src_ipaddr, pkt->hdr.src_ip);
+    if (!src_ipaddr || ipaddr_is_any(src_ipaddr)) {
+      // 源ip地址为空则使用网络接口的ip地址
+      ipaddr_to_bytes(&netif->ipaddr, pkt->hdr.src_ip);
+    } else {
+      ipaddr_to_bytes(src_ipaddr, pkt->hdr.src_ip);
+    }
     ipaddr_to_bytes(dest_ipaddr, pkt->hdr.dest_ip);
 
     // 打印ipv4数据包头部信息
@@ -782,8 +785,8 @@ net_err_t ipv4_frag_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
     pkt->hdr.hdr_chksum =
         pktbuf_checksum16(frag_buf, ipv4_get_hdr_size(pkt), 0, 1);
 
-    // 通过网络接口发送数据包
-    err = netif_send(netif_default, dest_ipaddr, frag_buf);  //!!! 数据包传递
+    // 通过网络接口将数据包发送到下一跳目标地址
+    err = netif_send(netif, next_hop, frag_buf);  //!!! 数据包传递
     if (err != NET_ERR_OK) {
       dbg_error(DBG_IPV4, "netif send ip packet failed.");
       pktbuf_free(frag_buf);  //!!! 释放数据包
@@ -815,14 +818,28 @@ net_err_t ipv4_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
   dbg_info(DBG_IPV4, "send an ipv4 packet....");
   net_err_t err = NET_ERR_OK;
 
+  // 根据目的ip地址查找路由表，获取下一跳的ip地址和发送该包的网络接口
+  route_entry_t *rt_entry = route_find(dest_ipaddr);
+  if (!rt_entry) {
+    dbg_error(DBG_IPV4, "route entry not found.");
+    return NET_ERR_IPV4;
+  }
+  netif_t *netif = rt_entry->netif;
+  const ipaddr_t *next_hop;
+  if (ipaddr_is_any(&rt_entry->next_hop)) {
+    // 下一跳地址为空, 即目的地址在链路上，直接使用目的地址即可
+    next_hop = dest_ipaddr;
+  } else {  // 下一跳地址不为空，使用下一跳地址，让下一跳路由该数据包
+    next_hop = &rt_entry->next_hop;
+  }
+
   // 判断数据包是否需要进行分片处理
-  netif_t *netif_default = netif_get_default();  // 获取当前激活的网络接口
   int ipv4_total_size = pktbuf_total_size(buf) + sizeof(ipv4_hdr_t);
-  if (netif_default->mtu && ipv4_total_size > netif_default->mtu) {
+  if (netif->mtu && ipv4_total_size > netif->mtu) {
     // 数据包大小超过了网络接口链路层的最大传输单元
     // 需要对数据包进行分片处理
-    err = ipv4_frag_send(tran_protocol, dest_ipaddr, src_ipaddr,
-                         buf);  //!!! 数据包传递
+    err = ipv4_frag_send(tran_protocol, dest_ipaddr, src_ipaddr, buf, netif,
+                         next_hop);  //!!! 数据包传递
     if (err != NET_ERR_OK) {
       dbg_error(DBG_IPV4, "frag send failed.");
       return err;
@@ -831,17 +848,15 @@ net_err_t ipv4_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
     return NET_ERR_OK;
   }
 
-  // 数据包不需要进行分片处理
-  // 给数据包添加ipv4头部
+  // 数据包不需要进行分片处理, 给数据包添加ipv4头部
   err = pktbuf_header_add(buf, sizeof(ipv4_hdr_t), PKTBUF_ADD_HEADER_CONT);
   if (err != NET_ERR_OK) {
     dbg_error(DBG_IPV4, "add header failed.");
     return err;
   }
 
-  // 获取ipv4头部对象
+  // 获取ipv4头部对象, 并设置ipv4头部信息
   ipv4_pkt_t *pkt = pktbuf_data_ptr(buf);
-  // 设置ipv4头部信息
   pkt->hdr.version = IPV4_VERSION;
   ipv4_set_hdr_size(pkt, sizeof(ipv4_hdr_t));
   pkt->hdr.ecn = 0;
@@ -852,7 +867,12 @@ net_err_t ipv4_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
   pkt->hdr.ttl = IPV4_DEFAULT_TTL;
   pkt->hdr.tran_proto = tran_protocol;
   pkt->hdr.hdr_chksum = 0;
-  ipaddr_to_bytes(src_ipaddr, pkt->hdr.src_ip);
+  if (!src_ipaddr || ipaddr_is_any(src_ipaddr)) {
+    // 源ip地址为空则使用网络接口的ip地址
+    ipaddr_to_bytes(&netif->ipaddr, pkt->hdr.src_ip);
+  } else {
+    ipaddr_to_bytes(src_ipaddr, pkt->hdr.src_ip);
+  }
   ipaddr_to_bytes(dest_ipaddr, pkt->hdr.dest_ip);
 
   // 打印ipv4数据包头部信息
@@ -865,8 +885,8 @@ net_err_t ipv4_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
   pktbuf_acc_reset(buf);  // 重置buf访问位置，从头部开始计算校验和
   pkt->hdr.hdr_chksum = pktbuf_checksum16(buf, ipv4_get_hdr_size(pkt), 0, 1);
 
-  // 通过网络接口发送数据包
-  err = netif_send(netif_default, dest_ipaddr, buf);  //!!! 数据包传递
+  // 通过网络接口将数据包发送到下一跳目标地址
+  err = netif_send(netif, next_hop, buf);  //!!! 数据包传递
   if (err != NET_ERR_OK) {
     dbg_error(DBG_IPV4, "netif send ip packet failed.");
     return err;
