@@ -400,6 +400,10 @@ net_err_t pktbuf_header_add(pktbuf_t *buf, int size, int is_cont) {
  */
 net_err_t pktbuf_header_remove(pktbuf_t *buf, int size) {
   pktbuf_check_buf(buf);
+  if (size < 0) {
+    dbg_error(DBG_PKTBUF, "pktbuf header remove failed, size error(%d).", size);
+    return NET_ERR_PKTBUF;
+  }
 
   // 获取数据包的第一个数据块
   pktblk_t *block = pktbuf_blk_first(buf);

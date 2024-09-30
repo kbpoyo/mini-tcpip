@@ -350,7 +350,7 @@ net_err_t sockraw_recv_pktbuf(pktbuf_t *raw_ip_buf) {
 
     // 已缓存数据包，唤醒等待接收数据的线程
     sock_wakeup(&sockraw->sock_base, SOCK_WAIT_READ, NET_ERR_OK);
-  } else {                    // 接收缓冲区链表已满
+  } else {                    // 接收缓冲区链表已满, 丢弃数据包
     pktbuf_free(raw_ip_buf);  //!!! 释放数据包
     dbg_warning(DBG_SOCKRAW, "recv buf list is full.");
   }

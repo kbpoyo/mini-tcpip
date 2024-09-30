@@ -23,7 +23,7 @@
 #include "sock_raw.h"
 #include "timer.h"
 #include "tools.h"
-
+#include "udp.h"
 
 static ipv4_frag_t ipv4_frag_arr[IPV4_FRAG_MAXCNT];  // ipv4分片数组(分片内存池)
 static mblock_t ipv4_frag_mblock;  // ipv4分片内存池管理对象
@@ -355,40 +355,42 @@ static void ipv4_hdr_hton(ipv4_hdr_t *hdr) {
 static net_err_t ipv4_handle_normal(const netif_t *netif, pktbuf_t *buf) {
   net_err_t err = NET_ERR_OK;
 
-  // 获取ipv4数据包结构
+  // 获取ipv4数据包结构, 并提取源ip地址和目的ip地址
   ipv4_pkt_t *pkt = (ipv4_pkt_t *)pktbuf_data_ptr(buf);
+  ipaddr_t src_ip, dest_ip;
+  ipaddr_from_bytes(&src_ip, pkt->hdr.src_ip);
+  ipaddr_from_bytes(&dest_ip, pkt->hdr.dest_ip);
 
   // 根据数据包的协议字段将其提供给上一层协议处理
   switch (pkt->hdr.tran_proto) {
     case NET_PROTOCOL_ICMPv4: {
-      ipaddr_t src_ipaddr;
-      ipaddr_from_bytes(&src_ipaddr, pkt->hdr.src_ip);
       // 当前网络接口已匹配该包的目的地址，直接使用接口地址即可
-      err = icmpv4_recv(&netif->ipaddr, &src_ipaddr, buf);  //!!! 数据包传递
+      err = icmpv4_recv(buf, &netif->ipaddr, &src_ip);  //!!! 数据包传递
       if (err != NET_ERR_OK) {
         dbg_warning(DBG_IPV4, "icmpv4 recv failed.");
         return err;
       }
     } break;
 
-    case NET_PROTOCOL_UDP: {  // TODO: 测试ICMP不可达报文
+    case NET_PROTOCOL_UDP: {  // UDP协议
       dbg_info(DBG_IPV4, "recv UDP packet.");
-      ipaddr_t src_ipaddr;
-      ipv4_hdr_hton(&pkt->hdr);  // 将头部转换为网络字节序
-      ipaddr_from_bytes(&src_ipaddr, pkt->hdr.src_ip);
-
-      return icmpv4_make_unreach(&src_ipaddr, &netif->ipaddr,
-                                 ICMPv4_CODE_UNREACH_PORT, buf);
+      err = udp_recv(buf, &src_ip, &dest_ip); //!!! 数据包传递
+      if (err != NET_ERR_OK) {
+        dbg_warning(DBG_IPV4, "udp recv failed.");
+        if (err == NET_ERR_UNREACH) {
+          ipv4_hdr_hton(&pkt->hdr);  // 将头部转换为网络字节序
+          icmpv4_make_unreach(&src_ip, &netif->ipaddr,
+                                     ICMPv4_CODE_UNREACH_PORT, buf);
+        }
+        return err;
+      }
 
     } break;
 
     case NET_PROTOCOL_TCP: {
       dbg_info(DBG_IPV4, "recv TCP packet.");
-      ipaddr_t src_ipaddr;
       ipv4_hdr_hton(&pkt->hdr);  // 将头部转换为网络字节序
-      ipaddr_from_bytes(&src_ipaddr, pkt->hdr.src_ip);
-
-      return icmpv4_make_unreach(&src_ipaddr, &netif->ipaddr,
+      return icmpv4_make_unreach(&src_ip, &netif->ipaddr,
                                  ICMPv4_CODE_UNREACH_PORT, buf);
     } break;
 
@@ -396,7 +398,7 @@ static net_err_t ipv4_handle_normal(const netif_t *netif, pktbuf_t *buf) {
       dbg_warning(DBG_IPV4, "unknown transport layer protocol!");
       // 未知的上层协议，直接将ip数据包递交给原始socket模块处理
       // 可通过原始socket模块来进行自定义传输层协议的处理
-      net_err_t err = sockraw_recv_pktbuf(buf);  //!!! 数据包传递
+      err = sockraw_recv_pktbuf(buf);  //!!! 数据包传递
       if (err != NET_ERR_OK) {
         dbg_warning(DBG_IPV4, "sockraw recv failed.");
         return err;

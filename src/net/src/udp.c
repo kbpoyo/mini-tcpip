@@ -23,6 +23,10 @@ static nlist_t udp_list;           // 挂载已分配的udp socket对象链表
 
 #if DBG_DISP_ENABLED(DBG_UDP)
 
+/**
+ * @brief 打印已分配的udp socket对象列表
+ *
+ */
 static void udp_disp_list(void) {
   nlist_node_t *node = (nlist_node_t *)0;
   sock_t *sock = (sock_t *)0;
@@ -38,9 +42,24 @@ static void udp_disp_list(void) {
   }
 }
 
+/**
+ * @brief 打印udp数据包
+ *
+ * @param pkt
+ */
+static void udp_disp_pkt(udp_pkt_t *pkt) {
+  plat_printf("---------------- udp packet ----------------\n");
+  plat_printf("\tsrc port: %d\n", net_ntohs(pkt->udp_hdr.src_port));
+  plat_printf("\tdest port: %d\n", net_ntohs(pkt->udp_hdr.dest_port));
+  plat_printf("\ttotal len: %d\n", net_ntohs(pkt->udp_hdr.total_len));
+  plat_printf("\tchecksum: 0x%04x\n", net_ntohs(pkt->udp_hdr.checksum));
+  plat_printf("---------------------------------------------\n");
+}
+
 #else
 
 #define udp_disp_list()
+#define udp_disp_pkt(pkt)
 
 #endif
 
@@ -256,6 +275,203 @@ static net_err_t udp_sendto(struct _sock_t *sock, const void *buf,
 
   // 发送成功，返回发送数据大小
   *ret_send_len += buf_len;
+
+  return NET_ERR_OK;
+}
+
+/**
+ * @brief 从sock对象中接收数据，并记录发送方socket地址
+ *
+ * @param sock 基类socket对象
+ * @param buf 接收数据缓冲区
+ * @param buf_len 缓冲区大小
+ * @param flags 选项设置标志位
+ * @param src 源socket地址
+ * @param src_len socket地址对象大小
+ * @param ret_recv_len 实际接收数据大小
+ * @return net_err_t
+ */
+net_err_t udp_recvfrom(struct _sock_t *sock, void *buf, size_t buf_len,
+                           int flags, struct net_sockaddr *src,
+                           net_socklen_t *src_len, ssize_t *ret_recv_len) {
+  // 将基类sock对象转换为udp对象，并从其接收缓冲区链表中获取数据包
+  udp_t *udp = (udp_t *)sock; 
+  nlist_node_t *node = nlist_remove_first(&udp->recv_buf_list);
+  if (!node) {  // 接收缓冲区链表为空, 通知调用者等待
+    return NET_ERR_NEEDWAIT;
+  }
+  pktbuf_t *pktbuf = nlist_entry(node, pktbuf_t, node);  //!!! 获取数据包
+
+  // 获取并移除数据包已修改过的udp头部，并解析源ip地址和端口号到socket地址对象中
+  udp_remote_info_t *remote_info = pktbuf_data_ptr(pktbuf);
+  struct net_sockaddr_in *src_addr = (struct net_sockaddr_in *)src;
+  src_addr->sin_family = AF_INET; // 只支持IPv4
+  src_addr->sin_port = remote_info->port;
+  src_addr->sin_addr.s_addr = *(uint32_t *)remote_info->ip;
+  pktbuf_header_remove(pktbuf, sizeof(udp_hdr_t));
+
+  // 并将数据包的数据部分拷贝到接收缓冲区
+  pktbuf_acc_reset(pktbuf);
+  int data_len = pktbuf_total_size(pktbuf);
+  int copy_len = data_len > buf_len ? buf_len : data_len;
+  net_err_t err = pktbuf_read(pktbuf, buf, copy_len);
+  pktbuf_free(pktbuf);  //!!! 释放数据包
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_UDP, "pktbuf read failed.");
+    return err;
+  }
+
+  // 返回接收到的数据大小和源socket地址大小
+  *src_len = sizeof(struct net_sockaddr_in);
+  *ret_recv_len = copy_len;
+  return NET_ERR_OK;
+}
+
+
+/**
+ * @brief 根据源ip地址、源端口号、目的ip地址、目的端口号查找udp
+ *
+ * local_ip | local_port | remote_ip | remote_port |
+ * 0       | 指定        | 0         | 0           |
+ * 可接收任意源ip地址和端口号的udp数据包(服务器模式) 指定    | 指定        | 0
+ * | 0           | 从指定网络接口接任意源ip地址和端口号的udp数据包(限制接收网卡)
+ * 0       | 0           | 指定      | 指定        |
+ * 只与指定的目的ip地址和端口号之间收发udp数据包(客户端模式)
+ * TODO: 细化匹配规则，若端口号重复，则采用匹配项数最多的规则
+ *
+ * @param src_ip
+ * @param src_port
+ * @param dest_ip
+ * @param dest_port
+ * @return udp_t*
+ */
+static udp_t *udp_find(ipaddr_t *src_ip, uint16_t src_port, ipaddr_t *dest_ip,
+                       uint16_t dest_port) {
+  nlist_node_t *node = (nlist_node_t *)0;
+  sock_t *sock = (sock_t *)0;
+
+  nlist_for_each(node, &udp_list) {
+    sock = nlist_entry(node, sock_t, node);
+    if (sock->local_port != dest_port) {  // 目的端口号不匹配
+      continue;
+    }
+
+    if (!ipaddr_is_any(&sock->local_ip) &&
+        !ipaddr_is_equal(&sock->local_ip, dest_ip)) {
+      // udp sock对象已绑定本地ip地址，但与指定的目的ip地址不匹配
+      continue;
+    }
+
+    if (!ipaddr_is_any(&sock->remote_ip) &&
+        !ipaddr_is_equal(&sock->remote_ip, src_ip)) {
+      // udp sock对象已绑定远端ip地址，但与指定的源ip地址不匹配
+      continue;
+    }
+
+    if (sock->remote_port && sock->remote_port != src_port) {
+      // udp sock对象已绑定远端端口号，但与指定的源端口号不匹配
+      continue;
+    }
+
+    // 找到匹配的udp sock对象
+    return (udp_t *)sock;
+  }
+
+  return (udp_t *)0;
+}
+
+/**
+ * @brief 检查udp数据包是否正确
+ *
+ * @param pkt
+ * @param size
+ * @param src_ip
+ * @param dest_ip
+ * @return net_err_t
+ */
+static net_err_t udp_check(pktbuf_t *udp_buf, ipaddr_t *src_ip,
+                           ipaddr_t *dest_ip) {
+  // 获取udp数据包对象和数据包大小
+  udp_pkt_t *pkt = (udp_pkt_t *)pktbuf_data_ptr(udp_buf);
+  int size = pktbuf_total_size(udp_buf);
+
+  // 检查udp数据包大小是否正确
+  if ((size < sizeof(udp_hdr_t)) ||
+      (size < net_ntohs(pkt->udp_hdr.total_len))) {
+    dbg_error(DBG_UDP, "udp packet size error.");
+    return NET_ERR_UDP;
+  }
+
+  // 计算校验和检查udp数据包是否正确
+  if (pkt->udp_hdr.checksum) {  // 校验和不为0，需要进行校验
+    uint16_t chksum = tools_checksum16_pseudo_head(udp_buf, dest_ip, src_ip,
+                                                   NET_PROTOCOL_UDP);
+    if (chksum != 0) {
+      dbg_error(DBG_UDP, "udp checksum error.");
+      return NET_ERR_UDP;
+    }
+  }
+
+  return NET_ERR_OK;
+}
+
+/**
+ * @brief udp协议层接收数据包
+ *
+ * @param udp_buf udp数据包
+ * @param src_ip 发送方ip地址
+ * @param dest_ip 接收方ip地址
+ * @return net_err_t
+ */
+net_err_t udp_recv(pktbuf_t *buf, ipaddr_t *src_ip, ipaddr_t *dest_ip) {
+  // 获取ip包头部大小，并设置ip头部和udp头部在内存上的连续性
+  int ip_hdr_len = ipv4_get_hdr_size((ipv4_pkt_t *)pktbuf_data_ptr(buf));
+  net_err_t err = pktbuf_set_cont(buf, ip_hdr_len + sizeof(udp_hdr_t));
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_UDP, "pktbuf set cont failed.");
+    return err;
+  }
+
+  // 获取udp头部对象, 并提取端口号信息
+  udp_hdr_t *udp_hdr = (udp_hdr_t *)(pktbuf_data_ptr(buf) + ip_hdr_len);
+  uint16_t dest_port = net_ntohs(udp_hdr->dest_port);
+  uint16_t src_port = net_ntohs(udp_hdr->src_port);
+
+  // 通过端口信息查找绑定的udp socket对象
+  udp_t *udp = udp_find(src_ip, src_port, dest_ip, dest_port);
+  if (!udp) {
+    dbg_error(DBG_UDP, "udp socket not found.");
+    // 未找到匹配的udp
+    // socket对象，返回不可达错误，通知ip层发送icmp端口不可达报文
+    // 返回不可达错误前不能修改数据包内容，需要尽可能多的将错误数据包的内容返回给发送方
+    return NET_ERR_UNREACH;
+  }
+
+  // 移除ip头部并计算udp数据包校验和判断数据包是否正确
+  pktbuf_header_remove(buf, ip_hdr_len);
+  err = udp_check(buf, src_ip, dest_ip);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_UDP, "udp check failed.");
+    return err;
+  }
+
+  // 修改udp头部用于记录远端ip地址和端口号
+  udp_remote_info_t *remote_info = (udp_remote_info_t *)pktbuf_data_ptr(buf);
+  remote_info->port = src_port;
+  *(uint32_t *)remote_info->ip = src_ip->addr;
+
+  // 将数据包放入udp sock对象的接收缓存链表，等待应用层接收
+  if (nlist_count(&udp->recv_buf_list) <
+      UDP_RECV_MAXCNT) {  // 接收缓冲区链表未满, 缓存数据包
+    nlist_insert_last(&udp->recv_buf_list,
+                      &buf->node);  //!!! 数据包转交
+
+    // 唤醒等待接收数据的线程
+    sock_wakeup(&udp->sock_base, SOCK_WAIT_READ, NET_ERR_OK);
+  } else {             // 接收缓冲区链表已满, 丢弃数据包
+    pktbuf_free(buf);  //!!! 释放数据包
+    dbg_warning(DBG_UDP, "recv buf list is full.");
+  }
 
   return NET_ERR_OK;
 }

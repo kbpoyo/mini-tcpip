@@ -18,7 +18,6 @@
 #include "protocol.h"
 #include "sock_raw.h"
 
-
 #if DBG_DISP_ENABLED(DBG_ICMPV4)
 
 /**
@@ -152,8 +151,8 @@ static net_err_t icmpv4_make_echo_reply(const ipaddr_t *dest_ipaddr,
  * @param buf ipv4数据包, 包含ipv4头部
  * @return net_err_t
  */
-net_err_t icmpv4_recv(const ipaddr_t *dest_ipaddr, const ipaddr_t *src_ipaddr,
-                      pktbuf_t *buf) {
+net_err_t icmpv4_recv(pktbuf_t *buf, const ipaddr_t *dest_ipaddr,
+                      const ipaddr_t *src_ipaddr) {
   dbg_info(DBG_ICMPV4, "recv icmpv4 packet....");
   pktbuf_check_buf(buf);
 
@@ -170,7 +169,6 @@ net_err_t icmpv4_recv(const ipaddr_t *dest_ipaddr, const ipaddr_t *src_ipaddr,
   // 获取icmpv4数据包
   icmpv4_pkt_t *icmpv4_pkt =
       (icmpv4_pkt_t *)(pktbuf_data_ptr(buf) + ip_hdr_size);
-  // 打印icmpv4数据包
   icmpv4_pkt_display(icmpv4_pkt);
 
   // 根据icmpv4数据包类型进行处理

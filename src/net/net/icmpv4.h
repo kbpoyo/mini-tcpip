@@ -28,7 +28,8 @@ typedef struct _icmpv4_hdr_t {
   union {  // 可变的4字节数据部分，严格来说这4字节不算在头部中，但几乎每一个icmp报文都携带，即使未使用也填0
 
     // 由icmpv4报文类型决定
-    // 回显请求与应答: icmpv4的16位的标识 + 16位的序列号(端到端，中间路由器不进行字段操作，所以不用转换字节序)
+    // 回显请求与应答: icmpv4的16位的标识 +
+    // 16位的序列号(端到端，中间路由器不进行字段操作，所以不用转换字节序)
     // 其他类型的icmpv4报文对该4字节的使用不同
     // TODO: 本地未对其进行读写，暂时忽略其字节序
     uint32_t reserve;
@@ -59,8 +60,8 @@ typedef enum _icmpv4_code_t {
 } icmpv4_code_t;
 
 net_err_t icmpv4_module_init(void);
-net_err_t icmpv4_recv(const ipaddr_t *dest_ipaddr, const ipaddr_t *src_ipaddr,
-                      pktbuf_t *buf);
+net_err_t icmpv4_recv(pktbuf_t *buf, const ipaddr_t *dest_ipaddr,
+                      const ipaddr_t *src_ipaddr);
 
 net_err_t icmpv4_make_unreach(const ipaddr_t *dest_ipaddr,
                               const ipaddr_t *src_ipaddr, uint8_t unreach_code,
