@@ -4,9 +4,9 @@
  * @brief 协议栈提供给应用程序的API
  * @version 0.1
  * @date 2024-07-30
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 
 #ifndef NET_API_H
@@ -16,7 +16,7 @@
 #include "tools.h"
 
 // 字节序转换相关接口
-#undef htons // 为了避免本地协议栈重定义，先取消宏定义
+#undef htons  // 为了避免本地协议栈重定义，先取消宏定义
 #define htons(val) net_htons(val)
 #undef ntohs
 #define ntohs(val) net_ntohs(val)
@@ -29,17 +29,19 @@
 char *net_inet_ntoa(struct net_in_addr addr);
 uint32_t net_inet_addr(const char *ip_str);
 int net_inet_pton(int family, const char *strptr, void *addrptr);
-const char *net_inet_ntop(int family, const void *addrptr, char *strptr, size_t len);
+const char *net_inet_ntop(int family, const void *addrptr, char *strptr,
+                          size_t len);
 
 #undef inet_ntoa
 #define inet_ntoa(addr) net_inet_ntoa(addr)
 #undef inet_addr
 #define inet_addr(ip_str) net_inet_addr(ip_str)
 #undef inet_pton
-#define inet_pton(family, strptr, addrptr) net_inet_pton(family, strptr, addrptr)
+#define inet_pton(family, strptr, addrptr) \
+  net_inet_pton(family, strptr, addrptr)
 #undef inet_ntop
-#define inet_ntop(family, addrptr, strptr, len) net_inet_ntop(family, addrptr, strptr, len)
-
+#define inet_ntop(family, addrptr, strptr, len) \
+  net_inet_ntop(family, addrptr, strptr, len)
 
 // socket相关接口
 #undef sockaddr_in
@@ -58,11 +60,16 @@ const char *net_inet_ntop(int family, const void *addrptr, char *strptr, size_t 
   net_recvfrom(sock, buf, buf_len, flags, src, src_len)
 #undef close
 #define close(sock) net_close(sock)
+#undef connect
+#define connect(sock, addr, addrlen) net_connect(sock, addr, addrlen)
+#undef send
+#define send(sock, buf, buf_len, flags) net_send(sock, buf, buf_len, flags)
+#undef recv
+#define recv(sock, buf, buf_len, flags) net_recv(sock, buf, buf_len, flags)
+#undef bind
+#define bind(sock, addr, addrlen) net_bind(sock, addr, addrlen)
 #undef setsockopt
 #define setsockopt(sock, level, optname, optval, optlen) \
   net_setsockopt(sock, level, optname, optval, optlen)
-
-
-
 
 #endif  // NET_API_H

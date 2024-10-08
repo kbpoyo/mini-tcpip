@@ -49,8 +49,7 @@ typedef struct _sock_ops_t {
   // 向目标socket地址发送信息
   net_err_t (*sendto)(struct _sock_t *sock, const void *buf, size_t buf_len,
                       int flags, const struct net_sockaddr *dest,
-                      net_socklen_t dest_len,
-                      ssize_t *ret_send_len);  
+                      net_socklen_t dest_len, ssize_t *ret_send_len);
 
   // 从目标socket地址接收信息
   net_err_t (*recvfrom)(struct _sock_t *sock, void *buf, size_t buf_len,
@@ -61,6 +60,22 @@ typedef struct _sock_ops_t {
   net_err_t (*setopt)(struct _sock_t *sock, int level, int optname,
                       const char *optval, int optlen);
 
+  // 连接目标socket地址
+  net_err_t (*connect)(struct _sock_t *sock, const struct net_sockaddr *addr,
+                       net_socklen_t addrlen);
+
+  // 发送信息, 且socket已连接到远端地址
+  net_err_t (*send)(struct _sock_t *sock, const void *buf, size_t buf_len,
+                    int flags, ssize_t *ret_send_len);
+
+  // 接收信息, 且socket已连接到远端地址
+  net_err_t (*recv)(struct _sock_t *sock, void *buf, size_t buf_len, int flags,
+                    ssize_t *ret_recv_len);
+
+  // 绑定socket到本地地址
+  net_err_t (*bind)(struct _sock_t *sock, const struct net_sockaddr *addr,
+                    net_socklen_t addrlen);
+
   // 销毁socket对象
   void (*destroy)(struct _sock_t *sock);
 
@@ -68,9 +83,12 @@ typedef struct _sock_ops_t {
 
 // 基类已实现了的通用接口，派生类可重写或直接继承
 
-int sock_setopt(struct _sock_t *sock, int level, int optname, const char *optval,
-                int optlen);
-
+net_err_t sock_setopt(struct _sock_t *sock, int level, int optname,
+                      const char *optval, int optlen);
+net_err_t sock_send(struct _sock_t *sock, const void *buf, size_t buf_len,
+                    int flags, ssize_t *ret_send_len);
+net_err_t sock_recv(struct _sock_t *sock, void *buf, size_t buf_len, int flags,
+                    ssize_t *ret_recv_len);
 
 // 定义基础socket结构, 描述端与端应用程序通信的基本信息
 typedef struct _sock_t {
@@ -133,9 +151,13 @@ typedef struct _sock_io_t {
 
 net_err_t sock_req_sendto(msg_func_t *msg);
 net_err_t sock_req_recvfrom(msg_func_t *msg);
+net_err_t sock_req_connect(msg_func_t *msg);
+net_err_t sock_req_bind(msg_func_t *msg);
+net_err_t sock_req_send(msg_func_t *msg);
+net_err_t sock_req_recv(msg_func_t *msg);
 
 // socket选项设置请求(setsockopt)的参数结构
-typedef struct _sock_opt_t{
+typedef struct _sock_opt_t {
   int level;
   int optname;
   const char *optval;
@@ -157,5 +179,8 @@ typedef struct _sock_req_t {
 } sock_req_t;
 
 net_err_t sock_module_init(void);
+net_err_t sock_connect(sock_t *sock, const struct net_sockaddr *addr,
+                       net_socklen_t addrlen);
+net_err_t sock_bind(sock_t *sock, const ipaddr_t *local_ip, const uint16_t local_port);
 
 #endif  // SOCK_H

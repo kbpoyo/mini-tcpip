@@ -57,7 +57,8 @@ int net_socket(int family, int type, int protocol) {
 ssize_t net_sendto(int socket, const void *buf, size_t buf_len, int flags,
                    const struct net_sockaddr *dest, net_socklen_t dest_len) {
   // 进行参数检查
-  if (!buf || !buf_len || !dest || dest_len != sizeof(struct net_sockaddr)) {
+  if (socket < 0 || !buf || !buf_len || !dest ||
+      dest_len != sizeof(struct net_sockaddr)) {
     dbg_error(DBG_SOCKET, "sendto param error.\n");
     return -1;
   }
@@ -117,7 +118,7 @@ ssize_t net_sendto(int socket, const void *buf, size_t buf_len, int flags,
 ssize_t net_recvfrom(int socket, void *buf, size_t buf_len, int flags,
                      struct net_sockaddr *src, net_socklen_t *src_len) {
   // 进行参数检查
-  if (!buf || !buf_len || !src || !src_len) {
+  if (socket < 0 || !buf || !buf_len || !src || !src_len) {
     dbg_error(DBG_SOCKET, "recvfrom param error.\n");
     return -1;
   }
@@ -139,7 +140,7 @@ ssize_t net_recvfrom(int socket, void *buf, size_t buf_len, int flags,
     // 调用消息队列工作线程执行socket接收请求
     net_err_t err = exmsg_func_exec(sock_req_recvfrom, &sock_req);
     switch (err) {
-      case NET_ERR_OK: {  // 还有数据未发送，更新缓冲区位置和大小信息
+      case NET_ERR_OK: {
         // 记录发送方socket地址大小
         *src_len = sock_req.io.sockaddr_len;
         // 返回实际接收的数据量(字节量)， 若返回-1表示接收失败
@@ -198,7 +199,7 @@ int net_close(int socket) {
 int net_setsockopt(int socket, int level, int optname, const char *optval,
                    int optlen) {
   // 进行参数检查
-  if (!optval || !optlen) {
+  if (socket < 0 || !optval || !optlen) {
     dbg_error(DBG_SOCKET, "setsockopt param error.\n");
     return -1;
   }
@@ -221,4 +222,191 @@ int net_setsockopt(int socket, int level, int optname, const char *optval,
   }
 
   return 0;
+}
+
+/**
+ * @brief 外部接口， socket连接指定地址, 只与该远端地址通信
+ *
+ * @param socket
+ * @param addr
+ * @param addrlen
+ * @return int
+ */
+int net_connect(int socket, const struct net_sockaddr *addr,
+                net_socklen_t addrlen) {
+  // 进行参数检查
+  if (socket < 0 || !addr || addrlen != sizeof(struct net_sockaddr)) {
+    dbg_error(DBG_SOCKET, "connect param error.\n");
+    return -1;
+  }
+  struct net_sockaddr_in *addr_in = (struct net_sockaddr_in *)addr;
+  if (addr_in->sin_family != AF_INET) {
+    dbg_error(DBG_SOCKET, "connect only support AF_INET(IPV4).\n");
+    return -1;
+  }
+  if (addr_in->sin_port < 0 || addr_in->sin_addr.s_addr == 0) {
+    dbg_error(DBG_SOCKET, "connect address error.\n");
+    return -1;
+  }
+
+  // 封装socket接收请求参数
+  sock_req_t sock_req;
+  sock_req.wait = (sock_wait_t *)0;  // wait对象，用来等待内部工作线程的接收结果
+  sock_req.wait_tmo = 0;
+  sock_req.sock_fd = socket;
+  sock_req.io.sockaddr = (struct net_sockaddr *)addr;
+  sock_req.io.sockaddr_len = addrlen;
+
+  // 调用消息队列工作线程执行socket连接请求
+  net_err_t err = exmsg_func_exec(sock_req_connect, &sock_req);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_SOCKET, "connect failed.\n");
+    return -1;
+  }
+
+  return 0;
+}
+
+/**
+ * @brief 外部接口， socket绑定指定地址, 指定本地ip地址和端口
+ *
+ * @param socket
+ * @param addr
+ * @param addrlen
+ * @return int
+ */
+int net_bind(int socket, const struct net_sockaddr *addr,
+                net_socklen_t addrlen) {
+  // 进行参数检查
+  if (socket < 0 || !addr || addrlen != sizeof(struct net_sockaddr)) {
+    dbg_error(DBG_SOCKET, "bind param error.\n");
+    return -1;
+  }
+  struct net_sockaddr_in *addr_in = (struct net_sockaddr_in *)addr;
+  if (addr_in->sin_family != AF_INET) {
+    dbg_error(DBG_SOCKET, "bind only support AF_INET(IPV4).\n");
+    return -1;
+  }
+  if (addr_in->sin_port <= 0) {
+    dbg_error(DBG_SOCKET, "bind port error, port <= 0.\n");
+    return -1;
+  }
+
+  // 封装socket接收请求参数
+  sock_req_t sock_req;
+  sock_req.wait = (sock_wait_t *)0;  // wait对象，用来等待内部工作线程的接收结果
+  sock_req.wait_tmo = 0;
+  sock_req.sock_fd = socket;
+  sock_req.io.sockaddr = (struct net_sockaddr *)addr;
+  sock_req.io.sockaddr_len = addrlen;
+
+  // 调用消息队列工作线程执行socket连接请求
+  net_err_t err = exmsg_func_exec(sock_req_bind, &sock_req);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_SOCKET, "bind failed.\n");
+    return -1;
+  }
+
+  return 0;
+}
+
+/**
+ * @brief 通过socket发送数据，socket已经调用connect()函数连接到远端地址
+ *
+ * @param socket
+ * @param buf
+ * @param buf_len
+ * @param flags
+ * @return ssize_t
+ */
+ssize_t net_send(int socket, const void *buf, size_t buf_len, int flags) {
+  // 进行参数检查
+  if (socket < 0 || !buf || !buf_len) {
+    dbg_error(DBG_SOCKET, "sendto param error.\n");
+    return -1;
+  }
+
+  // 封装socket发送请求参数
+  sock_req_t sock_req;
+  sock_req.wait = (sock_wait_t *)0;
+  sock_req.wait_tmo = 0;
+  sock_req.sock_fd = socket;
+  sock_req.io.buf = (void *)buf;
+  sock_req.io.buf_len = buf_len;
+  sock_req.io.flags = flags;
+  sock_req.io.ret_len = 0;
+
+  while (sock_req.io.buf_len > 0) {  // 数据可能需要多次发送
+    // 调用消息队列工作线程执行socket发送请求
+    net_err_t err = exmsg_func_exec(sock_req_send, &sock_req);
+
+    switch (err) {
+      case NET_ERR_OK: {  // 发送成功，更新缓冲区位置和大小信息
+        sock_req.io.buf = (uint8_t *)buf + sock_req.io.ret_len;
+        sock_req.io.buf_len = (size_t)(buf_len - sock_req.io.ret_len);
+      } break;
+      case NET_ERR_NEEDWAIT: {  // 需要等待内部工作线程执行完毕
+        if (sock_wait_enter(sock_req.wait, sock_req.wait_tmo) != NET_ERR_OK) {
+          dbg_error(DBG_SOCKET, "socket send wait time out.");
+          return sock_req.io.ret_len;
+        }
+      } break;
+      default: {  // 发生其他错误
+        dbg_error(DBG_SOCKET, "send failed.\n");
+        return sock_req.io.ret_len;
+      }
+    }
+  }
+
+  // 返回实际发送的数据量(字节量)
+  return sock_req.io.ret_len;
+}
+
+/**
+ * @brief 外部接口，通过socket接收数据，socket已经调用connect()函数连接到远端地址
+ * 
+ * @param socket 
+ * @param buf 
+ * @param buf_len 
+ * @param flags 
+ * @return ssize_t 
+ */
+ssize_t net_recv(int socket, void *buf, size_t buf_len, int flags) {
+  // 进行参数检查
+  if (socket < 0 || !buf || !buf_len) {
+    dbg_error(DBG_SOCKET, "recv param error.\n");
+    return -1;
+  }
+
+  while (1) {
+    // 封装socket接收请求参数
+    sock_req_t sock_req;
+    sock_req.wait =
+        (sock_wait_t *)0;  // wait对象，用来等待内部工作线程的接收结果
+    sock_req.wait_tmo = 0;
+    sock_req.sock_fd = socket;
+    sock_req.io.buf = buf;
+    sock_req.io.buf_len = buf_len;
+    sock_req.io.flags = flags;
+    sock_req.io.ret_len = 0;
+
+    // 调用消息队列工作线程执行socket接收请求
+    net_err_t err = exmsg_func_exec(sock_req_recv, &sock_req);
+    switch (err) {
+      case NET_ERR_OK: {  
+        // 返回实际接收的数据量(字节量)， 若返回-1表示接收失败
+        return sock_req.io.ret_len > 0 ? sock_req.io.ret_len : -1;
+      } break;
+      case NET_ERR_NEEDWAIT: {  // 需要等待内部工作线程执行完毕
+        if (sock_wait_enter(sock_req.wait, sock_req.wait_tmo) != NET_ERR_OK) {
+          dbg_error(DBG_SOCKET, "socket wait error.");
+          return -1;
+        }
+      } break;
+      default: {  // 发生其他错误
+        dbg_error(DBG_SOCKET, "recvfrom failed.\n");
+        return -1;
+      }
+    }
+  }
 }

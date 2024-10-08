@@ -86,13 +86,14 @@ void ping_run(ping_t *ping, const char *dest_ip, int data_size,
   dest_addr.sin_addr.s_addr = inet_addr(dest_ip);
   dest_addr.sin_port = 0;
 
-  // // 创建指定的socket连接
-  // if (connect(raw_socket, (struct sockaddr *)&dest_addr, sizeof(dest_addr)) <
-  // 0) {
-  //   plat_printf("connect error\n");
-  //   closesocket(raw_socket);
-  //   return;
-  // }
+  // 创建指定的socket连接
+  if (connect(raw_socket, (struct sockaddr *)&dest_addr, sizeof(dest_addr)) <
+      0) {
+    plat_printf("connect error\n");
+    close(raw_socket);
+    return;
+  }
+
 
   // 填充ping数据包
   int fill_size = data_size > PING_BUF_SIZE ? PING_BUF_SIZE : data_size;
@@ -142,7 +143,7 @@ void ping_run(ping_t *ping, const char *dest_ip, int data_size,
 #else
       size = recv(raw_socket, (char *)&ping->reply, sizeof(ping->reply), 0);
 #endif
-      
+
       if (size < 0) {
         plat_printf("recv icmp packet tmo\n");
         break;

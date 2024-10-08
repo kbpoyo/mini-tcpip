@@ -37,9 +37,12 @@ static void udp_disp_list(void) {
     sock = nlist_entry(node, sock_t, node);
     plat_printf("[%d]:", index++);
     netif_dum_ip(" local ip: ", &sock->local_ip);
+    plat_printf(" local port: %d", sock->local_port);
     netif_dum_ip(" remote ip: ", &sock->remote_ip);
-    plat_printf("\n");
+    plat_printf(" remote port: %d\n", sock->remote_port);
   }
+
+  plat_printf("----------------------------------------------\n");
 }
 
 /**
@@ -145,6 +148,7 @@ static net_err_t udp_port_alloc(sock_t *sock) {
     if (!udp_port_is_used(last_alloc_port)) {
       // 本地端口号未被使用，分配该端口号
       sock->local_port = last_alloc_port;
+      udp_disp_list();
       return NET_ERR_OK;
     }
   }
@@ -163,8 +167,8 @@ static net_err_t udp_port_alloc(sock_t *sock) {
  * @param buf
  * @return net_err_t
  */
-net_err_t udp_send(ipaddr_t *dest_ip, uint16_t dest_port, ipaddr_t *src_ip,
-                   uint16_t src_port, pktbuf_t *buf) {
+static net_err_t udp_send(ipaddr_t *dest_ip, uint16_t dest_port,
+                          ipaddr_t *src_ip, uint16_t src_port, pktbuf_t *buf) {
   // 检查是否已指定源ip地址，若没有则查找路由表获取合适的源ip地址
   if (ipaddr_is_any(src_ip)) {
     route_entry_t *rt_entry = route_find(dest_ip);
@@ -250,7 +254,7 @@ static net_err_t udp_sendto(struct _sock_t *sock, const void *buf,
 
   // TODO: 若分配的数据包缓冲区大小不足，将数据分多次发送
   // 为待发送数据分配一个数据包缓冲区
-  pktbuf_t *pktbuf = pktbuf_alloc(buf_len);  //!!! 分配数据包
+  pktbuf_t *pktbuf = pktbuf_alloc(buf_len);  //!!! 获取数据包
   if (!pktbuf) {
     dbg_error(DBG_UDP, "no memory for pktbuf.");
     return NET_ERR_UDP;
@@ -291,11 +295,11 @@ static net_err_t udp_sendto(struct _sock_t *sock, const void *buf,
  * @param ret_recv_len 实际接收数据大小
  * @return net_err_t
  */
-net_err_t udp_recvfrom(struct _sock_t *sock, void *buf, size_t buf_len,
-                           int flags, struct net_sockaddr *src,
-                           net_socklen_t *src_len, ssize_t *ret_recv_len) {
+static net_err_t udp_recvfrom(struct _sock_t *sock, void *buf, size_t buf_len,
+                              int flags, struct net_sockaddr *src,
+                              net_socklen_t *src_len, ssize_t *ret_recv_len) {
   // 将基类sock对象转换为udp对象，并从其接收缓冲区链表中获取数据包
-  udp_t *udp = (udp_t *)sock; 
+  udp_t *udp = (udp_t *)sock;
   nlist_node_t *node = nlist_remove_first(&udp->recv_buf_list);
   if (!node) {  // 接收缓冲区链表为空, 通知调用者等待
     return NET_ERR_NEEDWAIT;
@@ -303,11 +307,13 @@ net_err_t udp_recvfrom(struct _sock_t *sock, void *buf, size_t buf_len,
   pktbuf_t *pktbuf = nlist_entry(node, pktbuf_t, node);  //!!! 获取数据包
 
   // 获取并移除数据包已修改过的udp头部，并解析源ip地址和端口号到socket地址对象中
-  udp_remote_info_t *remote_info = pktbuf_data_ptr(pktbuf);
-  struct net_sockaddr_in *src_addr = (struct net_sockaddr_in *)src;
-  src_addr->sin_family = AF_INET; // 只支持IPv4
-  src_addr->sin_port = remote_info->port;
-  src_addr->sin_addr.s_addr = *(uint32_t *)remote_info->ip;
+  if (src) {  // 需要解析源socket地址
+    udp_remote_info_t *remote_info = pktbuf_data_ptr(pktbuf);
+    struct net_sockaddr_in *src_addr = (struct net_sockaddr_in *)src;
+    src_addr->sin_family = AF_INET;  // 只支持IPv4
+    src_addr->sin_port = remote_info->port;
+    src_addr->sin_addr.s_addr = *(uint32_t *)remote_info->ip;
+  }
   pktbuf_header_remove(pktbuf, sizeof(udp_hdr_t));
 
   // 并将数据包的数据部分拷贝到接收缓冲区
@@ -322,11 +328,139 @@ net_err_t udp_recvfrom(struct _sock_t *sock, void *buf, size_t buf_len,
   }
 
   // 返回接收到的数据大小和源socket地址大小
-  *src_len = sizeof(struct net_sockaddr_in);
+  if (src_len) {
+    *src_len = sizeof(struct net_sockaddr_in);
+  }
   *ret_recv_len = copy_len;
   return NET_ERR_OK;
 }
 
+/**
+ * @brief 释放一个原始socket对象
+ *
+ * @param sock
+ * @return net_err_t
+ */
+static net_err_t udp_close(sock_t *sock) {
+  // 将sock对象转换为udp对象
+  udp_t *udp = (udp_t *)sock;
+
+  // 释放sock对象的接收缓冲区链表
+  nlist_node_t *node = (nlist_node_t *)0;
+  while ((node = nlist_remove_first(&udp->recv_buf_list))) {
+    pktbuf_t *pktbuf = nlist_entry(node, pktbuf_t, node);  //!!! 获取数据包
+    pktbuf_free(pktbuf);                                   //!!! 释放数据包
+  }
+
+  // 销毁基类sock对象持有的资源，并释放原始sock对象
+  sock_uninit(sock);
+  udp_free(udp);
+
+  // 显示udp对象列表
+  udp_disp_list();
+
+  return NET_ERR_OK;
+}
+
+/**
+ * @brief udp socket连接目标socket地址
+ *
+ * @param sock
+ * @param addr
+ * @param addrlen
+ * @return net_err_t
+ */
+static net_err_t udp_connect(sock_t *sock, const struct net_sockaddr *addr,
+                             net_socklen_t addrlen) {
+  net_err_t err = sock_connect(sock, addr, addrlen);
+  udp_disp_list();
+  return err;
+}
+
+/**
+ * @brief udp socket绑定本地ip和端口号
+ *
+ * @param sock
+ * @param addr
+ * @param addrlen
+ * @return net_err_t
+ */
+static net_err_t udp_bind(sock_t *sock, const struct net_sockaddr *addr,
+                          net_socklen_t addrlen) {
+  // 判断是否已绑定本地ip和端口号
+  if (sock->local_port) {
+    dbg_error(DBG_UDP, "socket has bind.");
+    return NET_ERR_UDP;
+  }
+
+  // 获取端口号, 并判断端口号是否已被绑定
+  const struct net_sockaddr_in *addr_in = (const struct net_sockaddr_in *)addr;
+  ipaddr_t local_ip;
+  ipaddr_from_bytes(&local_ip, addr_in->sin_addr.s_addr_bytes);
+  uint16_t local_port = net_ntohs(addr_in->sin_port);
+  nlist_node_t *node = (nlist_node_t *)0;
+  nlist_for_each(node, &udp_list) {
+    sock_t *sock = nlist_entry(node, sock_t, node);
+    if (sock->local_port == local_port &&
+        ipaddr_is_equal(&sock->local_ip, &local_ip)) {
+      dbg_error(DBG_UDP, "port has bind.");
+      return NET_ERR_UDP;
+    }
+  }
+
+  // socket未进行绑定，且端口号未被使用，绑定本地ip和端口号
+  net_err_t err = sock_bind(sock, &local_ip, local_port);
+  udp_disp_list();
+
+  return err;
+}
+
+/**
+ * @brief 内部接口，创建一个udp socket对象
+ *
+ * @param family  协议族
+ * @param protocol 上层协议
+ * @return sock_t*
+ */
+sock_t *udp_create(int family, int protocol) {
+  static const sock_ops_t udp_ops = {
+      .sendto = udp_sendto,      // 独立实现接口
+      .recvfrom = udp_recvfrom,  // 独立实现接口
+      .setopt = sock_setopt,     // 继承基类的实现
+      .close = udp_close,        // 独立实现接口
+      .connect = udp_connect,    // 独立实现接口
+      .bind = udp_bind,
+      .send = sock_send,  // 继承基类的实现
+      .recv = sock_recv,  // 继承基类的实现
+  };
+
+  // 分配一个原始socket对象
+  udp_t *udp = udp_alloc();
+  if (!udp) {  // 内存块不足分配失败
+    dbg_error(DBG_UDP, "no memory for udp socket.");
+    return (sock_t *)0;
+  }
+  // 初始化该udp对象的基类socket对象, 并挂载到udp对象链表
+  sock_init(&udp->sock_base, family, protocol, &udp_ops);
+  nlist_insert_last(&udp_list, &udp->sock_base.node);
+  udp_disp_list();
+
+  // 初始化udp的数据包接收缓存链表
+  nlist_init(&udp->recv_buf_list);
+
+  // 使用基类sock记录udp sock的wait对象, 并初始化
+  udp->sock_base.recv_wait = &udp->recv_wait;
+  if (sock_wait_init(udp->sock_base.recv_wait) != NET_ERR_OK) {
+    dbg_error(DBG_UDP, "sock wait init failed.");
+    // 销毁基类sock对象持有的资源，并释放udp sock对象
+    sock_uninit(&udp->sock_base);
+    udp_free(udp);
+    return (sock_t *)0;
+  }
+
+  // sock_base为第一个成员，起始地址相同，可直接转换
+  return (sock_t *)udp;
+}
 
 /**
  * @brief 根据源ip地址、源端口号、目的ip地址、目的端口号查找udp
@@ -350,6 +484,7 @@ static udp_t *udp_find(ipaddr_t *src_ip, uint16_t src_port, ipaddr_t *dest_ip,
   nlist_node_t *node = (nlist_node_t *)0;
   sock_t *sock = (sock_t *)0;
 
+  // TODO: 优化查找算法，选出四元组匹配项最多的udp sock对象
   nlist_for_each(node, &udp_list) {
     sock = nlist_entry(node, sock_t, node);
     if (sock->local_port != dest_port) {  // 目的端口号不匹配
@@ -440,7 +575,7 @@ net_err_t udp_recv(pktbuf_t *buf, ipaddr_t *src_ip, ipaddr_t *dest_ip) {
   // 通过端口信息查找绑定的udp socket对象
   udp_t *udp = udp_find(src_ip, src_port, dest_ip, dest_port);
   if (!udp) {
-    dbg_error(DBG_UDP, "udp socket not found.");
+    dbg_warning(DBG_UDP, "udp socket not found.");
     // 未找到匹配的udp
     // socket对象，返回不可达错误，通知ip层发送icmp端口不可达报文
     // 返回不可达错误前不能修改数据包内容，需要尽可能多的将错误数据包的内容返回给发送方
@@ -457,8 +592,8 @@ net_err_t udp_recv(pktbuf_t *buf, ipaddr_t *src_ip, ipaddr_t *dest_ip) {
 
   // 修改udp头部用于记录远端ip地址和端口号
   udp_remote_info_t *remote_info = (udp_remote_info_t *)pktbuf_data_ptr(buf);
-  remote_info->port = src_port;
-  *(uint32_t *)remote_info->ip = src_ip->addr;
+  *(uint32_t *)remote_info->ip =
+      src_ip->addr;  // 端口号不需要修改，默认在前两个字节
 
   // 将数据包放入udp sock对象的接收缓存链表，等待应用层接收
   if (nlist_count(&udp->recv_buf_list) <
@@ -474,47 +609,4 @@ net_err_t udp_recv(pktbuf_t *buf, ipaddr_t *src_ip, ipaddr_t *dest_ip) {
   }
 
   return NET_ERR_OK;
-}
-
-/**
- * @brief 内部接口，创建一个udp socket对象
- *
- * @param family  协议族
- * @param protocol 上层协议
- * @return sock_t*
- */
-sock_t *udp_create(int family, int protocol) {
-  static const sock_ops_t udp_ops = {
-      .sendto = udp_sendto,  // 独立实现接口
-      //   .recvfrom = udp_recvfrom,  // 独立实现接口
-      .setopt = sock_setopt,  // 继承基类的实现
-      //   .close = udp_close,        // 独立实现接口
-  };
-
-  // 分配一个原始socket对象
-  udp_t *udp = udp_alloc();
-  if (!udp) {  // 内存块不足分配失败
-    dbg_error(DBG_UDP, "no memory for udp socket.");
-    return (sock_t *)0;
-  }
-  // 初始化该udp对象的基类socket对象, 并挂载到udp对象链表
-  sock_init(&udp->sock_base, family, protocol, &udp_ops);
-  nlist_insert_last(&udp_list, &udp->sock_base.node);
-  udp_disp_list();
-
-  // 初始化udp的数据包接收缓存链表
-  nlist_init(&udp->recv_buf_list);
-
-  // 使用基类sock记录udp sock的wait对象, 并初始化
-  udp->sock_base.recv_wait = &udp->recv_wait;
-  if (sock_wait_init(udp->sock_base.recv_wait) != NET_ERR_OK) {
-    dbg_error(DBG_UDP, "sock wait init failed.");
-    // 销毁基类sock对象持有的资源，并释放udp sock对象
-    sock_uninit(&udp->sock_base);
-    udp_free(udp);
-    return (sock_t *)0;
-  }
-
-  // sock_base为第一个成员，起始地址相同，可直接转换
-  return (sock_t *)udp;
 }

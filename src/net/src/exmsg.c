@@ -26,7 +26,6 @@ static fixq_t msg_queue;              // 消息队列
 static exmsg_t msg_buffer[EXMSG_MSG_CNT];  // 消息结构缓冲区,存放自定义消息结构
 static mblock_t msg_mblock;  // 消息结构缓冲区内存块管理对象
 
-
 /**
  * @brief 分配一个消息结构
  *
@@ -58,10 +57,6 @@ static void exmsg_free(exmsg_t *msg) {
 
   mblock_free(&msg_mblock, msg);
 }
-
-
-
-
 
 net_err_t exmsg_func_exec(exmsg_func_t func, void *arg) {
   // 创建函数执行请求的内部消息对象
@@ -101,7 +96,7 @@ net_err_t exmsg_func_exec(exmsg_func_t func, void *arg) {
   // 等待工作线程执行完当前函数
   sys_sem_wait(msg.sem, 0);
 
-
+  // 工作线程执行完后，返回值记录在msg.error中
   return msg.error;
 }
 
@@ -132,7 +127,6 @@ net_err_t exmsg_module_init(void) {
   dbg_info(DBG_EXMSG, "init exmsg module ok.");
   return NET_ERR_OK;
 }
-
 
 /**
  * @brief 从网卡接收数据后，发送到消息队列
@@ -203,8 +197,8 @@ static void exmsg_handle_netif_recv(exmsg_t *msg) {
 
 /**
  * @brief func_exec消息处理函数
- * 
- * @param msg 
+ *
+ * @param msg
  */
 static void exmsg_handle_func_exec(exmsg_t *msg) {
   dbg_info(DBG_EXMSG, "begin call func: %p", msg->msg_func->func);
@@ -217,7 +211,6 @@ static void exmsg_handle_func_exec(exmsg_t *msg) {
   sys_sem_notify(msg_func->sem);
 
   dbg_info(DBG_EXMSG, "end call func: %p", msg->msg_func->func);
-
 }
 
 /**

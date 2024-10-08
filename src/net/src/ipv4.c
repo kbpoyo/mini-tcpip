@@ -361,8 +361,9 @@ static net_err_t ipv4_handle_normal(const netif_t *netif, pktbuf_t *buf) {
   ipaddr_from_bytes(&src_ip, pkt->hdr.src_ip);
   ipaddr_from_bytes(&dest_ip, pkt->hdr.dest_ip);
 
-  // 根据数据包的协议字段将其提供给上一层协议处理
-  switch (pkt->hdr.tran_proto) {
+  // 根据数据包的协议字段将其提供给上一层协议处理，ip包有可能会触发上层协议的不可达错误
+  // 当触发不可达错误时，需要尽可能返回该ip包的数据，所以ip包头在上层协议接收该包时再移除
+  switch (pkt->hdr.tran_proto) { 
     case NET_PROTOCOL_ICMPv4: {
       // 当前网络接口已匹配该包的目的地址，直接使用接口地址即可
       err = icmpv4_recv(buf, &netif->ipaddr, &src_ip);  //!!! 数据包传递
@@ -374,12 +375,12 @@ static net_err_t ipv4_handle_normal(const netif_t *netif, pktbuf_t *buf) {
 
     case NET_PROTOCOL_UDP: {  // UDP协议
       dbg_info(DBG_IPV4, "recv UDP packet.");
-      err = udp_recv(buf, &src_ip, &dest_ip); //!!! 数据包传递
+      err = udp_recv(buf, &src_ip, &dest_ip);  //!!! 数据包传递
       if (err != NET_ERR_OK) {
         dbg_warning(DBG_IPV4, "udp recv failed.");
         if (err == NET_ERR_UNREACH) {
           ipv4_hdr_hton(&pkt->hdr);  // 将头部转换为网络字节序
-          icmpv4_make_unreach(&src_ip, &netif->ipaddr,
+          return icmpv4_make_unreach(&src_ip, &netif->ipaddr,
                                      ICMPv4_CODE_UNREACH_PORT, buf);
         }
         return err;
@@ -653,8 +654,6 @@ net_err_t ipv4_recv(const netif_t *netif, pktbuf_t *buf) {
 
   // 将ipv4数据包头部从网络字节序转换为主机字节序
   ipv4_hdr_ntoh(&ipv4_pkt->hdr);
-
-  // 打印ipv4数据包头部信息
   ipv4_pkt_display(ipv4_pkt);
 
   // 判断是否为发送给本网络接口的数据包
@@ -674,15 +673,14 @@ net_err_t ipv4_recv(const netif_t *netif, pktbuf_t *buf) {
     return err;
   }
 
-  if (ipv4_pkt->hdr.frag_more || ipv4_pkt->hdr.frag_offset) {
-    // 使用ipv4_handle_frag()函数处理被分片的数据包
+  // 判断是否为分片数据包, 若为分片数据包则进行分片处理
+  if (ipv4_pkt->hdr.frag_more || ipv4_pkt->hdr.frag_offset) {  // 进行分片处理
     err = ipv4_handle_frag(netif, buf);  //!!! 数据包传递
     if (err != NET_ERR_OK) {
       dbg_error(DBG_IPV4, "handle frag failed.");
       return err;
     }
-  } else {
-    // 使用ipv4_handle_normal()函数处理普通数据包
+  } else {                                 // 不进行分片处理
     err = ipv4_handle_normal(netif, buf);  //!!! 数据包传递
     if (err != NET_ERR_OK) {
       dbg_error(DBG_IPV4, "handle normal failed.");
@@ -819,6 +817,11 @@ net_err_t ipv4_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
                     const ipaddr_t *src_ipaddr, pktbuf_t *buf) {
   dbg_info(DBG_IPV4, "send an ipv4 packet....");
   net_err_t err = NET_ERR_OK;
+  // 检查目的ip地址是否有效
+  if (ipaddr_is_any(dest_ipaddr)) {
+    dbg_error(DBG_IPV4, "dest ip address is any.");
+    return NET_ERR_IPV4;
+  }
 
   // 根据目的ip地址查找路由表，获取下一跳的ip地址和发送该包的网络接口
   route_entry_t *rt_entry = route_find(dest_ipaddr);

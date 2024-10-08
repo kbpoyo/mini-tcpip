@@ -13,7 +13,9 @@
 
 #include "mblock.h"
 #include "net_plat.h"
+#include "route.h"
 #include "sock_raw.h"
+#include "tools.h"
 #include "udp.h"
 
 // 定义协议栈可用的socket对象最大数量
@@ -289,6 +291,45 @@ net_err_t sock_req_sendto(msg_func_t *msg) {
 }
 
 /**
+ * @brief 内部接口，通过socket对象发送数据，且socket对象已连接远端地址
+ *
+ * @param msg
+ * @return net_err_t
+ */
+net_err_t sock_req_send(msg_func_t *msg) {
+  // 获取socket发送请求参数
+  sock_req_t *sock_req = (sock_req_t *)msg->arg;
+  sock_io_t *io = &sock_req->io;
+
+  // 获取封装socket对象, 并获取其基类对象
+  net_socket_t *socket = socket_by_index(sock_req->sock_fd);
+  if (!socket) {
+    dbg_error(DBG_SOCKET, "invalid socket fd.");
+    return NET_ERR_SOCKET;
+  }
+  sock_t *sock = socket->sock;
+
+  // 调用socket对象的发送方法，进行静态多态调用
+  if (!sock->ops->send) {
+    dbg_error(DBG_SOCKET, "socket send not supported.");
+    return NET_ERR_SOCKET;
+  }
+  net_err_t err = socket->sock->ops->send(socket->sock, io->buf, io->buf_len,
+                                          io->flags, &io->ret_len);
+  if (err == NET_ERR_NEEDWAIT) {  // 通知外部线程等待执行结果
+    if (sock->send_wait) {
+      // 为方法请求对象添加一个wait对象, 使用该wait对象阻塞外部线程
+      sock_wait_add(sock->send_wait, sock->send_tmo, sock_req);
+    } else {
+      dbg_error(DBG_SOCKET, "socket don't have send wait obj.");
+      return NET_ERR_SOCKET;
+    }
+  }
+
+  return err;
+}
+
+/**
  * @brief 外部应用请求接收数据
  *
  * @param msg
@@ -332,6 +373,45 @@ net_err_t sock_req_recvfrom(msg_func_t *msg) {
 }
 
 /**
+ * @brief 内部接口，通过socket对象接收数据，且socket对象已连接远端地址
+ *
+ * @param msg
+ * @return net_err_t
+ */
+net_err_t sock_req_recv(msg_func_t *msg) {
+  // 获取socket发送请求参数
+  sock_req_t *sock_req = (sock_req_t *)msg->arg;
+  sock_io_t *io = &sock_req->io;
+
+  // 获取封装socket对象, 并获取其基类对象
+  net_socket_t *socket = socket_by_index(sock_req->sock_fd);
+  if (!socket) {
+    dbg_error(DBG_SOCKET, "invalid socket fd.");
+    return NET_ERR_SOCKET;
+  }
+  sock_t *sock = socket->sock;
+
+  // 调用socket对象的发送方法，进行静态多态调用
+  if (!sock->ops->recv) {
+    dbg_error(DBG_SOCKET, "socket recv not supported.");
+    return NET_ERR_SOCKET;
+  }
+  net_err_t err = socket->sock->ops->recv(socket->sock, io->buf, io->buf_len,
+                                          io->flags, &io->ret_len);
+  if (err == NET_ERR_NEEDWAIT) {  // 通知外部线程等待执行结果
+    if (sock->recv_wait) {
+      // 为方法请求对象添加一个wait对象, 使用该wait对象阻塞外部线程
+      sock_wait_add(sock->recv_wait, sock->recv_tmo, sock_req);
+    } else {
+      dbg_error(DBG_SOCKET, "socket don't have recv wait obj.");
+      return NET_ERR_SOCKET;
+    }
+  }
+
+  return err;
+}
+
+/**
  * @brief 外部应用请求设置socket选项
  *
  * @param msg
@@ -359,6 +439,81 @@ net_err_t sock_req_setopt(msg_func_t *msg) {
   }
   return sock->ops->setopt(sock, opt->level, opt->optname, opt->optval,
                            opt->optlen);
+}
+
+/**
+ * @brief 内部接口，连接指定socket对象，只与connect连接的远端地址通信
+ *
+ * @param msg
+ * @return net_err_t
+ */
+net_err_t sock_req_connect(msg_func_t *msg) {
+  // 获取socket选项设置请求参数
+  sock_req_t *sock_req = (sock_req_t *)msg->arg;
+  const struct net_sockaddr *addr = sock_req->io.sockaddr;
+  net_socklen_t addr_len = sock_req->io.sockaddr_len;
+
+  // 获取封装的socket对象
+  net_socket_t *socket = socket_by_index(sock_req->sock_fd);
+  if (!socket) {
+    dbg_error(DBG_SOCKET, "invalid socket fd.");
+    return NET_ERR_SOCKET;
+  }
+
+  // 获取socket基类对象, 并完成静态多态调用
+  sock_t *sock = socket->sock;
+  if (!sock->ops->connect) {
+    dbg_error(DBG_SOCKET, "socket connect not supported.");
+    return NET_ERR_SOCKET;
+  }
+  net_err_t err = sock->ops->connect(sock, addr, addr_len);
+  switch (err) {        // 处理连接结果
+    case NET_ERR_OK: {  // 连接成功
+      return NET_ERR_OK;
+    } break;
+    case NET_ERR_NEEDWAIT: {  // 通知外部线程等待执行结果
+      if (sock->conn_wait) {
+        // 为方法请求对象添加一个wait对象, 使用该wait对象阻塞外部线程
+        sock_wait_add(sock->conn_wait, sock->recv_tmo, sock_req);
+      } else {
+        dbg_error(DBG_SOCKET, "socket don't have connect wait obj.");
+        return NET_ERR_SOCKET;
+      }
+    } break;
+    default: {  // 连接失败
+      dbg_error(DBG_SOCKET, "socket connect failed.");
+      return err;
+    } break;
+  }
+}
+
+/**
+ * @brief 内部接口，socket绑定本地ip地址与端口
+ *
+ * @param msg
+ * @return net_err_t
+ */
+net_err_t sock_req_bind(msg_func_t *msg) {
+  // 获取socket选项设置请求参数
+  sock_req_t *sock_req = (sock_req_t *)msg->arg;
+  const struct net_sockaddr *addr = sock_req->io.sockaddr;
+  net_socklen_t addr_len = sock_req->io.sockaddr_len;
+
+  // 获取封装的socket对象
+  net_socket_t *socket = socket_by_index(sock_req->sock_fd);
+  if (!socket) {
+    dbg_error(DBG_SOCKET, "invalid socket fd.");
+    return NET_ERR_SOCKET;
+  }
+
+  // 获取socket基类对象, 并完成静态多态调用
+  sock_t *sock = socket->sock;
+  if (!sock->ops->bind) {
+    dbg_error(DBG_SOCKET, "socket bind not supported.");
+    return NET_ERR_SOCKET;
+  }
+
+  return sock->ops->bind(sock, addr, addr_len);
 }
 
 /**
@@ -459,6 +614,50 @@ net_err_t sock_req_close(msg_func_t *msg) {
   return NET_ERR_OK;
 }
 
+/**
+ * @brief 将addr中的ip和端口信息记录到sock对象中
+ *
+ * @param sock
+ * @param addr
+ * @param addr_len
+ * @return net_err_t
+ */
+net_err_t sock_connect(sock_t *sock, const struct net_sockaddr *addr,
+                       net_socklen_t addr_len) {
+  // 将远端地址信息拷贝到sock对象中
+  const struct net_sockaddr_in *remote_addr =
+      (const struct net_sockaddr_in *)addr;
+  ipaddr_from_bytes(&sock->remote_ip, remote_addr->sin_addr.s_addr_bytes);
+  sock->remote_port = net_ntohs(remote_addr->sin_port);
+  return NET_ERR_OK;
+}
+
+/**
+ * @brief 将sock对象绑定到本地地址
+ *
+ * @param sock
+ * @param addr
+ * @param addr_len
+ * @return net_err_t
+ */
+net_err_t sock_bind(sock_t *sock, const ipaddr_t *local_ip, const uint16_t local_port) {
+  // 若指定了ip地址，则判断其是否在本地网络接口中
+  if (!ipaddr_is_any(local_ip)) {
+    route_entry_t *rt_entry = route_find(local_ip);
+    if (!rt_entry || !ipaddr_is_equal(&rt_entry->netif->ipaddr, local_ip)) {
+      dbg_error(DBG_SOCKET, "local ip not found in local netif.\n");
+      return NET_ERR_SOCKET;
+    }
+  }
+
+  // 指定的ip地址在本地网络接口中，将其绑定到sock对象中
+  // 若未指定ip地址(local_ip 为空)，则由ip层在发送时根据目的地址自动选择
+  ipaddr_copy(&sock->local_ip, local_ip);
+  sock->local_port = local_port;
+
+  return NET_ERR_OK;
+}
+
 /***********************************************************************************************************
  * @brief
  * 基类sock的通用接口实现，后续派生类可直接继承方法，不用再独立实现。
@@ -512,4 +711,41 @@ net_err_t sock_setopt(sock_t *sock, int level, int optname, const char *optval,
   }
 
   return NET_ERR_OK;
+}
+
+/**
+ * @brief 基类的send方法实现，后续派生类可直接继承该方法
+ *
+ * @param sock
+ * @param buf
+ * @param buf_len
+ * @param flags
+ * @param ret_send_len
+ * @return neterr_t
+ */
+net_err_t sock_send(sock_t *sock, const void *buf, size_t buf_len, int flags,
+                    ssize_t *ret_send_len) {
+  struct net_sockaddr_in addr;
+  addr.sin_family = sock->family;
+  addr.sin_port = net_htons(sock->remote_port);
+  ipaddr_to_bytes(&sock->remote_ip, addr.sin_addr.s_addr_bytes);
+
+  return sock->ops->sendto(sock, buf, buf_len, flags,
+                           (const struct net_sockaddr *)&addr,
+                           sizeof(struct net_sockaddr_in), ret_send_len);
+}
+
+/**
+ * @brief 基类的recv方法实现，后续派生类可直接继承该方法
+ *
+ * @param sock
+ * @param buf
+ * @param buf_len
+ * @param flags
+ * @param ret_recv_len
+ * @return neterr_t
+ */
+net_err_t sock_recv(sock_t *sock, void *buf, size_t buf_len, int flags,
+                    ssize_t *ret_recv_len) {
+  return sock->ops->recvfrom(sock, buf, buf_len, flags, 0, 0, ret_recv_len);
 }

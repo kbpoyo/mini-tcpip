@@ -2,6 +2,7 @@
 
 #include "udp_echo_server.h"
 
+// #include <winsock2.h>
 #include "net_api.h"
 #include "sys_plat.h"
 
@@ -9,8 +10,8 @@ void udp_echo_server_run(void *arg) {
   int port = (int)arg;
 
   // 初始化WinSock
-  WSADATA wsaData;
-  WSAStartup(MAKEWORD(2, 2), &wsaData);
+  // WSADATA wsaData;
+  // WSAStartup(MAKEWORD(2, 2), &wsaData);
 
   // 创建客户端socket
   int server_socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -24,12 +25,12 @@ void udp_echo_server_run(void *arg) {
   plat_memset(&server_addr, 0, sizeof(server_addr));
   server_addr.sin_family = AF_INET;
   server_addr.sin_addr.s_addr = INADDR_ANY;
+  // server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
   server_addr.sin_port = htons(port);
 
   // 绑定服务器socket地址
-  //   int ret = bind(server_socket, (const struct sockaddr *)&server_addr,
-  //                  sizeof(server_addr));
-  int ret = 1;
+  int ret = bind(server_socket, (const struct sockaddr *)&server_addr,
+                 sizeof(server_addr));
   if (ret < 0) {
     plat_printf("udp echo server bind error\n");
     goto client_end;
@@ -52,12 +53,12 @@ void udp_echo_server_run(void *arg) {
     plat_memset(buf, 0, sizeof(buf));
   }
 
-  closesocket(server_socket);
+  close(server_socket);
   sys_thread_exit(0);
 
 client_end:
   if (server_socket >= 0) {
-    closesocket(server_socket);
+    close(server_socket);
   }
   sys_thread_exit(0);
 }

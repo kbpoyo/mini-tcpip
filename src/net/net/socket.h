@@ -92,7 +92,11 @@ ssize_t net_sendto(int socket, const void *buf, size_t buf_len, int flags,
 ssize_t net_recvfrom(int socket, void *buf, size_t buf_len, int flags,
                      struct net_sockaddr *src, net_socklen_t *src_len);
 int net_close(int socket);
+int net_connect(int socket, const struct net_sockaddr *addr,
+                net_socklen_t addrlen);
 int net_setsockopt(int socket, int level, int optname, const char *optval,
                    int optlen);
-
+ssize_t net_send(int socket, const void *buf, size_t buf_len, int flags);
+ssize_t net_recv(int socket, void *buf, size_t buf_len, int flags);
+int net_bind(int socket, const struct net_sockaddr *addr, net_socklen_t addrlen);
 #endif  // SOCKET_H
