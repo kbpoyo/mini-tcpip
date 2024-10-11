@@ -35,7 +35,7 @@ int net_socket(int family, int type, int protocol) {
   // 调用消息队列工作线程执行socket创建请求
   net_err_t err = exmsg_func_exec(sock_req_creat, &sock_req);
   if (err != NET_ERR_OK) {
-    dbg_error(DBG_SOCKET, "socket create failed.\n");
+    dbg_error(DBG_SOCKET, "socket create failed.");
     return -1;
   }
 

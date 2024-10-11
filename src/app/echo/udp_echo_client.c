@@ -52,10 +52,14 @@ int udp_echo_client_start(const char *ip, int port) {
     // int len = recvfrom(client_socket, buf, sizeof(buf), 0,
     //                    (struct sockaddr *)&from_addr, &from_len);
     int len = recv(client_socket, buf, sizeof(buf), 0);
+    // int len = recv(client_socket, buf, 2, 0);
     if (len < 0) {
       plat_printf("udp client recv error\n");
       goto client_end;
     }
+
+    // len = recv(client_socket, buf + 2, 2, 0);
+
     buf[len - 1] = '\0';
     plat_printf("recv: %s\n", buf);
     plat_printf(">>");

@@ -37,7 +37,9 @@
         "internet": "c",
         "udp_echo_client.h": "c",
         "udp_echo_server.h": "c",
-        "net_api.h": "c"
+        "net_api.h": "c",
+        "functional": "c",
+        "tcp.h": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [

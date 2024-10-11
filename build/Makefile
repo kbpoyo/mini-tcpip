@@ -892,6 +892,54 @@ src/net/src/socket.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/socket.c.s
 .PHONY : src/net/src/socket.c.s
 
+src/net/src/tcp.obj: src/net/src/tcp.c.obj
+.PHONY : src/net/src/tcp.obj
+
+# target to build an object file
+src/net/src/tcp.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp.c.obj
+.PHONY : src/net/src/tcp.c.obj
+
+src/net/src/tcp.i: src/net/src/tcp.c.i
+.PHONY : src/net/src/tcp.i
+
+# target to preprocess a source file
+src/net/src/tcp.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp.c.i
+.PHONY : src/net/src/tcp.c.i
+
+src/net/src/tcp.s: src/net/src/tcp.c.s
+.PHONY : src/net/src/tcp.s
+
+# target to generate assembly for a file
+src/net/src/tcp.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp.c.s
+.PHONY : src/net/src/tcp.c.s
+
+src/net/src/tcp_recv.obj: src/net/src/tcp_recv.c.obj
+.PHONY : src/net/src/tcp_recv.obj
+
+# target to build an object file
+src/net/src/tcp_recv.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp_recv.c.obj
+.PHONY : src/net/src/tcp_recv.c.obj
+
+src/net/src/tcp_recv.i: src/net/src/tcp_recv.c.i
+.PHONY : src/net/src/tcp_recv.i
+
+# target to preprocess a source file
+src/net/src/tcp_recv.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp_recv.c.i
+.PHONY : src/net/src/tcp_recv.c.i
+
+src/net/src/tcp_recv.s: src/net/src/tcp_recv.c.s
+.PHONY : src/net/src/tcp_recv.s
+
+# target to generate assembly for a file
+src/net/src/tcp_recv.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp_recv.c.s
+.PHONY : src/net/src/tcp_recv.c.s
+
 src/net/src/timer.obj: src/net/src/timer.c.obj
 .PHONY : src/net/src/timer.obj
 
@@ -1134,6 +1182,12 @@ help:
 	@echo ... src/net/src/socket.obj
 	@echo ... src/net/src/socket.i
 	@echo ... src/net/src/socket.s
+	@echo ... src/net/src/tcp.obj
+	@echo ... src/net/src/tcp.i
+	@echo ... src/net/src/tcp.s
+	@echo ... src/net/src/tcp_recv.obj
+	@echo ... src/net/src/tcp_recv.i
+	@echo ... src/net/src/tcp_recv.s
 	@echo ... src/net/src/timer.obj
 	@echo ... src/net/src/timer.i
 	@echo ... src/net/src/timer.s

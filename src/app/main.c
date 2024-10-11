@@ -15,6 +15,7 @@
 #include "exmsg.h"
 #include "echo/udp_echo_client.h"
 #include "echo/udp_echo_server.h"
+#include "echo/tcp_echo_client.h"
 
 pcap_data_t pcap_data = {
     // 需要打开的网络接口的ip地址和硬件地址
@@ -94,15 +95,20 @@ void timer_test() {
 
 void udp_echo_test() {
 
-  udp_echo_server_start(1024);
+  // udp_echo_server_start(2000);
   
-  udp_echo_client_start("192.168.3.160", 1024);
+  // udp_echo_client_start("192.168.3.159", 2000);
   // udp_echo_client_start("0.0.0.0", 1024);
+}
+
+void tcp_echo_test() {
+  tcp_echo_client_start("192.168.3.159", 2000);
 }
 void basic_test(void) {
   // timer_test();
 
-  udp_echo_test();
+  // udp_echo_test();
+  // tcp_echo_test();
 }
 
 #define DBG_TEST DBG_LEVEL_INFO
@@ -118,7 +124,7 @@ int main(void) {
   net_start();
 
   netdev_init();
-  // basic_test();
+  basic_test();
 
   int a = 0x12345678;
 
@@ -126,11 +132,11 @@ int main(void) {
   char cmd[32], param[32];
   ping_t ping;
   while (1) {
-    plat_printf(">>");
-    scanf("%s%s", cmd, param);
-    if (strcmp(cmd, "ping") == 0) {
-      ping_run(&ping, param, 1024, 4, 1000);
-    }
+    // plat_printf(">>");
+    // scanf("%s%s", cmd, param);
+    // if (strcmp(cmd, "ping") == 0) {
+    //   ping_run(&ping, param, 1024, 4, 1000);
+    // }
 
     sys_sleep(10);
   }

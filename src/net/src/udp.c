@@ -74,11 +74,11 @@ static void udp_disp_pkt(udp_pkt_t *pkt) {
 net_err_t udp_module_init(void) {
   dbg_info(DBG_UDP, "init udp module...");
 
-  // 初始化原始socket对象内存块管理对象
+  // 初始化udp socket对象内存块管理对象
   // 只由工作线程访问，不需要加锁
   mblock_init(&udp_mblock, udp_tbl, sizeof(udp_t), UDP_MAXCNT, NLOCKER_NONE);
 
-  // 初始化原始socket对象挂载链表
+  // 初始化udp socket对象挂载链表
   nlist_init(&udp_list);
 
   dbg_info(DBG_UDP, "init udp module ok.");
@@ -179,15 +179,13 @@ static net_err_t udp_send(ipaddr_t *dest_ip, uint16_t dest_port,
     src_ip = &rt_entry->netif->ipaddr;
   }
 
-  // 为数据包添加udp头部
+  // 为数据包添加udp头部,并设置udp头部信息
   net_err_t err =
       pktbuf_header_add(buf, sizeof(udp_hdr_t), PKTBUF_ADD_HEADER_CONT);
   if (err != NET_ERR_OK) {
     dbg_error(DBG_UDP, "add header failed.");
     return err;
   }
-
-  // 获取udp头部对象, 并设置udp头部信息
   udp_hdr_t *udp_hdr = pktbuf_data_ptr(buf);
   udp_hdr->src_port = net_htons(src_port);
   udp_hdr->dest_port = net_htons(dest_port);
@@ -284,7 +282,13 @@ static net_err_t udp_sendto(struct _sock_t *sock, const void *buf,
 }
 
 /**
- * @brief 从sock对象中接收数据，并记录发送方socket地址
+ * @brief 从sock对象中接收数据，并记录发送方socket地址。
+ *       且以数据包为单位进行读取，若未一次将数据包读取完，数据包也将被丢弃，
+ *       ip协议限制ip数据包大小不超过64kb(包括ip头部和udp头部)，
+ *       所以buf缓冲区最大为64kb，且每一个包也暗含了数据的边界信息。
+ *       ! 上层应用必须保证buf缓冲区大小足够大，以接收一个完整的数据包。
+ *       ! 若无法接收完整的数据包，将导致数据丢失，返回错误。
+ *       ! 读取成功后返回的一定是该数据包的大小。
  *
  * @param sock 基类socket对象
  * @param buf 接收数据缓冲区
@@ -537,7 +541,7 @@ static net_err_t udp_check(pktbuf_t *udp_buf, ipaddr_t *src_ip,
     return NET_ERR_UDP;
   }
 
-  // 计算校验和检查udp数据包是否正确
+  // 检查校验和是否正确
   if (pkt->udp_hdr.checksum) {  // 校验和不为0，需要进行校验
     uint16_t chksum = tools_checksum16_pseudo_head(udp_buf, dest_ip, src_ip,
                                                    NET_PROTOCOL_UDP);

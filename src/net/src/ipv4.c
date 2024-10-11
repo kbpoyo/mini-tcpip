@@ -24,6 +24,7 @@
 #include "timer.h"
 #include "tools.h"
 #include "udp.h"
+#include "tcp_recv.h"
 
 static ipv4_frag_t ipv4_frag_arr[IPV4_FRAG_MAXCNT];  // ipv4分片数组(分片内存池)
 static mblock_t ipv4_frag_mblock;  // ipv4分片内存池管理对象
@@ -375,10 +376,11 @@ static net_err_t ipv4_handle_normal(const netif_t *netif, pktbuf_t *buf) {
 
     case NET_PROTOCOL_UDP: {  // UDP协议
       dbg_info(DBG_IPV4, "recv UDP packet.");
+      // 保留ipv4头部, 并将数据包传递给udp模块处理
       err = udp_recv(buf, &src_ip, &dest_ip);  //!!! 数据包传递
       if (err != NET_ERR_OK) {
         dbg_warning(DBG_IPV4, "udp recv failed.");
-        if (err == NET_ERR_UNREACH) {
+        if (err == NET_ERR_UNREACH) { // udp通过icmpv4处理不可达错误
           ipv4_hdr_hton(&pkt->hdr);  // 将头部转换为网络字节序
           return icmpv4_make_unreach(&src_ip, &netif->ipaddr,
                                      ICMPv4_CODE_UNREACH_PORT, buf);
@@ -390,9 +392,13 @@ static net_err_t ipv4_handle_normal(const netif_t *netif, pktbuf_t *buf) {
 
     case NET_PROTOCOL_TCP: {
       dbg_info(DBG_IPV4, "recv TCP packet.");
-      ipv4_hdr_hton(&pkt->hdr);  // 将头部转换为网络字节序
-      return icmpv4_make_unreach(&src_ip, &netif->ipaddr,
-                                 ICMPv4_CODE_UNREACH_PORT, buf);
+      // 移除ipv4头部, 并将数据包传递给tcp模块处理
+      pktbuf_header_remove(buf, ipv4_get_hdr_size(pkt));
+      err = tcp_recv(buf, &src_ip, &dest_ip);  //!!! 数据包传递
+      if (err != NET_ERR_OK) { // tcp不通过icmpv4处理不可达错误
+        dbg_warning(DBG_IPV4, "tcp recv failed.");
+        return err;
+      }
     } break;
 
     default: {

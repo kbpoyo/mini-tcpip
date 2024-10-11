@@ -17,9 +17,10 @@
 #include "sock_raw.h"
 #include "tools.h"
 #include "udp.h"
+#include "tcp.h"
 
 // 定义协议栈可用的socket对象最大数量
-#define SOCKET_MAX_CNT (SOCKRAW_MAXCNT)
+#define SOCKET_MAX_CNT (SOCKRAW_MAXCNT + UDP_MAXCNT + TCP_MAXCNT)
 
 static net_socket_t socket_tbl[SOCKET_MAX_CNT];  // socket对象表
 static mblock_t socket_mblock;  // socket对象内存块管理对象
@@ -209,6 +210,7 @@ net_err_t sock_req_creat(msg_func_t *msg) {
   } sock_type_tbl[] = {
       [SOCK_RAW] = {.default_protocol = IPPROTO_ICMP, .create = sockraw_create},
       [SOCK_DGRAM] = {.default_protocol = IPPROTO_UDP, .create = udp_create},
+      [SOCK_STREAM] = {.default_protocol = IPPROTO_TCP, .create = tcp_create},
   };
 
   // 获取socket创建请求参数

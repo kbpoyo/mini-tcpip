@@ -23,7 +23,7 @@
 
 #pragma pack(1)
 
-//!!! 小端模式下结构体位域的存储顺序是从低位到高位，而大端模式下是从高位到低位
+//!!! 小端模式下结构体位域的存储顺序是从低位到高位，而大端模式下是从高位到低位(寄存器中的位序)
 /**
  * 小端:     |  ihl  |version|
  *          |7 6 5 4|3 2 1 0| (uint8_t)
@@ -69,7 +69,7 @@ typedef struct _ipv4_hdr_t {
     uint8_t domain_8_16;  // 区分服务和显式拥塞通知
   };
 
-  uint16_t total_len;  // ip数据包总长度
+  uint16_t total_len;  // ip数据包总长度(64kb)
 
   uint16_t id;  // 标识
   union {
