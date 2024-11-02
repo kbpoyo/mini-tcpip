@@ -12,6 +12,9 @@
 #ifndef NET_CFG_H
 #define NET_CFG_H
 
+// 开发调试相关配置
+#define NET_MOD_DBG  // 是否开启模块调
+
 // 系统相关配置
 #define SYS_ENDIAN_LITTLE 1  // 小端模式
 

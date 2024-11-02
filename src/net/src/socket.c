@@ -178,6 +178,7 @@ int net_close(int socket) {
         dbg_error(DBG_SOCKET, "socket close wait time out.");
         return -1;
       }
+      return 0;
     } break;
     default: {  // 发生其他错误
       dbg_error(DBG_SOCKET, "socket close failed.\n");
@@ -259,12 +260,22 @@ int net_connect(int socket, const struct net_sockaddr *addr,
 
   // 调用消息队列工作线程执行socket连接请求
   net_err_t err = exmsg_func_exec(sock_req_connect, &sock_req);
-  if (err != NET_ERR_OK) {
-    dbg_error(DBG_SOCKET, "connect failed.\n");
-    return -1;
+  switch (err) {
+    case NET_ERR_OK: {  // 连接成功
+      return 0;
+    } break;
+    case NET_ERR_NEEDWAIT: {  // 需要等待内部工作线程执行完毕(TCP协议需要等待三次握手完成连接)
+      if (sock_wait_enter(sock_req.wait, sock_req.wait_tmo) != NET_ERR_OK) {
+        dbg_error(DBG_SOCKET, "socket connect wait time out.");
+        return -1;
+      }
+      return 0;
+    } break;
+    default: {  // 发生其他错误
+      dbg_error(DBG_SOCKET, "socket connect failed.\n");
+      return -1;
+    } break;
   }
-
-  return 0;
 }
 
 /**
@@ -276,7 +287,7 @@ int net_connect(int socket, const struct net_sockaddr *addr,
  * @return int
  */
 int net_bind(int socket, const struct net_sockaddr *addr,
-                net_socklen_t addrlen) {
+             net_socklen_t addrlen) {
   // 进行参数检查
   if (socket < 0 || !addr || addrlen != sizeof(struct net_sockaddr)) {
     dbg_error(DBG_SOCKET, "bind param error.\n");
@@ -363,13 +374,14 @@ ssize_t net_send(int socket, const void *buf, size_t buf_len, int flags) {
 }
 
 /**
- * @brief 外部接口，通过socket接收数据，socket已经调用connect()函数连接到远端地址
- * 
- * @param socket 
- * @param buf 
- * @param buf_len 
- * @param flags 
- * @return ssize_t 
+ * @brief
+ * 外部接口，通过socket接收数据，socket已经调用connect()函数连接到远端地址
+ *
+ * @param socket
+ * @param buf
+ * @param buf_len
+ * @param flags
+ * @return ssize_t
  */
 ssize_t net_recv(int socket, void *buf, size_t buf_len, int flags) {
   // 进行参数检查
@@ -393,7 +405,7 @@ ssize_t net_recv(int socket, void *buf, size_t buf_len, int flags) {
     // 调用消息队列工作线程执行socket接收请求
     net_err_t err = exmsg_func_exec(sock_req_recv, &sock_req);
     switch (err) {
-      case NET_ERR_OK: {  
+      case NET_ERR_OK: {
         // 返回实际接收的数据量(字节量)， 若返回-1表示接收失败
         return sock_req.io.ret_len > 0 ? sock_req.io.ret_len : -1;
       } break;

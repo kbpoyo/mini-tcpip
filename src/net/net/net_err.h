@@ -30,6 +30,8 @@ typedef enum _net_err_t {
   NET_ERR_UDP = -23,
   NET_ERR_TCP = -24,
   NET_ERR_PKTBUF = -25,
+  NET_ERR_TCP_RST = -26,
+  NET_ERR_TCP_CLOSE = -27,
 } net_err_t;
 
 

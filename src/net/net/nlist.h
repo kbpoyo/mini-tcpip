@@ -32,6 +32,16 @@ static inline nlist_node_t *nlist_node_pre(nlist_node_t *node) {
 }
 
 /**
+ * @brief 判断结点是否已挂载在链表上
+ * 
+ * @param node 
+ * @return int 
+ */
+static inline int nlist_node_is_mount(nlist_node_t *node) {
+  return (node->next || node->pre);
+}
+
+/**
  * @brief 通用链表结构
  */
 typedef struct _nlist_t {

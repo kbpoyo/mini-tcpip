@@ -27,6 +27,7 @@ struct _sock_t;
 #define SOCK_WAIT_READ (1 << 0)   // 等待读事件
 #define SOCK_WAIT_WRITE (1 << 1)  // 等待写事件
 #define SOCK_WAIT_CONN (1 << 2)   // 等待连接事件
+#define SOCK_WAIT_ALL (SOCK_WAIT_READ | SOCK_WAIT_WRITE | SOCK_WAIT_CONN)
 // socket等待事件结构
 typedef struct _sock_wait_t {
   sys_sem_t sem;       // 信号量

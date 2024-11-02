@@ -940,6 +940,54 @@ src/net/src/tcp_recv.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp_recv.c.s
 .PHONY : src/net/src/tcp_recv.c.s
 
+src/net/src/tcp_send.obj: src/net/src/tcp_send.c.obj
+.PHONY : src/net/src/tcp_send.obj
+
+# target to build an object file
+src/net/src/tcp_send.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp_send.c.obj
+.PHONY : src/net/src/tcp_send.c.obj
+
+src/net/src/tcp_send.i: src/net/src/tcp_send.c.i
+.PHONY : src/net/src/tcp_send.i
+
+# target to preprocess a source file
+src/net/src/tcp_send.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp_send.c.i
+.PHONY : src/net/src/tcp_send.c.i
+
+src/net/src/tcp_send.s: src/net/src/tcp_send.c.s
+.PHONY : src/net/src/tcp_send.s
+
+# target to generate assembly for a file
+src/net/src/tcp_send.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp_send.c.s
+.PHONY : src/net/src/tcp_send.c.s
+
+src/net/src/tcp_state.obj: src/net/src/tcp_state.c.obj
+.PHONY : src/net/src/tcp_state.obj
+
+# target to build an object file
+src/net/src/tcp_state.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp_state.c.obj
+.PHONY : src/net/src/tcp_state.c.obj
+
+src/net/src/tcp_state.i: src/net/src/tcp_state.c.i
+.PHONY : src/net/src/tcp_state.i
+
+# target to preprocess a source file
+src/net/src/tcp_state.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp_state.c.i
+.PHONY : src/net/src/tcp_state.c.i
+
+src/net/src/tcp_state.s: src/net/src/tcp_state.c.s
+.PHONY : src/net/src/tcp_state.s
+
+# target to generate assembly for a file
+src/net/src/tcp_state.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp_state.c.s
+.PHONY : src/net/src/tcp_state.c.s
+
 src/net/src/timer.obj: src/net/src/timer.c.obj
 .PHONY : src/net/src/timer.obj
 
@@ -1188,6 +1236,12 @@ help:
 	@echo ... src/net/src/tcp_recv.obj
 	@echo ... src/net/src/tcp_recv.i
 	@echo ... src/net/src/tcp_recv.s
+	@echo ... src/net/src/tcp_send.obj
+	@echo ... src/net/src/tcp_send.i
+	@echo ... src/net/src/tcp_send.s
+	@echo ... src/net/src/tcp_state.obj
+	@echo ... src/net/src/tcp_state.i
+	@echo ... src/net/src/tcp_state.s
 	@echo ... src/net/src/timer.obj
 	@echo ... src/net/src/timer.i
 	@echo ... src/net/src/timer.s

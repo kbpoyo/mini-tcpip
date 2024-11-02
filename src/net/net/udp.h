@@ -13,8 +13,7 @@
 
 #include "sock.h"
 
-#define UDP_PORT_START 1024  // UDP可用端口号起始值
-#define UDP_PORT_END 65535   // UDP可用端口号结束值
+
 
 #pragma pack(1)
 

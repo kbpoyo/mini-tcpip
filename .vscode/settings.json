@@ -39,7 +39,9 @@
         "udp_echo_server.h": "c",
         "net_api.h": "c",
         "functional": "c",
-        "tcp.h": "c"
+        "tcp.h": "c",
+        "netfwd": "c",
+        "tcp_state.h": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [

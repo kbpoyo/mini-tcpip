@@ -81,10 +81,10 @@ typedef struct _ipv4_hdr_t {
       uint16_t frag_reserved : 1;          // 标志位(保留位): 必须为0 
     };
 #else
-    struct {
+    struct { //TODO:大端位序无法测试，暂时定义如下(按理来说应该是 offset7_0: 8, reserved: 1, more: 1, offset12_8: 5)
       uint16_t reserved : 1;         
-      uint16_t frag_more: 1;
       uint16_t frag_disable : 1;
+      uint16_t frag_more: 1;
       uint16_t frag_offset : 13;  // 片偏移
     };
 #endif

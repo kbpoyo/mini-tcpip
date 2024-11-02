@@ -16,6 +16,7 @@
 #include "tcp.h"
 
 net_err_t tcp_recv(pktbuf_t *tcp_buf, ipaddr_t *src_ip, ipaddr_t *dest_ip);
+net_err_t tcp_recv_data(tcp_t *tcp, tcp_info_t *info);
 
 
 #endif  // TCP_RECV_H

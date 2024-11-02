@@ -11,6 +11,10 @@
 #include "tcp.h"
 
 #include "mblock.h"
+#include "protocol.h"
+#include "route.h"
+#include "tcp_send.h"
+#include "tcp_state.h"
 
 #define TCP_CREATE_WAIT 1    // 创建tcp socket时进行等待
 #define TCP_CREATE_NOWAIT 0  // 创建tcp socket时不进行等待
@@ -18,6 +22,67 @@
 static tcp_t tcp_tbl[TCP_MAXCNT];  // tcp socket对象表
 static mblock_t tcp_mblock;        // tcp socket对象内存块管理对象
 static nlist_t tcp_list;           // 挂载已分配的tcp socket对象链表
+
+#if DBG_DISP_ENABLED(DBG_TCP)
+void tcp_disp(char *msg, tcp_t *tcp) {
+  plat_printf("msg: %s\n", msg);
+  plat_printf("\tlocal port: %d, remote port: %d\n", tcp->sock_base.local_port,
+              tcp->sock_base.remote_port);
+  plat_printf("\tstate: %s\n", tcp_state_name(tcp->state));
+}
+
+void tcp_disp_pkt(char *msg, tcp_hdr_t *tcp_hdr, pktbuf_t *tcp_buf) {
+  plat_printf("msg: %s\n", msg);
+  plat_printf("\tsrc port: %u, dest port: %u\n", tcp_hdr->src_port,
+              tcp_hdr->dest_port);
+  plat_printf("\tseq: %u, ack: %u\n", tcp_hdr->seq, tcp_hdr->ack);
+  plat_printf("\twin size: %d, urg ptr: %d\n", tcp_hdr->win_size,
+              tcp_hdr->urg_ptr);
+  plat_printf("\tdata len: %d\n",
+              pktbuf_total_size(tcp_buf) - tcp_get_hdr_size(tcp_hdr));
+  plat_printf("\tflag: ");
+  if (tcp_hdr->f_fin) {
+    plat_printf("FIN ");
+  }
+  if (tcp_hdr->f_syn) {
+    plat_printf("SYN ");
+  }
+  if (tcp_hdr->f_rst) {
+    plat_printf("RST ");
+  }
+  if (tcp_hdr->f_psh) {
+    plat_printf("PSH ");
+  }
+  if (tcp_hdr->f_ack) {
+    plat_printf("ACK ");
+  }
+  if (tcp_hdr->f_urg) {
+    plat_printf("URG ");
+  }
+  if (tcp_hdr->f_ece) {
+    plat_printf("ECE ");
+  }
+  if (tcp_hdr->f_cwr) {
+    plat_printf("CWR ");
+  }
+  plat_printf("\n");
+}
+
+void tcp_disp_list(void) {
+  plat_printf("---------------tcp socket list:---------------\n");
+  nlist_node_t *node = (nlist_node_t *)0;
+  sock_t *sock = (sock_t *)0;
+  int index = 0;
+  nlist_for_each(node, &tcp_list) {
+    sock = nlist_entry(node, sock_t, node);
+    plat_printf("[%d]:", index++);
+    tcp_disp("", (tcp_t *)sock);
+  }
+
+  plat_printf("----------------------------------------------\n");
+}
+
+#endif
 
 net_err_t tcp_module_init(void) {
   dbg_info(DBG_TCP, "init tcp module ......");
@@ -31,6 +96,41 @@ net_err_t tcp_module_init(void) {
 
   dbg_info(DBG_TCP, "init tcp module ok.");
   return NET_ERR_OK;
+}
+
+/**
+ * @brief 初始化一个tcp数据包信息结构
+ *
+ * @param tcp_info
+ * @param tcp_buf
+ * @param local_ip
+ * @param remote_ip
+ */
+void tcp_info_init(tcp_info_t *tcp_info, pktbuf_t *tcp_buf, ipaddr_t *local_ip,
+                   ipaddr_t *remote_ip) {
+  // 记录tcp数据包和头部
+  tcp_info->tcp_buf = tcp_buf;
+  tcp_info->tcp_hdr = (tcp_hdr_t *)pktbuf_data_ptr(tcp_buf);
+
+  // 记录本地ip(主机ip)和远端ip(发送方的ip)
+  ipaddr_copy(&tcp_info->local_ip, local_ip);
+  ipaddr_copy(&tcp_info->remote_ip, remote_ip);    
+
+  // 计算tcp数据包的有效数据长度
+  tcp_info->data_len =
+      pktbuf_total_size(tcp_buf) - tcp_get_hdr_size(tcp_info->tcp_hdr);
+
+  // 记录tcp数据包的序列号和序列号长度
+  tcp_info->seq = tcp_info->tcp_hdr->seq;
+
+  /**
+   * tcp协议为每一个有效数据字节都分配一个序列号
+   * 并且也为SYN和FIN标志位各分配一个序列号
+   * 拥有序列号的数据才是tcp确保可靠传输的数据
+   * 序列号长度将用于接收方进行累积确认
+   */
+  tcp_info->seq_len =
+      tcp_info->data_len + tcp_info->tcp_hdr->f_syn + tcp_info->tcp_hdr->f_fin;
 }
 
 /**
@@ -49,17 +149,182 @@ static tcp_t *tcp_get_free(int wait) {
 }
 
 /**
+ * @brief 释放一个tcp socket对象
+ *
+ * @param tcp
+ * @return void*
+ */
+static void *tcp_free(tcp_t *tcp) {
+  // 销毨tcp对象的基础sock对象所持有的资源
+  sock_uninit(&tcp->sock_base);
+
+  // 将tcp对象从挂载链表中移除
+  if (nlist_node_is_mount(&tcp->sock_base.node)) {
+    nlist_remove(&tcp_list, &tcp->sock_base.node);
+  }
+
+  // 将tcp对象内存块释放
+  mblock_free(&tcp_mblock, tcp);
+}
+
+/**
+ * @brief 检查tcp端口号是否已被使用
+ *
+ * @param port
+ * @return int
+ */
+static int tcp_port_is_used(uint16_t port) {
+  nlist_node_t *node = (nlist_node_t *)0;
+  nlist_for_each(node, &tcp_list) {
+    sock_t *sock = nlist_entry(node, sock_t, node);
+    if (sock->local_port == port) {
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
+/**
+ * @brief 分配一个本地端口号
+ *
+ * @return uint16_t
+ */
+static net_err_t tcp_alloc_port(sock_t *sock) {
+#ifdef NET_MOD_DBG
+  // 调试模式下，随机分配端口号，避免多次启动调试时端口号冲突
+  srand((unsigned)time(NULL));
+  int last_alloc_port =
+      NET_PORT_START + (rand() % (NET_PORT_END - NET_PORT_START));
+#else
+  static uint16_t last_alloc_port = NET_PORT_START - 1;
+#endif
+
+  for (int i = NET_PORT_START; i < NET_PORT_END; i++) {
+    last_alloc_port = (last_alloc_port + 1 % NET_PORT_END);
+    last_alloc_port = last_alloc_port ? last_alloc_port : NET_PORT_START;
+    if (!tcp_port_is_used(last_alloc_port)) {
+      // 本地端口号未被使用，分配该端口号
+      sock->local_port = last_alloc_port;
+      tcp_disp_list();
+      return NET_ERR_OK;
+    }
+  }
+
+  return NET_ERR_TCP;
+}
+
+/**
+ * @brief 为发送窗口获取一个随机的初始序号
+ * TODO: 此处实现简单，可以使用更复杂的算法
+ *
+ * @return uint32_t
+ */
+static uint32_t tcp_get_isn(void) {
+  static uint32_t isn = 1024;
+  return isn++;
+}
+
+/**
+ * @brief 初始化tcp连接结构
+ *
+ * @param tcp
+ * @return net_err_t
+ */
+static net_err_t tcp_init_connect(tcp_t *tcp) {
+  // 获取本次连接的初始序号
+  tcp->send.isn = tcp_get_isn();
+
+  // 设置发送窗口的未确认位和待发送位
+  tcp->send.una = tcp->send.isn;
+  tcp->send.nxt = tcp->send.isn;
+
+  // 设置接收到的初始序号位
+  tcp->recv.isn = 0;
+
+  // 设置接收窗口的待接收位
+  tcp->recv.nxt = 0;
+
+  return NET_ERR_OK;
+}
+
+/**
+ * @brief 建立tcp连接
+ *
+ * @param sock
+ * @param addr
+ * @param addrlen
+ * @return net_err_t
+ */
+net_err_t tcp_connect(sock_t *sock, const struct net_sockaddr *addr,
+                      net_socklen_t addrlen) {
+  // 检查tcp对象状态是否为CLOSED
+  if (((tcp_t *)sock)->state != TCP_STATE_CLOSED) {
+    dbg_error(DBG_TCP, "tcp state error.");
+    return NET_ERR_TCP;
+  }
+
+  // 提取远端ip地址和端口号
+  const struct net_sockaddr_in *addr_in = (const struct net_sockaddr_in *)addr;
+  ipaddr_from_bytes(&sock->remote_ip, addr_in->sin_addr.s_addr_bytes);
+  sock->remote_port = net_ntohs(addr_in->sin_port);
+
+  // 若未绑定本地端口，则分配一个本地端口
+  if (sock->local_port == NET_PORT_EMPTY) {
+    if (tcp_alloc_port(sock) != NET_ERR_OK) {
+      dbg_error(DBG_TCP, "alloc local port failed.");
+      return NET_ERR_TCP;
+    }
+  }
+
+  // 若未绑定本地ip地址，则查找路由表，获取本地ip地址
+  if (ipaddr_is_any(&sock->local_ip)) {
+    route_entry_t *rt_entry = route_find(&sock->remote_ip);
+    if (!rt_entry) {  // 路由表查找失败, 返回不可达错误
+      dbg_error(DBG_TCP, "route find failed.");
+      return NET_ERR_UNREACH;
+    }
+    ipaddr_copy(&sock->local_ip, &rt_entry->netif->ipaddr);
+  }
+
+  // 初始化tcp对象连接状态，包括发送窗口和接收窗口的边界信息
+  if (tcp_init_connect((tcp_t *)sock) != NET_ERR_OK) {
+    dbg_error(DBG_TCP, "init connect failed.");
+    return NET_ERR_TCP;
+  }
+
+  // 发送连接请求(SYN)
+  if (tcp_send_syn((tcp_t *)sock) != NET_ERR_OK) {
+    dbg_error(DBG_TCP, "send syn failed.");
+    return NET_ERR_TCP;
+  }
+
+  // SYN已发送，切换到SYN_SENT状态
+  tcp_state_set((tcp_t *)sock, TCP_STATE_SYN_SENT);
+
+  return NET_ERR_NEEDWAIT;
+}
+
+/**
+ * @brief 关闭tcp连接
+ *
+ * @param sock
+ * @return net_err_t
+ */
+net_err_t tcp_close(sock_t *sock) { return NET_ERR_OK; }
+
+/**
  * @brief 分配一个tcp socket对象
  *
  * @return tcp_t*
  */
 static tcp_t *tcp_alloc(int family, int protocol, int wait) {
   static const sock_ops_t tcp_ops = {
+      .connect = tcp_connect,  // 独立实现接口
       //   .sendto = tcp_sendto,      // 独立实现接口
       //   .recvfrom = tcp_recvfrom,  // 独立实现接口
       //   .setopt = sock_setopt,     // 继承基类的实现
       //   .close = tcp_close,        // 独立实现接口
-      //   .connect = tcp_connect,    // 独立实现接口
       //   .bind = tcp_bind,
       //   .send = sock_send,  // 继承基类的实现
       //   .recv = sock_recv,  // 继承基类的实现
@@ -72,30 +337,43 @@ static tcp_t *tcp_alloc(int family, int protocol, int wait) {
     return (tcp_t *)0;
   }
 
+  // 初始化tcp状态
+  tcp->state = TCP_STATE_CLOSED;
+
   // 初始化tcp对象的基础socket对象
   plat_memset(tcp, 0, sizeof(tcp_t));
   net_err_t err = sock_init(&tcp->sock_base, family, protocol, &tcp_ops);
   if (err != NET_ERR_OK) {
     dbg_error(DBG_TCP, "sock init failed.");
-    mblock_free(&tcp_mblock, tcp);
-    return (tcp_t *)0;
+    goto tcp_alloc_failed;
   }
 
+  // 初始化tcp对象的连接wait对象, 并用基类sock记录该wait对象
+  if (sock_wait_init(&tcp->conn.wait) != NET_ERR_OK) {
+    dbg_error(DBG_TCP, "conn wait init failed.");
+    goto tcp_alloc_failed;
+  }
+  tcp->sock_base.conn_wait = &tcp->conn.wait;
+
+  // 初始化tcp对象的发送wait对象, 并用基类sock记录该wait对象
+  if (sock_wait_init(&tcp->send.wait) != NET_ERR_OK) {
+    dbg_error(DBG_TCP, "send wait init failed.");
+    goto tcp_alloc_failed;
+  }
+  tcp->sock_base.send_wait = &tcp->send.wait;
+
+  // 初始化tcp对象的接收wait对象, 并用基类sock记录该wait对象
+  if (sock_wait_init(&tcp->recv.wait) != NET_ERR_OK) {
+    dbg_error(DBG_TCP, "recv wait init failed.");
+    goto tcp_alloc_failed;
+  }
+  tcp->sock_base.recv_wait = &tcp->recv.wait;
+
   return tcp;
-}
 
-/**
- * @brief 释放一个tcp socket对象
- *
- * @param tcp
- * @return void*
- */
-static void *tcp_free(tcp_t *tcp) {
-  // 将tcp对象从挂载链表中移除
-  nlist_remove(&tcp_list, &tcp->sock_base.node);
-
-  // 将tcp对象内存块释放
-  mblock_free(&tcp_mblock, tcp);
+tcp_alloc_failed:
+  tcp_free(tcp);
+  return (tcp_t *)0;
 }
 
 /**
@@ -146,4 +424,48 @@ sock_t *tcp_create(int family, int protocol) {
 
   // sock_base为第一个成员，起始地址相同，可直接转换
   return (sock_t *)tcp;
+}
+
+/**
+ * @brief 根据tcp信息结构查找对应的tcp对象
+ *
+ * @param info
+ * @return tcp_t*
+ */
+tcp_t *tcp_find(tcp_info_t *info) {
+  nlist_node_t *node = (nlist_node_t *)0;
+  nlist_for_each(node, &tcp_list) {
+    sock_t *tcp_sock = nlist_entry(node, sock_t, node);
+    // 若tcp对象绑定了本地ip地址，则比较本地ip地址
+    if (!ipaddr_is_any(&tcp_sock->local_ip) &&
+        !ipaddr_is_equal(&tcp_sock->local_ip, &info->local_ip)) {
+      continue;
+    }
+
+    // 比较四元组其余信息
+    if (tcp_sock->local_port == info->tcp_hdr->dest_port &&
+        tcp_sock->remote_port == info->tcp_hdr->src_port &&
+        ipaddr_is_equal(&tcp_sock->remote_ip, &info->remote_ip)) {
+      return (tcp_t *)tcp_sock;
+    }
+  }
+
+  return (tcp_t *)0;
+}
+
+/**
+ * @brief 关闭当前tcp连接
+ * 
+ * @param tcp 
+ * @param err 
+ * @return net_err_t 
+ */
+net_err_t tcp_abort_connect(tcp_t *tcp, net_err_t err) {
+  // 设置tcp状态为CLOSED
+  tcp_state_set(tcp, TCP_STATE_CLOSED);
+
+  // 唤醒等待在该tcp对象上的所有任务
+  sock_wakeup(&tcp->sock_base, SOCK_WAIT_ALL, err);
+
+  return NET_ERR_OK;
 }

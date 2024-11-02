@@ -2,20 +2,20 @@
 #include <stdio.h>
 
 #include "dbg.h"
+#include "echo/tcp_echo_client.h"
+#include "echo/udp_echo_client.h"
+#include "echo/udp_echo_server.h"
+#include "exmsg.h"
+#include "ipv4.h"
 #include "mblock.h"
 #include "net.h"
 #include "netif.h"
 #include "netif_pcap.h"
+#include "ping/ping.h"
 #include "pktbuf.h"
 #include "sys_plat.h"
 #include "timer.h"
 #include "tools.h"
-#include "ipv4.h"
-#include "ping/ping.h"
-#include "exmsg.h"
-#include "echo/udp_echo_client.h"
-#include "echo/udp_echo_server.h"
-#include "echo/tcp_echo_client.h"
 
 pcap_data_t pcap_data = {
     // 需要打开的网络接口的ip地址和硬件地址
@@ -45,7 +45,6 @@ net_err_t netdev_init(void) {
     dbg_error(DBG_LOOP, "netif set active failed.");
     return err;
   }
-
 
   return NET_ERR_OK;
 }
@@ -92,23 +91,19 @@ void timer_test() {
   // net_timer_check_tmo(6000);
 }
 
-
 void udp_echo_test() {
-
   // udp_echo_server_start(2000);
-  
+
   // udp_echo_client_start("192.168.3.159", 2000);
   // udp_echo_client_start("0.0.0.0", 1024);
 }
 
-void tcp_echo_test() {
-  tcp_echo_client_start("192.168.3.159", 2000);
-}
+void tcp_echo_test() { tcp_echo_client_start("192.168.3.159", 2000); }
 void basic_test(void) {
   // timer_test();
 
   // udp_echo_test();
-  // tcp_echo_test();
+  tcp_echo_test();
 }
 
 #define DBG_TEST DBG_LEVEL_INFO
@@ -118,6 +113,17 @@ net_err_t test_func(msg_func_t *msg) {
   return NET_ERR_OK;
 }
 
+struct test_domain {
+  union {
+    struct {
+      uint16_t a : 4;
+      uint16_t b : 8;
+      uint16_t c : 4;
+    };
+    uint16_t u16;
+  };
+};
+
 int main(void) {
   net_init();
 
@@ -126,9 +132,14 @@ int main(void) {
   netdev_init();
   basic_test();
 
+  // struct test_domain test;
+  // test.a = 0x1;
+  // test.b = 0x80;
+  // test.c = 0x8;
+
   int a = 0x12345678;
 
-  //简单的命令行测试
+  // 简单的命令行测试
   char cmd[32], param[32];
   ping_t ping;
   while (1) {

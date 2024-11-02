@@ -141,10 +141,10 @@ static int udp_port_is_used(uint16_t port) {
  * @return net_err_t
  */
 static net_err_t udp_port_alloc(sock_t *sock) {
-  static uint16_t last_alloc_port = UDP_PORT_START - 1;
-  for (int i = UDP_PORT_START; i < UDP_PORT_END; i++) {
-    last_alloc_port = (last_alloc_port + 1 % UDP_PORT_END);
-    last_alloc_port = last_alloc_port ? last_alloc_port : UDP_PORT_START;
+  static uint16_t last_alloc_port = NET_PORT_START - 1;
+  for (int i = NET_PORT_START; i < NET_PORT_END; i++) {
+    last_alloc_port = (last_alloc_port + 1 % NET_PORT_END);
+    last_alloc_port = last_alloc_port ? last_alloc_port : NET_PORT_START;
     if (!udp_port_is_used(last_alloc_port)) {
       // 本地端口号未被使用，分配该端口号
       sock->local_port = last_alloc_port;

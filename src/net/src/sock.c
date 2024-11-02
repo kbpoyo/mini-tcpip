@@ -15,9 +15,9 @@
 #include "net_plat.h"
 #include "route.h"
 #include "sock_raw.h"
+#include "tcp.h"
 #include "tools.h"
 #include "udp.h"
-#include "tcp.h"
 
 // 定义协议栈可用的socket对象最大数量
 #define SOCKET_MAX_CNT (SOCKRAW_MAXCNT + UDP_MAXCNT + TCP_MAXCNT)
@@ -47,6 +47,7 @@ net_err_t sock_wait_init(sock_wait_t *wait) {
  */
 void sock_wait_destroy(sock_wait_t *wait) {
   if (wait) {
+    dbg_assert(wait->wait_event_cnt == 0, "wait event count error.");
     if (wait->sem != SYS_SEM_INVALID) {
       sys_sem_free(wait->sem);
       wait->sem = SYS_SEM_INVALID;
@@ -54,7 +55,7 @@ void sock_wait_destroy(sock_wait_t *wait) {
   }
 }
 /**
- * @brief 为方法请求对象添加一个wait事件
+ * @brief 为方法请求对象req添加一个wait事件
  *
  * @param wait
  * @param req
@@ -79,6 +80,11 @@ net_err_t sock_wait_add(sock_wait_t *wait, int tmo, struct _sock_req_t *req) {
  * @return net_err_t
  */
 net_err_t sock_wait_enter(sock_wait_t *wait, int tmo) {
+  if (!wait) {
+    dbg_error(DBG_SOCKET, "wait object is null.");
+    return NET_ERR_SOCKET;
+  }
+  
   if (sys_sem_wait(wait->sem, tmo) < 0) {  // 等待获取信号量
     return NET_ERR_TIMEOUT;
   }
@@ -477,6 +483,7 @@ net_err_t sock_req_connect(msg_func_t *msg) {
       if (sock->conn_wait) {
         // 为方法请求对象添加一个wait对象, 使用该wait对象阻塞外部线程
         sock_wait_add(sock->conn_wait, sock->recv_tmo, sock_req);
+        return NET_ERR_NEEDWAIT;
       } else {
         dbg_error(DBG_SOCKET, "socket don't have connect wait obj.");
         return NET_ERR_SOCKET;
@@ -642,7 +649,8 @@ net_err_t sock_connect(sock_t *sock, const struct net_sockaddr *addr,
  * @param addr_len
  * @return net_err_t
  */
-net_err_t sock_bind(sock_t *sock, const ipaddr_t *local_ip, const uint16_t local_port) {
+net_err_t sock_bind(sock_t *sock, const ipaddr_t *local_ip,
+                    const uint16_t local_port) {
   // 若指定了ip地址，则判断其是否在本地网络接口中
   if (!ipaddr_is_any(local_ip)) {
     route_entry_t *rt_entry = route_find(local_ip);

@@ -11,6 +11,11 @@
 
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
+
+#define NET_PORT_EMPTY 0     // 空端口号
+#define NET_PORT_START 1024  // 系统可用端口号起始值(1~1023为系统保留端口号)
+#define NET_PORT_END 65535   // 系统可用端口号结束值
+
 /**
  * @brief 协议类型的枚举
  *
