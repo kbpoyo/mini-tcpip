@@ -118,7 +118,8 @@ typedef struct _tcp_t {
   // tcp标志位
   struct {
     uint32_t syn_send : 1;  // SYN已发送
-    uint32_t recv_win_valid : 1;   // 接收窗口的isn是否有效
+    uint32_t fin_send : 1;  // FIN已发送
+    uint32_t recv_win_valid : 1;   // 接收窗口的是否有效
   } flags;
 
   struct {             // 用于处理tcp连接的结构

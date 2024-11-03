@@ -114,7 +114,7 @@ void tcp_info_init(tcp_info_t *tcp_info, pktbuf_t *tcp_buf, ipaddr_t *local_ip,
 
   // 记录本地ip(主机ip)和远端ip(发送方的ip)
   ipaddr_copy(&tcp_info->local_ip, local_ip);
-  ipaddr_copy(&tcp_info->remote_ip, remote_ip);    
+  ipaddr_copy(&tcp_info->remote_ip, remote_ip);
 
   // 计算tcp数据包的有效数据长度
   tcp_info->data_len =
@@ -155,7 +155,7 @@ static tcp_t *tcp_get_free(int wait) {
  * @return void*
  */
 static void *tcp_free(tcp_t *tcp) {
-  // 销毨tcp对象的基础sock对象所持有的资源
+  // 销毨tcp对象的基础sock对象所持有的资源(主要是wait对象)
   sock_uninit(&tcp->sock_base);
 
   // 将tcp对象从挂载链表中移除
@@ -311,7 +311,49 @@ net_err_t tcp_connect(sock_t *sock, const struct net_sockaddr *addr,
  * @param sock
  * @return net_err_t
  */
-net_err_t tcp_close(sock_t *sock) { return NET_ERR_OK; }
+net_err_t tcp_close(sock_t *sock) {
+  // 转为对应tcp对象
+  tcp_t *tcp = (tcp_t *)sock;
+
+  // 根据tcp对象的状态进行不同的处理
+  switch (tcp->state) {
+    case TCP_STATE_CLOSED: {  // tcp已关闭，释放tcp对象
+      dbg_info(DBG_TCP, "tcp closed.");
+      tcp_free(tcp);
+      return NET_ERR_OK;
+    } break;
+
+    case TCP_STATE_SYN_SENT:
+    case TCP_STATE_SYN_RCVD: {  // tcp正在等待连接建立，放弃该连接并释放tcp对象
+      tcp_abort_connect(tcp, NET_ERR_TCP_CLOSE);
+      tcp_free(tcp);
+      return NET_ERR_OK;
+    } break;
+
+    case TCP_STATE_CLOSE_WAIT: {  // tcp处于等待关闭状态(对端已关闭)，发送关闭请求
+                                  // 并切换到LAST_ACK状态
+      if (tcp_send_fin(tcp) != NET_ERR_OK) {
+        dbg_error(DBG_TCP, "send fin failed.");
+        return NET_ERR_TCP;
+      }
+      tcp_state_set(tcp, TCP_STATE_LAST_ACK);
+      return NET_ERR_NEEDWAIT;  // 通知调用者等待对端对FIN的确认
+    } break;
+
+    case TCP_STATE_ESTABLISHED: {  // tcp连接已建立，发送关闭请求
+      if (tcp_send_fin(tcp) != NET_ERR_OK) {
+        dbg_error(DBG_TCP, "send fin failed.");
+        return NET_ERR_TCP;
+      }
+      tcp_state_set(tcp, TCP_STATE_FIN_WAIT_1); // 切换到FIN_WAIT_1状态
+      return NET_ERR_NEEDWAIT;  // 通知调用者等待对端对FIN的确认
+    } break;
+    default:
+      break;
+  }
+
+  return NET_ERR_OK;
+}
 
 /**
  * @brief 分配一个tcp socket对象
@@ -321,10 +363,10 @@ net_err_t tcp_close(sock_t *sock) { return NET_ERR_OK; }
 static tcp_t *tcp_alloc(int family, int protocol, int wait) {
   static const sock_ops_t tcp_ops = {
       .connect = tcp_connect,  // 独立实现接口
+      .close = tcp_close,      // 独立实现接口
       //   .sendto = tcp_sendto,      // 独立实现接口
       //   .recvfrom = tcp_recvfrom,  // 独立实现接口
       //   .setopt = sock_setopt,     // 继承基类的实现
-      //   .close = tcp_close,        // 独立实现接口
       //   .bind = tcp_bind,
       //   .send = sock_send,  // 继承基类的实现
       //   .recv = sock_recv,  // 继承基类的实现
@@ -454,11 +496,13 @@ tcp_t *tcp_find(tcp_info_t *info) {
 }
 
 /**
- * @brief 关闭当前tcp连接
- * 
- * @param tcp 
- * @param err 
- * @return net_err_t 
+ * @brief 舍弃当前tcp连接，唤醒等待在该tcp对象上的所有任务,
+ *        并将tcp对象状态设置为CLOSED以等待本地持有者调用close关闭并释放该对象
+ *       
+ *
+ * @param tcp
+ * @param err
+ * @return net_err_t
  */
 net_err_t tcp_abort_connect(tcp_t *tcp, net_err_t err) {
   // 设置tcp状态为CLOSED

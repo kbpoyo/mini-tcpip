@@ -38,10 +38,9 @@ static net_err_t tcp_send(tcp_hdr_t *tcp_hdr, pktbuf_t *tcp_buf,
   net_err_t err = ipv4_send(NET_PROTOCOL_TCP, dest_ip, src_ip, tcp_buf);
   if (err != NET_ERR_OK) {
     dbg_error(DBG_TCP, "tcp packet send err.");
-    return err;
   }
 
-  return NET_ERR_OK;
+  return err;
 }
 
 /**
@@ -119,9 +118,11 @@ static net_err_t tcp_transmit(tcp_t *tcp) {
   tcp_hdr->ack = tcp->recv.nxt;  // 设置确认号为接收窗口的下一个待接收数据段序号
   tcp_set_hdr_size(tcp_hdr, sizeof(tcp_hdr_t));  // 设置头部长度
   tcp_hdr->flag = 0;                             // 清空标志位
-  // 已设置syn_send标志位，需要当前tcp数据包设置SYN标志位，以请求连接
+  // 根据tcp标志的syn_send位来设置SYN标志位，以请求连接
   tcp_hdr->f_syn = tcp->flags.syn_send;
-  // 本地接收窗口已经初始化，设置ACK标志位，确认已收到的tcp数据包
+  // 根据tcp标志的fin_send标志位来设置FIN标志位，以请求关闭连接
+  tcp_hdr->f_fin = tcp->flags.fin_send;
+  // 根据tcp标志的recv_win_valid标志位来设置ACK标志位，确认已收到的tcp数据包
   tcp_hdr->f_ack = tcp->flags.recv_win_valid;
   tcp_hdr->win_size = 1024;  // 设置窗口大小
   tcp_hdr->urg_ptr = 0;      // 紧急指针
@@ -142,27 +143,11 @@ static net_err_t tcp_transmit(tcp_t *tcp) {
 }
 
 /**
- * @brief 本地tcp对象向远端发送一个tcp连接请求(发送SYN标志位和初始序列号isn)
+ * @brief 单独对一个数据包发送ack确认
  *
  * @param tcp
+ * @param info
  * @return net_err_t
- */
-net_err_t tcp_send_syn(tcp_t *tcp) {
-  // 设置tcp状态标志位
-  tcp->flags.syn_send = 1;  // 设置SYN已发送标志位
-
-  // 进行tcp发送数据包的相关处理
-  tcp_transmit(tcp);
-
-  return NET_ERR_OK;
-}
-
-/**
- * @brief 单独对一个数据包发送ack确认
- * 
- * @param tcp 
- * @param info 
- * @return net_err_t 
  */
 net_err_t tcp_send_ack(tcp_t *tcp, tcp_info_t *info) {
   pktbuf_t *buf = pktbuf_alloc(sizeof(tcp_hdr_t));  //!!! 分配数据包
@@ -183,7 +168,6 @@ net_err_t tcp_send_ack(tcp_t *tcp, tcp_info_t *info) {
   tcp_hdr->win_size = 1024;  // 设置窗口大小
   tcp_hdr->urg_ptr = 0;      // 紧急指针
 
-
   // 将tcp数据包下交给网络层处理
   net_err_t err = tcp_send(tcp_hdr, buf, &tcp->sock_base.remote_ip,
                            &tcp->sock_base.local_ip);  //!!! 数据包传递
@@ -193,4 +177,32 @@ net_err_t tcp_send_ack(tcp_t *tcp, tcp_info_t *info) {
   }
 
   return err;
+}
+
+/**
+ * @brief 本地tcp对象向远端发送一个tcp连接请求(发送SYN标志位和初始序列号isn)
+ *
+ * @param tcp
+ * @return net_err_t
+ */
+net_err_t tcp_send_syn(tcp_t *tcp) {
+  // 设置tcp状态标志位
+  tcp->flags.syn_send = 1;  
+
+  // 进行tcp发送数据包的相关处理
+  return tcp_transmit(tcp);
+}
+
+/**
+ * @brief 发送tcp连接关闭请求
+ *
+ * @param tcp
+ * @return net_err_t
+ */
+net_err_t tcp_send_fin(tcp_t *tcp) {
+  // 设置tcp标志位
+  tcp->flags.fin_send = 1;
+
+  // 进行tcp发送数据包的相关处理
+  return tcp_transmit(tcp);
 }

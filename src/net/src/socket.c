@@ -167,23 +167,26 @@ int net_close(int socket) {
   sock_req.wait_tmo = 0;
   sock_req.sock_fd = socket;
 
-  // 调用消息队列工作线程执行socket关闭请求
-  net_err_t err = exmsg_func_exec(sock_req_close, &sock_req);
-  switch (err) {
-    case NET_ERR_OK: {  // 关闭成功
-      return 0;
-    } break;
-    case NET_ERR_NEEDWAIT: {  // 需要等待内部工作线程执行完毕(TCP协议需要等待对端关闭)
-      if (sock_wait_enter(sock_req.wait, sock_req.wait_tmo) != NET_ERR_OK) {
-        dbg_error(DBG_SOCKET, "socket close wait time out.");
+  while (1) {
+    // 调用消息队列工作线程执行socket关闭请求
+    net_err_t err = exmsg_func_exec(sock_req_close, &sock_req);
+    switch (err) {
+      case NET_ERR_OK: {  // 关闭成功
+        return 0;
+      } break;
+      case NET_ERR_NEEDWAIT: {  // 需要等待内部工作线程执行完毕(TCP协议需要等待对端关闭)
+        net_err_t err = sock_wait_enter(sock_req.wait, sock_req.wait_tmo);
+        if (err != NET_ERR_OK && err != NET_ERR_TCP_CLOSE) {
+          dbg_error(DBG_SOCKET, "socket close wait time out.");
+          return -1;
+        }
+        continue;  // 等待结束，重新执行关闭请求
+      } break;
+      default: {  // 发生其他错误
+        dbg_error(DBG_SOCKET, "socket close failed.\n");
         return -1;
-      }
-      return 0;
-    } break;
-    default: {  // 发生其他错误
-      dbg_error(DBG_SOCKET, "socket close failed.\n");
-      return -1;
-    } break;
+      } break;
+    }
   }
 }
 

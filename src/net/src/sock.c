@@ -102,8 +102,8 @@ net_err_t sock_wait_enter(sock_wait_t *wait, int tmo) {
 void sock_wait_leave(sock_wait_t *wait, net_err_t error) {
   if (wait->wait_event_cnt > 0) {
     wait->wait_event_cnt--;
-    sys_sem_notify(wait->sem);
     wait->error = error;
+    sys_sem_notify(wait->sem);
   }
 }
 
@@ -611,16 +611,28 @@ net_err_t sock_req_close(msg_func_t *msg) {
     return NET_ERR_SOCKET;
   }
   net_err_t err = sock->ops->close(sock);
-  // TODO: 暂时不处理NET_ERR_NEEDWAIT错误
-  if (err != NET_ERR_OK) {
-    dbg_error(DBG_SOCKET, "socket close failed.\n");
-    return err;
+  switch (err) {
+    case NET_ERR_OK: break;  // 关闭成功
+    
+    case NET_ERR_NEEDWAIT: {  // 通知外部线程等待执行结果
+      if (sock->conn_wait) {
+        // 为方法请求对象添加一个wait对象, 使用该wait对象阻塞外部线程
+        sock_wait_add(sock->conn_wait, sock->recv_tmo, sock_req);
+        return NET_ERR_NEEDWAIT;
+      } else {
+        dbg_error(DBG_SOCKET, "socket don't have close wait obj.");
+      }
+    } break;
+
+    default: {  // 关闭失败
+      dbg_error(DBG_SOCKET, "socket close failed.");
+    } break;
   }
 
   // 释放socket对象
   socket_free(socket);
 
-  return NET_ERR_OK;
+  return err;
 }
 
 /**

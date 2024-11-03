@@ -105,7 +105,7 @@ net_err_t tcp_recv(pktbuf_t *tcp_buf, ipaddr_t *src_ip, ipaddr_t *dest_ip) {
 }
 
 /**
- * @brief 接收处理tcp包的有效数据部分
+ * @brief 接收处理tcp包的有效数据部分(有保证的部分也就是有序号的部分), 同时更新接收窗口信息，并发送ack确认
  *
  * @param tcp
  * @param info

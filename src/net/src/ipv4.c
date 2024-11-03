@@ -21,10 +21,10 @@
 #include "protocol.h"
 #include "route.h"
 #include "sock_raw.h"
+#include "tcp_recv.h"
 #include "timer.h"
 #include "tools.h"
 #include "udp.h"
-#include "tcp_recv.h"
 
 static ipv4_frag_t ipv4_frag_arr[IPV4_FRAG_MAXCNT];  // ipv4分片数组(分片内存池)
 static mblock_t ipv4_frag_mblock;  // ipv4分片内存池管理对象
@@ -364,7 +364,7 @@ static net_err_t ipv4_handle_normal(const netif_t *netif, pktbuf_t *buf) {
 
   // 根据数据包的协议字段将其提供给上一层协议处理，ip包有可能会触发上层协议的不可达错误
   // 当触发不可达错误时，需要尽可能返回该ip包的数据，所以ip包头在上层协议接收该包时再移除
-  switch (pkt->hdr.tran_proto) { 
+  switch (pkt->hdr.tran_proto) {
     case NET_PROTOCOL_ICMPv4: {
       // 当前网络接口已匹配该包的目的地址，直接使用接口地址即可
       err = icmpv4_recv(buf, &netif->ipaddr, &src_ip);  //!!! 数据包传递
@@ -380,8 +380,8 @@ static net_err_t ipv4_handle_normal(const netif_t *netif, pktbuf_t *buf) {
       err = udp_recv(buf, &src_ip, &dest_ip);  //!!! 数据包传递
       if (err != NET_ERR_OK) {
         dbg_warning(DBG_IPV4, "udp recv failed.");
-        if (err == NET_ERR_UNREACH) { // udp通过icmpv4处理不可达错误
-          ipv4_hdr_hton(&pkt->hdr);  // 将头部转换为网络字节序
+        if (err == NET_ERR_UNREACH) {  // udp通过icmpv4处理不可达错误
+          ipv4_hdr_hton(&pkt->hdr);    // 将头部转换为网络字节序
           return icmpv4_make_unreach(&src_ip, &netif->ipaddr,
                                      ICMPv4_CODE_UNREACH_PORT, buf);
         }
@@ -395,7 +395,7 @@ static net_err_t ipv4_handle_normal(const netif_t *netif, pktbuf_t *buf) {
       // 移除ipv4头部, 并将数据包传递给tcp模块处理
       pktbuf_header_remove(buf, ipv4_get_hdr_size(pkt));
       err = tcp_recv(buf, &src_ip, &dest_ip);  //!!! 数据包传递
-      if (err != NET_ERR_OK) { // tcp不通过icmpv4处理不可达错误
+      if (err != NET_ERR_OK) {  // tcp不通过icmpv4处理不可达错误
         dbg_warning(DBG_IPV4, "tcp recv failed.");
         return err;
       }
@@ -900,8 +900,7 @@ net_err_t ipv4_send(uint8_t tran_protocol, const ipaddr_t *dest_ipaddr,
   err = netif_send(netif, next_hop, buf);  //!!! 数据包传递
   if (err != NET_ERR_OK) {
     dbg_error(DBG_IPV4, "netif send ip packet failed.");
-    return err;
   }
 
-  return NET_ERR_OK;
+  return err;
 }
