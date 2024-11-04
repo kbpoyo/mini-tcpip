@@ -141,8 +141,10 @@ static void arp_entry_free(arp_entry_t *entry) {
   arp_entry_clear(entry);
 
   // 从已分配的arp缓存表链表中移除
-  nlist_remove(&cache_entry_list, &entry->node);
-
+  if (nlist_is_mount(&entry->node)) {
+    nlist_remove(&cache_entry_list, &entry->node);
+  }
+  
   // 释放该arp缓存表项
   mblock_free(&cache_tbl_mblock, entry);
 }
@@ -343,8 +345,8 @@ static net_err_t arp_entry_send_all(arp_entry_t *entry) {
  * @param entry
  * @param ipaddr
  * @param hwaddr
- * @param force 若内存块已满，是否强制释放一个，以便分配新的内存块(1: 强制释放,
- * 0: 不强制释放, 放弃插入)
+ * @param force 若内存块已满，是否强制释放一个，以便分配新的内存块(1:
+ * 强制释放, 0: 不强制释放, 放弃插入)
  * @return net_err_t
  */
 static net_err_t arp_entry_insert(netif_t *netif, const uint8_t *ipaddr_bytes,
@@ -405,9 +407,9 @@ net_err_t arp_module_init(void) {
   }
 
   // 初始化arp缓存表定时器
-  err =
-      net_timer_add(&cache_timer, "arp cache timer", arp_cache_tmo, (void *)0,
-                    ARP_CACHE_SCAN_PERIOD * 1000, NET_TIMER_ACTIVE | NET_TIMER_RELOAD);
+  err = net_timer_add(&cache_timer, "arp cache timer", arp_cache_tmo, (void *)0,
+                      ARP_CACHE_SCAN_PERIOD * 1000,
+                      NET_TIMER_ACTIVE | NET_TIMER_RELOAD);
   if (err != NET_ERR_OK) {
     dbg_error(DBG_ARP, "arp module init error: arp cache timer init failed.");
     return err;
@@ -486,8 +488,9 @@ net_err_t arp_make_reply(netif_t *netif, pktbuf_t *buf) {
 
   arp_pkt_display(arp_pkt);
 
-  net_err_t err = ether_raw_send(
-      netif, NET_PROTOCOL_ARP, arp_pkt->target_hw_addr, buf);  //!!! 数据包传递
+  net_err_t err =
+      ether_raw_send(netif, NET_PROTOCOL_ARP, arp_pkt->target_hw_addr,
+                     buf);  //!!! 数据包传递
   if (err != NET_ERR_OK) {
     dbg_error(DBG_ETHER, "arp reply error: send arp reply failed.");
     return err;
@@ -517,8 +520,9 @@ static net_err_t arp_make_conflict(netif_t *netif, pktbuf_t *buf) {
 
   arp_pkt_display(arp_pkt);
 
-  net_err_t err = ether_raw_send(
-      netif, NET_PROTOCOL_ARP, arp_pkt->target_hw_addr, buf);  //!!! 数据包传递
+  net_err_t err =
+      ether_raw_send(netif, NET_PROTOCOL_ARP, arp_pkt->target_hw_addr,
+                     buf);  //!!! 数据包传递
   if (err != NET_ERR_OK) {
     dbg_error(DBG_ETHER, "arp reply error: send arp reply failed.");
     return err;
@@ -790,10 +794,8 @@ void arp_clear(netif_t *netif) {
   nlist_node_t *node, *next;
   arp_entry_t *entry;
 
-  for (node = nlist_first(&cache_entry_list); node; node = next) {
-    next = nlist_node_next(node);
+  nlist_for_each_safe(node, next, &cache_entry_list) {
     entry = nlist_entry(node, arp_entry_t, node);
-
     if (entry->netif == netif) {
       arp_entry_free(entry);
     }

@@ -159,12 +159,14 @@ static void *tcp_free(tcp_t *tcp) {
   sock_uninit(&tcp->sock_base);
 
   // 将tcp对象从挂载链表中移除
-  if (nlist_node_is_mount(&tcp->sock_base.node)) {
+  if (nlist_is_mount(&tcp->sock_base.node)) {
     nlist_remove(&tcp_list, &tcp->sock_base.node);
   }
 
   // 将tcp对象内存块释放
   mblock_free(&tcp_mblock, tcp);
+
+  tcp_disp_list();
 }
 
 /**
@@ -320,14 +322,12 @@ net_err_t tcp_close(sock_t *sock) {
     case TCP_STATE_CLOSED: {  // tcp已关闭，释放tcp对象
       dbg_info(DBG_TCP, "tcp closed.");
       tcp_free(tcp);
-      return NET_ERR_OK;
     } break;
 
     case TCP_STATE_SYN_SENT:
     case TCP_STATE_SYN_RCVD: {  // tcp正在等待连接建立，放弃该连接并释放tcp对象
       tcp_abort_connect(tcp, NET_ERR_TCP_CLOSE);
       tcp_free(tcp);
-      return NET_ERR_OK;
     } break;
 
     case TCP_STATE_CLOSE_WAIT: {  // tcp处于等待关闭状态(对端已关闭)，发送关闭请求
@@ -347,6 +347,10 @@ net_err_t tcp_close(sock_t *sock) {
       }
       tcp_state_set(tcp, TCP_STATE_FIN_WAIT_1); // 切换到FIN_WAIT_1状态
       return NET_ERR_NEEDWAIT;  // 通知调用者等待对端对FIN的确认
+    } break;
+
+    case TCP_STATE_TIME_WAIT: {  // TODO: 暂时处：释放tcp对象
+      tcp_free(tcp);
     } break;
     default:
       break;

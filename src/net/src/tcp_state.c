@@ -65,10 +65,17 @@ net_err_t tcp_ack_process(tcp_t *tcp, tcp_info_t *info) {
   // 获取tcp数据包头部
   tcp_hdr_t *tcp_hdr = info->tcp_hdr;
 
-  // 若tcp对象的syn_send标志位有效, 则该ack为syn请求的ack确认
+  // 若tcp对象的syn_send标志位有效, 则该ack一定为syn请求的ack确认
   if (tcp->flags.syn_send) {
     tcp->send.una++;  // 对端已确认接收syn号，更新未确认的序号
     tcp->flags.syn_send = 0;  // 清除syn_send标志位
+  }
+
+  // 若tcp对象的fin_send标志位有效, 则判断该ack是否为fin请求的ack确认
+  if (tcp->flags.fin_send && tcp_seq_before(tcp->send.una, tcp_hdr->ack)) {
+    // 当前ack序号大于发送窗口的未确认序号，说明对端已对本地的fin请求进行了确认
+    tcp->send.una++;  // 对端已确认接收fin号，更新未确认的序号
+    tcp->flags.fin_send = 0;  // 清除fin_send标志位
   }
 
   return NET_ERR_OK;
@@ -78,7 +85,7 @@ net_err_t tcp_ack_process(tcp_t *tcp, tcp_info_t *info) {
  * @brief 使用定时器来将tcp进入TIME_WAIT状态
  *
  */
-void tcp_sate_time_wait(tcp_t *tcp) { tcp_state_set(tcp, TCP_STATE_TIME_WAIT); }
+void tcp_state_time_wait(tcp_t *tcp) { tcp_state_set(tcp, TCP_STATE_TIME_WAIT); }
 
 /***********************************************************************************************************
  *  tcp recv状态处理系列函数
@@ -151,14 +158,14 @@ static net_err_t tcp_established_recv(tcp_t *tcp, tcp_info_t *info) {
 
   // 若复位请求有效, 则接收复位请求，舍弃当前连接
   if (tcp_hdr->f_rst) {
-    dbg_warning(DBG_TCP, "tcp recv rst.");
+    dbg_warning(DBG_TCP, "tcp recv rst in ESTABLISHED.");
     return tcp_abort_connect(tcp, NET_ERR_TCP_RST);
   }
 
   // 在连接建立后, 不应该再收到syn请求，若收到则可能出现异常
   // 发送复位数据包通知对端，并舍弃当前连接
   if (tcp_hdr->f_syn) {
-    dbg_warning(DBG_TCP, "tcp recv syn.");
+    dbg_warning(DBG_TCP, "tcp recv syn in ESTABLISHED.");
     tcp_send_reset(info);
     return tcp_abort_connect(tcp, NET_ERR_TCP_RST);
   }
@@ -179,6 +186,7 @@ static net_err_t tcp_established_recv(tcp_t *tcp, tcp_info_t *info) {
 
   return NET_ERR_OK;
 }
+
 static net_err_t tcp_fin_wait_1_recv(tcp_t *tcp, tcp_info_t *info) {
   // 获取tcp数据包头部
   tcp_hdr_t *tcp_hdr = info->tcp_hdr;
@@ -207,12 +215,20 @@ static net_err_t tcp_fin_wait_1_recv(tcp_t *tcp, tcp_info_t *info) {
   tcp_recv_data(tcp, info);
 
   // 根据对端是否也请求关闭连接，进入不同的状态
-  if (tcp_hdr->f_fin) {
-    // TODO: 对端在本地请求关闭的同时也请求关闭连接, 本地直接进入TIME_WAIT状态
-    tcp_sate_time_wait(tcp);
-  } else {
-    // 以接收到对端对fin的ack确认，进入FIN_WAIT_2状态
-    tcp_state_set(tcp, TCP_STATE_FIN_WAIT_2);
+  if (tcp->flags.fin_send == 0) { // 对端已确认本地的fin请求
+    if (tcp_hdr->f_fin) {
+      // 对端在确认本地fin请求的同时也发送了fin(在数据处理中已对其进行确认),
+      // 本地直接进入TIME_WAIT状态
+      tcp_state_time_wait(tcp);
+    } else {
+      // 进入FIN_WAIT_2状态，以等待对端发送的fin请求
+      tcp_state_set(tcp, TCP_STATE_FIN_WAIT_2);
+    }
+  } else if (tcp_hdr->f_fin) {
+    // 对端未确认本地fin请求，但却发送了fin请求，本地进入CLOSING状态
+    // 以等待对端对本地的fin请求进行确认
+    // TODO: 暂时无法测试双方同时发送fin请求的情况
+    tcp_state_set(tcp, TCP_STATE_CLOSING);
   }
 
   return NET_ERR_OK;
@@ -246,7 +262,7 @@ static net_err_t tcp_fin_wait_2_recv(tcp_t *tcp, tcp_info_t *info) {
 
   // 若对端请求关闭连接，本地进入TIME_WAIT状态
   if (tcp_hdr->f_fin) {
-    tcp_sate_time_wait(tcp);
+    tcp_state_time_wait(tcp);
   }
 
   return NET_ERR_OK;
@@ -277,13 +293,14 @@ static net_err_t tcp_time_wait_recv(tcp_t *tcp, tcp_info_t *info) {
     dbg_error(DBG_TCP, "tcp ack process failed in TIME_WAIT.");
     return NET_ERR_TCP;
   }
-  
+
   // 在TIME_WAIT状态下，双方都已关闭连接，不需要再进行有效数据的接收处理(之前已完成全部接收和确认，包括对端发送的fin请求)
   // 只需要单独确认对端重传的fin请求(在之前ack丢失的情况下)
   if (tcp_hdr->f_fin) {
-    //TODO: 暂时无法测试ack丢失的情况
-    tcp_send_ack(tcp, info); // 发送ack确认
-    tcp_state_time_wait(tcp); // 重新进入TIME_WAIT状态(重置定时器，继续等待2MSL时长，以确保对端已经接收到ack确认)
+    // TODO: 暂时无法测试ack丢失的情况
+    tcp_send_ack(tcp, info);  // 发送ack确认
+    tcp_state_time_wait(
+        tcp);  // 重新进入TIME_WAIT状态(重置定时器，继续等待2MSL时长，以确保对端已经接收到ack确认)
   }
 
   return NET_ERR_OK;

@@ -185,7 +185,8 @@ netif_t *netif_open(const char *dev_name, const netif_ops_t *ops,
   }
 
   // 设置链路层回调接口
-  netif->link_layer = link_layers[netif->type]; // 在调用特定操作方法之后网络接口的类型已经确定
+  netif->link_layer =
+      link_layers[netif->type];  // 在调用特定操作方法之后网络接口的类型已经确定
   if (!(netif->link_layer) && netif->type != NETIF_TYPE_LOOP) {
     // 若未注册链路层回调接口(环回接口不需要进行链路层处理)
     dbg_error(DBG_NETIF, "no link layer for netif %s.", dev_name);
@@ -229,7 +230,9 @@ net_err_t netif_close(netif_t *netif) {
   netif->state = NETIF_STATE_CLOSED;
 
   // 从已使用网络接口链表中移除
-  nlist_remove(&netif_list, &(netif->node));
+  if (nlist_is_mount(&netif->node)) {
+    nlist_remove(&netif_list, &netif->node);
+  }
 
   // 释放网络接口内存块
   mblock_free(&netif_mblock, netif);

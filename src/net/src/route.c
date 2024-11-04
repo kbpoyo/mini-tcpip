@@ -60,7 +60,9 @@ static route_entry_t *route_alloc(void) {
  */
 static void route_free(route_entry_t *rt_entry) {
   // 将路由表表项从全局路由表链表中移除
-  nlist_remove(&route_list, &rt_entry->node);
+  if (nlist_is_mount(&rt_entry->node)) {
+    nlist_remove(&route_list, &rt_entry->node);
+  }
   // 释放路由表表项内存
   mblock_free(&route_mblock, rt_entry);
 }
@@ -140,22 +142,24 @@ void route_remove(ipaddr_t *dest_net, ipaddr_t *mask) {
  * @return route_entry_t*
  */
 route_entry_t *route_find(const ipaddr_t *dest_ip) {
-    // 记录最长匹配的路由表表项
-    route_entry_t *longest_match = (route_entry_t *)0;
+  // 记录最长匹配的路由表表项
+  route_entry_t *longest_match = (route_entry_t *)0;
 
-    // 遍历全局路由表链表
-    nlist_node_t *node = (nlist_node_t *)0;
-    nlist_for_each(node, &route_list) {
-        route_entry_t *rt_entry = nlist_entry(node, route_entry_t, node);
-        // 检查目的ip地址是否在路由表表项的目的子网中
-       ipaddr_t dest_net = ipaddr_get_netnum(dest_ip, &rt_entry->mask); // 获取目的ip地址的网络号
-        if (ipaddr_is_equal(&dest_net, &rt_entry->dest_net)) { // ip的目的子网与路由表项匹配
-            if (!longest_match || rt_entry->mask_len > longest_match->mask_len) { 
-                // 更新最长匹配的路由表表项
-                longest_match = rt_entry; 
-            }
-        }
+  // 遍历全局路由表链表
+  nlist_node_t *node = (nlist_node_t *)0;
+  nlist_for_each(node, &route_list) {
+    route_entry_t *rt_entry = nlist_entry(node, route_entry_t, node);
+    // 检查目的ip地址是否在路由表表项的目的子网中
+    ipaddr_t dest_net =
+        ipaddr_get_netnum(dest_ip, &rt_entry->mask);  // 获取目的ip地址的网络号
+    if (ipaddr_is_equal(&dest_net,
+                        &rt_entry->dest_net)) {  // ip的目的子网与路由表项匹配
+      if (!longest_match || rt_entry->mask_len > longest_match->mask_len) {
+        // 更新最长匹配的路由表表项
+        longest_match = rt_entry;
+      }
     }
+  }
 
-    return longest_match;
+  return longest_match;
 }

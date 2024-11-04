@@ -1,14 +1,24 @@
 ﻿#ifndef NLIST_H
 #define NLIST_H
 
+
 /**
  * @brief 链表结点类型
- * 采用的是双向链表，方便结点的删除。
+ * 采用的是双向循环链表，方便结点的删除。
  */
 typedef struct _nlist_node_t {
   struct _nlist_node_t *next;  // 后继结点
   struct _nlist_node_t *pre;   // 前驱结点
 } nlist_node_t;
+
+/**
+ * @brief 通用链表结构
+ */
+typedef struct _nlist_t {
+  nlist_node_t head;  // 哨兵头结点
+  int count;          // 结点数量
+} nlist_t;
+
 
 /**
  * @brief 头结点的初始化
@@ -18,39 +28,39 @@ static inline void nlist_node_init(nlist_node_t *node) {
 }
 
 /**
+ * @brief 判断结点是否已挂载在链表上
+ *
+ * @param node
+ * @return int
+ */
+static inline int nlist_is_mount(nlist_node_t *node) {
+  return (node->next || node->pre);
+}
+
+/**
  * @brief 获取结点的后继结点
  */
-static inline nlist_node_t *nlist_node_next(nlist_node_t *node) {
-  return node->next;
+static inline nlist_node_t *nlist_next(nlist_t *list, nlist_node_t *node) {
+  return node->next == &list->head ? (nlist_node_t *)0 : node->next; // 遍历到链表的head节点，返回0
 }
 
 /**
  * @brief 获取结点的前一结点
  */
-static inline nlist_node_t *nlist_node_pre(nlist_node_t *node) {
-  return node->pre;
+static inline nlist_node_t *nlist_pre(nlist_t *list, nlist_node_t *node) {
+  return node->pre == &list->head ? (nlist_node_t *)0 : node->pre; // 遍历到链表的head节点，返回0
 }
 
 /**
- * @brief 判断结点是否已挂载在链表上
- * 
- * @param node 
- * @return int 
+ * 初始化链表
+ * @param list 待初始化的链表
  */
-static inline int nlist_node_is_mount(nlist_node_t *node) {
-  return (node->next || node->pre);
+static inline void nlist_init(nlist_t *list) {
+  if (list == (nlist_t *)0) return;
+
+  list->head.pre = list->head.next = &list->head;
+  list->count = 0;
 }
-
-/**
- * @brief 通用链表结构
- */
-typedef struct _nlist_t {
-  nlist_node_t *first;  // 头结点
-  nlist_node_t *last;   // 尾结点
-  int count;            // 结点数量
-} nlist_t;
-
-void nlist_init(nlist_t *list);
 
 /**
  * 判断链表是否为空
@@ -71,14 +81,21 @@ static inline int nlist_count(nlist_t *list) { return list->count; }
  * @param list 查询的链表
  * @return 第一个元素
  */
-static inline nlist_node_t *nlist_first(nlist_t *list) { return list->first; }
+static inline nlist_node_t *nlist_first(nlist_t *list) {
+  return list->head.next == &list->head
+             ? (nlist_node_t *)0
+             : list->head.next;  // 如果链表为空，返回0
+}
 
 /**
  * 获取指定链接的最后一个元素
  * @param list 查询的链表
  * @return 最后一个元素
  */
-static inline nlist_node_t *nlist_last(nlist_t *list) { return list->last; }
+static inline nlist_node_t *nlist_last(nlist_t *list) {
+  return list->head.pre == &list->head ? (nlist_node_t *)0
+                                       : list->head.pre;  // 如果链表为空，返回0
+}
 
 /**
  * @brief 将结构体中某个字段的地址转换为所在结构体的指针
@@ -106,54 +123,39 @@ static inline nlist_node_t *nlist_last(nlist_t *list) { return list->last; }
   ((parent_type *)(node ? noffset_to_parent((node), parent_type, node_name) \
                         : 0))
 
-#define nlist_for_each(node_ptr, list_ptr) \
-  for (node_ptr = (list_ptr)->first; node_ptr; node_ptr = node_ptr->next)
+#define nlist_for_each(node_ptr, list_ptr)                                \
+  for (node_ptr = (list_ptr)->head.next; node_ptr != &((list_ptr)->head); \
+       node_ptr = node_ptr->next)
+#define nlist_for_each_safe(node_ptr, next_ptr, list_ptr)           \
+  for (node_ptr = (list_ptr)->head.next, next_ptr = node_ptr->next; \
+       node_ptr != &((list_ptr)->head);                             \
+       node_ptr = next_ptr, next_ptr = node_ptr->next)
 
 void nlist_insert_first(nlist_t *list, nlist_node_t *node);
-nlist_node_t *nlist_remove(nlist_t *list, nlist_node_t *node);
-
-/**
- * @brief 移除链表首个结点
- */
-static inline nlist_node_t *nlist_remove_first(nlist_t *list) {
-  nlist_node_t *first = nlist_first(list);
-  if (first) {
-    nlist_remove(list, first);
-  }
-  return first;
-}
-
 void nlist_insert_last(nlist_t *list, nlist_node_t *node);
-
-/**
- * @brief 移除链表末尾结点
- */
-static inline nlist_node_t *nlist_remove_last(nlist_t *list) {
-  nlist_node_t *last = nlist_last(list);
-  if (last) {
-    nlist_remove(list, last);
-  }
-  return last;
-}
-
 void nlist_insert_after(nlist_t *list, nlist_node_t *pre, nlist_node_t *node);
 void nlist_insert_before(nlist_t *list, nlist_node_t *next, nlist_node_t *node);
-
+nlist_node_t *nlist_remove(nlist_t *list, nlist_node_t *node);
+nlist_node_t *nlist_remove_first(nlist_t *list);
+nlist_node_t *nlist_remove_last(nlist_t *list);
 void nlist_join(nlist_t *front, nlist_t *behind);
 
 /**
  * @brief 转移链表资源所有权
  *
- * @param dest
- * @param src
+ * @param dest 目标链表, 必须为空链表
+ * @param src 源链表, 转移后为空链表
  */
 static inline void nlist_move(nlist_t *dest, nlist_t *src) {
-  dest->first = src->first;
-  dest->last = src->last;
+  if (!nlist_is_empty(dest) || nlist_is_empty(src)) return;
+
+  dest->head.next = src->head.next;
+  src->head.next->pre = &dest->head;
+  dest->head.pre = src->head.pre;
+  src->head.pre->next = &dest->head;
   dest->count = src->count;
 
-  src->first = src->last = (nlist_node_t *)0;
-  src->count = 0;
+  nlist_init(src);
 }
 
 #endif /* NLIST_H */

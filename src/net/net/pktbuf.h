@@ -72,8 +72,8 @@ typedef struct _pktbuf_t {
 /**
  * 获取当前block的下一个子包
  */
-static inline pktblk_t *pktbuf_blk_next(pktblk_t *blk) {
-  nlist_node_t *next = nlist_node_next(&(blk->node));
+static inline pktblk_t *pktbuf_blk_next(pktbuf_t *pktbuf, pktblk_t *blk) {
+  nlist_node_t *next = nlist_next(&pktbuf->blk_list, &blk->node);
   return nlist_entry(next, pktblk_t, node);
 }
 

@@ -176,11 +176,14 @@ int net_close(int socket) {
       } break;
       case NET_ERR_NEEDWAIT: {  // 需要等待内部工作线程执行完毕(TCP协议需要等待对端关闭)
         net_err_t err = sock_wait_enter(sock_req.wait, sock_req.wait_tmo);
-        if (err != NET_ERR_OK && err != NET_ERR_TCP_CLOSE) {
+        if (err != NET_ERR_OK) {
+          if (err == NET_ERR_TCP_CLOSE || err == NET_ERR_TCP_RST) {
+            dbg_warning(DBG_SOCKET, "socket close retry tcp close.\n");
+            continue; // 本地tcp已关闭，重新执行关闭请求以释放资源
+          }
           dbg_error(DBG_SOCKET, "socket close wait time out.");
           return -1;
         }
-        continue;  // 等待结束，重新执行关闭请求
       } break;
       default: {  // 发生其他错误
         dbg_error(DBG_SOCKET, "socket close failed.\n");

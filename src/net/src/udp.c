@@ -108,7 +108,9 @@ static udp_t *udp_alloc(void) {
  */
 static void *udp_free(udp_t *udp) {
   // 将udp对象从挂载链表中移除
-  nlist_remove(&udp_list, &udp->sock_base.node);
+  if (nlist_is_mount(&udp->sock_base.node)) {
+    nlist_remove(&udp_list, &udp->sock_base.node);
+  }
 
   // 将udp对象内存块释放
   mblock_free(&udp_mblock, udp);

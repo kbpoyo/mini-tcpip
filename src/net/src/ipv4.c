@@ -196,7 +196,9 @@ static void ipv4_frag_free(ipv4_frag_t *frag) {
   ipv4_frag_buf_free(frag);
 
   // 从分片链表中移除分片对象
-  nlist_remove(&ipv4_frag_list, &frag->node);
+  if (nlist_is_mount(&frag->node)) {
+    nlist_remove(&ipv4_frag_list, &frag->node);
+  }
 
   // 释放分片对象
   mblock_free(&ipv4_frag_mblock, frag);
@@ -212,10 +214,7 @@ static void ipv4_frag_tmo(net_timer_t *timer, void *arg) {
   nlist_node_t *curr_node = 0, *next_node = 0;
 
   // 遍历分片链表
-  for (curr_node = nlist_first(&ipv4_frag_list); curr_node;
-       curr_node = next_node) {
-    next_node = nlist_node_next(curr_node);
-
+  nlist_for_each_safe(curr_node, next_node, &ipv4_frag_list) {
     ipv4_frag_t *frag = nlist_entry(curr_node, ipv4_frag_t, node);
     if (--frag->tmo <= 0) {
       // 分片超时，释放分片对象

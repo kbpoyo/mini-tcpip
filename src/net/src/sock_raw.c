@@ -88,7 +88,9 @@ static sockraw_t *sockraw_alloc(void) {
  */
 static void *sockraw_free(sockraw_t *sockraw) {
   // 将sockraw对象从挂载链表中移除
-  nlist_remove(&sockraw_list, &sockraw->sock_base.node);
+  if (nlist_is_mount(&sockraw->sock_base.node)) {
+    nlist_remove(&sockraw_list, &sockraw->sock_base.node);
+  }
 
   // 将sockraw对象内存块释放
   mblock_free(&sockraw_mblock, sockraw);
@@ -262,7 +264,6 @@ static net_err_t sockraw_bind(sock_t *sock, const struct net_sockaddr *addr,
   ipaddr_t local_ip;
   ipaddr_from_bytes(&local_ip, addr_in->sin_addr.s_addr_bytes);
   int local_port = net_ntohs(addr_in->sin_port);
-
 
   // 绑定本地ip和端口号(在raw socket中不使用端口号，所以端口号一般为0)
   net_err_t err = sock_bind(sock, &local_ip, local_port);

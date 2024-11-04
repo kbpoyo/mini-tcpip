@@ -34,7 +34,7 @@ static mblock_t msg_mblock;  // 消息结构缓冲区内存块管理对象
 static exmsg_t *exmsg_alloc(void) {
   exmsg_t *msg = (exmsg_t *)mblock_alloc(&msg_mblock, -1);
   if (!msg) {
-    dbg_warning(DBG_EXMSG, "no free msg buffer.");
+    dbg_error(DBG_EXMSG, "no free msg buffer.");
     return (void *)0;
   }
 

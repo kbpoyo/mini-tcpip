@@ -22,6 +22,8 @@ static mblock_t pktbuf_list;  // 数据包链表(管理数据包池)
 
 static nlocker_t pkt_locker;  // 数据包模块锁
 
+//TODO: 后续可以尝试使用全局的pktbuf链表来记录已分配的数据包, 以便调试时查看数据包的分配情况
+
 static void pktbuf_pos_move_forward(pktbuf_t *buf, int size);
 
 static inline void pktbuf_update_pos(pktbuf_t *buf) {
@@ -161,7 +163,7 @@ static pktblk_t *pktblock_alloc(void) {
 
   pktblk->data_size = 0;
   pktblk->data = (uint8_t *)0;
-  nlist_node_init(&(pktblk->node));
+  nlist_node_init(&pktblk->node);
 
   return pktblk;
 }
@@ -183,19 +185,15 @@ static void pktblock_free(pktblk_t *pktblk) {
  * @param blk_list  数据块列表
  */
 static void pktblock_list_free(nlist_t *blk_list) {
-  nlist_node_t *blk_node = nlist_first(blk_list);
+  nlist_node_t *blk_node = (nlist_node_t *)0;
   nlist_node_t *next_node = (nlist_node_t *)0;
-  while (blk_node) {
-    // 获取下一个数据块结点
-    next_node = nlist_node_next(blk_node);
+  nlist_for_each_safe(blk_node, next_node, blk_list) {
     // 获取数据块
     pktblk_t *pktblk = nlist_entry(blk_node, pktblk_t, node);
     // 从数据块列表中移除数据块
     nlist_remove(blk_list, blk_node);
     // 将数据块释放到数据块池中
     pktblock_free(pktblk);
-
-    blk_node = next_node;
   }
 }
 
@@ -232,12 +230,12 @@ static net_err_t pktblock_list_alloc(pktbuf_t *pktbuf, int size,
       newblk->data_size = curr_size;
       newblk->data = newblk->payload + PKTBUF_BLK_SIZE - curr_size;
 
-      nlist_insert_first(&tmp_list, &(newblk->node));
+      nlist_insert_first(&tmp_list, &newblk->node);
     } else {  // 使用尾插法
       // 计算当前数据块的有效载荷大小
       newblk->data_size = curr_size;
       newblk->data = newblk->payload;
-      nlist_insert_last(&tmp_list, &(newblk->node));
+      nlist_insert_last(&tmp_list, &newblk->node);
     }
 
     // 更新待分配内存大小
@@ -246,8 +244,8 @@ static net_err_t pktblock_list_alloc(pktbuf_t *pktbuf, int size,
 
   // 将临时数据块列表添加到数据块列表中
   if (insert_type == PKTBUF_LIST_INSERT_HEAD) {  // 使用头插法
-    nlist_join(&tmp_list, &(pktbuf->blk_list));
-    nlist_move(&(pktbuf->blk_list), &tmp_list);
+    nlist_join(&tmp_list, &pktbuf->blk_list);
+    nlist_move(&pktbuf->blk_list, &tmp_list);
   } else {  // 使用尾插法
     nlist_join(&(pktbuf->blk_list), &tmp_list);
   }
@@ -277,8 +275,8 @@ pktbuf_t *pktbuf_alloc(int size) {
   // 初始化数据包
   pktbuf->total_size = 0;
   pktbuf->ref_cnt = 1;
-  nlist_init(&(pktbuf->blk_list));
-  nlist_node_init(&(pktbuf->node));
+  nlist_init(&pktbuf->blk_list);
+  nlist_node_init(&pktbuf->node);
 
   if (size > 0) {
     // 为数据包分配数据块列表
@@ -411,7 +409,7 @@ net_err_t pktbuf_header_remove(pktbuf_t *buf, int size) {
   // 从第一个数据块开始移除数据
   int remove_size = size;
   while (size && block) {
-    pktblk_t *next_blk = pktbuf_blk_next(block);
+    pktblk_t *next_blk = pktbuf_blk_next(buf, block);
 
     if (size < block->data_size) {  // 当前数块内容不需要全部移除
       block->data += size;
@@ -422,7 +420,7 @@ net_err_t pktbuf_header_remove(pktbuf_t *buf, int size) {
 
     // 当前数据块内容全部移除
     int curr_size = block->data_size;
-    nlist_remove_first(&(buf->blk_list));  // 从数据块列表中移除数据块
+    nlist_remove_first(&buf->blk_list);  // 从数据块列表中移除数据块
     pktblock_free(block);                  // 释放数据块
     buf->total_size -= curr_size;          // 更新数据包总大小
     size -= curr_size;                     // 更新待移除数据大小
@@ -465,8 +463,7 @@ net_err_t pktbuf_resize(pktbuf_t *buf, int to_size) {
   } else if (to_size == 0) {  // 清空数据包
     pktblock_list_free(&(buf->blk_list));
     buf->total_size = 0;
-    nlist_init(&(buf->blk_list));
-
+    nlist_init(&buf->blk_list);
   } else if (to_size > buf->total_size) {  // 目标数据大小大于当前数据包大小,
                                            // 需要增加数据包大小
     // 获取尾部数据块
@@ -501,7 +498,7 @@ net_err_t pktbuf_resize(pktbuf_t *buf, int to_size) {
     // 从头部开始遍历数据块, 记录总的数据大小,
     // 当总的数据大小大于等于目标大小则停止
     for (curr_blk = pktbuf_blk_first(buf); curr_blk;
-         curr_blk = pktbuf_blk_next(curr_blk)) {
+         curr_blk = pktbuf_blk_next(buf, curr_blk)) {
       dest_total_size += curr_blk->data_size;
       if (dest_total_size >= to_size) {
         break;
@@ -517,11 +514,11 @@ net_err_t pktbuf_resize(pktbuf_t *buf, int to_size) {
 
     // 目标大小已经达到, 移除多余的数据块
     pktblk_t *tail_blk = curr_blk;  // 记录新的尾部数据块
-    curr_blk = pktbuf_blk_next(curr_blk);
+    curr_blk = pktbuf_blk_next(buf, curr_blk);
     while (curr_blk) {
-      pktblk_t *next_blk = pktbuf_blk_next(curr_blk);
+      pktblk_t *next_blk = pktbuf_blk_next(buf, curr_blk);
 
-      nlist_remove(&(buf->blk_list), &(curr_blk->node));
+      nlist_remove(&buf->blk_list, &curr_blk->node);
       buf->total_size -= curr_blk->data_size;
 
       pktblock_free(curr_blk);
@@ -613,7 +610,7 @@ net_err_t pktbuf_set_cont(pktbuf_t *buf, int size) {
 
   // 计算还需要调整多少字节
   int remain_size = size - first_blk->data_size;
-  pktblk_t *curr_blk = pktbuf_blk_next(first_blk);
+  pktblk_t *curr_blk = pktbuf_blk_next(buf, first_blk);
   while (remain_size &&
          curr_blk) {  // 在后续块调整remain_size字节到第一个数据块中
 
@@ -634,9 +631,9 @@ net_err_t pktbuf_set_cont(pktbuf_t *buf, int size) {
 
     // 当前数据块内容已被全部移到前一个数据块，需要将当前数据块移除
     if (curr_blk->data_size == 0) {
-      pktblk_t *next_blk = pktbuf_blk_next(curr_blk);
+      pktblk_t *next_blk = pktbuf_blk_next(buf, curr_blk);
 
-      nlist_remove(&(buf->blk_list), &(curr_blk->node));
+      nlist_remove(&buf->blk_list, &curr_blk->node);
       pktblock_free(curr_blk);
 
       curr_blk = next_blk;
@@ -681,7 +678,7 @@ static void pktbuf_pos_move_forward(pktbuf_t *buf, int size) {
     if (buf->curr_pos >=
         (buf->curr_blk->data +
          buf->curr_blk->data_size)) {  // 实际情况中应该只有等于
-      buf->curr_blk = pktbuf_blk_next(buf->curr_blk);
+      buf->curr_blk = pktbuf_blk_next(buf, buf->curr_blk);
       buf->curr_pos = buf->curr_blk ? buf->curr_blk->data : (uint8_t *)0;
     }
   }

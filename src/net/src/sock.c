@@ -84,7 +84,7 @@ net_err_t sock_wait_enter(sock_wait_t *wait, int tmo) {
     dbg_error(DBG_SOCKET, "wait object is null.");
     return NET_ERR_SOCKET;
   }
-  
+
   if (sys_sem_wait(wait->sem, tmo) < 0) {  // 等待获取信号量
     return NET_ERR_TIMEOUT;
   }
@@ -195,7 +195,9 @@ static void socket_free(net_socket_t *socket) {
   socket->state = SOCKET_STATE_FREE;
 
   // 从socket对象链表中移除
-  nlist_remove(&socket_list, &socket->node);
+  if (nlist_is_mount(&socket->node)) {
+    nlist_remove(&socket_list, &socket->node);
+  }
 
   // 释放socket对象内存块
   mblock_free(&socket_mblock, socket);
@@ -612,8 +614,9 @@ net_err_t sock_req_close(msg_func_t *msg) {
   }
   net_err_t err = sock->ops->close(sock);
   switch (err) {
-    case NET_ERR_OK: break;  // 关闭成功
-    
+    case NET_ERR_OK:
+      break;  // 关闭成功
+
     case NET_ERR_NEEDWAIT: {  // 通知外部线程等待执行结果
       if (sock->conn_wait) {
         // 为方法请求对象添加一个wait对象, 使用该wait对象阻塞外部线程

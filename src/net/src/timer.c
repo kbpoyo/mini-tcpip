@@ -62,12 +62,12 @@ net_err_t net_timer_module_init(void) {
 /**
  * @brief 按照定时时长插入定时器链表，且在插入后，
  * 每个定时器的定时时长为当前定时器及之前的定时器的curr_ticks之和。
- * 
+ *
  * (timer_A, 10s) -> (timer_B, 20s) -> (timer_C, 0s) -> (timer_D, 30s)
- * 
+ *
  * timer_A定时时长为10s, timer_B和timer_C定时时长为30s, timer_D定时时长为60s
- * 
- * @param timer 
+ *
+ * @param timer
  */
 static void insert_timer(net_timer_t *timer) {
   nlist_node_t *node = (nlist_node_t *)0;
@@ -156,7 +156,7 @@ void net_timer_remove(net_timer_t *timer) {
 
   // 获取timer的后一个定时器
   net_timer_t *next_timer =
-      nlist_entry(nlist_node_next(&timer->node), net_timer_t, node);
+      nlist_entry(nlist_next(&timer_list, &timer->node), net_timer_t, node);
 
   // 从链表中删除timer
   nlist_remove(&timer_list, &timer->node);
@@ -181,14 +181,13 @@ net_err_t net_timer_check_tmo(int diff_ms) {
     return NET_ERR_PARAM;
   }
 
-  nlist_node_t *node = nlist_first(&timer_list);
+  nlist_node_t *node = (nlist_node_t *)0;
+  nlist_node_t *next = (nlist_node_t *)0;
   net_timer_t *timer = (net_timer_t *)0;
 
   // 遍历定时器链表
-  while (node) {
+  nlist_for_each_safe(node, next, &timer_list) {
     timer = nlist_entry(node, net_timer_t, node);
-    node = nlist_node_next(node);
-
     if (timer->curr_ticks <= diff_ms) {  // timer需要触发
       diff_ms -= timer->curr_ticks;  // 更新时间间隔, 以便继续扫描后面的定时器
 
