@@ -85,13 +85,22 @@ net_err_t tcp_ack_process(tcp_t *tcp, tcp_info_t *info) {
  * @brief 使用定时器来将tcp进入TIME_WAIT状态
  *
  */
-void tcp_state_time_wait(tcp_t *tcp) { tcp_state_set(tcp, TCP_STATE_TIME_WAIT); }
+void tcp_state_time_wait(tcp_t *tcp) {
+  tcp_state_set(tcp, TCP_STATE_TIME_WAIT);
+}
 
 /***********************************************************************************************************
  *  tcp recv状态处理系列函数
  **********************************************************************************************************/
 
 static net_err_t tcp_closed_recv(tcp_t *tcp, tcp_info_t *info) {
+  // 本地tcp对象因某些错误被tcp_abort_connect()函数设置为CLOSED状态，
+  // 即已经断开连接，只是持有该资源的用户线程还未调用close()进行资源释放
+  // 所以不需要接收任何数据，直接向对端发送复位数据包即可，若接收到的包为复位请求，则忽略即可
+  if (!info->tcp_hdr->f_rst) {
+    tcp_send_reset(info);
+  }
+
   return NET_ERR_OK;
 }
 
@@ -215,7 +224,7 @@ static net_err_t tcp_fin_wait_1_recv(tcp_t *tcp, tcp_info_t *info) {
   tcp_recv_data(tcp, info);
 
   // 根据对端是否也请求关闭连接，进入不同的状态
-  if (tcp->flags.fin_send == 0) { // 对端已确认本地的fin请求
+  if (tcp->flags.fin_send == 0) {  // 对端已确认本地的fin请求
     if (tcp_hdr->f_fin) {
       // 对端在确认本地fin请求的同时也发送了fin(在数据处理中已对其进行确认),
       // 本地直接进入TIME_WAIT状态
@@ -268,8 +277,39 @@ static net_err_t tcp_fin_wait_2_recv(tcp_t *tcp, tcp_info_t *info) {
   return NET_ERR_OK;
 }
 static net_err_t tcp_closing_recv(tcp_t *tcp, tcp_info_t *info) {
+  // 获取tcp数据包头部
+  tcp_hdr_t *tcp_hdr = info->tcp_hdr;
+
+  // 若复位请求有效, 则接收复位请求，舍弃当前连接
+  if (tcp_hdr->f_rst) {
+    dbg_warning(DBG_TCP, "tcp recv rst in CLOSING.");
+    return tcp_abort_connect(tcp, NET_ERR_TCP_RST);
+  }
+
+  // 在连接建立后, 不应该再收到syn请求，若收到则可能出现异常
+  // 发送复位数据包通知对端，并舍弃当前连接
+  if (tcp_hdr->f_syn) {
+    dbg_warning(DBG_TCP, "tcp recv syn in CLOSING.");
+    tcp_send_reset(info);
+    return tcp_abort_connect(tcp, NET_ERR_TCP_RST);
+  }
+
+  // 若ack有效, 则处理ack确认(更新发送窗口信息)
+  if (tcp_ack_process(tcp, info) != NET_ERR_OK) {
+    dbg_error(DBG_TCP, "tcp ack process failed in CLOSING.");
+    return NET_ERR_TCP;
+  }
+
+  // 双方同时发送fin请求的情况，不需要再进行有效数据的接收处理(之前已完成全部接收和确认)
+  // 只需要接收对端对本地fin请求的ack确认，以及发送对端fin请求的ack确认(已在ack处理中完成)
+  if (tcp->flags.fin_send == 0) {
+    // 对端已确认本地的fin请求，本地进入TIME_WAIT状态
+    tcp_state_time_wait(tcp);
+  }
+
   return NET_ERR_OK;
 }
+
 static net_err_t tcp_time_wait_recv(tcp_t *tcp, tcp_info_t *info) {
   // 获取tcp数据包头部
   tcp_hdr_t *tcp_hdr = info->tcp_hdr;
@@ -305,9 +345,37 @@ static net_err_t tcp_time_wait_recv(tcp_t *tcp, tcp_info_t *info) {
 
   return NET_ERR_OK;
 }
+
 static net_err_t tcp_close_wait_recv(tcp_t *tcp, tcp_info_t *info) {
+  // 获取tcp数据包头部
+  tcp_hdr_t *tcp_hdr = info->tcp_hdr;
+
+  // 若复位请求有效, 则接收复位请求，舍弃当前连接
+  if (tcp_hdr->f_rst) {
+    dbg_warning(DBG_TCP, "tcp recv rst in TIME_WAIT.");
+    return tcp_abort_connect(tcp, NET_ERR_TCP_RST);
+  }
+
+  // 在连接建立后, 不应该再收到syn请求，若收到则可能出现异常
+  // 发送复位数据包通知对端，并舍弃当前连接
+  if (tcp_hdr->f_syn) {
+    dbg_warning(DBG_TCP, "tcp recv syn in TIME_WAIT.");
+    tcp_send_reset(info);
+    return tcp_abort_connect(tcp, NET_ERR_TCP_RST);
+  }
+
+  // 若ack有效, 则处理ack确认(更新发送窗口信息)
+  if (tcp_ack_process(tcp, info) != NET_ERR_OK) {
+    dbg_error(DBG_TCP, "tcp ack process failed in TIME_WAIT.");
+    return NET_ERR_TCP;
+  }
+
+  // 在CLOSE_WAIT状态下，对端已经关闭连接，不需要再进行有效数据的接收处理(之前已完成全部接收和确认)
+  // 只需要对对端的fin请求进行重复的ack确认(在之前ack丢失的情况下)
+
   return NET_ERR_OK;
 }
+
 static net_err_t tcp_last_ack_recv(tcp_t *tcp, tcp_info_t *info) {
   // 获取tcp数据包头部
   tcp_hdr_t *tcp_hdr = info->tcp_hdr;
@@ -332,8 +400,14 @@ static net_err_t tcp_last_ack_recv(tcp_t *tcp, tcp_info_t *info) {
     return NET_ERR_TCP;
   }
 
-  // 以接收到对端对fin的ack确认，可以关闭连接
-  return tcp_abort_connect(tcp, NET_ERR_TCP_CLOSE);
+  // 对端已关闭连接，不需要再进行有效数据的接收处理(之前已完成全部接收和确认)
+  //  且本地已经发送了fin请求，只需要接收对端对fin请求的确认，
+  //  并且对对端的fin请求进行重复的ack确认(在之前ack丢失的情况下) 即可。
+  if (tcp->flags.fin_send == 0) {
+    tcp_abort_connect(tcp, NET_ERR_TCP_CLOSE);
+  }
+
+  return NET_ERR_OK;
 }
 
 /**
