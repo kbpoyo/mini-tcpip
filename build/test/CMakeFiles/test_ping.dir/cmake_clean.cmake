@@ -51,6 +51,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/test_ping.dir/__/src/net/src/socket.c.obj.d"
   "CMakeFiles/test_ping.dir/__/src/net/src/tcp.c.obj"
   "CMakeFiles/test_ping.dir/__/src/net/src/tcp.c.obj.d"
+  "CMakeFiles/test_ping.dir/__/src/net/src/tcp_buf.c.obj"
+  "CMakeFiles/test_ping.dir/__/src/net/src/tcp_buf.c.obj.d"
   "CMakeFiles/test_ping.dir/__/src/net/src/tcp_recv.c.obj"
   "CMakeFiles/test_ping.dir/__/src/net/src/tcp_recv.c.obj.d"
   "CMakeFiles/test_ping.dir/__/src/net/src/tcp_send.c.obj"

@@ -53,6 +53,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/net.dir/src/net/src/socket.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/tcp.c.obj"
   "CMakeFiles/net.dir/src/net/src/tcp.c.obj.d"
+  "CMakeFiles/net.dir/src/net/src/tcp_buf.c.obj"
+  "CMakeFiles/net.dir/src/net/src/tcp_buf.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/tcp_recv.c.obj"
   "CMakeFiles/net.dir/src/net/src/tcp_recv.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/tcp_send.c.obj"

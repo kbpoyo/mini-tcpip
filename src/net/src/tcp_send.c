@@ -12,6 +12,7 @@
 #include "tcp_send.h"
 
 #include "protocol.h"
+#include "tcp_buf.h"
 #include "tools.h"
 
 /**
@@ -97,12 +98,42 @@ net_err_t tcp_send_reset(tcp_info_t *info) {
 }
 
 /**
+ * @brief 将tcp发送缓冲区中的数据拷贝到待发送的tcp数据包中
+ *
+ * @param tcp
+ * @param tcp_data 记录待发送数据的信息
+ * @param buf
+ * @return int
+ */
+static int copy_send_data(tcp_t *tcp, tcp_data_t *data, pktbuf_t *buf) {
+  if (data->len <= 0) {
+    return 0;
+  }
+
+  // 对数据包进行扩容，以容纳新的数据
+  net_err_t err = pktbuf_resize(buf, pktbuf_total_size(buf) + data->len);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_TCP, "pktbuf resize failed.");
+    return -1;
+  }
+
+  // 移动数据包的访问指针，以略过tcp头部
+  pktbuf_acc_reset(buf);
+  pktbuf_seek(buf, tcp_get_hdr_size((tcp_hdr_t *)pktbuf_data_ptr(buf)));
+
+  // 从发送缓冲区中读取数据到tcp数据包中
+  return tcp_buf_read_to_pktbuf(&tcp->send.buf, data, buf);  //!!! 数据包传递
+}
+
+/**
  * @brief 根据tcp对象的状态，创建并发送一个tcp数据包
  *
  * @param tcp
  * @return net_err_t
  */
-static net_err_t tcp_transmit(tcp_t *tcp) {
+net_err_t tcp_transmit(tcp_t *tcp) {
+  net_err_t err = NET_ERR_OK;
+
   // 分配一个数据包用于存放tcp数据包
   pktbuf_t *buf = pktbuf_alloc(sizeof(tcp_hdr_t));  //!!! 分配数据包
   if (!buf) {
@@ -127,19 +158,27 @@ static net_err_t tcp_transmit(tcp_t *tcp) {
   tcp_hdr->win_size = 1024;  // 设置窗口大小
   tcp_hdr->urg_ptr = 0;      // 紧急指针
 
-  // 调整tcp发送窗口的边界信息
-  // syn号和fin号都需要占用一个序号位
-  tcp->send.nxt += tcp_hdr->f_syn + tcp_hdr->f_fin;
+  // 从发送缓冲区中读取数据到tcp数据包中，并更新发送窗口的边界信息(待发送序号)
+  tcp_data_t data = {.start_idx = 0, .len = 0};
+  tcp_get_send_data(tcp, &data);
+  if (data.len < 0 || copy_send_data(tcp, &data, buf) < 0) {//!!! 数据包传递
+    goto tcp_transmit_failed;
+  }
+  tcp->send.nxt += tcp_hdr->f_syn + tcp_hdr->f_fin +
+                   data.len;  // syn号和fin号都需要占用一个序号位
 
-  // 将tcp数据包下交给网络层处理
-  net_err_t err = tcp_send(tcp_hdr, buf, &tcp->sock_base.remote_ip,
+  // 通过tcp_send将tcp数据包下交给网络层处理
+  err = tcp_send(tcp_hdr, buf, &tcp->sock_base.remote_ip,
                            &tcp->sock_base.local_ip);  //!!! 数据包传递
   if (err != NET_ERR_OK) {
-    dbg_error(DBG_TCP, "tcp send failed.");
-    pktbuf_free(buf);  //!!! 释放数据包
+    goto tcp_transmit_failed;
   }
+  return NET_ERR_OK;
 
-  return err;
+tcp_transmit_failed:
+  dbg_error(DBG_TCP, "tcp transmit failed.");
+  pktbuf_free(buf);  //!!! 释放数据包
+  return err == NET_ERR_OK ? NET_ERR_TCP : err;
 }
 
 /**
@@ -187,7 +226,7 @@ net_err_t tcp_send_ack(tcp_t *tcp, tcp_info_t *info) {
  */
 net_err_t tcp_send_syn(tcp_t *tcp) {
   // 设置tcp状态标志位
-  tcp->flags.syn_send = 1;  
+  tcp->flags.syn_send = 1;
 
   // 进行tcp发送数据包的相关处理
   return tcp_transmit(tcp);
@@ -205,4 +244,17 @@ net_err_t tcp_send_fin(tcp_t *tcp) {
 
   // 进行tcp发送数据包的相关处理
   return tcp_transmit(tcp);
+}
+
+int tcp_send_bufwrite(tcp_t *tcp, const uint8_t *buf, int len) {
+  // 获取发送缓冲区的剩余空间, 无空间则返回0
+  int free_cnt = tcp_buf_free_cnt(&tcp->send.buf);
+  if (free_cnt <= 0) {
+    return 0;
+  }
+
+  // 根据剩余空间大小，写入数据到发送缓冲区
+  int write_len = (len > free_cnt) ? free_cnt : len;
+  tcp_buf_write(&tcp->send.buf, buf, write_len);
+  return write_len;
 }

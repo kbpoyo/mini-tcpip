@@ -51,6 +51,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/circular_queue.dir/__/src/net/src/socket.c.obj.d"
   "CMakeFiles/circular_queue.dir/__/src/net/src/tcp.c.obj"
   "CMakeFiles/circular_queue.dir/__/src/net/src/tcp.c.obj.d"
+  "CMakeFiles/circular_queue.dir/__/src/net/src/tcp_buf.c.obj"
+  "CMakeFiles/circular_queue.dir/__/src/net/src/tcp_buf.c.obj.d"
   "CMakeFiles/circular_queue.dir/__/src/net/src/tcp_recv.c.obj"
   "CMakeFiles/circular_queue.dir/__/src/net/src/tcp_recv.c.obj.d"
   "CMakeFiles/circular_queue.dir/__/src/net/src/tcp_send.c.obj"

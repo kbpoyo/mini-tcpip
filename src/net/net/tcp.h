@@ -14,6 +14,7 @@
 
 #include "net_cfg.h"
 #include "sock.h"
+#include "tcp_buf.h"
 #include "tools.h"
 
 #pragma pack(1)
@@ -91,6 +92,8 @@ typedef struct _tcp_info_t {
   uint32_t seq;        // 序号
   uint32_t seq_len;    // 序号长度
 } tcp_info_t;
+void tcp_info_init(tcp_info_t *tcp_info, pktbuf_t *tcp_buf, ipaddr_t *dest_ip,
+                   ipaddr_t *src_ip);
 
 // 定义tcp状态
 typedef enum _tcp_state_t {
@@ -117,9 +120,9 @@ typedef struct _tcp_t {
 
   // tcp标志位
   struct {
-    uint32_t syn_send : 1;  // SYN已发送
-    uint32_t fin_send : 1;  // FIN已发送
-    uint32_t recv_win_valid : 1;   // 接收窗口的是否有效
+    uint32_t syn_send : 1;        // SYN已发送
+    uint32_t fin_send : 1;        // FIN已发送
+    uint32_t recv_win_valid : 1;  // 接收窗口的是否有效
   } flags;
 
   struct {             // 用于处理tcp连接的结构
@@ -133,6 +136,9 @@ typedef struct _tcp_t {
     uint32_t una;      // 未确认的数据的数据段序号
     uint32_t nxt;      // 下一个将要发送的数据段序号
     sock_wait_t wait;  // 用于处理tcp发送的等待事件
+    tcp_buf_t buf;    // tcp发送缓冲区
+    //TODO: 为了简化实现以及可移植到某些嵌入式设备上，这里直接使用一个固定大小的缓冲区，以后可以使用动态分配的缓冲区
+    uint8_t buf_data[TCP_BUF_SIZE];  // tcp发送缓冲区数据的数据区
   } send;
 
   // 接收窗口
@@ -144,13 +150,11 @@ typedef struct _tcp_t {
   } recv;
 
 } tcp_t;
-
 net_err_t tcp_module_init(void);
 sock_t *tcp_create(int family, int protocol);
-void tcp_info_init(tcp_info_t *tcp_info, pktbuf_t *tcp_buf, ipaddr_t *dest_ip,
-                   ipaddr_t *src_ip);
 tcp_t *tcp_find(tcp_info_t *info);
 net_err_t tcp_abort_connect(tcp_t *tcp, net_err_t err);
+void tcp_get_send_data(tcp_t *tcp, tcp_data_t *tcp_data);
 
 static inline int tcp_get_hdr_size(const tcp_hdr_t *tcp_hdr) {
   return (tcp_hdr->hdr_len * 4);
@@ -192,25 +196,27 @@ static inline void tcp_hdr_ntoh(tcp_hdr_t *hdr) {
 #define type_check(type, var)   \
   ({                            \
     type __var1;                \
-    typeof(var) __var2;   \
+    typeof(var) __var2;         \
     (void)(&__var1 == &__var2); \
     1;                          \
   })
 
-// 定义序号比较宏(当b在逻辑上减a的值不超过2^31时，即使出现回绕该比较结果也正确) 1：a < b 0：a >= b
-#define tcp_seq_before(a, b) \
-(type_check(uint32_t, a) && type_check(uint32_t, b) && ((int32_t)(a) - (int32_t)(b) < 0))
-#define tcp_seq_before_eq(a, b) \
-(type_check(uint32_t, a) && type_check(uint32_t, b) && ((int32_t)(a) - (int32_t)(b) <= 0))
+// 定义序号比较宏(当b在逻辑上减a的值不超过2^31时，即使出现回绕该比较结果也正确)
+// 1：a < b 0：a >= b
+#define tcp_seq_before(a, b)                             \
+  (type_check(uint32_t, a) && type_check(uint32_t, b) && \
+   ((int32_t)(a) - (int32_t)(b) < 0))
+#define tcp_seq_before_eq(a, b)                          \
+  (type_check(uint32_t, a) && type_check(uint32_t, b) && \
+   ((int32_t)(a) - (int32_t)(b) <= 0))
 #define tcp_seq_after(a, b) tcp_seq_before(b, a)
 #define tcp_seq_after_eq(a, b) tcp_seq_before_eq(b, a)
-#define tcp_seq_between(a, b, c) \
-(tcp_seq_after(a, b) && tcp_seq_before(c, b))
+#define tcp_seq_between(a, b, c) (tcp_seq_after(a, b) && tcp_seq_before(c, b))
 #define tcp_seq_between_eq(a, b, c) \
-(tcp_seq_after_eq(a, b) && tcp_seq_before_eq(c, b))
+  (tcp_seq_after_eq(a, b) && tcp_seq_before_eq(c, b))
 
 #if DBG_DISP_ENABLED(DBG_TCP)
-    void tcp_disp(char *msg, tcp_t *tcp);
+void tcp_disp(char *msg, tcp_t *tcp);
 void tcp_disp_pkt(char *msg, tcp_hdr_t *tcp_hdr, pktbuf_t *tcp_buf);
 void tcp_disp_list(void);
 #else

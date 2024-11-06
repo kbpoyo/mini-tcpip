@@ -916,6 +916,30 @@ src/net/src/tcp.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp.c.s
 .PHONY : src/net/src/tcp.c.s
 
+src/net/src/tcp_buf.obj: src/net/src/tcp_buf.c.obj
+.PHONY : src/net/src/tcp_buf.obj
+
+# target to build an object file
+src/net/src/tcp_buf.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp_buf.c.obj
+.PHONY : src/net/src/tcp_buf.c.obj
+
+src/net/src/tcp_buf.i: src/net/src/tcp_buf.c.i
+.PHONY : src/net/src/tcp_buf.i
+
+# target to preprocess a source file
+src/net/src/tcp_buf.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp_buf.c.i
+.PHONY : src/net/src/tcp_buf.c.i
+
+src/net/src/tcp_buf.s: src/net/src/tcp_buf.c.s
+.PHONY : src/net/src/tcp_buf.s
+
+# target to generate assembly for a file
+src/net/src/tcp_buf.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/net/src/tcp_buf.c.s
+.PHONY : src/net/src/tcp_buf.c.s
+
 src/net/src/tcp_recv.obj: src/net/src/tcp_recv.c.obj
 .PHONY : src/net/src/tcp_recv.obj
 
@@ -1233,6 +1257,9 @@ help:
 	@echo ... src/net/src/tcp.obj
 	@echo ... src/net/src/tcp.i
 	@echo ... src/net/src/tcp.s
+	@echo ... src/net/src/tcp_buf.obj
+	@echo ... src/net/src/tcp_buf.i
+	@echo ... src/net/src/tcp_buf.s
 	@echo ... src/net/src/tcp_recv.obj
 	@echo ... src/net/src/tcp_recv.i
 	@echo ... src/net/src/tcp_recv.s

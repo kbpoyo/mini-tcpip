@@ -41,7 +41,8 @@
         "functional": "c",
         "tcp.h": "c",
         "netfwd": "c",
-        "tcp_state.h": "c"
+        "tcp_state.h": "c",
+        "tcp_buf.h": "c"
     },
     "better-comments.highlightPlainText": true,
     "better-comments.tags": [

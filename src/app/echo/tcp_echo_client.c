@@ -33,9 +33,27 @@ int tcp_echo_client_start(const char *ip, int port) {
     goto client_end;
   }
   
-#if 1
-  char sbuf[128];
-  fgets(sbuf, sizeof(sbuf), stdin);
+#if 0 //测试 tcp连接管理部分
+  getchar();
+  close(client_socket);
+  return 0;
+#endif
+
+#if 1 //测试tcp数据传输部分
+  char sbuf[1025];
+  for (int i = 0; i < sizeof(sbuf); i++) {
+    sbuf[i] = 'a' + i % 26;
+  }
+
+  for (int i = 0; i < 10; i++) {
+    ssize_t size = send(client_socket, sbuf, sizeof(sbuf), 0);
+    if (size < 0) {
+      plat_printf("send error\n");
+      break;
+    }
+  }
+
+  getchar();
   close(client_socket);
   return 0;
 #endif

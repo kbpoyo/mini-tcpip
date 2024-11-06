@@ -3111,6 +3111,7 @@ CMakeFiles/net.dir/src/net/src/ipv4.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/sr
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/sock_raw.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/socket.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp.h \
+  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_buf.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_recv.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/timer.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tools.h \
@@ -3869,6 +3870,7 @@ CMakeFiles/net.dir/src/net/src/net.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/sock_raw.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/socket.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp.h \
+  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_buf.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/timer.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tools.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/udp.h \
@@ -5376,6 +5378,7 @@ CMakeFiles/net.dir/src/net/src/sock.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/sr
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/sock_raw.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/socket.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp.h \
+  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_buf.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tools.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/udp.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/plat/net_plat.h \
@@ -6141,6 +6144,7 @@ CMakeFiles/net.dir/src/net/src/tcp.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/sock.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/socket.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp.h \
+  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_buf.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_send.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_state.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tools.h \
@@ -6373,6 +6377,25 @@ CMakeFiles/net.dir/src/net/src/tcp.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src
   D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/ws2ipdef.h \
   D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/ws2tcpip.h
 
+CMakeFiles/net.dir/src/net/src/tcp_buf.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/tcp_buf.c \
+  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/dbg.h \
+  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/net_cfg.h \
+  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/net_err.h \
+  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/nlist.h \
+  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/pktbuf.h \
+  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_buf.h \
+  D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stddef.h \
+  D:/software/work/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stdint.h \
+  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/_mingw.h \
+  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/_mingw_mac.h \
+  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/_mingw_secapi.h \
+  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/corecrt.h \
+  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/crtdefs.h \
+  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h \
+  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/stddef.h \
+  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/stdint.h \
+  D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/vadefs.h
+
 CMakeFiles/net.dir/src/net/src/tcp_recv.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/tcp_recv.c \
   C:/Users/kbpoyo/Desktop/mini-tcpip/npcap/Include/pcap.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/npcap/Include/pcap/bpf.h \
@@ -6398,6 +6421,7 @@ CMakeFiles/net.dir/src/net/src/tcp_recv.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpi
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/sock.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/socket.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp.h \
+  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_buf.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_recv.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_send.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_state.h \
@@ -6656,6 +6680,7 @@ CMakeFiles/net.dir/src/net/src/tcp_send.c.obj: C:/Users/kbpoyo/Desktop/mini-tcpi
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/sock.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/socket.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp.h \
+  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_buf.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_send.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tools.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/plat/net_plat.h \
@@ -6911,6 +6936,7 @@ CMakeFiles/net.dir/src/net/src/tcp_state.c.obj: C:/Users/kbpoyo/Desktop/mini-tcp
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/sock.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/socket.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp.h \
+  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_buf.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_recv.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_send.h \
   C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_state.h \
@@ -9026,6 +9052,8 @@ D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/lzexpand.h:
 
 D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/mciapi.h:
 
+C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/src/tcp_buf.c:
+
 D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/mmeapi.h:
 
 D:/software/work/CLion/bin/mingw/x86_64-w64-mingw32/include/mmiscapi2.h:
@@ -9089,6 +9117,8 @@ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/exmsg.h:
 C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/mblock.h:
 
 C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/net.h:
+
+C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_buf.h:
 
 C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/timer.h:
 

@@ -86,14 +86,16 @@ net_err_t tcp_recv(pktbuf_t *tcp_buf, ipaddr_t *src_ip, ipaddr_t *dest_ip) {
 
   // 记录tcp数据包信息
   tcp_info_t tcp_info;
-  tcp_info_init(&tcp_info, tcp_buf, dest_ip, src_ip);
+  tcp_info_init(&tcp_info, tcp_buf, dest_ip,
+                src_ip);  //!!! 数据包转交（给tcp_info）
 
   // 根据tcp数据包信息查找对应的tcp对象
   tcp_t *tcp = tcp_find(&tcp_info);
   if (!tcp) {
-    dbg_error(DBG_TCP, "tcp find failed.");
-    // 发送一个tcp复位数据包
-    tcp_send_reset(&tcp_info);
+    dbg_warning(DBG_TCP, "tcp find failed.");
+    if (!tcp_hdr->f_rst) { // 若不是复位请求，则给对端发送复位数据包
+      tcp_send_reset(&tcp_info);
+    }
     tcp_disp_list();
     return NET_ERR_TCP;
   }
@@ -105,7 +107,8 @@ net_err_t tcp_recv(pktbuf_t *tcp_buf, ipaddr_t *src_ip, ipaddr_t *dest_ip) {
 }
 
 /**
- * @brief 接收处理tcp包的有效数据部分(有保证的部分也就是有序号的部分), 同时更新接收窗口信息，并发送ack确认
+ * @brief 接收处理tcp包的有效数据部分(有保证的部分也就是有序号的部分),
+ * 同时更新接收窗口信息，并发送ack确认
  *
  * @param tcp
  * @param info

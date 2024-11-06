@@ -13,6 +13,7 @@
 #include "mblock.h"
 #include "protocol.h"
 #include "route.h"
+#include "tcp_buf.h"
 #include "tcp_send.h"
 #include "tcp_state.h"
 
@@ -247,6 +248,9 @@ static net_err_t tcp_init_connect(tcp_t *tcp) {
   // 设置接收窗口的待接收位
   tcp->recv.nxt = 0;
 
+  // 初始化发送缓冲区
+  tcp_buf_init(&tcp->send.buf, tcp->send.buf_data, TCP_BUF_SIZE);
+
   return NET_ERR_OK;
 }
 
@@ -258,8 +262,8 @@ static net_err_t tcp_init_connect(tcp_t *tcp) {
  * @param addrlen
  * @return net_err_t
  */
-net_err_t tcp_connect(sock_t *sock, const struct net_sockaddr *addr,
-                      net_socklen_t addrlen) {
+static net_err_t tcp_connect(sock_t *sock, const struct net_sockaddr *addr,
+                             net_socklen_t addrlen) {
   // 检查tcp对象状态是否为CLOSED
   if (((tcp_t *)sock)->state != TCP_STATE_CLOSED) {
     dbg_error(DBG_TCP, "tcp state error.");
@@ -313,7 +317,7 @@ net_err_t tcp_connect(sock_t *sock, const struct net_sockaddr *addr,
  * @param sock
  * @return net_err_t
  */
-net_err_t tcp_close(sock_t *sock) {
+static net_err_t tcp_close(sock_t *sock) {
   // 转为对应tcp对象
   tcp_t *tcp = (tcp_t *)sock;
 
@@ -345,7 +349,7 @@ net_err_t tcp_close(sock_t *sock) {
         dbg_error(DBG_TCP, "send fin failed.");
         return NET_ERR_TCP;
       }
-      tcp_state_set(tcp, TCP_STATE_FIN_WAIT_1); // 切换到FIN_WAIT_1状态
+      tcp_state_set(tcp, TCP_STATE_FIN_WAIT_1);  // 切换到FIN_WAIT_1状态
       return NET_ERR_NEEDWAIT;  // 通知调用者等待对端对FIN的确认
     } break;
 
@@ -360,6 +364,70 @@ net_err_t tcp_close(sock_t *sock) {
 }
 
 /**
+ * @brief tcp提供给上层的数据发送接口
+ *
+ * @param sock
+ * @param buf
+ * @param buf_len
+ * @param flags
+ * @return net_err_t
+ */
+static net_err_t tcp_send(sock_t *sock, const void *buf, size_t buf_len,
+                          int flags,  ssize_t *ret_send_len) {
+  // 转为对应tcp对象
+  tcp_t *tcp = (tcp_t *)sock;
+
+  // 根据tcp对象的状态进行不同的处理
+  switch (tcp->state) {
+    case TCP_STATE_CLOSED: {
+      dbg_error(DBG_TCP, "tcp is closed, refuse send data.");
+      return NET_ERR_TCP_CLOSE;
+    } break;
+
+    case TCP_STATE_LISTEN:
+    case TCP_STATE_SYN_RCVD:
+    case TCP_STATE_SYN_SENT: {
+      dbg_warning(DBG_TCP, "tcp is waiting for connectino, refuse send data.");
+      return NET_ERR_TCP;
+    } break;
+
+    case TCP_STATE_FIN_WAIT_1:
+    case TCP_STATE_FIN_WAIT_2:
+    case TCP_STATE_CLOSING:
+    case TCP_STATE_TIME_WAIT:
+    case TCP_STATE_LAST_ACK: {  // 本地tcp已主动关闭连接，不能再发送数据
+      dbg_warning(DBG_TCP, "tcp is closing, refuse send data.");
+      return NET_ERR_TCP;
+    } break;
+
+    case TCP_STATE_ESTABLISHED:
+    case TCP_STATE_CLOSE_WAIT: {  // 本地tcp连接已建立，且自己没有主动申请关闭连接，可以继续发送数据
+                                  // CLOSE_WAIT为半关闭状态，对端已停止发数据，本地可以继续发送数据
+      // if (tcp_send_data(tcp, buf, buf_len) != NET_ERR_OK) {
+      //   dbg_error(DBG_TCP, "send data failed.");
+      //   return NET_ERR_TCP;
+      // }
+    } break;
+
+    default: {
+      dbg_error(DBG_TCP, "tcp send failed, unknown state.");
+      return NET_ERR_TCP;
+    } break;
+  }
+
+  // 将数据写入到tcp发送缓冲区, 并返回累积实际发送数据长度到ret_send_len中
+  int size = tcp_send_bufwrite(tcp, (const uint8_t *)buf, (int)buf_len);
+  if (size <= 0) { // 写入失败
+    *ret_send_len += 0; 
+    dbg_warning(DBG_TCP, "send buf write 0 byte.");
+    return NET_ERR_NEEDWAIT;
+  } else { // 写入成功，调用tcp_transmit发送数据
+    *ret_send_len += size; 
+    return tcp_transmit(tcp);
+  }
+}
+
+/**
  * @brief 分配一个tcp socket对象
  *
  * @return tcp_t*
@@ -368,11 +436,11 @@ static tcp_t *tcp_alloc(int family, int protocol, int wait) {
   static const sock_ops_t tcp_ops = {
       .connect = tcp_connect,  // 独立实现接口
       .close = tcp_close,      // 独立实现接口
+      .send = tcp_send,        // 独立实现接口
       //   .sendto = tcp_sendto,      // 独立实现接口
       //   .recvfrom = tcp_recvfrom,  // 独立实现接口
       //   .setopt = sock_setopt,     // 继承基类的实现
       //   .bind = tcp_bind,
-      //   .send = sock_send,  // 继承基类的实现
       //   .recv = sock_recv,  // 继承基类的实现
   };
 
@@ -502,7 +570,7 @@ tcp_t *tcp_find(tcp_info_t *info) {
 /**
  * @brief 舍弃当前tcp连接，唤醒等待在该tcp对象上的所有任务,
  *        并将tcp对象状态设置为CLOSED以等待本地持有者调用close关闭并释放该对象
- *       
+ *
  *
  * @param tcp
  * @param err
@@ -516,4 +584,20 @@ net_err_t tcp_abort_connect(tcp_t *tcp, net_err_t err) {
   sock_wakeup(&tcp->sock_base, SOCK_WAIT_ALL, err);
 
   return NET_ERR_OK;
+}
+
+/**
+ * @brief 获取tcp发送缓冲区中待发送的数据的起始位置和长度信息
+ * 
+ * @param tcp 
+ * @param tcp_data 
+ */
+void tcp_get_send_data(tcp_t *tcp, tcp_data_t *tcp_data) {
+  int offset = tcp->send.nxt - tcp->send.una; // 未确认的数据还在缓冲区中，需要略过
+  int start_idx = tcp->send.buf.out + offset; // 获取待发送数据的起始位置
+  if (start_idx >= tcp->send.buf.size) { // 回绕处理
+    start_idx -= tcp->send.buf.size;
+  }
+  tcp_data->start_idx = start_idx;
+  tcp_data->len = tcp_buf_cnt(&tcp->send.buf) - offset;
 }

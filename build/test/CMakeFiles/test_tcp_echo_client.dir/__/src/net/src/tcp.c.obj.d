@@ -256,10 +256,12 @@ test/CMakeFiles/test_tcp_echo_client.dir/__/src/net/src/tcp.c.obj: \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/dbg.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/socket.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/ipv4.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_buf.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tools.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/mblock.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/protocol.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/route.h \
+ C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_buf.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_send.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp.h \
  C:/Users/kbpoyo/Desktop/mini-tcpip/src/net/net/tcp_state.h
