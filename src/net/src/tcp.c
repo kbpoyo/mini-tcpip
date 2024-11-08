@@ -416,7 +416,7 @@ static net_err_t tcp_send(sock_t *sock, const void *buf, size_t buf_len,
   }
 
   // 将数据写入到tcp发送缓冲区, 并返回累积实际发送数据长度到ret_send_len中
-  int size = tcp_send_bufwrite(tcp, (const uint8_t *)buf, (int)buf_len);
+  int size = tcp_buf_write(&tcp->send.buf, (const uint8_t *)buf, (int)buf_len);
   if (size <= 0) { // 写入失败
     *ret_send_len += 0; 
     dbg_warning(DBG_TCP, "send buf write 0 byte.");
@@ -586,18 +586,40 @@ net_err_t tcp_abort_connect(tcp_t *tcp, net_err_t err) {
   return NET_ERR_OK;
 }
 
+
 /**
- * @brief 获取tcp发送缓冲区中待发送的数据的起始位置和长度信息
+ * @brief 解析tcp选项数据 
  * 
  * @param tcp 
- * @param tcp_data 
+ * @param tcp_hdr 
  */
-void tcp_get_send_data(tcp_t *tcp, tcp_data_t *tcp_data) {
-  int offset = tcp->send.nxt - tcp->send.una; // 未确认的数据还在缓冲区中，需要略过
-  int start_idx = tcp->send.buf.out + offset; // 获取待发送数据的起始位置
-  if (start_idx >= tcp->send.buf.size) { // 回绕处理
-    start_idx -= tcp->send.buf.size;
+void tcp_read_options(tcp_t *tcp, tcp_hdr_t *tcp_hdr) {
+  // 获取tcp选项数据
+  uint8_t *opt_start = (uint8_t *)(tcp_hdr + 1); // 跳过tcp头部
+  uint8_t *opt_end = opt_start + (tcp_get_hdr_size(tcp_hdr) - sizeof(tcp_hdr_t));
+
+  // 遍历tcp选项数据
+  while (opt_start < opt_end) {
+    switch (opt_start[0]) {
+      case TCP_OPT_MSS: {
+        tcp_opt_mss_t *opt_mss = (tcp_opt_mss_t *)opt_start;
+        if (opt_mss->len == 4) { // 只处理长度为4的MSS选项
+          tcp->mss = net_ntohs(opt_mss->mss);
+        }
+        opt_start += opt_mss->len; // 移动到下一个选项
+      } break;
+
+      case TCP_OPT_NOP: { // 填充字节，直接跳过
+        opt_start++;
+      } break;
+
+      case TCP_OPT_END: { // 结束选项
+        return;
+      } break;
+
+      default: { //TODO: 其他选项暂时跳过，后续再扩展
+        opt_start++;
+      } break;
+    }
   }
-  tcp_data->start_idx = start_idx;
-  tcp_data->len = tcp_buf_cnt(&tcp->send.buf) - offset;
 }

@@ -17,7 +17,26 @@
 #include "tcp_buf.h"
 #include "tools.h"
 
+// 定义tcp选项枚举
+typedef enum _tcp_opt_t {  // TODO: 本协议栈只支持了部分选项
+  TCP_OPT_END = 0,         // 结束选项
+  TCP_OPT_NOP = 1,         // 无操作
+  TCP_OPT_MSS = 2,         // 最大报文长度
+  TCP_OPT_WSCALE = 3,      // 窗口扩大因子
+  TCP_OPT_SACK_PERM = 4,   // SACK允许
+  TCP_OPT_SACK = 5,        // SACK
+  TCP_OPT_TS = 8,          // 时间戳
+} tcp_opt_t;
+
 #pragma pack(1)
+
+// 定义tcp选项结构
+typedef struct _tcp_opt_mss_t { //获取对端mss
+  uint8_t kind;
+  uint8_t len;
+  uint16_t mss;
+}tcp_opt_mss_t;
+
 // 定义tcp 头部结构
 typedef struct _tcp_hdr_t {
   uint16_t src_port;   // 源端口
@@ -117,6 +136,7 @@ typedef struct _tcp_t {
   sock_t sock_base;  // 基础socket结构(父类，必须在第一个位置)
 
   tcp_state_t state;  // tcp状态
+  uint16_t mss;       // 对端一次性可接收的最大报文长度(不包括ip和tcp头部) = MTU - IP头部 - TCP头部
 
   // tcp标志位
   struct {
@@ -136,8 +156,9 @@ typedef struct _tcp_t {
     uint32_t una;      // 未确认的数据的数据段序号
     uint32_t nxt;      // 下一个将要发送的数据段序号
     sock_wait_t wait;  // 用于处理tcp发送的等待事件
-    tcp_buf_t buf;    // tcp发送缓冲区
-    //TODO: 为了简化实现以及可移植到某些嵌入式设备上，这里直接使用一个固定大小的缓冲区，以后可以使用动态分配的缓冲区
+    tcp_buf_t buf;     // tcp发送缓冲区
+    // TODO:
+    // 为了简化实现以及可移植到某些嵌入式设备上，这里直接使用一个固定大小的缓冲区，以后可以使用动态分配的缓冲区
     uint8_t buf_data[TCP_BUF_SIZE];  // tcp发送缓冲区数据的数据区
   } send;
 
@@ -154,7 +175,7 @@ net_err_t tcp_module_init(void);
 sock_t *tcp_create(int family, int protocol);
 tcp_t *tcp_find(tcp_info_t *info);
 net_err_t tcp_abort_connect(tcp_t *tcp, net_err_t err);
-void tcp_get_send_data(tcp_t *tcp, tcp_data_t *tcp_data);
+void tcp_read_options(tcp_t *tcp, tcp_hdr_t *tcp_hdr);
 
 static inline int tcp_get_hdr_size(const tcp_hdr_t *tcp_hdr) {
   return (tcp_hdr->hdr_len * 4);
@@ -162,6 +183,16 @@ static inline int tcp_get_hdr_size(const tcp_hdr_t *tcp_hdr) {
 
 static inline void tcp_set_hdr_size(tcp_hdr_t *tcp_hdr, int size) {
   tcp_hdr->hdr_len = size / 4;
+}
+
+/**
+ * @brief 获取tcp发送窗口中未确认的数据量
+ *
+ * @param tcp
+ * @return int
+ */
+static inline int tcp_unack_data(tcp_t *tcp) {
+  return tcp->send.nxt - tcp->send.una;
 }
 
 /**
@@ -211,9 +242,9 @@ static inline void tcp_hdr_ntoh(tcp_hdr_t *hdr) {
    ((int32_t)(a) - (int32_t)(b) <= 0))
 #define tcp_seq_after(a, b) tcp_seq_before(b, a)
 #define tcp_seq_after_eq(a, b) tcp_seq_before_eq(b, a)
-#define tcp_seq_between(a, b, c) (tcp_seq_after(a, b) && tcp_seq_before(c, b))
+#define tcp_seq_between(a, b, c) (tcp_seq_after(c, a) && tcp_seq_before(b, a))
 #define tcp_seq_between_eq(a, b, c) \
-  (tcp_seq_after_eq(a, b) && tcp_seq_before_eq(c, b))
+  (tcp_seq_after_eq(c, a) && tcp_seq_before_eq(b, a))
 
 #if DBG_DISP_ENABLED(DBG_TCP)
 void tcp_disp(char *msg, tcp_t *tcp);

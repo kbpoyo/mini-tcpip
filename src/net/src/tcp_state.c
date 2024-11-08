@@ -71,13 +71,25 @@ net_err_t tcp_ack_process(tcp_t *tcp, tcp_info_t *info) {
     tcp->flags.syn_send = 0;  // 清除syn_send标志位
   }
 
-  // 若tcp对象的fin_send标志位有效, 则判断该ack是否为fin请求的ack确认
-  if (tcp->flags.fin_send && tcp_seq_before(tcp->send.una, tcp_hdr->ack)) {
-    // 当前ack序号大于发送窗口的未确认序号，说明对端已对本地的fin请求进行了确认
-    tcp->send.una++;  // 对端已确认接收fin号，更新未确认的序号
-    tcp->flags.fin_send = 0;  // 清除fin_send标志位
-  }
+  // 处理对数据部分的ack确认,
+  // 移除发送缓冲区中已确认的数据并更新发送窗口的边界信息
+  int ack_cnt = tcp_hdr->ack - tcp->send.una;  // 此次ack预计确认的数据量
+  int una_cnt = tcp->send.nxt - tcp->send.una;  // 发送窗口中未确认的数据量
+  ack_cnt = MIN(ack_cnt, una_cnt);  // 本次ack确认的数据量不能超过未确认的数据量
+  if (ack_cnt > 0) {
+    tcp->send.una += ack_cnt;  // 更新发送窗口的未确认的序号
+    // 移除已确认的数据，若移除后ack_cnt ==
+    // 1，则说明该ack确认包含对fin请求的确认
+    ack_cnt -= tcp_buf_remove(&tcp->send.buf, ack_cnt);
 
+    // 若tcp对象的fin_send标志位有效, 则判断该ack是否为fin请求的ack确认
+    if (tcp->flags.fin_send && ack_cnt) {
+      tcp->flags.fin_send = 0;  // 清除fin_send标志位
+    }
+
+    // 处理完ack确认后，发送缓冲区中有了空闲空间，可尝试唤醒等待在tcp对象上的发送任务
+    sock_wakeup(&tcp->sock_base, SOCK_WAIT_WRITE, NET_ERR_OK);
+  }
   return NET_ERR_OK;
 }
 
@@ -139,6 +151,7 @@ static net_err_t tcp_syn_sent_recv(tcp_t *tcp, tcp_info_t *info) {
     tcp->recv.isn = tcp_hdr->seq;
     tcp->recv.nxt = tcp_hdr->seq + 1;
     tcp->flags.recv_win_valid = 1;
+    tcp_read_options(tcp, tcp_hdr); // 读取tcp选项信息，主要是读取mss选项
 
     if (tcp_hdr->f_ack) {
       // 完成三次握手,切换到ESTABLISHED状态，并唤醒等待在该连接事件上的任务

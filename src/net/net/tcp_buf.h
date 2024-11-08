@@ -33,16 +33,9 @@ static inline int tcp_buf_cnt(tcp_buf_t *tcp_buf) { return tcp_buf->count; }
 static inline int tcp_buf_free_cnt(tcp_buf_t *tcp_buf) {
   return tcp_buf->size - tcp_buf->count;
 }
+int tcp_buf_write(tcp_buf_t *tcp_buf, const uint8_t *data_buf, int len);
+int tcp_buf_read_to_pktbuf(tcp_buf_t *tcp_buf, pktbuf_t *buf, int offset);
 
-void tcp_buf_write(tcp_buf_t *tcp_buf, const uint8_t *data_buf, int len);
-
-
-// 定义tcp数据信息结构
-typedef struct _tcp_data_t {
-  int start_idx;  // 数据在缓冲区中的起始位置
-  int len;     // 数据长度
-} tcp_data_t;
-int tcp_buf_read_to_pktbuf(tcp_buf_t *tcp_buf, tcp_data_t *data, pktbuf_t *buf);
-
+int tcp_buf_remove(tcp_buf_t *tcp_buf, int cnt);
 
 #endif  // TCP_BUF_H

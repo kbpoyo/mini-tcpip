@@ -65,5 +65,8 @@ uint16_t tools_checksum16(const void *data, uint16_t len, uint32_t pre_sum, int 
 uint16_t tools_checksum16_pseudo_head(pktbuf_t *buf, const ipaddr_t *dest_ip,
                                        const ipaddr_t *src_ip, uint8_t proto);
 
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
 
 #endif  // TOOLS_H
