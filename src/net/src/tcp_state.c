@@ -62,29 +62,43 @@ void tcp_state_set(tcp_t *tcp, tcp_state_t state) {
  * @return net_err_t
  */
 net_err_t tcp_ack_process(tcp_t *tcp, tcp_info_t *info) {
-  // 获取tcp数据包头部
+  // 获取tcp数据包头部, 并检查ack号是否合法
   tcp_hdr_t *tcp_hdr = info->tcp_hdr;
+  if (tcp_seq_after(tcp_hdr->ack, tcp->send.nxt) ||
+      tcp_seq_before_eq(tcp_hdr->ack, tcp->send.isn)) {
+    // ack号不合法：ack超过了待发送的数据段范围, 或者ack小于等于初始序号
+    // 直接返回错误，相对于直接忽略该包，不继续向上层传递，本地不发送复位包也不会继续发送缓冲区中的数据
+    dbg_error(DBG_TCP, "tcp ack error, ack:%u, send.nxt:%u.", tcp_hdr->ack,
+              tcp->send.nxt);
+    return NET_ERR_TCP;
+  }
+  if (tcp_seq_before_eq(tcp_hdr->ack, tcp->send.una)) {
+    // 重复的ack确认, 无需处理，本地可以继续发送缓冲区中的数据
+    return NET_ERR_OK;
+  }
 
   // 若tcp对象的syn_send标志位有效, 则该ack一定为syn请求的ack确认
-  if (tcp->flags.syn_send) {
+  if (tcp->flags.syn_need_ack) {
     tcp->send.una++;  // 对端已确认接收syn号，更新未确认的序号
-    tcp->flags.syn_send = 0;  // 清除syn_send标志位
+    tcp->flags.syn_need_ack = 0;  // 清除syn发送缓存标志位
   }
 
   // 处理对数据部分的ack确认,
   // 移除发送缓冲区中已确认的数据并更新发送窗口的边界信息
-  int ack_cnt = tcp_hdr->ack - tcp->send.una;  // 此次ack预计确认的数据量
-  int una_cnt = tcp->send.nxt - tcp->send.una;  // 发送窗口中未确认的数据量
-  ack_cnt = MIN(ack_cnt, una_cnt);  // 本次ack确认的数据量不能超过未确认的数据量
+  // int ack_cnt = tcp_hdr->ack - tcp->send.una;  // 此次ack预计确认的数据量
+  // int una_cnt = tcp->send.nxt - tcp->send.una;  //
+  // 发送窗口中未确认的数据量(包括syn和fin) ack_cnt = MIN(ack_cnt, una_cnt);  //
+  // 本次ack确认的数据量不能超过未确认的数据量
+  int ack_cnt = tcp_hdr->ack - tcp->send.una;
   if (ack_cnt > 0) {
     tcp->send.una += ack_cnt;  // 更新发送窗口的未确认的序号
     // 移除已确认的数据，若移除后ack_cnt ==
     // 1，则说明该ack确认包含对fin请求的确认
     ack_cnt -= tcp_buf_remove(&tcp->send.buf, ack_cnt);
 
-    // 若tcp对象的fin_send标志位有效, 则判断该ack是否为fin请求的ack确认
-    if (tcp->flags.fin_send && ack_cnt) {
-      tcp->flags.fin_send = 0;  // 清除fin_send标志位
+    // 若tcp对象的fin_need_ack标志位有效, 则判断该ack是否为fin请求的ack确认
+    if (tcp->flags.fin_need_ack && ack_cnt) {
+      tcp->flags.fin_need_ack = 0;  // 清除fin标志位发送缓存标志位
     }
 
     // 处理完ack确认后，发送缓冲区中有了空闲空间，可尝试唤醒等待在tcp对象上的发送任务
@@ -124,13 +138,16 @@ static net_err_t tcp_syn_sent_recv(tcp_t *tcp, tcp_info_t *info) {
   // 获取tcp数据包头部
   tcp_hdr_t *tcp_hdr = info->tcp_hdr;
 
-  // 若ack有效, 则检查ack号是否合法
+  // 若ack有效, 则先单独检查收到的第一个ack是否合法
   if (tcp_hdr->f_ack) {
     if (tcp_seq_before_eq(tcp_hdr->ack, tcp->send.isn) ||
         tcp_seq_after(tcp_hdr->ack, tcp->send.nxt)) {
       // ack 落在待确认的数据段范围之外, 发送复位数据包通知对端
-      dbg_error(DBG_TCP, "tcp ack error.");
-      return tcp_send_reset(info);
+      dbg_error(DBG_TCP, "tcp ack error, ack:%u, send.nxt:%u.", tcp_hdr->ack,
+                tcp->send.nxt);
+      tcp_send_reset(info);
+      // TODO: 此处应该考虑重传syn请求，暂时未实现
+      return tcp_abort_connect(tcp, NET_ERR_TCP_RST);
     }
   }
 
@@ -140,9 +157,8 @@ static net_err_t tcp_syn_sent_recv(tcp_t *tcp, tcp_info_t *info) {
       // 若复位请求无ack确认, 则忽略该复位请求
       return NET_ERR_OK;
     }
-
     // 若复位请求有ack确认, 则接收复位请求，舍弃当前连接
-    tcp_abort_connect(tcp, NET_ERR_TCP_RST);
+    return tcp_abort_connect(tcp, NET_ERR_TCP_RST);
   }
 
   // 若syn有效, 则判断是否为连接请求
@@ -151,7 +167,7 @@ static net_err_t tcp_syn_sent_recv(tcp_t *tcp, tcp_info_t *info) {
     tcp->recv.isn = tcp_hdr->seq;
     tcp->recv.nxt = tcp_hdr->seq + 1;
     tcp->flags.recv_win_valid = 1;
-    tcp_read_options(tcp, tcp_hdr); // 读取tcp选项信息，主要是读取mss选项
+    tcp_read_options(tcp, tcp_hdr);  // 读取tcp选项信息，主要是读取mss选项
 
     if (tcp_hdr->f_ack) {
       // 完成三次握手,切换到ESTABLISHED状态，并唤醒等待在该连接事件上的任务
@@ -192,14 +208,18 @@ static net_err_t tcp_established_recv(tcp_t *tcp, tcp_info_t *info) {
     return tcp_abort_connect(tcp, NET_ERR_TCP_RST);
   }
 
-  // 若ack有效, 则处理ack确认
+  // 处理ack确认，以更新发送窗口信息并清除发送缓冲区中已确认的数据
   if (tcp_ack_process(tcp, info) != NET_ERR_OK) {
+    // ack不合法，直接返回错误，不继续向上层传递，相对于直接忽略该包
     dbg_error(DBG_TCP, "tcp ack process failed.");
     return NET_ERR_TCP;
   }
 
-  // 处理tcp包的数据部分
+  // 处理有效数据，以更新接收窗口信息
   tcp_recv_data(tcp, info);
+
+  // 发送缓冲区中剩余的数据
+  tcp_transmit(tcp);
 
   // 若fin有效, 则对端请求关闭，本地进入CLOSE_WAIT状态
   if (tcp_hdr->f_fin) {
@@ -209,6 +229,16 @@ static net_err_t tcp_established_recv(tcp_t *tcp, tcp_info_t *info) {
   return NET_ERR_OK;
 }
 
+/**
+ * @brief
+ * 在ESTABLISHED状态下，发送完fin请求后，本地进入FIN_WAIT_1状态，以等待对端对fin请求的ack确认
+ *        在FIN_WAIT_1状态下(其余半关闭状态下相同)，本地应用程序不能再向发送缓冲区中写入数据，但若发送缓冲区中还有数据未发送完，
+ *        则协议栈还会继续发送数据，直到发送缓冲区中的数据全部发送完毕
+ *
+ * @param tcp
+ * @param info
+ * @return net_err_t
+ */
 static net_err_t tcp_fin_wait_1_recv(tcp_t *tcp, tcp_info_t *info) {
   // 获取tcp数据包头部
   tcp_hdr_t *tcp_hdr = info->tcp_hdr;
@@ -227,7 +257,7 @@ static net_err_t tcp_fin_wait_1_recv(tcp_t *tcp, tcp_info_t *info) {
     return tcp_abort_connect(tcp, NET_ERR_TCP_RST);
   }
 
-  // 若ack有效, 则处理ack确认(更新发送窗口信息)
+  // 处理ack确认(更新发送窗口信息, 并删除发送缓冲区中已确认的数据)
   if (tcp_ack_process(tcp, info) != NET_ERR_OK) {
     dbg_error(DBG_TCP, "tcp ack process failed in FIN_WAIT_1.");
     return NET_ERR_TCP;
@@ -236,8 +266,11 @@ static net_err_t tcp_fin_wait_1_recv(tcp_t *tcp, tcp_info_t *info) {
   // 处理tcp包的数据部分(更新接收窗口信息, 并发送ack确认)
   tcp_recv_data(tcp, info);
 
+  // 发送缓冲区中剩余的数据，或者发送fin请求(缓冲区数据发送完毕后)
+  tcp_transmit(tcp);
+
   // 根据对端是否也请求关闭连接，进入不同的状态
-  if (tcp->flags.fin_send == 0) {  // 对端已确认本地的fin请求
+  if (tcp_fin_is_ack(tcp)) {  // 对端已确认本地的fin请求
     if (tcp_hdr->f_fin) {
       // 对端在确认本地fin请求的同时也发送了fin(在数据处理中已对其进行确认),
       // 本地直接进入TIME_WAIT状态
@@ -289,6 +322,17 @@ static net_err_t tcp_fin_wait_2_recv(tcp_t *tcp, tcp_info_t *info) {
 
   return NET_ERR_OK;
 }
+
+/**
+ * @brief
+ * 在ESTABLISHED状态下，双方同时发送fin请求，本地进入CLOSING状态，以等待对端对本地的fin请求进行确认
+ *        在CLOSING状态下(其余半关闭状态下相同)，本地应用程序不能再向发送缓冲区中写入数据，但若发送缓冲区中还有数据未发送完，
+ *        则协议栈还会继续发送数据，直到发送缓冲区中的数据全部发送完毕
+ *
+ * @param tcp
+ * @param info
+ * @return net_err_t
+ */
 static net_err_t tcp_closing_recv(tcp_t *tcp, tcp_info_t *info) {
   // 获取tcp数据包头部
   tcp_hdr_t *tcp_hdr = info->tcp_hdr;
@@ -315,7 +359,11 @@ static net_err_t tcp_closing_recv(tcp_t *tcp, tcp_info_t *info) {
 
   // 双方同时发送fin请求的情况，不需要再进行有效数据的接收处理(之前已完成全部接收和确认)
   // 只需要接收对端对本地fin请求的ack确认，以及发送对端fin请求的ack确认(已在ack处理中完成)
-  if (tcp->flags.fin_send == 0) {
+
+  // 发送缓冲区中剩余的数据, 或者发送fin请求(缓冲区数据发送完毕后)
+  tcp_transmit(tcp);
+
+  if (tcp_fin_is_ack(tcp)) {  // 对端已确认本地的fin请求
     // 对端已确认本地的fin请求，本地进入TIME_WAIT状态
     tcp_state_time_wait(tcp);
   }
@@ -385,10 +433,21 @@ static net_err_t tcp_close_wait_recv(tcp_t *tcp, tcp_info_t *info) {
 
   // 在CLOSE_WAIT状态下，对端已经关闭连接，不需要再进行有效数据的接收处理(之前已完成全部接收和确认)
   // 只需要对对端的fin请求进行重复的ack确认(在之前ack丢失的情况下)
+  // 等待本地应用程序调用close关闭连接即可
 
   return NET_ERR_OK;
 }
 
+/**
+ * @brief
+ * 在CLOSE_WAIT状态下，发送完fin请求后，本地进入LAST_ACK状态，以等待对端对fin请求的ack确认
+ *        在LAST_ACK状态下(其余半关闭状态下相同)，本地应用程序不能再向发送缓冲区中写入数据，但若发送缓冲区中还有数据未发送完，
+ *        则协议栈还会继续发送数据，直到发送缓冲区中的数据全部发送完毕
+ *
+ * @param tcp
+ * @param info
+ * @return net_err_t
+ */
 static net_err_t tcp_last_ack_recv(tcp_t *tcp, tcp_info_t *info) {
   // 获取tcp数据包头部
   tcp_hdr_t *tcp_hdr = info->tcp_hdr;
@@ -416,7 +475,11 @@ static net_err_t tcp_last_ack_recv(tcp_t *tcp, tcp_info_t *info) {
   // 对端已关闭连接，不需要再进行有效数据的接收处理(之前已完成全部接收和确认)
   //  且本地已经发送了fin请求，只需要接收对端对fin请求的确认，
   //  并且对对端的fin请求进行重复的ack确认(在之前ack丢失的情况下) 即可。
-  if (tcp->flags.fin_send == 0) {
+
+  // 调用tcp_transmit, 以发送缓冲区中剩余的数据
+  tcp_transmit(tcp);
+
+  if (tcp_fin_is_ack(tcp)) {  // 对端已确认本地的fin请求
     tcp_abort_connect(tcp, NET_ERR_TCP_CLOSE);
   }
 

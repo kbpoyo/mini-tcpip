@@ -17,6 +17,11 @@
 #include "tcp_buf.h"
 #include "tools.h"
 
+// 定义TCP默认最大报文长度(不包括ip和tcp头部)
+// 主要避免在未知链路上传输时，因为MTU限制导致的分片
+// 尽可能让tcp报文在链路上传输时不被分片
+#define TCP_MSS_DEFAULT 536
+
 // 定义tcp选项枚举
 typedef enum _tcp_opt_t {  // TODO: 本协议栈只支持了部分选项
   TCP_OPT_END = 0,         // 结束选项
@@ -31,11 +36,11 @@ typedef enum _tcp_opt_t {  // TODO: 本协议栈只支持了部分选项
 #pragma pack(1)
 
 // 定义tcp选项结构
-typedef struct _tcp_opt_mss_t { //获取对端mss
+typedef struct _tcp_opt_mss_t {  // 获取对端mss
   uint8_t kind;
   uint8_t len;
   uint16_t mss;
-}tcp_opt_mss_t;
+} tcp_opt_mss_t;
 
 // 定义tcp 头部结构
 typedef struct _tcp_hdr_t {
@@ -136,12 +141,18 @@ typedef struct _tcp_t {
   sock_t sock_base;  // 基础socket结构(父类，必须在第一个位置)
 
   tcp_state_t state;  // tcp状态
-  uint16_t mss;       // 对端一次性可接收的最大报文长度(不包括ip和tcp头部) = MTU - IP头部 - TCP头部
+  uint16_t
+      mss;  // 对端一次性可接收的最大报文长度(不包括ip和tcp头部) = MTU - IP头部
+            // - TCP头部
+            // 设置mss主要是为了避免在未知链路上传输时，因为MTU限制导致的分片
+            // 尽可能让tcp报文在链路上传输时不被分片
 
   // tcp标志位
   struct {
-    uint32_t syn_send : 1;        // SYN已发送
-    uint32_t fin_send : 1;        // FIN已发送
+    uint32_t syn_need_send : 1;        // SYN需要发送
+    uint32_t syn_need_ack : 1;        // SYN已发送, 需要ack确认
+    uint32_t fin_need_send : 1;        // FIN需要发送
+    uint32_t fin_need_ack : 1;        // FIN已发送, 需要ack确认
     uint32_t recv_win_valid : 1;  // 接收窗口的是否有效
   } flags;
 
@@ -186,14 +197,33 @@ static inline void tcp_set_hdr_size(tcp_hdr_t *tcp_hdr, int size) {
 }
 
 /**
- * @brief 获取tcp发送窗口中未确认的数据量
+ * @brief 获取tcp发送窗口中未确认的数据量, 不包括syn和fin请求
  *
  * @param tcp
  * @return int
  */
-static inline int tcp_unack_data(tcp_t *tcp) {
-  return tcp->send.nxt - tcp->send.una;
+static inline int tcp_wait_ack_data(tcp_t *tcp) {
+  return (tcp->send.nxt - tcp->send.una) - (tcp->flags.syn_need_ack + tcp->flags.fin_need_ack);
 }
+
+/**
+ * @brief 获取tcp缓冲区中待发送的数据量
+ * 
+ * @param tcp 
+ * @return int 
+ */
+static inline int tcp_wait_send_data(tcp_t *tcp) {
+  return tcp_buf_cnt(&tcp->send.buf) - tcp_wait_ack_data(tcp);
+}
+
+/**
+ * @brief 判断当前tcp是否已发送且已确认fin请求
+ * 
+ * @param tcp 
+ * @return int 
+ */
+#define tcp_fin_is_ack(tcp) (tcp->flags.fin_need_send == tcp->flags.fin_need_ack)
+
 
 /**
  * @brief 将头部字段中除开校验和以外的字段转换为网络字节序

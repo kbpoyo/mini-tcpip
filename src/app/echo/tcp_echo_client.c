@@ -40,7 +40,7 @@ int tcp_echo_client_start(const char *ip, int port) {
 #endif
 
 #if 1 //测试tcp数据传输部分
-  char sbuf[1028];
+  char sbuf[4096];
   for (int i = 0; i < sizeof(sbuf); i++) {
     sbuf[i] = 'a' + i % 26;
   }

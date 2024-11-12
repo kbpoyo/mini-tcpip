@@ -34,7 +34,7 @@ static inline int tcp_buf_free_cnt(tcp_buf_t *tcp_buf) {
   return tcp_buf->size - tcp_buf->count;
 }
 int tcp_buf_write(tcp_buf_t *tcp_buf, const uint8_t *data_buf, int len);
-int tcp_buf_read_to_pktbuf(tcp_buf_t *tcp_buf, pktbuf_t *buf, int offset);
+int tcp_buf_read_to_pktbuf(tcp_buf_t *tcp_buf, pktbuf_t *buf, int offset, int len);
 
 int tcp_buf_remove(tcp_buf_t *tcp_buf, int cnt);
 

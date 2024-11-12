@@ -370,7 +370,7 @@ ssize_t net_send(int socket, const void *buf, size_t buf_len, int flags) {
       } break;
       default: {  // 发生其他错误
         dbg_error(DBG_SOCKET, "send failed.\n");
-        return sock_req.io.ret_len;
+        return -1;
       }
     }
   }

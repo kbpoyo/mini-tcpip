@@ -136,7 +136,8 @@ void route_remove(ipaddr_t *dest_net, ipaddr_t *mask) {
 }
 
 /**
- * @brief 查找一个路由表表项
+ * @brief 查找一个路由表表项, 若有多个匹配的路由表表项，则返回最长匹配的路由表表项
+ *        若没有匹配的路由表表项，则返回网关路由表表项
  *
  * @param dest_ip 目的ip地址
  * @return route_entry_t*

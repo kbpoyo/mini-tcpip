@@ -60,21 +60,21 @@ net_err_t tcp_send_reset(tcp_info_t *info) {
 
   // 获取tcp数据包头部, 并填充头部字段
   tcp_hdr_t *tcp_hdr = (tcp_hdr_t *)pktbuf_data_ptr(buf);
+  plat_memset(tcp_hdr, 0, sizeof(tcp_hdr_t));
   tcp_hdr->src_port = info->tcp_hdr->dest_port;
   tcp_hdr->dest_port = info->tcp_hdr->src_port;
+  tcp_set_hdr_size(tcp_hdr, sizeof(tcp_hdr_t));
+  tcp_hdr->reserved = 0;
   tcp_hdr->flag = 0;   // 清空标志位
   tcp_hdr->f_rst = 1;  // 设置复位标志位
-  tcp_set_hdr_size(tcp_hdr, sizeof(tcp_hdr_t));
   tcp_hdr->win_size = tcp_hdr->urg_ptr = 0;
 
   /**
-   * 要确保对方能正确接收复位包，需要根据对方发来的数据包进行ack确认或者seq更新
-   * ack确认：设置ack号和f_ack标志位，以确认对方发来的数据包，对方接收到复位包才不会忽略该包
-   * seq更新：根据对方发送ack号，更新发送的seq号，若seq号在对方窗口范围内，则对方接收到复位包才不会忽略该包
-   *
-   * 对方接收复位包后，并识别到复位请求后，将立马重发之前发送的数据包，若多次接收到复位包，对方会关闭连接
-   * 若对方忽略了复位包，对方会以2的n次方的指数增长的时间间隔重发数据包，若重发次数超过一定次数，对方会关闭连接
-   *
+   * @brief 根据对方发送的ack号，更新发送的seq号和ack号
+   *        若对端收到正确的ack号，则对端会立即响应复位请求，在0.5s后尝试重传，共重传4次(每次间隔0.5s)
+   *        若没有设置ack号，则对端也会重传4次，但第一次间隔1s，后面每次间隔时间翻倍
+   *        若对端收到错误的ack号，则对端会发送一个复位数据包，以关闭连接
+   * 
    */
   if (info->tcp_hdr->f_ack) {
     tcp_hdr->seq = info->tcp_hdr->ack;  // 根据对方发送的ack号，更新发送的seq号
@@ -87,14 +87,14 @@ net_err_t tcp_send_reset(tcp_info_t *info) {
     tcp_hdr->f_ack = 1;
   }
 
+  // 发送tcp复位数据包
   net_err_t err = tcp_send(tcp_hdr, buf, &info->remote_ip, &info->local_ip);
   if (err != NET_ERR_OK) {
     dbg_error(DBG_TCP, "tcp send reset failed.");
     pktbuf_free(buf);  //!!! 释放数据包
-    return err;
   }
 
-  return NET_ERR_OK;
+  return err;
 }
 
 /**
@@ -103,12 +103,12 @@ net_err_t tcp_send_reset(tcp_info_t *info) {
  *
  * @param tcp
  * @param buf
- * @param offset 待读取数据相对于缓冲区out指针的偏移量
  * @return int 拷贝数据的长度
  */
-static int copy_send_data(tcp_t *tcp, pktbuf_t *buf, int offset) {
-  // 计算待发送数据的长度
-  int cpy_len = tcp_buf_cnt(&tcp->send.buf) - offset;
+static int copy_send_data(tcp_t *tcp, pktbuf_t *buf) {
+  // 获取发送缓冲区中待发送数据的长度, 数据长度不能超过mss
+  int valid_len = tcp_wait_send_data(tcp);
+  int cpy_len = MIN(valid_len, tcp->mss);
   if (cpy_len <= 0) {
     return cpy_len;
   }
@@ -125,7 +125,8 @@ static int copy_send_data(tcp_t *tcp, pktbuf_t *buf, int offset) {
   pktbuf_seek(buf, tcp_get_hdr_size((tcp_hdr_t *)pktbuf_data_ptr(buf)));
 
   // 从发送缓冲区中读取数据到tcp数据包中
-  return tcp_buf_read_to_pktbuf(&tcp->send.buf, buf, offset);  //!!! 数据包传递
+  return tcp_buf_read_to_pktbuf(&tcp->send.buf, buf, tcp_wait_ack_data(tcp),
+                                cpy_len);  //!!! 数据包传递
 }
 
 /**
@@ -136,6 +137,18 @@ static int copy_send_data(tcp_t *tcp, pktbuf_t *buf, int offset) {
  */
 net_err_t tcp_transmit(tcp_t *tcp) {
   net_err_t err = NET_ERR_OK;
+
+  // 获取tcp对象的发送缓冲区中待发送数据的长度，并判断是否需要发送一个tcp数据包
+  int wait_data_len = tcp_wait_send_data(tcp);
+  if (wait_data_len < 0) {
+    dbg_error(DBG_TCP, "tcp send buf error, wait_send_data can't < 0.");
+    return NET_ERR_TCP;
+  }
+  int seq_len =
+      tcp->flags.syn_need_send + tcp->flags.fin_need_send + wait_data_len;
+  if (seq_len == 0) {  // 没有数据或请求需要发送，直接返回
+    return NET_ERR_OK;
+  }
 
   // 分配一个数据包用于存放tcp数据包
   pktbuf_t *buf = pktbuf_alloc(sizeof(tcp_hdr_t));  //!!! 分配数据包
@@ -151,30 +164,43 @@ net_err_t tcp_transmit(tcp_t *tcp) {
   tcp_hdr->seq = tcp->send.nxt;  // 设置序号位发送窗口的下一个待发送数据段序号
   tcp_hdr->ack = tcp->recv.nxt;  // 设置确认号为接收窗口的下一个待接收数据段序号
   tcp_set_hdr_size(tcp_hdr, sizeof(tcp_hdr_t));  // 设置头部长度
+  tcp_hdr->reserved = 0;                         // 清空保留字段
   tcp_hdr->flag = 0;                             // 清空标志位
-  // 根据tcp标志的syn_send位来设置SYN标志位，以请求连接
-  tcp_hdr->f_syn = tcp->flags.syn_send;
-  // 根据tcp标志的fin_send标志位来设置FIN标志位，以请求关闭连接
-  tcp_hdr->f_fin = tcp->flags.fin_send;
+  // 根据tcp标志的syn_need_send位来设置SYN标志位，以请求连接
+  tcp_hdr->f_syn = tcp->flags.syn_need_send;
+  // 根据tcp标志的fin_need_send标志位来设置FIN标志位，以请求关闭连接,
+  // 且发送缓冲区中无待发送数据时，才能发送fin请求
+  tcp_hdr->f_fin = (wait_data_len == 0 ? tcp->flags.fin_need_send : 0);
   // 根据tcp标志的recv_win_valid标志位来设置ACK标志位，确认已收到的tcp数据包
   tcp_hdr->f_ack = tcp->flags.recv_win_valid;
   tcp_hdr->win_size = 1024;  // 设置窗口大小
   tcp_hdr->urg_ptr = 0;      // 紧急指针
 
-  // 从发送缓冲区中读取数据到tcp数据包中，并更新发送窗口的边界信息(待发送序号)
-  int offset = tcp_unack_data(tcp);  // 待确认数据还停留在发送缓冲区中，需要跳过
-  int data_len = copy_send_data(tcp, buf, offset);  //!!! 数据包传递
+  // 记录tcp头部syn或fin标志位是否设置成功
+  int temp_syn = tcp_hdr->f_syn;
+  int temp_fin = tcp_hdr->f_fin;
+
+  // 从发送缓冲区中读取数据到tcp数据包中,
+  // 并通过tcp_send将tcp数据包下交给网络层处理
+  int data_len = copy_send_data(tcp, buf);  //!!! 数据包传递
   if (data_len < 0) {
     goto tcp_transmit_failed;
   }
-  tcp->send.nxt += tcp_hdr->f_syn + tcp_hdr->f_fin +
-                   data_len;  // syn号和fin号都需要占用一个序号位
-
-  // 通过tcp_send将tcp数据包下交给网络层处理
   err = tcp_send(tcp_hdr, buf, &tcp->sock_base.remote_ip,
                  &tcp->sock_base.local_ip);  //!!! 数据包传递
   if (err != NET_ERR_OK) {
     goto tcp_transmit_failed;
+  }
+
+  // tcp数据包发送成功，更新发送窗口信息(syn号和fin号都需要占用一个序号位)和标志位, 
+  tcp->send.nxt += (temp_syn + temp_fin + data_len);  
+  if (temp_syn) {
+    tcp->flags.syn_need_send = 0;
+    tcp->flags.syn_need_ack = 1;
+  }
+  if (temp_fin) {
+    tcp->flags.fin_need_send = 0;
+    tcp->flags.fin_need_ack = 1;
   }
   return NET_ERR_OK;
 
@@ -205,6 +231,7 @@ net_err_t tcp_send_ack(tcp_t *tcp, tcp_info_t *info) {
   tcp_hdr->seq = tcp->send.nxt;  // 设置序号位发送窗口的下一个待发送数据段序号
   tcp_hdr->ack = tcp->recv.nxt;  // 设置确认号为接收窗口的下一个待接收数据段序号
   tcp_set_hdr_size(tcp_hdr, sizeof(tcp_hdr_t));  // 设置头部长度
+  tcp_hdr->reserved = 0;                         // 清空保留字段
   tcp_hdr->flag = 0;                             // 清空标志位
   tcp_hdr->f_ack = 1;
   tcp_hdr->win_size = 1024;  // 设置窗口大小
@@ -229,7 +256,7 @@ net_err_t tcp_send_ack(tcp_t *tcp, tcp_info_t *info) {
  */
 net_err_t tcp_send_syn(tcp_t *tcp) {
   // 设置tcp状态标志位
-  tcp->flags.syn_send = 1;
+  tcp->flags.syn_need_send = 1;
 
   // 进行tcp发送数据包的相关处理
   return tcp_transmit(tcp);
@@ -243,7 +270,7 @@ net_err_t tcp_send_syn(tcp_t *tcp) {
  */
 net_err_t tcp_send_fin(tcp_t *tcp) {
   // 设置tcp标志位
-  tcp->flags.fin_send = 1;
+  tcp->flags.fin_need_send = 1;
 
   // 进行tcp发送数据包的相关处理
   return tcp_transmit(tcp);

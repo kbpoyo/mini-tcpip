@@ -78,14 +78,14 @@ int tcp_buf_write(tcp_buf_t *tcp_buf, const uint8_t *data_buf, int len) {
  * @param tcp_buf
  * @param buf
  * @param offset 待读取数据相对于缓冲区out指针的偏移量
+ * @param len 待读取数据长度
  * @return int 读取的数据长度
  */
-int tcp_buf_read_to_pktbuf(tcp_buf_t *tcp_buf, pktbuf_t *buf, int offset) {
+int tcp_buf_read_to_pktbuf(tcp_buf_t *tcp_buf, pktbuf_t *buf, int offset, int len) {
   net_err_t err = NET_ERR_OK;
 
-  // 获取待读取数据的起始索引和长度
-  int start_idx = (offset + tcp_buf->out) % tcp_buf->size;
-  int len = tcp_buf->count - offset;
+  // 计算待读取数据的起始索引
+  int start_idx = (tcp_buf->out + offset) % tcp_buf->size;
 
   // 计算可读取的数据长度，情况1：可读数据未形成回绕，cpy_len = len,
   // 只进行第一次拷贝 情况2：可读数据形成回绕，cpy_len = tcp_buf->size -

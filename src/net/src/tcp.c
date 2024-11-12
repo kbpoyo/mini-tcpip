@@ -234,7 +234,7 @@ static uint32_t tcp_get_isn(void) {
  * @param tcp
  * @return net_err_t
  */
-static net_err_t tcp_init_connect(tcp_t *tcp) {
+static net_err_t tcp_connect_init(tcp_t *tcp) {
   // 获取本次连接的初始序号
   tcp->send.isn = tcp_get_isn();
 
@@ -250,6 +250,15 @@ static net_err_t tcp_init_connect(tcp_t *tcp) {
 
   // 初始化发送缓冲区
   tcp_buf_init(&tcp->send.buf, tcp->send.buf_data, TCP_BUF_SIZE);
+
+  // 查找路由表，判断是否在本地网段，以初始化mss
+  route_entry_t *rt_entry = route_find(&tcp->sock_base.remote_ip);
+  if (rt_entry->netif->mtu == 0 || !ipaddr_is_any(&rt_entry->next_hop)) { 
+    // 本地网络接口mtu未知或者下一跳地址不为空(即下一跳地址为网关地址，即对端不在本地链路上)，使用默认mss
+    tcp->mss = TCP_MSS_DEFAULT;
+  } else { // 对端在本地链路上，计算mss = MTU - IP头部 - TCP头部
+    tcp->mss = rt_entry->netif->mtu - sizeof(ipv4_hdr_t) - sizeof(tcp_hdr_t);
+  }
 
   return NET_ERR_OK;
 }
@@ -294,7 +303,7 @@ static net_err_t tcp_connect(sock_t *sock, const struct net_sockaddr *addr,
   }
 
   // 初始化tcp对象连接状态，包括发送窗口和接收窗口的边界信息
-  if (tcp_init_connect((tcp_t *)sock) != NET_ERR_OK) {
+  if (tcp_connect_init((tcp_t *)sock) != NET_ERR_OK) {
     dbg_error(DBG_TCP, "init connect failed.");
     return NET_ERR_TCP;
   }
@@ -418,7 +427,6 @@ static net_err_t tcp_send(sock_t *sock, const void *buf, size_t buf_len,
   // 将数据写入到tcp发送缓冲区, 并返回累积实际发送数据长度到ret_send_len中
   int size = tcp_buf_write(&tcp->send.buf, (const uint8_t *)buf, (int)buf_len);
   if (size <= 0) { // 写入失败
-    *ret_send_len += 0; 
     dbg_warning(DBG_TCP, "send buf write 0 byte.");
     return NET_ERR_NEEDWAIT;
   } else { // 写入成功，调用tcp_transmit发送数据
@@ -604,7 +612,8 @@ void tcp_read_options(tcp_t *tcp, tcp_hdr_t *tcp_hdr) {
       case TCP_OPT_MSS: {
         tcp_opt_mss_t *opt_mss = (tcp_opt_mss_t *)opt_start;
         if (opt_mss->len == 4) { // 只处理长度为4的MSS选项
-          tcp->mss = net_ntohs(opt_mss->mss);
+          uint16_t mss = net_ntohs(opt_mss->mss);
+          tcp->mss = MIN(tcp->mss, mss); // 选择最小的MSS
         }
         opt_start += opt_mss->len; // 移动到下一个选项
       } break;
