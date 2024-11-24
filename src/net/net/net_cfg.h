@@ -95,7 +95,8 @@
 
 // tcp模块相关配置
 #define TCP_MAXCNT 10  // tcp socket对象表大小
-#define TCP_BUF_SIZE 4096  // tcp发送缓冲区大小
+#define TCP_SBUF_SIZE 4096  // tcp发送缓冲区大小
+#define TCP_RBUF_SIZE 4096  // tcp接收缓冲区大小
 
 
 #endif  // NET_CFG_H

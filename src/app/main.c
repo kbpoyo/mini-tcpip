@@ -99,11 +99,15 @@ void udp_echo_test() {
 }
 
 void tcp_echo_test() { tcp_echo_client_start("192.168.3.159", 2000); }
+
+void tcp_download_test() { download_test("hello.txt", 2000); }
 void basic_test(void) {
   // timer_test();
 
   // udp_echo_test();
-  tcp_echo_test();
+  // tcp_echo_test();
+
+  tcp_download_test();
 }
 
 #define DBG_TEST DBG_LEVEL_INFO
@@ -113,17 +117,6 @@ net_err_t test_func(msg_func_t *msg) {
   return NET_ERR_OK;
 }
 
-struct test_domain {
-  union {
-    struct {
-      uint16_t a : 4;
-      uint16_t b : 8;
-      uint16_t c : 4;
-    };
-    uint16_t u16;
-  };
-};
-
 int main(void) {
   net_init();
 
@@ -132,12 +125,6 @@ int main(void) {
   netdev_init();
   basic_test();
 
-  // struct test_domain test;
-  // test.a = 0x1;
-  // test.b = 0x80;
-  // test.c = 0x8;
-
-  int a = 0x12345678;
 
   // 简单的命令行测试
   char cmd[32], param[32];

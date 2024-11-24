@@ -32,6 +32,7 @@ typedef enum _net_err_t {
   NET_ERR_PKTBUF = -25,
   NET_ERR_TCP_RST = -26,
   NET_ERR_TCP_CLOSE = -27,
+  NET_ERR_TCP_STATE = -28,
 } net_err_t;
 
 

@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/net.dir/src/app/main.c.obj.d"
   "CMakeFiles/net.dir/src/app/ping/ping.c.obj"
   "CMakeFiles/net.dir/src/app/ping/ping.c.obj.d"
+  "CMakeFiles/net.dir/src/app/test/download.c.obj"
+  "CMakeFiles/net.dir/src/app/test/download.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/arp.c.obj"
   "CMakeFiles/net.dir/src/net/src/arp.c.obj.d"
   "CMakeFiles/net.dir/src/net/src/dbg.c.obj"

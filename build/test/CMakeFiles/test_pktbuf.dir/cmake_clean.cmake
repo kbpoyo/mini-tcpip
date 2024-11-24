@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/test_pktbuf.dir/__/src/app/echo/udp_echo_server.c.obj.d"
   "CMakeFiles/test_pktbuf.dir/__/src/app/ping/ping.c.obj"
   "CMakeFiles/test_pktbuf.dir/__/src/app/ping/ping.c.obj.d"
+  "CMakeFiles/test_pktbuf.dir/__/src/app/test/download.c.obj"
+  "CMakeFiles/test_pktbuf.dir/__/src/app/test/download.c.obj.d"
   "CMakeFiles/test_pktbuf.dir/__/src/net/src/arp.c.obj"
   "CMakeFiles/test_pktbuf.dir/__/src/net/src/arp.c.obj.d"
   "CMakeFiles/test_pktbuf.dir/__/src/net/src/dbg.c.obj"

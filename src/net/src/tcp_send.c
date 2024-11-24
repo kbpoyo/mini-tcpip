@@ -74,7 +74,7 @@ net_err_t tcp_send_reset(tcp_info_t *info) {
    *        若对端收到正确的ack号，则对端会立即响应复位请求，在0.5s后尝试重传，共重传4次(每次间隔0.5s)
    *        若没有设置ack号，则对端也会重传4次，但第一次间隔1s，后面每次间隔时间翻倍
    *        若对端收到错误的ack号，则对端会发送一个复位数据包，以关闭连接
-   * 
+   *
    */
   if (info->tcp_hdr->f_ack) {
     tcp_hdr->seq = info->tcp_hdr->ack;  // 根据对方发送的ack号，更新发送的seq号
@@ -121,7 +121,6 @@ static int copy_send_data(tcp_t *tcp, pktbuf_t *buf) {
   }
 
   // 移动数据包的访问指针，以略过tcp头部
-  pktbuf_acc_reset(buf);
   pktbuf_seek(buf, tcp_get_hdr_size((tcp_hdr_t *)pktbuf_data_ptr(buf)));
 
   // 从发送缓冲区中读取数据到tcp数据包中
@@ -163,9 +162,8 @@ net_err_t tcp_transmit(tcp_t *tcp) {
   tcp_hdr->dest_port = tcp->sock_base.remote_port;
   tcp_hdr->seq = tcp->send.nxt;  // 设置序号位发送窗口的下一个待发送数据段序号
   tcp_hdr->ack = tcp->recv.nxt;  // 设置确认号为接收窗口的下一个待接收数据段序号
-  tcp_set_hdr_size(tcp_hdr, sizeof(tcp_hdr_t));  // 设置头部长度
-  tcp_hdr->reserved = 0;                         // 清空保留字段
-  tcp_hdr->flag = 0;                             // 清空标志位
+  tcp_hdr->reserved = 0;  // 清空保留字段
+  tcp_hdr->flag = 0;      // 清空标志位
   // 根据tcp标志的syn_need_send位来设置SYN标志位，以请求连接
   tcp_hdr->f_syn = tcp->flags.syn_need_send;
   // 根据tcp标志的fin_need_send标志位来设置FIN标志位，以请求关闭连接,
@@ -173,8 +171,15 @@ net_err_t tcp_transmit(tcp_t *tcp) {
   tcp_hdr->f_fin = (wait_data_len == 0 ? tcp->flags.fin_need_send : 0);
   // 根据tcp标志的recv_win_valid标志位来设置ACK标志位，确认已收到的tcp数据包
   tcp_hdr->f_ack = tcp->flags.recv_win_valid;
-  tcp_hdr->win_size = 1024;  // 设置窗口大小
+  tcp_hdr->win_size = tcp_recv_window(tcp);  // 设置窗口大小
   tcp_hdr->urg_ptr = 0;      // 紧急指针
+  if (tcp_hdr->f_syn) {      // 若发送syn请求，则需要设置mss选项
+    err = tcp_write_options(tcp, buf);
+    if (err != NET_ERR_OK) {
+      goto tcp_transmit_failed;
+    }
+  }
+  tcp_set_hdr_size(tcp_hdr, pktbuf_total_size(buf));  // 设置tcp数据包头部长度
 
   // 记录tcp头部syn或fin标志位是否设置成功
   int temp_syn = tcp_hdr->f_syn;
@@ -192,8 +197,8 @@ net_err_t tcp_transmit(tcp_t *tcp) {
     goto tcp_transmit_failed;
   }
 
-  // tcp数据包发送成功，更新发送窗口信息(syn号和fin号都需要占用一个序号位)和标志位, 
-  tcp->send.nxt += (temp_syn + temp_fin + data_len);  
+  // tcp数据包发送成功，更新发送窗口信息(syn号和fin号都需要占用一个序号位)和标志位,
+  tcp->send.nxt += (temp_syn + temp_fin + data_len);
   if (temp_syn) {
     tcp->flags.syn_need_send = 0;
     tcp->flags.syn_need_ack = 1;
@@ -234,7 +239,7 @@ net_err_t tcp_send_ack(tcp_t *tcp, tcp_info_t *info) {
   tcp_hdr->reserved = 0;                         // 清空保留字段
   tcp_hdr->flag = 0;                             // 清空标志位
   tcp_hdr->f_ack = 1;
-  tcp_hdr->win_size = 1024;  // 设置窗口大小
+  tcp_hdr->win_size = tcp_recv_window(tcp);  // 设置窗口大小
   tcp_hdr->urg_ptr = 0;      // 紧急指针
 
   // 将tcp数据包下交给网络层处理

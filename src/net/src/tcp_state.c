@@ -66,14 +66,14 @@ net_err_t tcp_ack_process(tcp_t *tcp, tcp_info_t *info) {
   tcp_hdr_t *tcp_hdr = info->tcp_hdr;
   if (tcp_seq_after(tcp_hdr->ack, tcp->send.nxt) ||
       tcp_seq_before_eq(tcp_hdr->ack, tcp->send.isn)) {
-    // ack号不合法：ack超过了待发送的数据段范围, 或者ack小于等于初始序号
+    // ack号不合法：ack落在了待发送的窗口内, 或者ack小于等于初始序号
     // 直接返回错误，相对于直接忽略该包，不继续向上层传递，本地不发送复位包也不会继续发送缓冲区中的数据
     dbg_error(DBG_TCP, "tcp ack error, ack:%u, send.nxt:%u.", tcp_hdr->ack,
               tcp->send.nxt);
     return NET_ERR_TCP;
   }
   if (tcp_seq_before_eq(tcp_hdr->ack, tcp->send.una)) {
-    // 重复的ack确认, 无需处理，本地可以继续发送缓冲区中的数据
+    // ack落在已确认窗口内，即是重复的ack确认, 无需处理
     return NET_ERR_OK;
   }
 
@@ -85,9 +85,6 @@ net_err_t tcp_ack_process(tcp_t *tcp, tcp_info_t *info) {
 
   // 处理对数据部分的ack确认,
   // 移除发送缓冲区中已确认的数据并更新发送窗口的边界信息
-  // int ack_cnt = tcp_hdr->ack - tcp->send.una;  // 此次ack预计确认的数据量
-  // int una_cnt = tcp->send.nxt - tcp->send.una;  //
-  // 发送窗口中未确认的数据量(包括syn和fin) ack_cnt = MIN(ack_cnt, una_cnt);  //
   // 本次ack确认的数据量不能超过未确认的数据量
   int ack_cnt = tcp_hdr->ack - tcp->send.una;
   if (ack_cnt > 0) {
@@ -166,6 +163,7 @@ static net_err_t tcp_syn_sent_recv(tcp_t *tcp, tcp_info_t *info) {
     // 设置接收窗口的初始序号, 待接收序号和对应标志
     tcp->recv.isn = tcp_hdr->seq;
     tcp->recv.nxt = tcp_hdr->seq + 1;
+    tcp->recv.unr = tcp_hdr->seq + 1;  // syn请求不是可读取的数据
     tcp->flags.recv_win_valid = 1;
     tcp_read_options(tcp, tcp_hdr);  // 读取tcp选项信息，主要是读取mss选项
 
@@ -190,6 +188,16 @@ static net_err_t tcp_syn_rcvd_recv(tcp_t *tcp, tcp_info_t *info) {
   return NET_ERR_OK;
 }
 
+/**
+ * @brief 处于ESTABLISHED状态,
+ * 接收对端的数据包，并进行数据接收处理及ack确认处理即可
+ *        并发送缓冲区中剩余的数据，若对端请求关闭连接，则本地进入CLOSE_WAIT状态
+ *        TODO: 每次只发送一个数据包，以后根据对端的接收窗口大小进行调整
+ *
+ * @param tcp
+ * @param info
+ * @return net_err_t
+ */
 static net_err_t tcp_established_recv(tcp_t *tcp, tcp_info_t *info) {
   // 获取tcp数据包头部
   tcp_hdr_t *tcp_hdr = info->tcp_hdr;
@@ -516,6 +524,15 @@ net_err_t tcp_state_handler_recv(tcp_t *tcp, tcp_info_t *info) {
   if (tcp->state >= TCP_STATE_MAX || tcp->state < 0) {
     dbg_error(DBG_TCP, "tcp err or state error.");
     return NET_ERR_TCP;
+  }
+
+  // 在接收窗口有效的状态下，需要对接收到的数据包的序号进行合法性检查
+  if ((tcp->state != TCP_STATE_CLOSED) && (tcp->state != TCP_STATE_SYN_SENT) &&
+      (tcp->state != TCP_STATE_LISTEN)) {
+        if (!tcp_seq_is_ok(tcp, info)) {
+          dbg_warning(DBG_TCP, "tcp seq is error.");
+          return NET_ERR_TCP;
+        }
   }
 
   return tcp_state_handler_recv[tcp->state](tcp, info);

@@ -520,6 +520,57 @@ __/src/app/ping/ping.c.s:
 	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/app/ping/ping.c.s
 .PHONY : __/src/app/ping/ping.c.s
 
+__/src/app/test/download.obj: __/src/app/test/download.c.obj
+.PHONY : __/src/app/test/download.obj
+
+# target to build an object file
+__/src/app/test/download.c.obj:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/app/test/download.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/app/test/download.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/app/test/download.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/app/test/download.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/app/test/download.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/app/test/download.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/test/download.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/app/test/download.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/app/test/download.c.obj
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/app/test/download.c.obj
+.PHONY : __/src/app/test/download.c.obj
+
+__/src/app/test/download.i: __/src/app/test/download.c.i
+.PHONY : __/src/app/test/download.i
+
+# target to preprocess a source file
+__/src/app/test/download.c.i:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/app/test/download.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/app/test/download.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/app/test/download.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/app/test/download.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/app/test/download.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/app/test/download.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/test/download.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/app/test/download.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/app/test/download.c.i
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/app/test/download.c.i
+.PHONY : __/src/app/test/download.c.i
+
+__/src/app/test/download.s: __/src/app/test/download.c.s
+.PHONY : __/src/app/test/download.s
+
+# target to generate assembly for a file
+__/src/app/test/download.c.s:
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test1.dir\build.make test/CMakeFiles/test1.dir/__/src/app/test/download.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\send_pocket.dir\build.make test/CMakeFiles/send_pocket.dir/__/src/app/test/download.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\recv_pocket.dir\build.make test/CMakeFiles/recv_pocket.dir/__/src/app/test/download.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\multi_thread.dir\build.make test/CMakeFiles/multi_thread.dir/__/src/app/test/download.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\circular_queue.dir\build.make test/CMakeFiles/circular_queue.dir/__/src/app/test/download.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_client.dir\build.make test/CMakeFiles/test_tcp_echo_client.dir/__/src/app/test/download.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_tcp_echo_server.dir\build.make test/CMakeFiles/test_tcp_echo_server.dir/__/src/app/test/download.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_mblock.dir\build.make test/CMakeFiles/test_mblock.dir/__/src/app/test/download.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_pktbuf.dir\build.make test/CMakeFiles/test_pktbuf.dir/__/src/app/test/download.c.s
+	cd /d C:\Users\kbpoyo\Desktop\mini-tcpip\build && $(MAKE) $(MAKESILENT) -f test\CMakeFiles\test_ping.dir\build.make test/CMakeFiles/test_ping.dir/__/src/app/test/download.c.s
+.PHONY : __/src/app/test/download.c.s
+
 __/src/net/src/arp.obj: __/src/net/src/arp.c.obj
 .PHONY : __/src/net/src/arp.obj
 
@@ -2375,6 +2426,9 @@ help:
 	@echo ... __/src/app/ping/ping.obj
 	@echo ... __/src/app/ping/ping.i
 	@echo ... __/src/app/ping/ping.s
+	@echo ... __/src/app/test/download.obj
+	@echo ... __/src/app/test/download.i
+	@echo ... __/src/app/test/download.s
 	@echo ... __/src/net/src/arp.obj
 	@echo ... __/src/net/src/arp.i
 	@echo ... __/src/net/src/arp.s

@@ -412,6 +412,30 @@ src/app/ping/ping.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/ping/ping.c.s
 .PHONY : src/app/ping/ping.c.s
 
+src/app/test/download.obj: src/app/test/download.c.obj
+.PHONY : src/app/test/download.obj
+
+# target to build an object file
+src/app/test/download.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/test/download.c.obj
+.PHONY : src/app/test/download.c.obj
+
+src/app/test/download.i: src/app/test/download.c.i
+.PHONY : src/app/test/download.i
+
+# target to preprocess a source file
+src/app/test/download.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/test/download.c.i
+.PHONY : src/app/test/download.c.i
+
+src/app/test/download.s: src/app/test/download.c.s
+.PHONY : src/app/test/download.s
+
+# target to generate assembly for a file
+src/app/test/download.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\net.dir\build.make CMakeFiles/net.dir/src/app/test/download.c.s
+.PHONY : src/app/test/download.c.s
+
 src/net/src/arp.obj: src/net/src/arp.c.obj
 .PHONY : src/net/src/arp.obj
 
@@ -1194,6 +1218,9 @@ help:
 	@echo ... src/app/ping/ping.obj
 	@echo ... src/app/ping/ping.i
 	@echo ... src/app/ping/ping.s
+	@echo ... src/app/test/download.obj
+	@echo ... src/app/test/download.i
+	@echo ... src/app/test/download.s
 	@echo ... src/net/src/arp.obj
 	@echo ... src/net/src/arp.i
 	@echo ... src/net/src/arp.s

@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/multi_thread.dir/__/src/app/echo/udp_echo_server.c.obj.d"
   "CMakeFiles/multi_thread.dir/__/src/app/ping/ping.c.obj"
   "CMakeFiles/multi_thread.dir/__/src/app/ping/ping.c.obj.d"
+  "CMakeFiles/multi_thread.dir/__/src/app/test/download.c.obj"
+  "CMakeFiles/multi_thread.dir/__/src/app/test/download.c.obj.d"
   "CMakeFiles/multi_thread.dir/__/src/net/src/arp.c.obj"
   "CMakeFiles/multi_thread.dir/__/src/net/src/arp.c.obj.d"
   "CMakeFiles/multi_thread.dir/__/src/net/src/dbg.c.obj"

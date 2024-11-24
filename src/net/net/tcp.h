@@ -149,10 +149,12 @@ typedef struct _tcp_t {
 
   // tcp标志位
   struct {
-    uint32_t syn_need_send : 1;        // SYN需要发送
-    uint32_t syn_need_ack : 1;        // SYN已发送, 需要ack确认
-    uint32_t fin_need_send : 1;        // FIN需要发送
-    uint32_t fin_need_ack : 1;        // FIN已发送, 需要ack确认
+    uint32_t syn_need_send : 1;   // SYN需要发送
+    uint32_t syn_need_ack : 1;    // SYN已发送, 需要ack确认
+    uint32_t fin_need_send : 1;   // FIN需要发送
+    uint32_t fin_need_ack : 1;    // FIN已发送, 需要ack确认
+    uint32_t fin_recved : 1;     // 已接收对端的FIN
+    uint32_t syn_recved : 1;     // 已接收对端的SYN
     uint32_t recv_win_valid : 1;  // 接收窗口的是否有效
   } flags;
 
@@ -168,17 +170,19 @@ typedef struct _tcp_t {
     uint32_t nxt;      // 下一个将要发送的数据段序号
     sock_wait_t wait;  // 用于处理tcp发送的等待事件
     tcp_buf_t buf;     // tcp发送缓冲区
-    // TODO:
-    // 为了简化实现以及可移植到某些嵌入式设备上，这里直接使用一个固定大小的缓冲区，以后可以使用动态分配的缓冲区
-    uint8_t buf_data[TCP_BUF_SIZE];  // tcp发送缓冲区数据的数据区
+    // TODO:为了简化实现以及可移植到某些嵌入式设备上，这里直接使用一个固定大小的缓冲区，以后可以使用动态分配的缓冲区
+    uint8_t buf_data[TCP_SBUF_SIZE];  // tcp发送缓冲区数据的数据区
   } send;
 
   // 接收窗口
   // [isn ~ nxt) 已接收的数据, [nxt ~ end) 等待接收的数据
   struct {
-    uint32_t isn;      // 初始序号
-    uint32_t nxt;      // 下一个将要接收的数据段序号
-    sock_wait_t wait;  // 用于处理tcp接收的等待事件
+    uint32_t isn;                     // 初始序号
+    uint32_t unr;                     // 未读取的数据的数据段序号
+    uint32_t nxt;                     // 下一个将要接收的数据段序号
+    sock_wait_t wait;                 // 用于处理tcp接收的等待事件
+    tcp_buf_t buf;                    // tcp接收缓冲区
+    uint8_t buf_data[TCP_RBUF_SIZE];  // tcp接收缓冲区数据的数据区
   } recv;
 
 } tcp_t;
@@ -187,6 +191,9 @@ sock_t *tcp_create(int family, int protocol);
 tcp_t *tcp_find(tcp_info_t *info);
 net_err_t tcp_abort_connect(tcp_t *tcp, net_err_t err);
 void tcp_read_options(tcp_t *tcp, tcp_hdr_t *tcp_hdr);
+net_err_t tcp_write_options(tcp_t *tcp, pktbuf_t *buf);
+int tcp_recv_window(tcp_t *tcp);
+int tcp_seq_is_ok(tcp_t *tcp, tcp_info_t *info);
 
 static inline int tcp_get_hdr_size(const tcp_hdr_t *tcp_hdr) {
   return (tcp_hdr->hdr_len * 4);
@@ -203,27 +210,48 @@ static inline void tcp_set_hdr_size(tcp_hdr_t *tcp_hdr, int size) {
  * @return int
  */
 static inline int tcp_wait_ack_data(tcp_t *tcp) {
-  return (tcp->send.nxt - tcp->send.una) - (tcp->flags.syn_need_ack + tcp->flags.fin_need_ack);
+  return (tcp->send.nxt - tcp->send.una) -
+         (tcp->flags.syn_need_ack + tcp->flags.fin_need_ack);
 }
 
 /**
- * @brief 获取tcp缓冲区中待发送的数据量
- * 
- * @param tcp 
- * @return int 
+ * @brief 获取tcp发送缓冲区中待发送的数据量
+ *
+ * @param tcp
+ * @return int
  */
 static inline int tcp_wait_send_data(tcp_t *tcp) {
   return tcp_buf_cnt(&tcp->send.buf) - tcp_wait_ack_data(tcp);
 }
 
 /**
- * @brief 判断当前tcp是否已发送且已确认fin请求
+ * @brief 获取tcp接收缓冲区中待接收的数据量
  * 
  * @param tcp 
  * @return int 
  */
-#define tcp_fin_is_ack(tcp) (tcp->flags.fin_need_send == tcp->flags.fin_need_ack)
+static inline int tcp_wait_recv_data(tcp_t *tcp) {
+  return (tcp->recv.nxt - tcp->recv.unr) - tcp->flags.fin_recved;
+}
 
+/**
+ * @brief 获取tcp接收缓冲区中空闲的空间大小
+ * 
+ * @param tcp 
+ * @return int 
+ */
+static inline int tcp_wait_free_cnt(tcp_t *tcp) {
+  return tcp_buf_free_cnt(&tcp->recv.buf) - tcp_wait_recv_data(tcp);
+}
+
+/**
+ * @brief 判断当前tcp是否已发送且已确认fin请求
+ *
+ * @param tcp
+ * @return int
+ */
+#define tcp_fin_is_ack(tcp) \
+  (tcp->flags.fin_need_send == tcp->flags.fin_need_ack)
 
 /**
  * @brief 将头部字段中除开校验和以外的字段转换为网络字节序

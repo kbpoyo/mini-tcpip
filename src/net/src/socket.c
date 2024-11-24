@@ -179,7 +179,7 @@ int net_close(int socket) {
         if (err != NET_ERR_OK) {
           if (err == NET_ERR_TCP_CLOSE || err == NET_ERR_TCP_RST) {
             dbg_warning(DBG_SOCKET, "socket close retry tcp close.\n");
-            continue; // 本地tcp已关闭，重新执行关闭请求以释放资源
+            continue;  // 本地tcp已关闭，重新执行关闭请求以释放资源
           }
           dbg_error(DBG_SOCKET, "socket close wait time out.");
           return -1;
@@ -413,16 +413,20 @@ ssize_t net_recv(int socket, void *buf, size_t buf_len, int flags) {
     switch (err) {
       case NET_ERR_OK: {
         // 返回实际接收的数据量(字节量)， 若返回-1表示接收失败
-        return sock_req.io.ret_len > 0 ? sock_req.io.ret_len : -1;
+        return sock_req.io.ret_len >= 0 ? sock_req.io.ret_len : -1;
       } break;
       case NET_ERR_NEEDWAIT: {  // 需要等待内部工作线程执行完毕
-        if (sock_wait_enter(sock_req.wait, sock_req.wait_tmo) != NET_ERR_OK) {
+        net_err_t err = sock_wait_enter(sock_req.wait, sock_req.wait_tmo);
+        if (err == NET_ERR_TCP_CLOSE) {  // 对端已关闭连接
+          dbg_info(DBG_SOCKET, "remote close.\n");
+          return 0;
+        } else if (err != NET_ERR_OK) {
           dbg_error(DBG_SOCKET, "socket wait error.");
           return -1;
         }
       } break;
       default: {  // 发生其他错误
-        dbg_error(DBG_SOCKET, "recvfrom failed.\n");
+        dbg_error(DBG_SOCKET, "recv failed.\n");
         return -1;
       }
     }

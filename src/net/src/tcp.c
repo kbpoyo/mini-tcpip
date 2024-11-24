@@ -145,6 +145,10 @@ static tcp_t *tcp_get_free(int wait) {
 
   // 从内存块管理对象中分配一个tcp对象
   tcp = (tcp_t *)mblock_alloc(&tcp_mblock, wait == TCP_CREATE_WAIT ? 0 : -1);
+  if (!tcp) {
+    return (tcp_t *)0;
+  }
+  plat_memset(tcp, 0, sizeof(tcp_t));
 
   return tcp;
 }
@@ -235,28 +239,25 @@ static uint32_t tcp_get_isn(void) {
  * @return net_err_t
  */
 static net_err_t tcp_connect_init(tcp_t *tcp) {
-  // 获取本次连接的初始序号
-  tcp->send.isn = tcp_get_isn();
+  // 初始化发送窗口的边界信息
+  tcp->send.isn = tcp_get_isn();  // 获取本次连接的初始序号
+  tcp->send.una = tcp->send.isn;  // 设置发送窗口的未确认位
+  tcp->send.nxt = tcp->send.isn;  // 设置发送窗口的待发送位
 
-  // 设置发送窗口的未确认位和待发送位
-  tcp->send.una = tcp->send.isn;
-  tcp->send.nxt = tcp->send.isn;
+  // 初始化接收窗口的边界信息
+  tcp->recv.isn = 0;  // 设置接收窗口的初始序号位
+  tcp->recv.nxt = 0;  // 设置接收窗口的待接收位
 
-  // 设置接收到的初始序号位
-  tcp->recv.isn = 0;
-
-  // 设置接收窗口的待接收位
-  tcp->recv.nxt = 0;
-
-  // 初始化发送缓冲区
-  tcp_buf_init(&tcp->send.buf, tcp->send.buf_data, TCP_BUF_SIZE);
+  // 初始化发送缓冲区和接收缓冲区
+  tcp_buf_init(&tcp->send.buf, tcp->send.buf_data, TCP_SBUF_SIZE);
+  tcp_buf_init(&tcp->recv.buf, tcp->recv.buf_data, TCP_RBUF_SIZE);
 
   // 查找路由表，判断是否在本地网段，以初始化mss
   route_entry_t *rt_entry = route_find(&tcp->sock_base.remote_ip);
-  if (rt_entry->netif->mtu == 0 || !ipaddr_is_any(&rt_entry->next_hop)) { 
+  if (rt_entry->netif->mtu == 0 || !ipaddr_is_any(&rt_entry->next_hop)) {
     // 本地网络接口mtu未知或者下一跳地址不为空(即下一跳地址为网关地址，即对端不在本地链路上)，使用默认mss
     tcp->mss = TCP_MSS_DEFAULT;
-  } else { // 对端在本地链路上，计算mss = MTU - IP头部 - TCP头部
+  } else {  // 对端在本地链路上，计算mss = MTU - IP头部 - TCP头部
     tcp->mss = rt_entry->netif->mtu - sizeof(ipv4_hdr_t) - sizeof(tcp_hdr_t);
   }
 
@@ -382,7 +383,7 @@ static net_err_t tcp_close(sock_t *sock) {
  * @return net_err_t
  */
 static net_err_t tcp_send(sock_t *sock, const void *buf, size_t buf_len,
-                          int flags,  ssize_t *ret_send_len) {
+                          int flags, ssize_t *ret_send_len) {
   // 转为对应tcp对象
   tcp_t *tcp = (tcp_t *)sock;
 
@@ -426,13 +427,83 @@ static net_err_t tcp_send(sock_t *sock, const void *buf, size_t buf_len,
 
   // 将数据写入到tcp发送缓冲区, 并返回累积实际发送数据长度到ret_send_len中
   int size = tcp_buf_write(&tcp->send.buf, (const uint8_t *)buf, (int)buf_len);
-  if (size <= 0) { // 写入失败
+  if (size <= 0) {  // 写入失败
     dbg_warning(DBG_TCP, "send buf write 0 byte.");
     return NET_ERR_NEEDWAIT;
-  } else { // 写入成功，调用tcp_transmit发送数据
-    *ret_send_len += size; 
+  } else {  // 写入成功，调用tcp_transmit发送数据
+    *ret_send_len += size;
     return tcp_transmit(tcp);
   }
+}
+
+/**
+ * @brief 内部接口，接收tcp数据
+ *
+ * @param sock
+ * @param buf
+ * @param buf_len
+ * @param flags
+ * @param ret_recv_len
+ * @return net_err_t
+ */
+static net_err_t tcp_recv(sock_t *sock, void *buf, size_t buf_len, int flags,
+                          ssize_t *ret_recv_len) {
+  // 转为对应tcp对象
+  tcp_t *tcp = (tcp_t *)sock;
+
+  net_err_t need_wait = NET_ERR_NEEDWAIT; // 默认调用者需要等待
+
+  // 根据tcp对象的状态进行不同的处理
+  switch (tcp->state) {
+    case TCP_STATE_CLOSED: {
+      dbg_error(DBG_TCP, "tcp is closed, refuse recv data.");
+      return NET_ERR_TCP_CLOSE;
+    } break;
+
+    case TCP_STATE_LISTEN:
+    case TCP_STATE_SYN_RCVD:
+    case TCP_STATE_SYN_SENT: {
+      dbg_error(DBG_TCP, "tcp is waiting for connectino, refuse recv data.");
+      return NET_ERR_TCP_STATE;
+    } break;
+
+    case TCP_STATE_TIME_WAIT:
+    case TCP_STATE_LAST_ACK: {
+      dbg_warning(DBG_TCP, "The remote has send fin, refuse recv data.");
+      return NET_ERR_TCP;
+    } break;
+
+    // 允许接收数据的状态
+    case TCP_STATE_ESTABLISHED:
+    // 半关闭状态，缓冲区中可能还有数据未接收，所以可以继续接收数据
+    case TCP_STATE_FIN_WAIT_1:
+    case TCP_STATE_FIN_WAIT_2:
+      break;
+
+    case TCP_STATE_CLOSING:
+    case TCP_STATE_CLOSE_WAIT: {
+      // 此两个半关闭状态下，本地已接收到对端的fin请求并完成了接收和发送了确认
+      // 即此两个状态下本地不再接收有效数据，缓冲区不会再更新数据, 所以若缓冲区中有数据则可以继续接收
+      // 但若缓冲区中无数据，则不需要等待
+      need_wait = NET_ERR_OK;
+    }
+    break;
+
+    default: {
+      dbg_error(DBG_TCP, "tcp recv failed, unknown state.");
+      return NET_ERR_TCP_STATE;
+    } break;
+  }
+
+  // 从tcp接收缓冲区中读取数据到buf中
+  int size = tcp_buf_read(&tcp->recv.buf, (uint8_t *)buf, (int)buf_len);
+  if (size > 0) {
+    *ret_recv_len += size;
+    tcp->recv.unr += size;  // 更新未读取的数据的数据段序号
+    return NET_ERR_OK;
+  }
+
+  return need_wait;
 }
 
 /**
@@ -445,11 +516,11 @@ static tcp_t *tcp_alloc(int family, int protocol, int wait) {
       .connect = tcp_connect,  // 独立实现接口
       .close = tcp_close,      // 独立实现接口
       .send = tcp_send,        // 独立实现接口
+      .recv = tcp_recv,        // 独立实现接口
       //   .sendto = tcp_sendto,      // 独立实现接口
       //   .recvfrom = tcp_recvfrom,  // 独立实现接口
       //   .setopt = sock_setopt,     // 继承基类的实现
       //   .bind = tcp_bind,
-      //   .recv = sock_recv,  // 继承基类的实现
   };
 
   // 获取一个空闲的tcp对象
@@ -594,41 +665,130 @@ net_err_t tcp_abort_connect(tcp_t *tcp, net_err_t err) {
   return NET_ERR_OK;
 }
 
-
 /**
- * @brief 解析tcp选项数据 
- * 
- * @param tcp 
- * @param tcp_hdr 
+ * @brief 解析tcp选项数据
+ * TODO: 选项数据和tcp头部数据可能不是连续存储的，需要特殊处理
+ * @param tcp
+ * @param tcp_hdr
  */
 void tcp_read_options(tcp_t *tcp, tcp_hdr_t *tcp_hdr) {
   // 获取tcp选项数据
-  uint8_t *opt_start = (uint8_t *)(tcp_hdr + 1); // 跳过tcp头部
-  uint8_t *opt_end = opt_start + (tcp_get_hdr_size(tcp_hdr) - sizeof(tcp_hdr_t));
+  uint8_t *opt_start = (uint8_t *)(tcp_hdr + 1);  // 跳过tcp头部
+  uint8_t *opt_end =
+      opt_start + (tcp_get_hdr_size(tcp_hdr) - sizeof(tcp_hdr_t));
 
   // 遍历tcp选项数据
   while (opt_start < opt_end) {
     switch (opt_start[0]) {
       case TCP_OPT_MSS: {
         tcp_opt_mss_t *opt_mss = (tcp_opt_mss_t *)opt_start;
-        if (opt_mss->len == 4) { // 只处理长度为4的MSS选项
+        if (opt_mss->len == 4) {  // 只处理长度为4的MSS选项
           uint16_t mss = net_ntohs(opt_mss->mss);
-          tcp->mss = MIN(tcp->mss, mss); // 选择最小的MSS
+          tcp->mss = MIN(tcp->mss, mss);  // 选择最小的MSS
         }
-        opt_start += opt_mss->len; // 移动到下一个选项
+        opt_start += opt_mss->len;  // 移动到下一个选项
       } break;
 
-      case TCP_OPT_NOP: { // 填充字节，直接跳过
+      case TCP_OPT_NOP: {  // 填充字节，直接跳过
         opt_start++;
       } break;
 
-      case TCP_OPT_END: { // 结束选项
+      case TCP_OPT_END: {  // 结束选项
         return;
       } break;
 
-      default: { //TODO: 其他选项暂时跳过，后续再扩展
+      default: {  // TODO: 其他选项暂时跳过，后续再扩展
         opt_start++;
       } break;
+    }
+  }
+}
+
+/**
+ * @brief 设置tcp数据包的同步选项
+ * TODO: 暂时只设置MSS选项
+ * 
+ * @param tcp 
+ * @param buf 
+ * @return net_err_t
+ */
+net_err_t tcp_write_options(tcp_t *tcp, pktbuf_t *buf) {
+
+  // 对数据包进行拓容以容纳MSS选项
+  int opt_len = sizeof(tcp_opt_mss_t);
+  net_err_t err = pktbuf_resize(buf, pktbuf_total_size(buf) + opt_len);
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_TCP, "pktbuf resize error.");
+    return err;
+  }
+
+  // 构造MSS选项，填充到数据包中
+  tcp_opt_mss_t opt_mss = {
+      .kind = TCP_OPT_MSS,
+      .len = sizeof(tcp_opt_mss_t),
+      .mss = net_htons(tcp->mss),
+  };
+  pktbuf_seek(buf, pktbuf_total_size(buf) - opt_len);
+  err = pktbuf_write(buf, (uint8_t *)&opt_mss, sizeof(tcp_opt_mss_t));
+  if (err != NET_ERR_OK) {
+    dbg_error(DBG_TCP, "pktbuf write error.");
+    return err;
+  }
+
+  return NET_ERR_OK;
+}
+
+
+/**
+ * @brief 获取tcp接收窗口大小(接收缓冲区剩余空间大小)
+ * 
+ * @param tcp 
+ * @return int 
+ */
+int tcp_recv_window(tcp_t *tcp) {
+  return tcp_buf_free_cnt(&tcp->recv.buf);
+}
+
+/**
+ * @brief 判断tcp数据包的序列号是否有效，有效则处理数据包，否则不处理(RFC793)
+ *        有效：
+ *            情况1：序号长度为0，窗口大小为0，序号seq与接收窗口的nxt相等
+ *            情况2：序号长度为0，窗口大小不为0，序号seq落在接收窗口内
+ *            情况3：序号长度不为0，窗口大小不为0，该段序列号有部分落在窗口内
+ *        无效：
+ *            情况1：序号长度不为0，窗口大小为0，不处理
+ *            其余情况：不处理
+ * 
+ * @param tcp 
+ * @param info 
+ * @return int 1: 有效, 0: 无效
+ */
+int tcp_seq_is_ok(tcp_t *tcp, tcp_info_t *info) {
+  // 分四种情况讨论
+
+  uint32_t win_size = tcp_recv_window(tcp); // 接收窗口大小
+
+  if (info->seq_len == 0) { 
+    if (win_size == 0) { // 情况1: 无数据，无窗口，需要序列号seq与接收窗口的nxt相等
+      return info->seq == tcp->recv.nxt;
+    } else { // 情况2: 无数据，有窗口，需要序列号seq在接收窗口的范围内
+      return (tcp_seq_after_eq(info->seq, tcp->recv.nxt) && 
+              tcp_seq_before(info->seq, tcp->recv.nxt + win_size));
+    }
+  } else {
+    if (win_size == 0) { // 情况3: 有数据，无窗口，直接返回0
+      return 0;
+    } else { // 情况4: 有数据，有窗口，有数据落在窗口内即可
+      // 起始seq在窗口内，则肯定有部分数据有效[seq, next + win_size)
+      int v = (tcp_seq_after_eq(info->seq, tcp->recv.nxt) && 
+               tcp_seq_before(info->seq, tcp->recv.nxt + win_size));
+      
+      uint32_t end_seq = info->seq + info->seq_len - 1; // 结束序列号(包含)
+
+      // 结束seq在窗口内，则肯定有部分数据有效[next, end_seq]
+      v |= (tcp_seq_after_eq(end_seq, tcp->recv.nxt) && 
+            tcp_seq_before(end_seq, tcp->recv.nxt + win_size));
+      return v;
     }
   }
 }
