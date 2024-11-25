@@ -16,6 +16,7 @@
 #include "sock.h"
 #include "tcp_buf.h"
 #include "tools.h"
+#include "timer.h"
 
 // 定义TCP默认最大报文长度(不包括ip和tcp头部)
 // 主要避免在未知链路上传输时，因为MTU限制导致的分片
@@ -156,10 +157,16 @@ typedef struct _tcp_t {
     uint32_t fin_recved : 1;     // 已接收对端的FIN
     uint32_t syn_recved : 1;     // 已接收对端的SYN
     uint32_t recv_win_valid : 1;  // 接收窗口的是否有效
+    uint32_t keep_alive_enable : 1;      // 是否启用保活机制
   } flags;
 
   struct {             // 用于处理tcp连接的结构
-    sock_wait_t wait;  // 用于处理tcp 连接的等待事件
+    sock_wait_t wait;  // 用于处理tcp 连接的等待结构
+    int keep_idle;     // 保持连接的空闲时间
+    int keep_intvl;    // 保持连接的探测间隔
+    int keep_cnt;      // 保持连接的探测次数
+    int keep_retry;    // 当前重复探测的剩余次数
+    net_timer_t timer;  // 用于处理tcp保活的定时器
   } conn;
 
   // 发送窗口
@@ -192,7 +199,6 @@ tcp_t *tcp_find(tcp_info_t *info);
 net_err_t tcp_abort_connect(tcp_t *tcp, net_err_t err);
 void tcp_read_options(tcp_t *tcp, tcp_hdr_t *tcp_hdr);
 net_err_t tcp_write_options(tcp_t *tcp, pktbuf_t *buf);
-int tcp_recv_window(tcp_t *tcp);
 int tcp_seq_is_ok(tcp_t *tcp, tcp_info_t *info);
 
 static inline int tcp_get_hdr_size(const tcp_hdr_t *tcp_hdr) {
@@ -230,18 +236,18 @@ static inline int tcp_wait_send_data(tcp_t *tcp) {
  * @param tcp 
  * @return int 
  */
-static inline int tcp_wait_recv_data(tcp_t *tcp) {
-  return (tcp->recv.nxt - tcp->recv.unr) - tcp->flags.fin_recved;
-}
+// static inline int tcp_wait_recv_data(tcp_t *tcp) {
+//   return (tcp->recv.nxt - tcp->recv.unr) - tcp->flags.fin_recved;
+// }
 
 /**
- * @brief 获取tcp接收缓冲区中空闲的空间大小
+ * @brief 获取tcp接收窗口大小(接收缓冲区剩余空间大小)
  * 
  * @param tcp 
  * @return int 
  */
-static inline int tcp_wait_free_cnt(tcp_t *tcp) {
-  return tcp_buf_free_cnt(&tcp->recv.buf) - tcp_wait_recv_data(tcp);
+static inline int tcp_recv_window(tcp_t *tcp) {
+  return tcp_buf_free_cnt(&tcp->recv.buf);
 }
 
 /**
@@ -250,7 +256,7 @@ static inline int tcp_wait_free_cnt(tcp_t *tcp) {
  * @param tcp
  * @return int
  */
-#define tcp_fin_is_ack(tcp) \
+#define TCP_FIN_IS_ACK(tcp) \
   (tcp->flags.fin_need_send == tcp->flags.fin_need_ack)
 
 /**

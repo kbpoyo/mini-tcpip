@@ -451,7 +451,7 @@ static net_err_t tcp_recv(sock_t *sock, void *buf, size_t buf_len, int flags,
   // 转为对应tcp对象
   tcp_t *tcp = (tcp_t *)sock;
 
-  net_err_t need_wait = NET_ERR_NEEDWAIT; // 默认调用者需要等待
+  net_err_t need_wait = NET_ERR_NEEDWAIT;  // 默认调用者需要等待
 
   // 根据tcp对象的状态进行不同的处理
   switch (tcp->state) {
@@ -483,11 +483,10 @@ static net_err_t tcp_recv(sock_t *sock, void *buf, size_t buf_len, int flags,
     case TCP_STATE_CLOSING:
     case TCP_STATE_CLOSE_WAIT: {
       // 此两个半关闭状态下，本地已接收到对端的fin请求并完成了接收和发送了确认
-      // 即此两个状态下本地不再接收有效数据，缓冲区不会再更新数据, 所以若缓冲区中有数据则可以继续接收
-      // 但若缓冲区中无数据，则不需要等待
+      // 即此两个状态下本地不再接收有效数据，缓冲区不会再更新数据,
+      // 所以若缓冲区中有数据则可以继续接收 但若缓冲区中无数据，则不需要等待
       need_wait = NET_ERR_OK;
-    }
-    break;
+    } break;
 
     default: {
       dbg_error(DBG_TCP, "tcp recv failed, unknown state.");
@@ -507,6 +506,74 @@ static net_err_t tcp_recv(sock_t *sock, void *buf, size_t buf_len, int flags,
 }
 
 /**
+ * @brief 设置TCP socket选项
+ *
+ * @param sock
+ * @param level
+ * @param optname
+ * @param optval
+ * @param optlen
+ * @return net_err_t
+ */
+static net_err_t tcp_setopt(struct _sock_t *sock, int level, int optname,
+                            const char *optval, int optlen) {
+  tcp_t *tcp = (tcp_t *)sock;
+
+  if (level == SOL_SOCKET) {        // 设置通用socket选项
+    if (optname == SO_KEEPALIVE) {  // 设置保活机制
+      if (optlen != sizeof(int)) {
+        dbg_error(DBG_TCP,
+                  "invalid TCP option value: optlen < sizeof(optval).");
+        return NET_ERR_TCP;
+      }
+      tcp->flags.keep_alive_enable = *((int *)optval);
+      return NET_ERR_OK;
+    } else {  // 其余选项交由基类sock处理
+      if (sock_setopt(sock, level, optname, optval, optlen) != NET_ERR_OK) {
+        dbg_error(DBG_TCP, "set TCP option failed.");
+        return NET_ERR_TCP;
+      }
+    }
+  } else if (level == SOL_TCP) {  // 设置tcp 层选项
+    switch (optname) {
+      case TCP_KEEPIDLE: {  // 设置保活机制的空闲时间
+        if (optlen != sizeof(int)) {
+          dbg_error(DBG_TCP,
+                    "invalid TCP option value: optlen < sizeof(optval).");
+          return NET_ERR_TCP;
+        }
+        tcp->conn.keep_idle = *((int *)optval);
+      } break;
+
+      case TCP_KEEPINTVL: {  // 设置保活机制的探测间隔
+        if (optlen != sizeof(int)) {
+          dbg_error(DBG_TCP,
+                    "invalid TCP option value: optlen < sizeof(optval).");
+          return NET_ERR_TCP;
+        }
+        tcp->conn.keep_intvl = *((int *)optval);
+      } break;
+
+      case TCP_KEEPCNT: {  // 设置保活机制的探测次数
+        if (optlen != sizeof(int)) {
+          dbg_error(DBG_TCP,
+                    "invalid TCP option value: optlen < sizeof(optval).");
+          return NET_ERR_TCP;
+        }
+        tcp->conn.keep_cnt = *((int *)optval);
+      } break;
+
+      default: {
+        dbg_error(DBG_TCP, "invalid TCP option name.");
+        return NET_ERR_TCP;
+      }
+    }
+  }
+
+  return NET_ERR_OK;
+}
+
+/**
  * @brief 分配一个tcp socket对象
  *
  * @return tcp_t*
@@ -517,9 +584,9 @@ static tcp_t *tcp_alloc(int family, int protocol, int wait) {
       .close = tcp_close,      // 独立实现接口
       .send = tcp_send,        // 独立实现接口
       .recv = tcp_recv,        // 独立实现接口
+      .setopt = tcp_setopt,    // 独立实现接口
       //   .sendto = tcp_sendto,      // 独立实现接口
       //   .recvfrom = tcp_recvfrom,  // 独立实现接口
-      //   .setopt = sock_setopt,     // 继承基类的实现
       //   .bind = tcp_bind,
   };
 
@@ -540,6 +607,12 @@ static tcp_t *tcp_alloc(int family, int protocol, int wait) {
     dbg_error(DBG_TCP, "sock init failed.");
     goto tcp_alloc_failed;
   }
+
+  // 初始化tcp保活机制参数
+  tcp->flags.keep_alive_enable = 0;  // 默认关闭保活机制
+  tcp->conn.keep_idle = TCP_KEEPALIVE_IDLE;
+  tcp->conn.keep_intvl = TCP_KEEPALIVE_INTVL;
+  tcp->conn.keep_cnt = TCP_KEEPALIVE_CNT;
 
   // 初始化tcp对象的连接wait对象, 并用基类sock记录该wait对象
   if (sock_wait_init(&tcp->conn.wait) != NET_ERR_OK) {
@@ -707,13 +780,12 @@ void tcp_read_options(tcp_t *tcp, tcp_hdr_t *tcp_hdr) {
 /**
  * @brief 设置tcp数据包的同步选项
  * TODO: 暂时只设置MSS选项
- * 
- * @param tcp 
- * @param buf 
+ *
+ * @param tcp
+ * @param buf
  * @return net_err_t
  */
 net_err_t tcp_write_options(tcp_t *tcp, pktbuf_t *buf) {
-
   // 对数据包进行拓容以容纳MSS选项
   int opt_len = sizeof(tcp_opt_mss_t);
   net_err_t err = pktbuf_resize(buf, pktbuf_total_size(buf) + opt_len);
@@ -738,17 +810,6 @@ net_err_t tcp_write_options(tcp_t *tcp, pktbuf_t *buf) {
   return NET_ERR_OK;
 }
 
-
-/**
- * @brief 获取tcp接收窗口大小(接收缓冲区剩余空间大小)
- * 
- * @param tcp 
- * @return int 
- */
-int tcp_recv_window(tcp_t *tcp) {
-  return tcp_buf_free_cnt(&tcp->recv.buf);
-}
-
 /**
  * @brief 判断tcp数据包的序列号是否有效，有效则处理数据包，否则不处理(RFC793)
  *        有效：
@@ -758,35 +819,36 @@ int tcp_recv_window(tcp_t *tcp) {
  *        无效：
  *            情况1：序号长度不为0，窗口大小为0，不处理
  *            其余情况：不处理
- * 
- * @param tcp 
- * @param info 
+ *
+ * @param tcp
+ * @param info
  * @return int 1: 有效, 0: 无效
  */
 int tcp_seq_is_ok(tcp_t *tcp, tcp_info_t *info) {
   // 分四种情况讨论
 
-  uint32_t win_size = tcp_recv_window(tcp); // 接收窗口大小
+  uint32_t win_size = tcp_recv_window(tcp);  // 接收窗口大小
 
-  if (info->seq_len == 0) { 
-    if (win_size == 0) { // 情况1: 无数据，无窗口，需要序列号seq与接收窗口的nxt相等
+  if (info->seq_len == 0) {
+    if (win_size ==
+        0) {  // 情况1: 无数据，无窗口，需要序列号seq与接收窗口的nxt相等
       return info->seq == tcp->recv.nxt;
-    } else { // 情况2: 无数据，有窗口，需要序列号seq在接收窗口的范围内
-      return (tcp_seq_after_eq(info->seq, tcp->recv.nxt) && 
+    } else {  // 情况2: 无数据，有窗口，需要序列号seq在接收窗口的范围内
+      return (tcp_seq_after_eq(info->seq, tcp->recv.nxt) &&
               tcp_seq_before(info->seq, tcp->recv.nxt + win_size));
     }
   } else {
-    if (win_size == 0) { // 情况3: 有数据，无窗口，直接返回0
+    if (win_size == 0) {  // 情况3: 有数据，无窗口，直接返回0
       return 0;
-    } else { // 情况4: 有数据，有窗口，有数据落在窗口内即可
+    } else {  // 情况4: 有数据，有窗口，有数据落在窗口内即可
       // 起始seq在窗口内，则肯定有部分数据有效[seq, next + win_size)
-      int v = (tcp_seq_after_eq(info->seq, tcp->recv.nxt) && 
+      int v = (tcp_seq_after_eq(info->seq, tcp->recv.nxt) &&
                tcp_seq_before(info->seq, tcp->recv.nxt + win_size));
-      
-      uint32_t end_seq = info->seq + info->seq_len - 1; // 结束序列号(包含)
+
+      uint32_t end_seq = info->seq + info->seq_len - 1;  // 结束序列号(包含)
 
       // 结束seq在窗口内，则肯定有部分数据有效[next, end_seq]
-      v |= (tcp_seq_after_eq(end_seq, tcp->recv.nxt) && 
+      v |= (tcp_seq_after_eq(end_seq, tcp->recv.nxt) &&
             tcp_seq_before(end_seq, tcp->recv.nxt + win_size));
       return v;
     }

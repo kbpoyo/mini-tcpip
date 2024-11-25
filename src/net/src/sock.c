@@ -705,32 +705,28 @@ net_err_t sock_setopt(sock_t *sock, int level, int optname, const char *optval,
                       int optlen) {
   // 判断选项级别是设置在哪一层
   if (level != SOL_SOCKET) {  // TODO: 暂时只支持在socket层设置选项
-    dbg_error(DBG_SOCKET, "invalid socket option level.\n");
+    dbg_error(DBG_SOCKET, "invalid socket option level.");
     return NET_ERR_SOCKET;
   }
 
   // 根据选项类型进行处理
   switch (optname) {
-    case SO_RCVTIMEO: {                            // 设置接收超时时间
-      if (optlen != sizeof(struct net_timeval)) {  // 选项参数类型大小不匹配
-        dbg_error(DBG_SOCKET, "invalid socket option value.\n");
-        return NET_ERR_SOCKET;
-      }
-      struct net_timeval *tmo = (struct net_timeval *)optval;
-      sock->recv_tmo = tmo->tv_sec * 1000 + tmo->tv_usec / 1000;
-    } break;
-
+    case SO_RCVTIMEO:                              // 设置接收超时时间
     case SO_SNDTIMEO: {                            // 设置发送超时时间
       if (optlen != sizeof(struct net_timeval)) {  // 选项参数类型大小不匹配
-        dbg_error(DBG_SOCKET, "invalid socket option value.\n");
+        dbg_error(DBG_SOCKET, "invalid socket option value.");
         return NET_ERR_SOCKET;
       }
       struct net_timeval *tmo = (struct net_timeval *)optval;
-      sock->send_tmo = tmo->tv_sec * 1000 + tmo->tv_usec / 1000;
+      if (optname == SO_RCVTIMEO) {
+        sock->recv_tmo = tmo->tv_sec * 1000 + tmo->tv_usec / 1000;
+      } else {
+        sock->send_tmo = tmo->tv_sec * 1000 + tmo->tv_usec / 1000;
+      }
     } break;
 
     default: {
-      dbg_error(DBG_SOCKET, "invalid socket option name.\n");
+      dbg_error(DBG_SOCKET, "invalid socket option name.");
       return NET_ERR_SOCKET;
     } break;
   }

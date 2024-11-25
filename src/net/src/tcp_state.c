@@ -230,7 +230,7 @@ static net_err_t tcp_established_recv(tcp_t *tcp, tcp_info_t *info) {
   tcp_transmit(tcp);
 
   // 若fin有效, 则对端请求关闭，本地进入CLOSE_WAIT状态
-  if (tcp_hdr->f_fin) {
+  if (tcp->flags.fin_recved) {
     tcp_state_set(tcp, TCP_STATE_CLOSE_WAIT);
   }
 
@@ -278,8 +278,8 @@ static net_err_t tcp_fin_wait_1_recv(tcp_t *tcp, tcp_info_t *info) {
   tcp_transmit(tcp);
 
   // 根据对端是否也请求关闭连接，进入不同的状态
-  if (tcp_fin_is_ack(tcp)) {  // 对端已确认本地的fin请求
-    if (tcp_hdr->f_fin) {
+  if (TCP_FIN_IS_ACK(tcp)) {  // 对端已确认本地的fin请求
+    if (tcp->flags.fin_recved) {
       // 对端在确认本地fin请求的同时也发送了fin(在数据处理中已对其进行确认),
       // 本地直接进入TIME_WAIT状态
       tcp_state_time_wait(tcp);
@@ -287,8 +287,8 @@ static net_err_t tcp_fin_wait_1_recv(tcp_t *tcp, tcp_info_t *info) {
       // 进入FIN_WAIT_2状态，以等待对端发送的fin请求
       tcp_state_set(tcp, TCP_STATE_FIN_WAIT_2);
     }
-  } else if (tcp_hdr->f_fin) {
-    // 对端未确认本地fin请求，但却发送了fin请求，本地进入CLOSING状态
+  } else if (tcp->flags.fin_recved) { 
+    // 对端未确认本地fin请求，但却发送了fin请求(本地也确认了)，本地进入CLOSING状态
     // 以等待对端对本地的fin请求进行确认
     // TODO: 暂时无法测试双方同时发送fin请求的情况
     tcp_state_set(tcp, TCP_STATE_CLOSING);
@@ -324,7 +324,7 @@ static net_err_t tcp_fin_wait_2_recv(tcp_t *tcp, tcp_info_t *info) {
   tcp_recv_data(tcp, info);
 
   // 若对端请求关闭连接，本地进入TIME_WAIT状态
-  if (tcp_hdr->f_fin) {
+  if (tcp->flags.fin_recved) {
     tcp_state_time_wait(tcp);
   }
 
@@ -371,7 +371,7 @@ static net_err_t tcp_closing_recv(tcp_t *tcp, tcp_info_t *info) {
   // 发送缓冲区中剩余的数据, 或者发送fin请求(缓冲区数据发送完毕后)
   tcp_transmit(tcp);
 
-  if (tcp_fin_is_ack(tcp)) {  // 对端已确认本地的fin请求
+  if (TCP_FIN_IS_ACK(tcp)) {  // 对端已确认本地的fin请求
     // 对端已确认本地的fin请求，本地进入TIME_WAIT状态
     tcp_state_time_wait(tcp);
   }
@@ -487,7 +487,7 @@ static net_err_t tcp_last_ack_recv(tcp_t *tcp, tcp_info_t *info) {
   // 调用tcp_transmit, 以发送缓冲区中剩余的数据
   tcp_transmit(tcp);
 
-  if (tcp_fin_is_ack(tcp)) {  // 对端已确认本地的fin请求
+  if (TCP_FIN_IS_ACK(tcp)) {  // 对端已确认本地的fin请求
     tcp_abort_connect(tcp, NET_ERR_TCP_CLOSE);
   }
 

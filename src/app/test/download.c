@@ -31,6 +31,17 @@ void download_test(const char *file_name, int port) {
     goto download_failed;
   }
 
+  // 添加tcp保活机制
+  int keep_alive = 1;
+  int keep_idle = 60;
+  int keep_interval = 5;
+  int keep_count = 3;
+  setsockopt(sockfd, SOL_SOCKET, SO_KEEPALIVE, (char *)&keep_alive, sizeof(keep_alive)); // 开启keepalive属性
+  setsockopt(sockfd, SOL_TCP, TCP_KEEPIDLE, (char *)&keep_idle, sizeof(keep_idle));
+  setsockopt(sockfd, SOL_TCP, TCP_KEEPINTVL, (char *)&keep_interval, sizeof(keep_interval));
+  setsockopt(sockfd, SOL_TCP, TCP_KEEPCNT, (char *)&keep_count, sizeof(keep_count));
+
+  // 连接服务器
   struct sockaddr_in servaddr;
   memset(&servaddr, 0, sizeof(servaddr));
   servaddr.sin_family = AF_INET;

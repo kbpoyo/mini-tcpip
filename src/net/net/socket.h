@@ -41,12 +41,24 @@
 #define IPPROTO_TCP 6
 
 // 定义socket选项设置相关宏
-#undef SOL_SOCKET  // 选项设置与哪一层(level)相关：通用socket选项(socket层)
-#define SOL_SOCKET 0
-#undef SO_RCVTIMEO  // 选项设置类型： 接收超时
-#define SO_RCVTIMEO 1
-#undef SO_SNDTIMEO  // 选项设置类型：发送超时
-#define SO_SNDTIMEO 2
+// 选项设置与哪一层(level)相关(通用socket层，TCP, UDP, IP, ICMP)：
+#undef SOL_SOCKET
+#define SOL_SOCKET 0  // 通用socket选项(socket层)
+#undef SOL_TCP
+#define SOL_TCP 1  // TCP层
+// 选项设置的类型(optname)：
+#undef SO_RCVTIMEO
+#define SO_RCVTIMEO 1  // 接收超时
+#undef SO_SNDTIMEO
+#define SO_SNDTIMEO 2  // 发送超时
+#undef SO_KEEPALIVE
+#define SO_KEEPALIVE 3  // 保活
+#undef TCP_KEEPIDLE
+#define TCP_KEEPIDLE 4  // TCP保活时长
+#undef TCP_KEEPINTVL
+#define TCP_KEEPINTVL 5  // TCP保活间隔
+#undef TCP_KEEPCNT
+#define TCP_KEEPCNT 6  // TCP保活次数
 
 // 定义socket地址长度类型
 typedef int net_socklen_t;
@@ -102,5 +114,6 @@ int net_setsockopt(int socket, int level, int optname, const char *optval,
                    int optlen);
 ssize_t net_send(int socket, const void *buf, size_t buf_len, int flags);
 ssize_t net_recv(int socket, void *buf, size_t buf_len, int flags);
-int net_bind(int socket, const struct net_sockaddr *addr, net_socklen_t addrlen);
+int net_bind(int socket, const struct net_sockaddr *addr,
+             net_socklen_t addrlen);
 #endif  // SOCKET_H

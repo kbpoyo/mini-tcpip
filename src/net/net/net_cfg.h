@@ -97,6 +97,9 @@
 #define TCP_MAXCNT 10  // tcp socket对象表大小
 #define TCP_SBUF_SIZE 4096  // tcp发送缓冲区大小
 #define TCP_RBUF_SIZE 4096  // tcp接收缓冲区大小
+#define TCP_KEEPALIVE_IDLE (2*60*60)  // tcp默认保活时长(s)
+#define TCP_KEEPALIVE_INTVL (5)  // tcp默认保活间隔(s)
+#define TCP_KEEPALIVE_CNT (10)    // tcp默认保活次数
 
 
 #endif  // NET_CFG_H

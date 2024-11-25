@@ -130,7 +130,7 @@ net_err_t tcp_recv(pktbuf_t *tcp_buf, ipaddr_t *src_ip, ipaddr_t *dest_ip) {
  */
 static int copy_recv_data(tcp_t *tcp, tcp_info_t *info) {
   // 获取接收缓冲区中可写入的空闲容量
-  int free_cnt = tcp_wait_free_cnt(tcp);
+  int free_cnt = tcp_recv_window(tcp);
   int cpy_len = MIN(free_cnt, info->data_len);  // 拷贝数据长度不能超过空闲容量
   if (cpy_len <= 0) {
     return cpy_len;
@@ -144,7 +144,7 @@ static int copy_recv_data(tcp_t *tcp, tcp_info_t *info) {
   int offset = info->seq - tcp->recv.nxt;
   if (offset < 0) {
     return -1;
-  }
+  } 
 
   // 从发送缓冲区中读取数据到tcp数据包中
   return tcp_buf_write_from_pktbuf(&tcp->recv.buf, info->tcp_buf, offset,
@@ -175,8 +175,9 @@ net_err_t tcp_recv_data(tcp_t *tcp, tcp_info_t *info) {
     wakeup++;
   }
 
-  // 若fin有效, 则需要对fin位进行接收并确认
-  if (tcp_hdr->f_fin) {
+  // 若fin有效, 且所有fin之前的数据都已接收完毕则对fin进行确认
+  // fin标志位不会携带数据，所以该fin包的seq号等于接收窗口的nxt即表示所有数据都已接收完毕
+  if (tcp_hdr->f_fin && (tcp->recv.nxt == info->seq)) {
     tcp->recv.nxt++;
     tcp->flags.fin_recved = 1;
     wakeup++;
@@ -184,7 +185,7 @@ net_err_t tcp_recv_data(tcp_t *tcp, tcp_info_t *info) {
 
   // 若成功处理完数据包，则唤醒等待在tcp对象上的任务
   if (wakeup) {
-    if (tcp_hdr->f_fin) {
+    if (tcp->flags.fin_recved) {
       // 对端请求关闭连接, 唤醒等待在tcp对象上的所有任务
       sock_wakeup(&tcp->sock_base, SOCK_WAIT_ALL, NET_ERR_TCP_CLOSE);
     } else {
